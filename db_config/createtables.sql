@@ -1,23 +1,103 @@
+CREATE TABLE Account (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Username VARCHAR(255) NOT NULL,
+    Name VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+);
+
+--Accounts-- 
 CREATE TABLE User (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(255) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    birthdate DATE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    known_allergies VARCHAR(255) NOT NULL
+	userID INT NOT NULL,
+	KnownAllergies VARCHAR(255) NOT NULL,
+	Birthdate DATE NOT NULL,
+	IsApproved VARCHAR(20) NOT NULL,
+
+	FOREIGN KEY (userID) REFERENCES Account(Id)
+);
+
+CREATE TABLE Doctor (
+	DoctorId INT NOT NULL,
+
+	FOREIGN KEY (DoctorId) REFERENCES Account(Id)
+
+);
+
+CREATE TABLE Company (
+	CompanyId INT NOT NULL,
+	address VARCHAR (255) NOT NULL,
+
+	FOREIGN KEY (CompanyId) REFERENCES Account(Id)
+);
+
+CREATE TABLE Staff (
+	StaffId INT NOT NULL,
+
+	FOREIGN KEY (staff_id) REFERENCES Account(id)
 );
 
 CREATE TABLE Questionnaire (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    qOne VARCHAR(255) NOT NULL,
-    qTwo VARCHAR(255) NOT NULL,
-    qThree VARCHAR(255) NOT NULL,
-    qFour VARCHAR(255) NOT NULL,
-    qFive VARCHAR(255) NOT NULL,
-    qSix VARCHAR(255) NOT NULL,
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    UserId INT NOT NULL,
+    QOne VARCHAR(255) NOT NULL,
+    QTwo VARCHAR(255) NOT NULL,
+    QThree VARCHAR(255) NOT NULL,
+    QFour VARCHAR(255) NOT NULL,
+    QFive VARCHAR(255) NOT NULL,
+    QSix VARCHAR(255) NOT NULL,
 
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
+);
+
+-- may need to created timeslot table... 
+CREATE TABLE Appointments (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	UserId INT NOT NULL,
+	DoctorID INT NULL,
+	Reason VARCHAR(255) NOT NULL,
+	TimeSlot DATETIME NOT NULL,
+
+	FOREIGN KEY (UserId) REFERENCES User(UserId)
+
+);
+
+CREATE TABLE Payments (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	userId INT NOT NULL,
+	DoctorId INT NOT NULL,
+	TotalFee DOUBLE NOT NULL,
+
+	FOREIGN KEY (user_id) REFERENCES User(user_id),
+	FOREIGN KEY (doctor_id) REFERENCES Doctor(doctor_id)
+);
+
+CREATE TABLE DrugInventory (
+	DrugName VARCHAR(255) PRIMARY KEY NOT NULL,
+	ClosestExpiryDate DATE NOT NULL,
+	FurthestExpiryDate DATE NULL,
+	Quantity INT NOT NULL,
+	Price DOUBLE NOT NULL,
+	Description VARCHAR(255) NOT NULL
+
+);
+
+CREATE TABLE DrugDonationRequests (
+	OrderId INT PRIMARY KEY AUTO_INCREMENT,
+	StaffId INT NOT NULL,
+	DrugName VARCHAR(255) NOT NULL,
+	DateRequest DATE NOT NULL,
+	Quatity INT NOT NULL,
+	Price DOUBLE NOT NULL,
+
+	FOREIGN KEY (StaffID) REFERENCES Staff(Id)
+);
+
+CREATE TABLE DrugInventoryEntryRecord (
+	EntryId INT PRIMARY KEY NOT NULL,
+	DateOfEntry DATE NOT NULL,
+	Medicine VARCHAR(255) NOT NULL,
+	ExpiryDate DATE NOT NULL,
+	STATUS VARCHAR(20) NOT NULL,
+
 );
