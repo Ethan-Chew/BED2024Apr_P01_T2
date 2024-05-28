@@ -1,0 +1,23 @@
+CREATE TABLE User (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    birthdate DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    known_allergies VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Questionnaire (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    qOne VARCHAR(255) NOT NULL,
+    qTwo VARCHAR(255) NOT NULL,
+    qThree VARCHAR(255) NOT NULL,
+    qFour VARCHAR(255) NOT NULL,
+    qFive VARCHAR(255) NOT NULL,
+    qSix VARCHAR(255) NOT NULL,
+
+    FOREIGN KEY (user_id) REFERENCES User(id)
+);
