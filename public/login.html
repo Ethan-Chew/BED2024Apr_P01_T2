@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
 
-        <title>CareLinc</title>
+        <title>CareLinc - Login</title>
     </head>
     <body class="w-screen h-screen flex flex-col">
         <!-- Navigation Bar -->
@@ -20,18 +20,30 @@
         </header>
 
         <!-- Main Content -->
-        <div class="p-5 flex flex-col align-center items-center">
-            <h2 class="text-4xl font-bold">Login</h2>
-            <div class="flex flex-col gap-3">
-                <label>
-                    Username:
-                    <input class="bg-gray-100" />
-                </label>
-                <label>
-                    Password:
-                    <input type="password" class="bg-gray-100" />
-                </label>
-            </div>
+        <div class="p-8">
+            <h2 class="text-center text-3xl font-bold mb-6">Login</h2>
+            <form action="#">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                        Username:
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="John Doe">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                        Password:
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************">
+                </div>
+                <div class="flex items-center justify-between">
+                    <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        Login
+                    </button>
+                </div>
+                <p class="mt-4 text-center text-sm text-gray-600">
+                    Don't have an account? <a href="./signup.html" class="text-blue-500 hover:text-blue-700">Create one</a>
+                </p>
+            </form>
         </div>
     </body>
 
