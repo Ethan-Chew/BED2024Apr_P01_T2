@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <title>CareLinc</title>
+    </head>
+    <body class="w-screen h-screen flex flex-col">
+        <!-- Navigation Bar -->
+        <header class="z-[1000] bg-primary flex flex-row px-5 py-3 text-white items-center">
+            <a class="text-2xl font-bold">CareLinc</a>
+            <nav class="ml-auto flex flex-row gap-5 items-center">
+                <a class="text-xl" href="./credits.html">Credits</a>
+                <button class="text-xl bg-btnprimary px-4 py-2">
+                    Login
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <div class="p-5 flex-grow flex flex-col">
+            <div class="text-lg max-w-xl">
+                <div>
+                    <h1 class="font-bold text-5xl mb-1">CareLinc</h1>
+                    <p class="text-gray-600">Making Quality Healthcare accessible for all.</p>
+                </div>
+                <p class="mt-4">
+                    We believe everyone deserves access to affordable, high-quality healthcare. 
+                    <br />
+                    Join us in our mission to make healthcare more inclusive and ensure that essential medicines are within everyone's reach.
+                </p>
+            </div>
+            <div class="flex-grow flex items-center justify-center">
+                <div class="w-1/2 flex flex-col items-center justify-center gap-3">
+                    <h2 class="text-4xl font-bold">Join Us.</h2>
+                    <div class="flex flex-row gap-5 w-full">
+                        <button class="bg-btnsecondary hover:bg-btnsecondary_hover flex-grow py-2 text-xl rounded-2xl">
+                            Login
+                        </button>
+                        <button class="bg-btnsecondary hover:bg-btnsecondary_hover flex-grow py-2 text-xl rounded-2xl">
+                            Create
+                        </button>
+                    </div>
+
+                    <div class="flex items-center w-full">
+                        <div class="flex-grow border-t border-gray-300"></div>
+                        <span class="flex-shrink mx-4 text-gray-500">or</span>
+                        <div class="flex-grow border-t border-gray-300"></div>
+                    </div>
+
+                    <button class="bg-btnsecondary hover:bg-btnsecondary_hover w-full py-2 text-xl rounded-2xl">
+                        Pay it Forward
+                    </button>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="scripts/tailwind.config.js"></script>
+</html>
