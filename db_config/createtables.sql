@@ -101,14 +101,23 @@ CREATE TABLE Payments (
 
 CREATE TABLE DrugInventory (
 	DrugName VARCHAR(255) NOT NULL,
-	ClosestExpiryDate DATE NOT NULL,
-	FurthestExpiryDate DATE NULL,
-	AvailableQuantity INT NOT NULL,
-	Price DOUBLE NOT NULL,
+	DrugPrice DOUBLE NOT NULL,
 	DrugDescription VARCHAR(255) NOT NULL
 
 	CONSTRAINT PK_DrugInventory PRIMARY KEY (PaymentRequestId),
 );
+
+CREATE TABLE DrugInventoryRecord (
+	DrugRecordId INT NOT NULL,
+	DrugName VARCHAR(255) NOT NULL,
+	DrugExpiryDate DATE NOT NULL,
+	DrugAvailableQuantity INT NOT NULL,
+	DrugTotalQuantity INT NOT NULL,
+	DrugRecordEntryDate DATE NOT NULL,
+
+	CONSTRAINT PK_DrugInventoryRecord PRIMARY KEY (DrugRecordId),
+	CONSTRAINT FK_DrugInventoryRecord_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName)
+)
 
 CREATE TABLE PrescribedMedication (
 	PrescribedMedId INT NOT NULL,
@@ -117,7 +126,7 @@ CREATE TABLE PrescribedMedication (
 	Quantity INT NOT NULL,
 	Price DOUBLE NOT NULL,
 	Reason VARCHAR(255) NOT NULL,
-	DrugRequest VARCHAR(10) NOT NULL CHECK (DrugRequest IN ('Cancelled', 'Pending', 'Fulfilled')),
+	DrugRequest VARCHAR(10) NULL CHECK (DrugRequest IN ('Cancelled', 'Pending', 'Fulfilled')),
 
 	CONSTRAINT PK_PrescribedMedication PRIMARY KEY (PrescribedMedId),
 	CONSTRAINT PK_PrescribedMedication_Appointment FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
