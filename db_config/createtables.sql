@@ -1,10 +1,9 @@
 CREATE TABLE Account (
     AccountId INT,
-    Accountname VARCHAR(255) NOT NULL,
-    Name VARCHAR(255) NOT NULL,
-    Password VARCHAR(255) NOT NULL,
-    Email VARCHAR(255) NOT NULL,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    AccountName VARCHAR(255) NOT NULL,
+    AccountPassword VARCHAR(255) NOT NULL,
+    AccountEmail VARCHAR(255) NOT NULL,
+    AccountCreationDate DATE NOT NULL,
 
 	CONSTRAINT PK_Account PRIMARY KEY (AccountId),
 );
@@ -13,8 +12,8 @@ CREATE TABLE Account (
 CREATE TABLE Patient (
 	AccountId INT NOT NULL,
 	KnownAllergies VARCHAR(255) NOT NULL,
-	Birthdate DATE NOT NULL,
-	IsApproved VARCHAR(20) NOT NULL,
+	PatientBirthdate DATE NOT NULL,
+	PatientIsApproved VARCHAR(20) NOT NULL CHECK (PatientIsApproved IN ("Pending", "Approved", "Declined")),
 
 	CONSTRAINT PK_Patient PRIMARY KEY (AccountId),
 	CONSTRAINT FK_Patient FOREIGN KEY (AccountId) REFERENCES Account(AccountId)
@@ -22,17 +21,22 @@ CREATE TABLE Patient (
 
 CREATE TABLE Doctor (
 	AccountId INT NOT NULL,
+	DoctorCreatedBy INT NOT NULL,
 
 	CONSTRAINT PK_Doctor PRIMARY KEY (AccountId),
-	CONSTRAINT FK_Doctor FOREIGN KEY (AccountId) REFERENCES Account(AccountId)
+	CONSTRAINT FK_Doctor_Account FOREIGN KEY (AccountId) REFERENCES Account(AccountId),
+	CONSTRAINT FK_Doctor_Staff FOREIGN KEY (DoctorCreatedBy) REFERENCES Staff(AccountId),
 );
 
 CREATE TABLE Company (
 	AccountId INT NOT NULL,
-	address VARCHAR (255) NOT NULL,
+	CompanyCreatedBy INT NOT NULL,
+	CompanyAddress VARCHAR (255) NOT NULL,
 
 	CONSTRAINT PK_Company PRIMARY KEY (AccountId),
-	CONSTRAINT FK_Company FOREIGN KEY (AccountId) REFERENCES Account(AccountId)
+	CONSTRAINT FK_Company_Account FOREIGN KEY (AccountId) REFERENCES Account(AccountId)
+	CONSTRAINT FK_Company_Staff FOREIGN KEY (CompanyCreatedBy) REFERENCES Staff(AccountId),
+
 );
 
 CREATE TABLE Staff (
@@ -44,7 +48,7 @@ CREATE TABLE Staff (
 
 
 CREATE TABLE Questionnaire (
-    QuestionnaireId INT PRIMARY KEY AUTO_INCREMENT,
+    QuestionnaireId INT PRIMARY KEY,
     AccountId INT NOT NULL,
     QOne VARCHAR(255) NOT NULL,
     QTwo VARCHAR(255) NOT NULL,
@@ -54,17 +58,29 @@ CREATE TABLE Questionnaire (
     QSix VARCHAR(255) NOT NULL,
 
 	CONSTRAINT PK_Questionnaire PRIMARY KEY (QuestionnaireId),
-	CONSTRAINT FK_Questionnaire_Account FOREIGN KEY (AccountId) REFERENCES Account(AccountId)
+	CONSTRAINT FK_Questionnaire_Patient FOREIGN KEY (AccountId) REFERENCES Patient(AccountId)
+);
+
+CREATE TABLE AvailableSlot (
+	SlotId INT,
+	DoctorId INT NOT NULL,
+	PatientId INT NULL,
+	SlotTime DATETIME NOT NULL,
+
+	CONSTRAINT PK_AvailableSlot PRIMARY KEY (SlotId),
+	CONSTRAINT FK_AvailableSlot_Doctor FOREIGN KEY (DoctorId) REFERENCES Doctor(DoctorId),
+	CONSTRAINT FK_AvailableSlot_Patient FOREIGN KEY (PatientId) REFERENCES Patient(AccountId),
 );
 
 CREATE TABLE Appointments (
-	AppointmentId INT PRIMARY KEY AUTO_INCREMENT,
+	AppointmentId INT NOT NULL,
 	AccountId INT NOT NULL,
 	DoctorId INT NULL,
 	SlotId INT NOT NULL,
 	RequestId INT NULL,
 	ConsultationCost DOUBLE NOT NULL,
 	Reason VARCHAR(255) NOT NULL,
+	DoctorNote VARCHAR(255) NULL,
 
 	CONSTRAINT PK_Appointment PRIMARY KEY (AppointmentId),
 	CONSTRAINT FK_Appointment_Account FOREIGN KEY (AccountId) REFERENCES Account(AccountId),
@@ -73,61 +89,59 @@ CREATE TABLE Appointments (
 	CONSTRAINT FK_Appointment_Request FOREIGN KEY (RequestId) REFERENCES DrugDonationRequests(RequestId)
 );
 
-CREATE TABLE PrescribedMedication {
-	PrescribedMedId INT PRIMARY KEY AUTO_INCREMENT,
-	DrugName VARCHAR(255) NOT NULL,
-	Quantity INT NOT NULL,
-	Price DOUBLE NOT NULL,
-	Reason VARCHAR(255) NOT NULL
-
-	CONSTRAINT PK_PrescribedMedication PRIMARY KEY (PrescribedMedId)
-};
-
-CREATE TABLE AppointmentMedication {
+CREATE TABLE Payments (
+	PaymentId INT,
 	AppointmentId INT NOT NULL,
-	PrescribedMedId INT NOT NULL,
+	PaymentAmount DOUBLE NOT NULL,
+	IsPaid BOOLEAN NOT NULL,
 
-	CONSTRAINT PK_AppointmentMedication PRIMARY KEY (AppointmentId, PrescribedMedId),
-	CONSTRAINT FK_AppointmentMedication_Appointment FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
-	CONSTRAINT FK_AppointmentMedication_PrescribedMedication FOREIGN KEY (PrescribedMedId) REFERENCES PrescribedMedication(PrescribedMedId),
-}
-
-CREATE TABLE AvailableSlot {
-	SlotId INT PRIMARY KEY AUTO_INCREMENT,
-	DoctorId INT NOT NULL,
-	PatientId INT NULL,
-	SlotTime DATETIME NOT NULL,
-
-	CONSTRAINT PK_AvailableSlot PRIMARY KEY (SlotId),
-	CONSTRAINT FK_AvailableSlot_Doctor FOREIGN KEY (DoctorId) REFERENCES Doctor(DoctorId),
-	CONSTRAINT FK_Appointment_Patient FOREIGN KEY (PatientId) REFERENCES Patient(AccountId),
-};
+	CONSTRAINT PK_Payments PRIMARY KEY (PaymentId),
+	CONSTRAINT FK_Payments_Appointment FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
+)
 
 CREATE TABLE DrugInventory (
-	DrugName VARCHAR(255) PRIMARY KEY NOT NULL,
+	DrugName VARCHAR(255) NOT NULL,
 	ClosestExpiryDate DATE NOT NULL,
 	FurthestExpiryDate DATE NULL,
 	AvailableQuantity INT NOT NULL,
 	Price DOUBLE NOT NULL,
 	DrugDescription VARCHAR(255) NOT NULL
 
+	CONSTRAINT PK_DrugInventory PRIMARY KEY (PaymentRequestId),
 );
 
-CREATE TABLE DrugDonationRequests (
-	RequestId INT PRIMARY KEY AUTO_INCREMENT
-	OrderId INT NOT NULL,
-	StaffId INT NOT NULL,
+CREATE TABLE PrescribedMedication (
+	PrescribedMedId INT NOT NULL,
+	AppointmentId INT NOT NULL,
 	DrugName VARCHAR(255) NOT NULL,
-	DateRequest DATE NOT NULL,
-	Quatity INT NOT NULL,
+	Quantity INT NOT NULL,
 	Price DOUBLE NOT NULL,
+	Reason VARCHAR(255) NOT NULL,
+	DrugRequest VARCHAR(10) NOT NULL CHECK (DrugRequest IN ('Cancelled', 'Pending', 'Fulfilled')),
+
+	CONSTRAINT PK_PrescribedMedication PRIMARY KEY (PrescribedMedId),
+	CONSTRAINT PK_PrescribedMedication_Appointment FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
+	CONSTRAINT FK_PrescribedMedication_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName),
 );
 
-CREATE TABLE DrugInventoryEntryRecord (
-	EntryId INT PRIMARY KEY NOT NULL,
-	DateOfEntry DATE NOT NULL,
-	Medicine VARCHAR(255) NOT NULL,
-	ExpiryDate DATE NOT NULL,
-	STATUS VARCHAR(20) NOT NULL,
+CREATE TABLE PaymentRequest (
+	PaymentRequestId INT NOT NULL,
+	AppointmentId INT NOT NULL,
+	PaymentRequestMessage VARCHAR(255) NOT NULL,
+	PaymentRequestCreatedDate DATE NOT NULL,
+	PaymentRequestStatus VARCHAR(10) NOT NULL CHECK (RequestStatus IN ('Waiting', 'Declined', 'Completed')),
+	
+	CONSTRAINT PK_PaymentRequest PRIMARY KEY (PaymentRequestId),
+	CONSTRAINT FK_PaymentRequest_Appointment FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId)
+)
 
-);
+CREATE TABLE DrugTopupRequest (
+	TopupId INT NOT NULL,
+	DrugName VARCHAR(255) NOT NULL,
+	TopupQuantity INT NOT NULL,
+	TopupRequestDate DATE NOT NULL,
+	TopupStatus VARCHAR(10) NOT NULL CHECK (TopupStatus IN ('Waiting', 'Cancelled', 'Completed')),
+
+	CONSTRAINT PK_DrugTopupRequest PRIMARY KEY (TopupId),
+	CONSTRAINT FK_DrugTopupRequest_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName)
+)
