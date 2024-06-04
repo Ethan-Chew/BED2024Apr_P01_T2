@@ -1,5 +1,5 @@
 CREATE TABLE Account (
-    AccountId INT,
+    AccountId VARCHAR(7),
     AccountName VARCHAR(255) NOT NULL,
     AccountPassword VARCHAR(255) NOT NULL,
     AccountEmail VARCHAR(255) NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE Company (
 );
 
 CREATE TABLE Questionnaire (
-    QuestionnaireId INT NOT NULL,
+    QuestionnaireId VARCHAR(7) NOT NULL,
     AccountId INT NOT NULL,
     QOne VARCHAR(255) NOT NULL,
     QTwo VARCHAR(255) NOT NULL,
