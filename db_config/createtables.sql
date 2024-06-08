@@ -99,7 +99,7 @@ CREATE TABLE PaymentRequest (
 	AppointmentId VARCHAR(7) NOT NULL,
 	PaymentRequestMessage VARCHAR(255) NOT NULL,
 	PaymentRequestCreatedDate DATE NOT NULL,
-	PaymentRequestStatus VARCHAR(10) NOT NULL CHECK (PaymentRequestStatus IN ('Waiting', 'Declined', 'Completed')),
+	PaymentRequestStatus VARCHAR(10) NOT NULL CHECK (PaymentRequestStatus IN ('Pending', 'Declined', 'Completed')),
 	
 	CONSTRAINT PK_PaymentRequest PRIMARY KEY (PaymentRequestId),
 	CONSTRAINT FK_PaymentRequest_Appointment FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId)
@@ -118,7 +118,7 @@ CREATE TABLE Payments (
 CREATE TABLE DrugInventoryRecord (
 	DrugRecordId VARCHAR(7) NOT NULL,
 	DrugName VARCHAR(255) NOT NULL,
-	DrugExpiryDate BIGINT NOT NULL,
+	DrugExpiryDate DATE NOT NULL,
 	DrugAvailableQuantity INT NOT NULL,
 	DrugTotalQuantity INT NOT NULL,
 	DrugRecordEntryDate DATE NOT NULL,
@@ -145,7 +145,7 @@ CREATE TABLE DrugTopupRequest (
 	TopupId VARCHAR(7) NOT NULL,
 	DrugName VARCHAR(255) NOT NULL,
 	TopupQuantity INT NOT NULL,
-	TopupRequestDate BIGINT NOT NULL,
+	TopupRequestDate DATE NOT NULL,
 	TopupStatus VARCHAR(10) NOT NULL CHECK (TopupStatus IN ('Pending', 'Cancelled', 'Completed')),
 
 	CONSTRAINT PK_DrugTopupRequest PRIMARY KEY (TopupId),

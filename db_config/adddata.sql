@@ -52,9 +52,9 @@ INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessa
 ('REQ0002', 'APP0002', 'Payment for follow-up', '2024-06-02', 'Completed');
 
 INSERT INTO Payments (PaymentId, AppointmentId, PaymentAmount, PaymentStatus) VALUES
-('PAY0001', 'APP0001', 50.00, 'Pending'),
-('PAY0002', 'APP0001', 50.00, 'Pending'),
-('PAY0003', 'APP0002', 60.00, 'Completed');
+('PAY0001', 'APP0001', 50.00, 'Unpaid'),
+('PAY0002', 'APP0001', 50.00, 'Unpaid'),
+('PAY0003', 'APP0002', 60.00, 'Paid');
 
 INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Aspirin', 5.99, 'Pain relief'),
