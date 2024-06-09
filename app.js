@@ -22,7 +22,12 @@ app.post("/auth/login", accountsController.authLoginAccount);
 app.listen(3000, async () => {
     console.log("CareLinc listening on port 3000.")
 
-    // TODO: Integrate with SQL Database
+    try {
+        await sql.connect(dbConfig);
+        console.log("Established connection to Database");
+    } catch (err) {
+        console.error("Database connection failed:", err);
+    }
 });
 
 // Close the connection pool on SIGINT signal

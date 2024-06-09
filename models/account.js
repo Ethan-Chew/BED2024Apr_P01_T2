@@ -1,4 +1,5 @@
 const sql = require("mssql");
+const dbConfig = require("../dbConfig");
 
 class Account {
     constructor(id, name, email, password, creationDate) {
@@ -7,6 +8,32 @@ class Account {
         this.email = email;
         this.password = password;
         this.creationDate = creationDate;
+    }
+
+    static async getAccountWithEmail(email) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `SELECT * FROM Account WHERE AccountEmail = '${email}'`;
+        const request = connection.request();
+
+        const result = await request.query(query);
+        connection.close();
+
+        return result.recordset[0];
+    }
+
+    // Helper Function to get New ID
+    static async getNextAccountId() {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `SELECT * FROM Account WHERE AccountId=(SELECT max(AccountId) FROM Account);`
+        const request = connection.request();
+
+        const result = await request.query(query);
+        connection.close();
+
+        const incrementString = str => str.replace(/\d+/, num => (Number(num) + 1).toString().padStart(4, "0"));
+        return incrementString(result.recordset[0].AccountId);
     }
 }
 
@@ -17,6 +44,30 @@ class Patient extends Account {
         this.knownAllergies = knownAllergies;
         this.birthdate = birthdate;
         this.isApproved = isApproved;
+    }
+
+    static async createPatient(name, email, password, knownAllergies, birthdate) {
+        const connection = await sql.connect(dbConfig);
+        const newAccountId = await Account.getNextAccountId();
+        const insertUnixTime = Math.floor(Date.now() / 1000);
+
+        const insertMemberQuery = `
+            INSERT INTO Account (AccountId, AccountName, AccountEmail, AccountPassword, AccountCreationDate) VALUES
+            ('${newAccountId}', '${name}', '${email}', '${password}', ${insertUnixTime});
+        `
+        const insertPatientQuery = `
+            INSERT INTO Patient (PatientId, KnownAllergies, PatientBirthdate, PatientIsApproved) VALUES
+            ('${newAccountId}', '${knownAllergies}', '${birthdate}', 'Pending');
+        `;
+
+        const request = connection.request();
+
+        const insertMemberResult = await request.query(insertMemberQuery);
+        const insertPatientResult = await request.query(insertPatientQuery);
+
+        connection.close()
+
+        return new Patient(newAccountId, name, email, password, insertUnixTime, knownAllergies, birthdate, "Pending");
     }
 }
 
