@@ -14,7 +14,15 @@ class Questionnaire {
     }
 
     static async getQuestionnaireWithAccountId(accountId) {
+        const connection = await sql.connect(dbConfig);
 
+        const query = `SELECT * FROM Questionnaire WHERE AccountId = ${accountId}`;
+        const request = connection.request();
+
+        const result = await request.query(query);
+        connection.close();
+
+        return result.recordset[0];
     }
 
     static async createQuestionnaire(accountId, qAnswers) {

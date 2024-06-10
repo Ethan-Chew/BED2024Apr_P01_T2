@@ -13,7 +13,14 @@ class Account {
     static async getAccountWithEmail(email) {
         const connection = await sql.connect(dbConfig);
 
-        const query = `SELECT * FROM Account WHERE AccountEmail = '${email}'`;
+        const query = `
+            SELECT * FROM Account a
+            LEFT JOIN Patient p ON a.AccountId = p.PatientId
+            LEFT JOIN Staff s ON a.AccountId = s.StaffId
+            LEFT JOIN Doctor d ON a.AccountId = d.DoctorId
+            LEFT JOIN Company c ON a.AccountId = c.CompanyId
+            WHERE AccountEmail = '${email}'
+        `;
         const request = connection.request();
 
         const result = await request.query(query);

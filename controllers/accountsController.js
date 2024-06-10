@@ -11,18 +11,24 @@ const authLoginAccount = async (req, res) => {
         const account = await accounts.Account.getAccountWithEmail(email);
 
         if (!account) {
-            res.status(404).send(`Account with email ${email} not found.`);
+            res.status(404).json({
+                error: `Account with email ${email} not found.`
+            });
             return;
         }
 
         if (account.AccountPassword !== password) {
-            res.status(403).send("Incorrect Password");
+            res.status(403).json({
+                error: "Incorrect Password"
+            });
         } else {
             res.status(200).send(account);
         }
     } catch(err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({
+            error: "Internal Server Error"
+        });
     }
 };
 
