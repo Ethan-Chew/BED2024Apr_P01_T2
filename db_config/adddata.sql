@@ -78,23 +78,23 @@ INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 
 
 INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAvailableQuantity, DrugTotalQuantity, DrugRecordEntryDate) VALUES
-('DRI0001', 'Aspirin', '2024-12-31', 100, 200, '2024-01-01'),
-('DRI0002', 'Ibuprofen', '2024-11-30', 150, 300, '2024-01-10'),
-('DRI0003', 'Paracetemol', '2025-2-21', 150, 300, '2024-01-11'),
-('DRI0004', 'Panadol', '2024-11-30', 150, 300, '2024-01-11'),
-('DRI0005', 'Calcium Channel Blockers', '2024-11-30', 150, 300, '2024-01-12'),
-('DRI0006', 'Tamoxifen', '2024-10-23', 150, 300, '2024-01-12'),
-('DRI0007', 'Penicillamine', '2024-11-30', 150, 300, '2024-01-13'),
-('DRI0008', 'Prazosin', '2024-11-30', 150, 300, '2024-01-13'),
-('DRI0009', 'Magnesium Carbonate', '2024-11-30', 150, 300, '2024-01-14'),
-('DRI0010', 'Promethazine', '2024-11-30', 150, 300, '2024-01-14'),
-('DRI0011', 'Co-trimoxazole', '2024-11-30', 150, 300, '2024-01-15'), 
-('DRI0012', 'Metronidazole', '2024-11-30', 150, 300, '2024-01-15'), 
-('DRI0013', 'Benzydamine', '2024-11-30', 150, 300, '2024-01-16'), 
-('DRI0014', 'Digoxin', '2024-11-30', 150, 300, '2024-01-16'), 
-('DRI0015', 'Dipyridamole', '2024-11-30', 150, 300, '2024-01-17'), 
-('DRI0016', 'Pheniramine', '2024-11-30', 150, 300, '2024-01-18'), 
-('DRI0017', 'Aciclovir', '2024-11-30', 150, 300, '2024-01-19'); 
+('DRI0001', 'Aspirin', '2024-12-31', 100, 200, '2024-01-01','ACC0010'),
+('DRI0002', 'Ibuprofen', '2024-11-30', 150, 300, '2024-01-10','ACC0011'),
+('DRI0003', 'Paracetemol', '2025-2-21', 150, 300, '2024-01-11','ACC0010'),
+('DRI0004', 'Panadol', '2024-11-30', 150, 300, '2024-01-11','ACC0010'),
+('DRI0005', 'Calcium Channel Blockers', '2024-11-30', 150, 300, '2024-01-12','ACC0010'),
+('DRI0006', 'Tamoxifen', '2024-10-23', 150, 300, '2024-01-12','ACC0010'),
+('DRI0007', 'Penicillamine', '2024-11-30', 150, 300, '2024-01-13','ACC0010'),
+('DRI0008', 'Prazosin', '2024-11-30', 150, 300, '2024-01-13','ACC0010'),
+('DRI0009', 'Magnesium Carbonate', '2024-11-30', 150, 300, '2024-01-14','ACC0010'),
+('DRI0010', 'Promethazine', '2024-11-30', 150, 300, '2024-01-14''ACC0011'),
+('DRI0011', 'Co-trimoxazole', '2024-11-30', 150, 300, '2024-01-15''ACC0011'), 
+('DRI0012', 'Metronidazole', '2024-11-30', 150, 300, '2024-01-15''ACC0010'), 
+('DRI0013', 'Benzydamine', '2024-11-30', 150, 300, '2024-01-16''ACC0011'), 
+('DRI0014', 'Digoxin', '2024-11-30', 150, 300, '2024-01-16''ACC0010'), 
+('DRI0015', 'Dipyridamole', '2024-11-30', 150, 300, '2024-01-17''ACC0011'), 
+('DRI0016', 'Pheniramine', '2024-11-30', 150, 300, '2024-01-18''ACC0011'), 
+('DRI0017', 'Aciclovir', '2024-11-30', 150, 300, '2024-01-19''ACC0011'); 
 
 INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quantity, Price, Reason, DrugRequest) VALUES
 ('PRM0001', 'APP0001', 'Aspirin', 10, 59.90, 'Pain relief', 'Completed'),

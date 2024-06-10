@@ -122,9 +122,11 @@ CREATE TABLE DrugInventoryRecord (
 	DrugAvailableQuantity INT NOT NULL,
 	DrugTotalQuantity INT NOT NULL,
 	DrugRecordEntryDate DATE NOT NULL,
+	CompanyId VARCHAR(7) NOT NULL,
 
 	CONSTRAINT PK_DrugInventoryRecord PRIMARY KEY (DrugRecordId),
 	CONSTRAINT FK_DrugInventoryRecord_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName)
+	CONSTRAINT FK_DrugInventoryRecord_Company FOREIGN KEY (CompanyId) REFERENCES Company(CompanyId)
 )
 
 CREATE TABLE PrescribedMedication (
