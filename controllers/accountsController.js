@@ -4,7 +4,9 @@ const authLoginAccount = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        res.status(400).send("Email and Password are required");
+        res.status(400).json({
+            message: "Email and Password are required."
+        });
     }
     
     try {
@@ -12,14 +14,14 @@ const authLoginAccount = async (req, res) => {
 
         if (!account) {
             res.status(404).json({
-                error: `Account with email ${email} not found.`
+                message: `Account with email ${email} not found.`
             });
             return;
         }
 
         if (account.AccountPassword !== password) {
             res.status(403).json({
-                error: "Incorrect Password"
+                message: "Incorrect Password"
             });
         } else {
             res.status(200).send(account);
@@ -27,7 +29,7 @@ const authLoginAccount = async (req, res) => {
     } catch(err) {
         console.error(err);
         res.status(500).json({
-            error: "Internal Server Error"
+            message: "Internal Server Error"
         });
     }
 };

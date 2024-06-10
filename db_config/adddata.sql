@@ -53,8 +53,8 @@ INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessa
 
 INSERT INTO Payments (PaymentId, AppointmentId, PaymentAmount, PaymentStatus) VALUES
 ('PAY0001', 'APP0001', 50.00, 'Unpaid'),
-('PAY0002', 'APP0001', 50.00, 'Unpaid'),
-('PAY0003', 'APP0002', 60.00, 'Paid');
+('PAY0002', 'APP0002', 50.00, 'Unpaid'),
+('PAY0003', 'APP0003', 60.00, 'Paid');
 
 INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Aspirin', 5.99, 'Pain relief'),

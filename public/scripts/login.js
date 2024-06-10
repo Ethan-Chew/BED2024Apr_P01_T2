@@ -16,15 +16,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             const body = await response.json();
             
             // Check for User's Role
-            sessionStorage.setItem('patientId', body.PatientId);
+            sessionStorage.setItem('accountId', body.AccountId);
             if (body.PatientId) {
-                window.location.href = '/patient/home';
+                window.location.href = './patient/home';
             } else if (body.CompanyId) {
-                window.location.href = '/company/home';
+                window.location.href = './company/home';
             } else if (body.DoctorId) {
-                window.location.href = '/doctor/home';
-            } else if (body.AdminId) {
-                window.location.href = '/admin/home';
+                window.location.href = './doctor/home';
+            } else if (body.StaffId) {
+                window.location.href = './staff/home';
             }
         } else {
             const error = await response.json();

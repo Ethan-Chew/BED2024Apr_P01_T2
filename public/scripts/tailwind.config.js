@@ -1,6 +1,9 @@
 tailwind.config = {
     theme: {
         extend: {
+            fontSize: {
+                '4.5xl': '2.5rem',
+            },
             colors: {
                 primary: '#47A6BC',
                 btnprimary: '#3C8D9F',
