@@ -77,7 +77,7 @@ INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Pheniramine', 7.99, 'Pain relief for eyes'); 
 
 
-INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAvailableQuantity, DrugTotalQuantity, DrugRecordEntryDate) VALUES
+INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAvailableQuantity, DrugTotalQuantity, DrugRecordEntryDate, CompanyId) VALUES
 ('DRI0001', 'Aspirin', '2024-12-31', 100, 200, '2024-01-01','ACC0010'),
 ('DRI0002', 'Ibuprofen', '2024-11-30', 150, 300, '2024-01-10','ACC0011'),
 ('DRI0003', 'Paracetemol', '2025-2-21', 150, 300, '2024-01-11','ACC0010'),
