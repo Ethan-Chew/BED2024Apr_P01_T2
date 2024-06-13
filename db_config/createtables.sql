@@ -56,7 +56,7 @@ CREATE TABLE Company (
 
 CREATE TABLE Questionnaire (
     QuestionnaireId VARCHAR(7) NOT NULL,
-    AccountId VARCHAR(7) NOT NULL,
+    AccountId VARCHAR(7) NOT NULL UNIQUE,
     QOne VARCHAR(255) NOT NULL,
     QTwo VARCHAR(255) NOT NULL,
     QThree VARCHAR(255) NOT NULL,
@@ -68,28 +68,34 @@ CREATE TABLE Questionnaire (
 	CONSTRAINT FK_Questionnaire_Patient FOREIGN KEY (AccountId) REFERENCES Patient(PatientId)
 );
 
+CREATE TABLE SlotTime {
+	SlotTimeId VARCHAR(7) NOT NULL,
+	SlotTime VARCHAR(20) NOT NULL UNIQUE,
+
+	CONSTRAINT PK_SlotTime PRIMARY KEY (SlotTimeId),
+}
+
 CREATE TABLE AvailableSlot (
 	SlotId VARCHAR(7),
 	DoctorId VARCHAR(7) NOT NULL,
-	PatientId VARCHAR(7) NULL,
-	SlotTime DATETIME NOT NULL,
+	SlotTimeId VARCHAR(7) NOT NULL,
 
 	CONSTRAINT PK_AvailableSlot PRIMARY KEY (SlotId),
 	CONSTRAINT FK_AvailableSlot_Doctor FOREIGN KEY (DoctorId) REFERENCES Doctor(DoctorId),
-	CONSTRAINT FK_AvailableSlot_Patient FOREIGN KEY (PatientId) REFERENCES Patient(PatientId),
+	CONSTRAINT FK_AvailableSlot_SlotTime FOREIGN KEY (SlotTimeId) REFERENCES SlotTime(SlotTimeId),
 );
 
 CREATE TABLE Appointments (
 	AppointmentId VARCHAR(7) NOT NULL,
-	AccountId VARCHAR(7) NOT NULL,
+	PatientId VARCHAR(7) NOT NULL,
 	DoctorId VARCHAR(7) NULL,
-	SlotId VARCHAR(7) NOT NULL,
+	SlotId VARCHAR(7) NOT NULL UNIQUE,
 	ConsultationCost MONEY NOT NULL,
 	Reason VARCHAR(255) NOT NULL,
 	DoctorNote VARCHAR(255) NULL,
 
 	CONSTRAINT PK_Appointment PRIMARY KEY (AppointmentId),
-	CONSTRAINT FK_Appointment_Account FOREIGN KEY (AccountId) REFERENCES Account(AccountId),
+	CONSTRAINT FK_Appointment_Account FOREIGN KEY (PatientId) REFERENCES Account(AccountId),
 	CONSTRAINT FK_Appointment_Doctor FOREIGN KEY (DoctorId) REFERENCES Doctor(DoctorId),
 	CONSTRAINT FK_Appointment_Slot FOREIGN KEY (SlotId) REFERENCES AvailableSlot(SlotId),
 );

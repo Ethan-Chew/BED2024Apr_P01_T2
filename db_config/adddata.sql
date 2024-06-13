@@ -38,14 +38,37 @@ INSERT INTO Questionnaire(QuestionnaireId, AccountId, QOne, QTwo, QThree, QFour,
 ('QES0004', 'ACC0006', 'Full-time student', 'N/A', 'No', 1, 'Live with parents', 'N/A'),
 ('QES0005', 'ACC0007', 'Part-time', '$25,000 - $50,000', 'No', 0, 'Rent', 'No');
 
-INSERT INTO AvailableSlot (SlotId, DoctorId, PatientId, SlotTime) VALUES
-('SLO0001', 'ACC0008', NULL, '2024-06-15 09:00:00'),
-('SLO0002', 'ACC0009', 'ACC0003', '2024-06-15 10:00:00');
+INSERT INTO SlotTime(SlotTimeId, SlotTime) VALUES
+('SLOT001', '09:00-09:30'),
+('SLOT002', '09:30-10:00'),
+('SLOT003', '10:00-10:30'),
+('SLOT004', '10:30-11:00'),
+('SLOT005', '11:00-11:30'),
+('SLOT006', '11:30-12:00'),
+('SLOT007', '12:00-12:30'),
+('SLOT008', '12:30-13:00'),
+('SLOT009', '13:00-13:30'),
+('SLOT010', '13:30-14:00'),
+('SLOT011', '14:00-14:30'),
+('SLOT012', '14:30-15:00'),
+('SLOT013', '15:00-15:30'),
+('SLOT014', '15:30-16:00'),
+('SLOT015', '16:00-16:30'),
+('SLOT016', '16:30-17:00'),
+('SLOT017', '17:00-17:30'),
+('SLOT018', '17:30-18:00'),
+('SLOT019', '18:00-18:30'),
+('SLOT020', '18:30-19:00'),
+('SLOT021', '19:00-19:30'),
+('SLOT022', '19:30-20:00');
 
-INSERT INTO Appointments (AppointmentId, AccountId, DoctorId, SlotId, ConsultationCost, Reason, DoctorNote) VALUES
+INSERT INTO AvailableSlot (SlotId, DoctorId, SlotDate, SlotTimeId) VALUES
+('SLO0001', 'ACC0008', '2024-06-15', 'SLOT001'),
+('SLO0002', 'ACC0009', '2024-06-15', 'SLOT004');
+
+INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, ConsultationCost, Reason, DoctorNote) VALUES
 ('APP0001', 'ACC0002', 'ACC0008', 'SLO0002', 50.00, 'Checkup', 'Recommend follow up'),
 ('APP0002', 'ACC0003', 'ACC0009', 'SLO0001', 60.00, 'Follow-up', NULL),
-('APP0003', 'ACC0003', 'ACC0009', 'SLO0001', 60.00, 'Checkup', NULL);
 
 INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus) VALUES
 ('REQ0001', 'APP0001', 'Payment for appointment', '2024-06-01', 'Pending'),
