@@ -55,7 +55,31 @@ const authCreatePatient = async (req, res) => {
     }
 }
 
+const getPatientById = async (req, res) => {
+    const { patientId } = req.params;
+
+    try {
+        const patient = await accounts.Patient.getPatientById(patientId);
+
+        if (!patient) {
+            res.status(404).json({
+                message: `Patient with ID ${patientId} not found.`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: "Patient with ID Found",
+            patient: patient
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
     authLoginAccount,
-    authCreatePatient
+    authCreatePatient,
+    getPatientById
 }

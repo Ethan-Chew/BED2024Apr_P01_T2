@@ -72,6 +72,21 @@ class Patient extends Account {
 
         return new Patient(newAccountId, name, email, password, insertUnixTime, knownAllergies, birthdate, "Pending");
     }
+
+    static async getPatientById(patientId) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `
+            SELECT * FROM Patient
+            WHERE PatientId = '${patientId}'
+        `;
+        const request = connection.request();
+
+        const result = await request.query(query);
+        connection.close();
+
+        return result.recordset[0];
+    }
 }
 
 class Staff extends Account {

@@ -22,6 +22,9 @@ app.use(staticMiddleware);
 app.post("/auth/login", accountsController.authLoginAccount);
 app.post("/auth/create/patient", validatePatient, accountsController.authCreatePatient);
 
+/// Route for Getting Patient Account Details
+app.get("/patient/:patientId", accountsController.getPatientById);
+
 // Initialise Server
 app.listen(3000, async () => {
     console.log("CareLinc listening on port 3000.")

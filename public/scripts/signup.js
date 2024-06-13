@@ -53,7 +53,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
         
         if (createResponse.status === 201) {
-            
+            alert("Account Created Successfully! You are currently Pending Approval by an Admin.");
+            window.location.href = "/index.html";
         }
     });
 });
