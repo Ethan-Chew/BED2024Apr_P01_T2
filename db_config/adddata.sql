@@ -17,11 +17,11 @@ INSERT INTO Staff(StaffId) VALUES
 ('ACC0002');
 
 INSERT INTO Patient(PatientId, KnownAllergies, PatientBirthdate, PatientIsApproved) VALUES
-('ACC0003', 'Pollen', "01-01-2000", 'Declined'),
-('ACC0004', 'Dust', "01-01-2000", 'Pending'),
-('ACC0005', 'Mold', "01-01-2000", 'Approved'),
-('ACC0006', 'Cats', "01-01-2000", 'Declined'),
-('ACC0007', 'Dogs', "01-01-2000", 'Pending');
+('ACC0003', 'Pollen', '01-01-2000', 'Declined'),
+('ACC0004', 'Dust', '01-01-2000', 'Pending'),
+('ACC0005', 'Mold', '01-01-2000', 'Approved'),
+('ACC0006', 'Cats', '01-01-2000', 'Declined'),
+('ACC0007', 'Dogs', '01-01-2000', 'Pending');
 
 INSERT INTO Doctor(DoctorId, DoctorCreatedBy) VALUES
 ('ACC0008', 'ACC0001'),
@@ -68,7 +68,7 @@ INSERT INTO AvailableSlot (SlotId, DoctorId, SlotDate, SlotTimeId) VALUES
 
 INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, ConsultationCost, Reason, DoctorNote) VALUES
 ('APP0001', 'ACC0002', 'ACC0008', 'SLO0002', 50.00, 'Checkup', 'Recommend follow up'),
-('APP0002', 'ACC0003', 'ACC0009', 'SLO0001', 60.00, 'Follow-up', NULL),
+('APP0002', 'ACC0003', 'ACC0009', 'SLO0001', 60.00, 'Follow-up', NULL);
 
 INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus) VALUES
 ('REQ0001', 'APP0001', 'Payment for appointment', '2024-06-01', 'Pending'),
@@ -110,14 +110,14 @@ INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAva
 ('DRI0007', 'Penicillamine', '2024-11-30', 150, 300, '2024-01-13','ACC0010'),
 ('DRI0008', 'Prazosin', '2024-11-30', 150, 300, '2024-01-13','ACC0010'),
 ('DRI0009', 'Magnesium Carbonate', '2024-11-30', 150, 300, '2024-01-14','ACC0010'),
-('DRI0010', 'Promethazine', '2024-11-30', 150, 300, '2024-01-14''ACC0011'),
-('DRI0011', 'Co-trimoxazole', '2024-11-30', 150, 300, '2024-01-15''ACC0011'), 
-('DRI0012', 'Metronidazole', '2024-11-30', 150, 300, '2024-01-15''ACC0010'), 
-('DRI0013', 'Benzydamine', '2024-11-30', 150, 300, '2024-01-16''ACC0011'), 
-('DRI0014', 'Digoxin', '2024-11-30', 150, 300, '2024-01-16''ACC0010'), 
-('DRI0015', 'Dipyridamole', '2024-11-30', 150, 300, '2024-01-17''ACC0011'), 
-('DRI0016', 'Pheniramine', '2024-11-30', 150, 300, '2024-01-18''ACC0011'), 
-('DRI0017', 'Aciclovir', '2024-11-30', 150, 300, '2024-01-19''ACC0011'); 
+('DRI0010', 'Promethazine', '2024-11-30', 150, 300, '2024-01-14', 'ACC0011'),
+('DRI0011', 'Co-trimoxazole', '2024-11-30', 150, 300, '2024-01-15', 'ACC0011'), 
+('DRI0012', 'Metronidazole', '2024-11-30', 150, 300, '2024-01-15', 'ACC0010'), 
+('DRI0013', 'Benzydamine', '2024-11-30', 150, 300, '2024-01-16', 'ACC0011'), 
+('DRI0014', 'Digoxin', '2024-11-30', 150, 300, '2024-01-16', 'ACC0010'), 
+('DRI0015', 'Dipyridamole', '2024-11-30', 150, 300, '2024-01-17', 'ACC0011'), 
+('DRI0016', 'Pheniramine', '2024-11-30', 150, 300, '2024-01-18', 'ACC0011'), 
+('DRI0017', 'Aciclovir', '2024-11-30', 150, 300, '2024-01-19', 'ACC0011'); 
 
 INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quantity, Price, Reason, DrugRequest) VALUES
 ('PRM0001', 'APP0001', 'Aspirin', 10, 59.90, 'Pain relief', 'Completed'),

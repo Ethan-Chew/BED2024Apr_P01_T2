@@ -68,12 +68,12 @@ CREATE TABLE Questionnaire (
 	CONSTRAINT FK_Questionnaire_Patient FOREIGN KEY (AccountId) REFERENCES Patient(PatientId)
 );
 
-CREATE TABLE SlotTime {
+CREATE TABLE SlotTime (
 	SlotTimeId VARCHAR(7) NOT NULL,
 	SlotTime VARCHAR(20) NOT NULL UNIQUE,
 
 	CONSTRAINT PK_SlotTime PRIMARY KEY (SlotTimeId),
-}
+)
 
 CREATE TABLE AvailableSlot (
 	SlotId VARCHAR(7),
@@ -132,8 +132,8 @@ CREATE TABLE DrugInventoryRecord (
 	CompanyId VARCHAR(7) NOT NULL,
 
 	CONSTRAINT PK_DrugInventoryRecord PRIMARY KEY (DrugRecordId),
-	CONSTRAINT FK_DrugInventoryRecord_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName)
-	CONSTRAINT FK_DrugInventoryRecord_Company FOREIGN KEY (CompanyId) REFERENCES Company(CompanyId)
+	CONSTRAINT FK_DrugInventoryRecord_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName),
+	CONSTRAINT FK_DrugInventoryRecord_Company FOREIGN KEY (CompanyId) REFERENCES Company(CompanyId),
 )
 
 CREATE TABLE PrescribedMedication (

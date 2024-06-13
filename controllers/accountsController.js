@@ -43,7 +43,7 @@ const authCreatePatient = async (req, res) => {
 
     try {
         const account = await accounts.Patient.createPatient(name, email, password, knownAllergies, birthdate);
-        const questionnaire = await questionnaire.createQuestionnaire(account.AccountId, qns);
+        // const questionnaire = await questionnaire.createQuestionnaire(account.AccountId, qns);
 
         res.status(201).json({
             message: "Account Created Successfully",

@@ -30,14 +30,11 @@ class Account {
     }
 
     // Helper Function to get New ID
-    static async getNextAccountId() {
-        const connection = await sql.connect(dbConfig);
-
+    static async getNextAccountId(accountConnection) {
         const query = `SELECT * FROM Account WHERE AccountId=(SELECT max(AccountId) FROM Account);`
-        const request = connection.request();
+        const request = accountConnection.request();
 
         const result = await request.query(query);
-        connection.close();
 
         const incrementString = str => str.replace(/\d+/, num => (Number(num) + 1).toString().padStart(4, "0"));
         return incrementString(result.recordset[0].AccountId);
@@ -55,7 +52,7 @@ class Patient extends Account {
 
     static async createPatient(name, email, password, knownAllergies, birthdate) {
         const connection = await sql.connect(dbConfig);
-        const newAccountId = await Account.getNextAccountId();
+        const newAccountId = await Account.getNextAccountId(connection);
         const insertUnixTime = Math.floor(Date.now() / 1000);
 
         const insertMemberQuery = `
@@ -68,7 +65,6 @@ class Patient extends Account {
         `;
 
         const request = connection.request();
-
         const insertMemberResult = await request.query(insertMemberQuery);
         const insertPatientResult = await request.query(insertPatientQuery);
 

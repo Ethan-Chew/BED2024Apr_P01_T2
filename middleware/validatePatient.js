@@ -2,8 +2,8 @@ const Joi = require("joi");
 
 const validatePatient = (res, req, next) => {
     const schema = Joi.object({
-        name: Joi.min(1).string().required(),
-        password: Joi.min(6).string().required(),
+        name: Joi.string().min(1).required(),
+        password: Joi.string().min(6).required(),
         knownAllergies: Joi.string().required(),
         birthdate: Joi.number().required(), // UNIX Time
         qns: Joi.object({
@@ -26,3 +26,5 @@ const validatePatient = (res, req, next) => {
 
     next();
 };
+
+module.exports = validatePatient;
