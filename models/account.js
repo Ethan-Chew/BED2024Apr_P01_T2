@@ -104,4 +104,4 @@ module.exports = {
     Staff,
     Doctor,
     Company,
-}
+};

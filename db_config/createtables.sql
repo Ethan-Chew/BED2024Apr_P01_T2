@@ -27,7 +27,7 @@ CREATE TABLE Staff (
 CREATE TABLE Patient (
 	PatientId VARCHAR(7) NOT NULL,
 	KnownAllergies VARCHAR(255) NOT NULL,
-	PatientBirthdate BIGINT NOT NULL,
+	PatientBirthdate DATE NOT NULL,
 	PatientIsApproved VARCHAR(20) NOT NULL CHECK (PatientIsApproved IN ('Pending', 'Approved', 'Declined')),
 
 	CONSTRAINT PK_Patient PRIMARY KEY (PatientId),
@@ -78,6 +78,7 @@ CREATE TABLE SlotTime {
 CREATE TABLE AvailableSlot (
 	SlotId VARCHAR(7),
 	DoctorId VARCHAR(7) NOT NULL,
+	SlotDate DATE NOT NULL,
 	SlotTimeId VARCHAR(7) NOT NULL,
 
 	CONSTRAINT PK_AvailableSlot PRIMARY KEY (SlotId),

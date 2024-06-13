@@ -3,7 +3,6 @@ const Joi = require("joi");
 const validatePatient = (res, req, next) => {
     const schema = Joi.object({
         name: Joi.min(1).string().required(),
-        email: Joi.string().email().required(),
         password: Joi.min(6).string().required(),
         knownAllergies: Joi.string().required(),
         birthdate: Joi.number().required(), // UNIX Time

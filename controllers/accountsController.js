@@ -1,4 +1,5 @@
 const accounts = require("../models/account");
+const questionnaire = require("../models/questionnaire");
 
 const authLoginAccount = async (req, res) => {
     const { email, password } = req.body;
@@ -24,7 +25,10 @@ const authLoginAccount = async (req, res) => {
                 message: "Incorrect Password"
             });
         } else {
-            res.status(200).send(account);
+            res.status(200).json({
+                message: "Login Successful",
+                account: account
+            })
         }
     } catch(err) {
         console.error(err);
@@ -39,8 +43,12 @@ const authCreatePatient = async (req, res) => {
 
     try {
         const account = await accounts.Patient.createPatient(name, email, password, knownAllergies, birthdate);
+        const questionnaire = await questionnaire.createQuestionnaire(account.AccountId, qns);
 
-        res.status(201).send(account);
+        res.status(201).json({
+            message: "Account Created Successfully",
+            account: account
+        });
     } catch(err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
@@ -49,4 +57,5 @@ const authCreatePatient = async (req, res) => {
 
 module.exports = {
     authLoginAccount,
+    authCreatePatient
 }

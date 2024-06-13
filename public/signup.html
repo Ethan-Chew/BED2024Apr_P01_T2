@@ -20,9 +20,9 @@
         </header>
 
         <!-- Main Content -->
-        <div class="p-8">
+        <div class="p-8" id="create-account-container">
             <h2 class="text-3xl font-bold mb-6">Create Account</h2>
-            <form action="#">
+            <form id="create-acc-form">
                 <div class="flex flex-row gap-10">
                     <!-- Left Column -->
                     <div class="flex-grow">
@@ -30,25 +30,25 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
                                 Full Name:
                             </label>
-                            <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700" id="username" type="text" placeholder="John Doe">
+                            <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700" id="fullname" type="text" placeholder="John Doe" required>
                         </div>
                         <div class="mt-3">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
                                 Username:
                             </label>
-                            <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700" id="username" type="text" placeholder="JohnDoe">
+                            <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700" id="username" type="text" placeholder="JohnDoe" required>
                         </div>
                         <div class="mt-3">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="date">
                                 Date of Birth:
                             </label>
-                            <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700" id="dob" type="date">
+                            <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700" id="dob" type="date" required>
                         </div>
                         <div class="mt-3">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="paragraph">
                                 Known Medication Allergies:
                             </label>
-                            <textarea class="appearance-none border rounded w-full py-2 px-3 text-gray-700" id="knownallergies" rows="4" placeholder="Enter your text here..."></textarea>
+                            <textarea class="appearance-none border rounded w-full py-2 px-3 text-gray-700" id="knownallergies" rows="4" placeholder="Enter your text here..." required></textarea>
                         </div>
                     </div>
                     <!-- Right Column -->
@@ -57,20 +57,90 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
                                 Password:
                             </label>
-                            <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700" id="password" type="password" placeholder="********">
+                            <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 required" id="password" type="password" placeholder="********" required>
                         </div>
                         <div class="mt-3">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
                                 Confirm Password:
                             </label>
-                            <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700" id="confirm-password" type="password" placeholder="********">
+                            <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 required" id="confirm-password" type="password" placeholder="********" required>
                         </div>
                     </div>
                 </div>
 
                 <div class="mt-5">
-                    <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded" type="button">
-                        Continue
+                    <div class="flex flex-row items-center">
+                        <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded" type="submit">
+                            Continue
+                        </button>
+                        <p class="ml-auto text-red-800" id="error-text">hello</p>
+                    </div>
+                    <p class="mt-4 text-sm text-gray-600">
+                        Have an account with us? <a href="./login.html" class="text-blue-500 hover:text-blue-700">Login</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+        <div class="p-8 hidden" id="questionnaire-container">
+            <div class="mb-6">
+                <h2 class="text-3xl font-bold">Questionnaire</h2>
+                <a>Please fill in this short Questionnaire to ensure that you fit the criteria for using CareLinc.</a>    
+            </div>
+            <form id="questionnaire-form">
+                <div class="flex flex-row gap-10">
+                    <!-- Left Column -->
+                    <div class="flex-grow">
+                        <div>
+                            <label class="block text-gray-700 text-xl font-bold" for="username">
+                                Question 1
+                            </label>
+                            <a>Are you currently employed full-time (35+ hours/week)?</a>
+                            <input class="mt-2 appearance-none border rounded w-full py-2 px-3 text-gray-700" id="qn1" type="text" placeholder="Your Answer" required>
+                        </div>
+                        <div class="mt-3">
+                            <label class="block text-gray-700 text-xl font-bold" for="username">
+                                Question 2
+                            </label>
+                            <a>If yes, what is your gross monthly income?</a>
+                            <input class="mt-2 appearance-none border rounded w-full py-2 px-3 text-gray-700" id="qn2" type="text" placeholder="Your Answer" required>
+                        </div>
+                        <div class="mt-3">
+                            <label class="block text-gray-700 text-xl font-bold" for="username">
+                                Question 3
+                            </label>
+                            <a>Do you receive any monetary assistance from the Government?</a>
+                            <input class="mt-2 appearance-none border rounded w-full py-2 px-3 text-gray-700" id="qn3" type="text" placeholder="Your Answer" required>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="flex-grow">
+                        <div>
+                            <label class="block text-gray-700 text-xl font-bold" for="username">
+                                Question 4
+                            </label>
+                            <a>How many people live in your household, including yourself?</a>
+                            <input class="mt-2 appearance-none border rounded w-full py-2 px-3 text-gray-700" id="qn4" type="text" placeholder="Your Answer" required>
+                        </div>
+                        <div class="mt-3">
+                            <label class="block text-gray-700 text-xl font-bold" for="username">
+                                Question 5
+                            </label>
+                            <a>Do you own your current residence, or are you renting?</a>
+                            <input class="mt-2 appearance-none border rounded w-full py-2 px-3 text-gray-700" id="qn5" type="text" placeholder="Your Answer" required>
+                        </div>
+                        <div class="mt-3">
+                            <label class="block text-gray-700 text-xl font-bold" for="username">
+                                Question 6
+                            </label>
+                            <a>Do you have any prison records?</a>
+                            <input class="mt-2 appearance-none border rounded w-full py-2 px-3 text-gray-700" id="qn6" type="text" placeholder="Your Answer" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded" type="submit">
+                        Create Account
                     </button>
                     <p class="mt-4 text-sm text-gray-600">
                         Have an account with us? <a href="./login.html" class="text-blue-500 hover:text-blue-700">Login</a>
@@ -80,5 +150,6 @@
         </div>
     </body>
 
+    <script src="scripts/signup.js"></script>
     <script src="scripts/tailwind.config.js"></script>
 </html>

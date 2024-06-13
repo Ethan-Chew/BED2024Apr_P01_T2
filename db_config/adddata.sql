@@ -17,11 +17,11 @@ INSERT INTO Staff(StaffId) VALUES
 ('ACC0002');
 
 INSERT INTO Patient(PatientId, KnownAllergies, PatientBirthdate, PatientIsApproved) VALUES
-('ACC0003', 'Pollen', 970365600, 'Declined'),
-('ACC0004', 'Dust', 970365600, 'Pending'),
-('ACC0005', 'Mold', 970365600, 'Approved'),
-('ACC0006', 'Cats', 970365600, 'Declined'),
-('ACC0007', 'Dogs', 970365600, 'Pending');
+('ACC0003', 'Pollen', "01-01-2000", 'Declined'),
+('ACC0004', 'Dust', "01-01-2000", 'Pending'),
+('ACC0005', 'Mold', "01-01-2000", 'Approved'),
+('ACC0006', 'Cats', "01-01-2000", 'Declined'),
+('ACC0007', 'Dogs', "01-01-2000", 'Pending');
 
 INSERT INTO Doctor(DoctorId, DoctorCreatedBy) VALUES
 ('ACC0008', 'ACC0001'),

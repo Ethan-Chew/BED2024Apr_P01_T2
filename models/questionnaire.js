@@ -40,3 +40,5 @@ class Questionnaire {
         return result;
     }
 }
+
+module.exports = Questionnaire;

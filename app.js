@@ -7,6 +7,9 @@ const dbConfig = require("./dbConfig");
 const accountsController = require("./controllers/accountsController");
 // TODO: Add Controllers
 
+// Middleware
+const validatePatient = require("./middleware/validatePatient");
+
 const app = express();
 const staticMiddleware = express.static("public");
 
@@ -17,6 +20,7 @@ app.use(staticMiddleware);
 // Routes
 /// Routes for Account Authentication and Authorisation
 app.post("/auth/login", accountsController.authLoginAccount);
+app.post("/auth/create/patient", validatePatient, accountsController.authCreatePatient);
 
 // Initialise Server
 app.listen(3000, async () => {
