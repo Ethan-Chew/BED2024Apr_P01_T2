@@ -1,4 +1,6 @@
-﻿INSERT INTO Account(AccountId, AccountName, AccountPassword, AccountEmail, AccountCreationDate) VALUES
+﻿USE CareLinc;
+
+INSERT INTO Account(AccountId, AccountName, AccountPassword, AccountEmail, AccountCreationDate) VALUES
 ('ACC0001', 'User1', 'password1', 'user1@mail.com', 1718096320), 
 ('ACC0002', 'User2', 'password2', 'user2@mail.com', 1717839920),
 ('ACC0003', 'User3', 'password3', 'user3@mail.com', 1717773120),
@@ -76,8 +78,7 @@ INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessa
 
 INSERT INTO Payments (PaymentId, AppointmentId, PaymentAmount, PaymentStatus) VALUES
 ('PAY0001', 'APP0001', 50.00, 'Unpaid'),
-('PAY0002', 'APP0002', 50.00, 'Unpaid'),
-('PAY0003', 'APP0003', 60.00, 'Paid');
+('PAY0002', 'APP0002', 50.00, 'Paid');
 
 INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Aspirin', 5.99, 'Pain relief'),
@@ -86,11 +87,11 @@ INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Panadol', 8.99, 'Pain relief'),
 ('Calcium Channel Blockers', 16.99, 'Lower blood pressure'),
 ('Tamoxifen', 7.99, 'Treatment for breast cancer'),
-('​​Penicillamine', 7.99, 'Treatment for rheumatoid arthritis'),
-('​Prazosin', 7.99, 'Treatment for hypertension'),
-('​Magnesium Carbonate', 7.99, 'Reducing excessive acid in the stomach'),
+('Penicillamine', 7.99, 'Treatment for rheumatoid arthritis'),
+('Prazosin', 7.99, 'Treatment for hypertension'),
+('Magnesium Carbonate', 7.99, 'Reducing excessive acid in the stomach'),
 ('Promethazine', 7.99, 'Inflammation relief'),
-('​Aciclovir', 7.99, 'Treatment for viral infections'),
+('Aciclovir', 7.99, 'Treatment for viral infections'),
 ('Clindamycin', 7.99, 'Treatment for viral infections'),
 ('Co-trimoxazole', 7.99, 'Treatment for bacterial infections'), 
 ('Metronidazole', 7.99, 'Treatment for gut infections'), 
@@ -99,11 +100,10 @@ INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Dipyridamole', 7.99, 'Prevent blood clots'), 
 ('Pheniramine', 7.99, 'Pain relief for eyes'); 
 
-
 INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAvailableQuantity, DrugTotalQuantity, DrugRecordEntryDate, CompanyId) VALUES
 ('DRI0001', 'Aspirin', '2024-12-31', 100, 200, '2024-01-01','ACC0010'),
 ('DRI0002', 'Ibuprofen', '2024-11-30', 150, 300, '2024-01-10','ACC0011'),
-('DRI0003', 'Paracetemol', '2025-2-21', 150, 300, '2024-01-11','ACC0010'),
+('DRI0003', 'Paracetamol', '2025-2-21', 150, 300, '2024-01-11','ACC0010'),
 ('DRI0004', 'Panadol', '2024-11-30', 150, 300, '2024-01-11','ACC0010'),
 ('DRI0005', 'Calcium Channel Blockers', '2024-11-30', 150, 300, '2024-01-12','ACC0010'),
 ('DRI0006', 'Tamoxifen', '2024-10-23', 150, 300, '2024-01-12','ACC0010'),
@@ -121,9 +121,10 @@ INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAva
 
 INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quantity, Price, Reason, DrugRequest) VALUES
 ('PRM0001', 'APP0001', 'Aspirin', 10, 59.90, 'Pain relief', 'Completed'),
-('PRM0002', 'APP0002', 'Paracetamol', 10, 59.90, 'Fever', 'Completed'),
-('PRM0003', 'APP0003', 'Ibuprofen', 5, 39.95, 'Inflammation', 'Pending');
+('PRM0002', 'APP0002', 'Paracetamol', 10, 59.90, 'Fever', 'Pending');
 
 INSERT INTO DrugTopupRequest (TopupId, DrugName, TopupQuantity, TopupRequestDate, TopupStatus) VALUES
 ('DRT0001', 'Paracetamol', 100, '2024-05-01', 'Completed'),
 ('DRT0002', 'Ibuprofen', 200, '2024-05-05', 'Pending');
+
+USE master;

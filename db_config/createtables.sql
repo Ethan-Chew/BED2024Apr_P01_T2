@@ -1,3 +1,5 @@
+USE CareLinc;
+
 CREATE TABLE Account (
     AccountId VARCHAR(7),
     AccountName VARCHAR(255) NOT NULL,
@@ -119,7 +121,7 @@ CREATE TABLE Payments (
 	PaymentStatus VARCHAR (10) NOT NULL CHECK (PaymentStatus IN ('Paid','Unpaid')),
 
 	CONSTRAINT PK_Payments PRIMARY KEY (PaymentId),
-	CONSTRAINT FK_Payments_Appointment FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
+	CONSTRAINT FK_Payments_Appointments FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
 )
 
 CREATE TABLE DrugInventoryRecord (
@@ -160,3 +162,5 @@ CREATE TABLE DrugTopupRequest (
 	CONSTRAINT PK_DrugTopupRequest PRIMARY KEY (TopupId),
 	CONSTRAINT FK_DrugTopupRequest_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName)
 )
+
+USE master;
