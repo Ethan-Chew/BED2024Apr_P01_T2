@@ -119,9 +119,9 @@ INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAva
 ('DRI0016', 'Pheniramine', '2024-11-30', 150, 300, '2024-01-18', 'ACC0011'), 
 ('DRI0017', 'Aciclovir', '2024-11-30', 150, 300, '2024-01-19', 'ACC0011'); 
 
-INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quantity, Price, Reason, DrugRequest) VALUES
-('PRM0001', 'APP0001', 'Aspirin', 10, 59.90, 'Pain relief', 'Completed'),
-('PRM0002', 'APP0002', 'Paracetamol', 10, 59.90, 'Fever', 'Pending');
+INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quantity, Reason, DrugRequest) VALUES
+('PRM0001', 'APP0001', 'Aspirin', 10, 'Pain relief', 'Completed'),
+('PRM0002', 'APP0002', 'Paracetamol', 10, 'Fever', 'Pending');
 
 INSERT INTO DrugTopupRequest (TopupId, DrugName, TopupQuantity, TopupRequestDate, TopupStatus) VALUES
 ('DRT0001', 'Paracetamol', 100, '2024-05-01', 'Completed'),

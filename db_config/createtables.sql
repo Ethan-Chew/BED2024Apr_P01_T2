@@ -143,7 +143,6 @@ CREATE TABLE PrescribedMedication (
 	AppointmentId VARCHAR(7) NOT NULL,
 	DrugName VARCHAR(255) NOT NULL,
 	Quantity INT NOT NULL,
-	Price MONEY NOT NULL,
 	Reason VARCHAR(255) NOT NULL,
 	DrugRequest VARCHAR(10) NULL CHECK (DrugRequest IN ('Cancelled', 'Pending', 'Completed')),
 

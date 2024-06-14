@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Show Results based on Approval Status
                 switch (patient.PatientIsApproved) {
                     case "Approved":
+                        sessionStorage.setItem('accountType', 'patient');
                         window.location.href = './patient/home.html';
                         return;
                     case "Pending":
@@ -39,11 +40,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                         break;
                 }
             } else if (account.CompanyId) {
-                window.location.href = './company/home';
+                sessionStorage.setItem('accountType', 'company');
+                window.location.href = './company/home.html';
             } else if (account.DoctorId) {
-                window.location.href = './doctor/home';
+                sessionStorage.setItem('accountType', 'doctor');
+                window.location.href = './doctor/home.html';
             } else if (account.StaffId) {
-                window.location.href = './staff/home';
+                sessionStorage.setItem('accountType', 'staff');
+                window.location.href = './staff/home.html';
             }
         } else {
             const error = await response.json();

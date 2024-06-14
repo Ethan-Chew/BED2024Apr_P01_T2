@@ -5,7 +5,7 @@ const dbConfig = require("./dbConfig");
 
 // Controllers
 const accountsController = require("./controllers/accountsController");
-// TODO: Add Controllers
+const appointmentController = require("./controllers/appointmentController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -22,8 +22,12 @@ app.use(staticMiddleware);
 app.post("/auth/login", accountsController.authLoginAccount);
 app.post("/auth/create/patient", validatePatient, accountsController.authCreatePatient);
 
-/// Route for Getting Patient Account Details
+/// Route for Patient Account Details
 app.get("/patient/:patientId", accountsController.getPatientById);
+
+/// Route for Appointments
+app.get("/appointments/patient/:patientId", appointmentController.getAllPatientAppointment);
+app.get("/appointments/:appointmentId", appointmentController.getAppointmentDetailById);
 
 // Initialise Server
 app.listen(3000, async () => {
