@@ -77,15 +77,42 @@ class Patient extends Account {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT * FROM Patient
-            WHERE PatientId = '${patientId}'
+            SELECT p.*, a.DoctorId, a.SlotId, a.ConsultationCost, a.Reason, a.DoctorNote, pay.PaymentAmount, pay.PaymentStatus, s.SlotDate, st.SlotTime FROM Patient p
+            LEFT JOIN Appointments a ON a.PatientId = p.PatientId
+            LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
+            LEFT JOIN AvailableSlot s ON s.SlotId = a.SlotId
+            LEFT JOIN SlotTime st ON st.SlotTimeId = s.SlotTimeId
+            WHERE p.PatientId = '${patientId}'
         `;
         const request = connection.request();
 
         const result = await request.query(query);
         connection.close();
 
-        return result.recordset[0];
+        // Group Patients with their Associated Appointments
+        const patientsWithAppointments = {
+            patientId: result.recordset[0].PatientId,
+            knownAllergies: result.recordset[0].KnownAllergies,
+            birthdate: result.recordset[0].PatientBirthdate,
+            isApproved: result.recordset[0].PatientIsApproved,
+            appointments: [],
+        };
+        for (const row of result.recordset) {
+            patientsWithAppointments.appointments.push({
+                appointmentId: row.AppointmentId,
+                doctorId: row.DoctorId,
+                slotId: row.SlotId,
+                consultationCost: row.ConsultationCost,
+                reason: row.Reason,
+                doctorNote: row.DoctorNote,
+                paymentAmount: row.PaymentAmount,
+                paymentStatus: row.PaymentStatus,
+                slotDate: row.SlotDate,
+                slotTime: row.SlotTime,
+            });
+        }
+
+        return patientsWithAppointments;
     }
 }
 
