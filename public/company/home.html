@@ -18,6 +18,36 @@
                 </button>
             </nav>
         </header>
+
+        <!-- Main Content -->
+        <div class="p-8 flex flex-col gap-10">
+            <div>
+                <h1 class="text-4.5xl font-bold">CareLinc Company</h1>
+                <a class="text-xl">Welcome Back. Select a service you require</a>
+            </div>
+
+            <div class="grid grid-cols-3 gap-5">
+                <!--Drug Donation Request-->
+                <div class="flex flex-col align-top bg-gray-200 p-5 rounded-xl cursor-pointer h-24" id="view-request">
+                    <a class="text-2xl">View Drug Donation Request</a>
+                    <i id="num-request-txt"><span class="font-bold" id="num-unpaid-num">0</span> Pending Requests</i>
+                </div>
+                <!--Drug Donation Orders-->
+                <div class="flex align-top bg-gray-200 p-5 rounded-xl cursor-pointer h-24" id="view-order">
+                    <a class="text-2xl">View Drug Donation Orders</a>
+                </div>
+                <!--Drug Inventory-->
+                <div class="flex align-top bg-gray-200 p-5 rounded-xl cursor-pointer h-24" id="view-inventory">
+                    <a class="text-2xl">View Drug Inventory</a>  
+                </div>
+                <!--Drug Inventory Record-->
+                <div class="flex align-top bg-gray-200 p-5 rounded-xl cursor-pointer h-24" id="view-record">
+                    <a class="text-2xl">View Drug Inventory Record</a>  
+                </div>
+            </div>
+        </div>
+
+        
     </body>
 
     <script src="../scripts/tailwind.config.js"></script>
