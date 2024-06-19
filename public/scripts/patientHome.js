@@ -11,6 +11,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = '../index.html';
     });
 
+    // Handle onClick of Main Buttons
+    document.getElementById('book-appt').addEventListener('click', () => {
+        window.location.href = '../bookAppointment.html';
+    });
+    document.getElementById('make-payment').addEventListener('click', () => {
+        window.location.href = '../makePayment.html';
+    });
+    document.getElementById('view-history').addEventListener('click', () => {
+        window.location.href = '../prescriptionHistory.html';
+    });
+
     // Fetch Patient Information
     const accountId = sessionStorage.getItem('accountId');
 

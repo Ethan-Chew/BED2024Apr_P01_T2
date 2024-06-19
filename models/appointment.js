@@ -57,10 +57,31 @@ class Appointment {
 
         const result = await request.query(query);
         connection.close();
-
+        
         if (!connection) return null;
 
-        return result.recordset[0];
+        const appointmentWithMedication = {
+            appointmentId: result.recordset[0].AppointmentId,
+            patientId: result.recordset[0].PatientId,
+            doctorId: result.recordset[0].DoctorId,
+            slotId: result.recordset[0].SlotId,
+            consultationCost: result.recordset[0].ConsultationCost,
+            reason: result.recordset[0].Reason,
+            doctorNote: result.recordset[0].DoctorNote,
+            medication: []
+        }
+
+        for (const row of record.recordset) {
+            appointmentWithMedication.medication.push({
+                drugName: row.DrugName,
+                quantity: row.Quantity,
+                drugReason: row.DrugReason,
+                drugRequest: row.DrugRequest,
+                drugPrice: row.DrugPrice
+            });
+        }
+
+        return appointmentWithMedication;
     }
 
     static async createAppointment(patientId, slotId, reason) {
