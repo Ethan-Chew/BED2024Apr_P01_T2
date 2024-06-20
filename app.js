@@ -22,12 +22,14 @@ app.use(staticMiddleware);
 app.post("/auth/login", accountsController.authLoginAccount);
 app.post("/auth/create/patient", validatePatient, accountsController.authCreatePatient);
 
-/// Route for Patient Account Details
+/// Route for Patient Account
 app.get("/patient/:patientId", accountsController.getPatientById);
+app.delete("/patient/:patientId", accountsController.deletePatientById);
 
 /// Route for Appointments
 app.get("/appointments/patient/:patientId", appointmentController.getAllPatientAppointment);
 app.get("/appointments/:appointmentId", appointmentController.getAppointmentDetailById);
+app.delete("/appointments/:appointmentId", appointmentController.deleteAppointmentById);
 
 // Initialise Server
 app.listen(3000, async () => {
