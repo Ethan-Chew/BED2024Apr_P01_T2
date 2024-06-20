@@ -1,11 +1,12 @@
-const Joi = require("joi");
+const Joi = require("joi").extend(require('@joi/date'));
 
-const validatePatient = (res, req, next) => {
+const validatePatient = (req, res, next) => {
     const schema = Joi.object({
         name: Joi.string().min(1).required(),
-        password: Joi.string().min(6).required(),
+        password: Joi.string(),
+        email: Joi.string().email({ tlds: { allow: false } }).required(),
         knownAllergies: Joi.string().required(),
-        birthdate: Joi.number().required(), // UNIX Time
+        birthdate: Joi.date().format('YYYY-MM-DD').required(), // UNIX Time
         qns: Joi.object({
             qOne: Joi.string().required(),
             qTwo: Joi.string().required(),
@@ -13,7 +14,7 @@ const validatePatient = (res, req, next) => {
             qFour: Joi.string().required(),
             qFive: Joi.string().required(),
             qSix: Joi.string().required(),
-        }).required(),
+        }),
     });
 
     const validation = schema.validate(req.body, { abortEarly: false });
