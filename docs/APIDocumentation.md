@@ -3,15 +3,15 @@ This document outlines the different endpoints contained in the CareLinc Back-En
 All related Schemas are located in the [Schema.md](./Schema.md) file.
 
 ## Account Authentication/Authorisation
-#### Login to an Account
+### Login to an Account
 <details>
-<summary><code>POST</code> <code><b>/auth/login</b></code></summary>
+<summary><code>POST</code<code><b>/auth/login</b></code></summary>
 
 **Request Body**
- > | name | type | data type |
-> |-----------|-----------|-------------------------|
-> | email | required | string |
-> | password | required | string |
+ | name | type | data type |
+|-----------|-----------|-------------------------|
+| email | required | string |
+| password | required | string |
 
 **Sample Request Body**
 ```json
@@ -23,28 +23,28 @@ All related Schemas are located in the [Schema.md](./Schema.md) file.
 
 **Responses**
 
-> | http code | response |
-> |---------------|---------------------------------------------------------------------|
-> | `200` | `{ message: "Login Successful", account: <account object> }` |
-> | `403` | `{ message: "Incorrect Password" }` |
-> | `404` | `{ message: "Account with email <email address> not found." }` |
-> | `500` | `{ message: "Internal Server Error" }` |
+| http code | response |
+|---------------|---------------------------------------------------------------------|
+| `200` | `{ message: "Login Successful", account: <account object}` |
+| `403` | `{ message: "Incorrect Password" }` |
+| `404` | `{ message: "Account with email <email addressnot found." }` |
+| `500` | `{ message: "Internal Server Error" }` |
 </details>
 
-#### Create a New Patient Account
+### Create a New Patient Account
 <details>
-<summary><code>POST</code> <code><b>/auth/create/patient</b></code></summary>
+<summary><code>POST</code<code><b>/auth/create/patient</b></code></summary>
 
 **Request Body**
-> | name | type | data type |
-> |-----------|-----------|-------------------------|
-> | name | required | string |
-> | email | required | string |
-> | password | required | string |
-> | knownAllergies | required | string |
-> | birthdate | required | string (format: YYYY-MM-DD) |
-> | email | required | string |
-> | qns | required | object |
+| name | type | data type |
+|-----------|-----------|-------------------------|
+| name | required | string |
+| email | required | string |
+| password | required | string |
+| knownAllergies | required | string |
+| birthdate | required | string (format: YYYY-MM-DD) |
+| email | required | string |
+| qns | required | object |
 
 **Data Object for `qns` Attribute**
 
@@ -80,10 +80,10 @@ All related Schemas are located in the [Schema.md](./Schema.md) file.
 
 **Responses**
 
-> | http code | response |
-> |---------------|---------------------------------------------------------------------|
-> | `201` | `{ message: "Account Created Successfully", account: <account object> }` |
-> | `500` | `{ message: "Internal Server Error" }` |
+| http code | response |
+|---------------|---------------------------------------------------------------------|
+| `201` | `{ message: "Account Created Successfully", account: <account object}` |
+| `500` | `{ message: "Internal Server Error" }` |
 </details>
 
 ---
