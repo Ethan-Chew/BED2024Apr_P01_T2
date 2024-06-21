@@ -43,7 +43,7 @@ const authCreatePatient = async (req, res) => {
 
     try {
         const account = await accounts.Patient.createPatient(name, email, password, knownAllergies, birthdate);
-        // const questionnaire = await questionnaire.createQuestionnaire(account.AccountId, qns);
+        const userQuestionnaire = await questionnaire.createQuestionnaire(account.id, qns);
 
         res.status(201).json({
             message: "Account Created Successfully",
@@ -78,8 +78,30 @@ const getPatientById = async (req, res) => {
     }
 }
 
+const deletePatientById = async (req, res) => {
+    const { patientId } = req.params;
+
+    try {
+        const deleteRequest = await accounts.Patient.deletePatientById(patientId);
+
+        if (deleteRequest) {
+            res.status(200).json({
+                message: "Patient Account Deleted Successfully"
+            });
+        } else {
+            res.status(500).json({
+                message: "Failed to Delete Patient Account"
+            });
+        }
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
     authLoginAccount,
     authCreatePatient,
-    getPatientById
+    getPatientById,
+    deletePatientById
 }

@@ -33,12 +33,12 @@ INSERT INTO Company(CompanyId, CompanyCreatedBy, CompanyAddress) VALUES
 ('ACC0010', 'ACC0001', '1234 Main St'),
 ('ACC0011', 'ACC0002', '5678 Elm St');
 
-INSERT INTO Questionnaire(QuestionnaireId, AccountId, QOne, QTwo, QThree, QFour, QFive, QSix) VALUES
-('QES0001', 'ACC0003', 'Yes', '$75,000', 'No', 3, 'Own', 'No'),
-('QES0002', 'ACC0004', 'No', 'N/A', 'Yes', 1, 'Rent', 'Yes'),
-('QES0003', 'ACC0005', 'Maybe', '$50,000 - $75,000', 'Depends', 2, 'Rent', 'No'),
-('QES0004', 'ACC0006', 'Full-time student', 'N/A', 'No', 1, 'Live with parents', 'N/A'),
-('QES0005', 'ACC0007', 'Part-time', '$25,000 - $50,000', 'No', 0, 'Rent', 'No');
+INSERT INTO Questionnaire(AccountId, QOne, QTwo, QThree, QFour, QFive, QSix) VALUES
+('ACC0003', 'Yes', '$75,000', 'No', 3, 'Own', 'No'),
+('ACC0004', 'No', 'N/A', 'Yes', 1, 'Rent', 'Yes'),
+('ACC0005', 'Maybe', '$50,000 - $75,000', 'Depends', 2, 'Rent', 'No'),
+('ACC0006', 'Full-time student', 'N/A', 'No', 1, 'Live with parents', 'N/A'),
+('ACC0007', 'Part-time', '$25,000 - $50,000', 'No', 0, 'Rent', 'No');
 
 INSERT INTO SlotTime(SlotTimeId, SlotTime) VALUES
 ('SLOT001', '09:00-09:30'),

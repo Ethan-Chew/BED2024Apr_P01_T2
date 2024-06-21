@@ -57,8 +57,7 @@ CREATE TABLE Company (
 );
 
 CREATE TABLE Questionnaire (
-    QuestionnaireId VARCHAR(7) NOT NULL,
-    AccountId VARCHAR(7) NOT NULL UNIQUE,
+    AccountId VARCHAR(7) NOT NULL,
     QOne VARCHAR(255) NOT NULL,
     QTwo VARCHAR(255) NOT NULL,
     QThree VARCHAR(255) NOT NULL,
@@ -66,7 +65,7 @@ CREATE TABLE Questionnaire (
     QFive VARCHAR(255) NOT NULL,
     QSix VARCHAR(255) NOT NULL,
 
-	CONSTRAINT PK_Questionnaire PRIMARY KEY (QuestionnaireId),
+	CONSTRAINT PK_Questionnaire PRIMARY KEY (AccountId),
 	CONSTRAINT FK_Questionnaire_Patient FOREIGN KEY (AccountId) REFERENCES Patient(PatientId)
 );
 

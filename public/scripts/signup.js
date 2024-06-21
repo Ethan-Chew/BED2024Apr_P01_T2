@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Save Patient Details
         patientDetails = {
             name: document.getElementById('fullname').value,
-            username: document.getElementById('username').value,
+            email: document.getElementById('email').value,
             password: password,
             knownAllergies: document.getElementById('knownallergies').value,
             birthdate: document.getElementById('dob').value,

@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const patient = patientJson.patient;
 
                 // Show Results based on Approval Status
-                switch (patient.PatientIsApproved) {
+                switch (patient.isApproved) {
                     case "Approved":
                         sessionStorage.setItem('accountType', 'patient');
                         window.location.href = './patient/home.html';

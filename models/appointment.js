@@ -48,7 +48,8 @@ class Appointment {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT a.*, pm.DrugName, pm.Quantity, pm.Reason AS 'DrugReason', pm.DrugRequest, di.DrugPrice * pm.Quantity AS 'DrugPrice' FROM Appointments a
+            SELECT a.*, pay.PaymentStatus, pm.DrugName, pm.Quantity, pm.Reason AS 'DrugReason', pm.DrugRequest, di.DrugPrice * pm.Quantity AS 'DrugPrice' FROM Appointments a
+            LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
             LEFT JOIN PrescribedMedication pm ON a.AppointmentId = pm.AppointmentId
             LEFT JOIN DrugInventory di ON pm.DrugName = di.DrugName
             WHERE a.AppointmentId = '${appointmentId}'
@@ -68,7 +69,8 @@ class Appointment {
             consultationCost: result.recordset[0].ConsultationCost,
             reason: result.recordset[0].Reason,
             doctorNote: result.recordset[0].DoctorNote,
-            medication: []
+            paymentStatus: result.recordset[0].PaymentStatus,
+            medication: [],
         }
 
         for (const row of record.recordset) {

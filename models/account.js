@@ -39,6 +39,15 @@ class Account {
         const incrementString = str => str.replace(/\d+/, num => (Number(num) + 1).toString().padStart(4, "0"));
         return incrementString(result.recordset[0].AccountId);
     }
+
+    static async deleteAccountWithId(accountId, connection) {
+        const query = `DELETE FROM Account WHERE AccountId = '${accountId}'`;
+        const request = connection.request();
+
+        const result = await request.query(query);
+
+        return result.rowsAffected[0] === 1;
+    }
 }
 
 // Subclasses of Account
@@ -77,7 +86,8 @@ class Patient extends Account {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT p.*, a.DoctorId, a.SlotId, a.ConsultationCost, a.Reason, a.DoctorNote, pay.PaymentAmount, pay.PaymentStatus, s.SlotDate, st.SlotTime FROM Patient p
+            SELECT p.*, acc.AccountName, acc.AccountEmail, a.DoctorId, a.SlotId, a.AppointmentId, a.ConsultationCost, a.Reason, a.DoctorNote, pay.PaymentAmount, pay.PaymentStatus, s.SlotDate, st.SlotTime FROM Patient p
+            LEFT JOIN Account acc ON acc.AccountId = p.PatientId
             LEFT JOIN Appointments a ON a.PatientId = p.PatientId
             LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
             LEFT JOIN AvailableSlot s ON s.SlotId = a.SlotId
@@ -91,6 +101,9 @@ class Patient extends Account {
 
         // Group Patients with their Associated Appointments
         const patientsWithAppointments = {
+            name: result.recordset[0].AccountName,
+            email: result.recordset[0].AccountEmail,
+            birthdate: result.recordset[0].PatientBirthdate,
             patientId: result.recordset[0].PatientId,
             knownAllergies: result.recordset[0].KnownAllergies,
             birthdate: result.recordset[0].PatientBirthdate,
@@ -113,6 +126,19 @@ class Patient extends Account {
         }
 
         return patientsWithAppointments;
+    }
+
+    static async deletePatientById(patientId) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `DELETE FROM Patient WHERE PatientId = '${patientId}'`;
+        const request = connection.request();
+
+        const deletePatientRes = await request.query(query);
+        const deleteAccountRes = await Account.deleteAccountWithId(patientId, connection);
+
+        connection.close();
+        return deleteAccountRes && deletePatientRes.rowsAffected[0] === 1
     }
 }
 

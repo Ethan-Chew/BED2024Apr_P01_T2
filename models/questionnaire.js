@@ -30,7 +30,7 @@ class Questionnaire {
 
         const query = `
             INSERT INTO Questionnaire (AccountId, QOne, QTwo, QThree, QFour, QFive, QSix) VALUES 
-            (${accountId}, ${qAnswers.qOne}, ${qAnswers.qTwo}, ${qAnswers.qThree}, ${qAnswers.qFour}, ${qAnswers.qFive}, ${qAnswers.qSix})
+            ('${accountId}', '${qAnswers.qOne}', '${qAnswers.qTwo}', '${qAnswers.qThree}', '${qAnswers.qFour}', '${qAnswers.qFive}', '${qAnswers.qSix}')
         `;
         const request = connection.request();
 
