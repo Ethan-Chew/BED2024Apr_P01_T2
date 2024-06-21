@@ -3,7 +3,7 @@ const Joi = require("joi").extend(require('@joi/date'));
 const validatePatient = (req, res, next) => {
     const schema = Joi.object({
         name: Joi.string().min(1).required(),
-        password: Joi.string(),
+        password: Joi.string().allow(null),
         email: Joi.string().email({ tlds: { allow: false } }).required(),
         knownAllergies: Joi.string().required(),
         birthdate: Joi.date().format('YYYY-MM-DD').required(), // UNIX Time

@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const { all } = require("axios");
 
 class Account {
     constructor(id, name, email, password, creationDate) {
@@ -48,6 +49,38 @@ class Account {
 
         return result.rowsAffected[0] === 1;
     }
+
+    static async updateAccount(accountId, updatedFields) {
+        const allowedFields = {
+            'name': 'AccountName',
+            'email': 'AccountEmail',
+            'password': 'AccountPassword',
+        };
+        
+        if (updatedFields.length === 0) {
+            throw new Error("No Fields to Update");
+        }
+
+        const connection = await sql.connect(dbConfig);
+        const request = connection.request();
+        
+        // Populate Query with Updated Fields
+        let query = `UPDATE Account SET `;
+        for (const field in updatedFields) {
+            if (Object.keys(allowedFields).includes(field) && updatedFields[field] !== null) {
+                query += `${allowedFields[field]} = @${field}, `;
+                request.input(field, updatedFields[field]);
+            }
+        }
+        query = query.slice(0, -2); // Remove last ', '
+        query += ` WHERE AccountId = '${accountId}'`;
+
+        // Send Request
+        const result = await request.query(query);
+        connection.close();
+
+        return result.rowsAffected[0] === 1;
+    }
 }
 
 // Subclasses of Account
@@ -74,8 +107,8 @@ class Patient extends Account {
         `;
 
         const request = connection.request();
-        const insertMemberResult = await request.query(insertMemberQuery);
-        const insertPatientResult = await request.query(insertPatientQuery);
+        await request.query(insertMemberQuery);
+        await request.query(insertPatientQuery);
 
         connection.close()
 
@@ -100,13 +133,13 @@ class Patient extends Account {
         connection.close();
 
         // Group Patients with their Associated Appointments
+        const birthdate = new Date(result.recordset[0].PatientBirthdate).toISOString().split("T")[0];  // Remove time from date
         const patientsWithAppointments = {
             name: result.recordset[0].AccountName,
             email: result.recordset[0].AccountEmail,
-            birthdate: result.recordset[0].PatientBirthdate,
+            birthdate: birthdate,
             patientId: result.recordset[0].PatientId,
             knownAllergies: result.recordset[0].KnownAllergies,
-            birthdate: result.recordset[0].PatientBirthdate,
             isApproved: result.recordset[0].PatientIsApproved,
             appointments: [],
         };
@@ -139,6 +172,39 @@ class Patient extends Account {
 
         connection.close();
         return deleteAccountRes && deletePatientRes.rowsAffected[0] === 1
+    }
+
+    static async updatePatient(patientId, updatedFields) {
+        const allowedFields = {
+            'knownAllergies': 'KnownAllergies',
+            'birthDate': 'PatientBirthdate',
+        }
+        
+        if (updatedFields.length === 0) {
+            throw new Error("No Fields to Update");
+        }
+
+        const connection = await sql.connect(dbConfig);
+        const request = connection.request();
+        
+        // Populate Query with Updated Fields
+        let query = `UPDATE Patient SET `;
+        for (const field in updatedFields) {
+            if (Object.keys(allowedFields).includes(field) && updatedFields[field] !== null) {
+                query += `${allowedFields[field]} = @${field}, `;
+                request.input(field, updatedFields[field]);
+            }
+        }
+        query = query.slice(0, -2); // Remove last ', '
+        query += ` WHERE PatientId = '${patientId}'`;
+        console.log(query)
+
+        // Send Request
+        const result = await request.query(query);
+        console.log(result)
+        connection.close();
+
+        return result.rowsAffected[0] === 1;
     }
 }
 

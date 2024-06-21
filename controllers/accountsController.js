@@ -2,15 +2,15 @@ const accounts = require("../models/account");
 const questionnaire = require("../models/questionnaire");
 
 const authLoginAccount = async (req, res) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        res.status(400).json({
-            message: "Email and Password are required."
-        });
-    }
-    
     try {
+        const { email, password } = req.body;
+    
+        if (!email || !password) {
+            res.status(400).json({
+                message: "Email and Password are required."
+            });
+        }
+        
         const account = await accounts.Account.getAccountWithEmail(email);
 
         if (!account) {
@@ -39,9 +39,9 @@ const authLoginAccount = async (req, res) => {
 };
 
 const authCreatePatient = async (req, res) => {
-    const { name, email, password, knownAllergies, birthdate, qns } = req.body;
-
     try {
+        const { name, email, password, knownAllergies, birthdate, qns } = req.body;
+
         const account = await accounts.Patient.createPatient(name, email, password, knownAllergies, birthdate);
         const userQuestionnaire = await questionnaire.createQuestionnaire(account.id, qns);
 
@@ -56,9 +56,13 @@ const authCreatePatient = async (req, res) => {
 }
 
 const getPatientById = async (req, res) => {
-    const { patientId } = req.params;
-
     try {
+        const patientId = req.params.patientId;
+
+        if (!patientId) {
+            return res.status(400).send({ message: 'Patient ID is required' });
+        }
+
         const patient = await accounts.Patient.getPatientById(patientId);
 
         if (!patient) {
@@ -79,9 +83,9 @@ const getPatientById = async (req, res) => {
 }
 
 const deletePatientById = async (req, res) => {
-    const { patientId } = req.params;
-
     try {
+        const { patientId } = req.params;
+        
         const deleteRequest = await accounts.Patient.deletePatientById(patientId);
 
         if (deleteRequest) {
@@ -99,9 +103,44 @@ const deletePatientById = async (req, res) => {
     }
 }
 
+const updatePatientById = async (req, res) => {
+    try {
+        const { patientId } = req.params;
+        const { name, email, knownAllergies, birthdate, password } = req.body;
+    
+        // Update Patient
+        const updatePatientRes = await accounts.Patient.updatePatient(patientId, {
+            knownAllergies: knownAllergies,
+            birthdate: birthdate,
+        });
+
+        // Update Account (Patient's Parent Class)
+        const updateAccountRes = await accounts.Account.updateAccount(patientId, {
+            name: name,
+            email: email,
+            password: password
+        })
+
+        if (updatePatientRes && updateAccountRes) {
+            res.status(200).json({
+                message: "Patient Account Updated Successfully",
+                patient: getPatientById(patientId)
+            });
+        } else {
+            res.status(500).json({
+                message: "Failed to Update Patient Account"
+            });
+        }
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
     authLoginAccount,
     authCreatePatient,
     getPatientById,
-    deletePatientById
+    updatePatientById,
+    deletePatientById,
 }
