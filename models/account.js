@@ -20,9 +20,10 @@ class Account {
             LEFT JOIN Staff s ON a.AccountId = s.StaffId
             LEFT JOIN Doctor d ON a.AccountId = d.DoctorId
             LEFT JOIN Company c ON a.AccountId = c.CompanyId
-            WHERE AccountEmail = '${email}'
+            WHERE AccountEmail = @AccountEmail
         `;
         const request = connection.request();
+        request.input('AccountEmail', email);
 
         const result = await request.query(query);
         connection.close();
@@ -42,8 +43,9 @@ class Account {
     }
 
     static async deleteAccountWithId(accountId, connection) {
-        const query = `DELETE FROM Account WHERE AccountId = '${accountId}'`;
+        const query = `DELETE FROM Account WHERE AccountId = @AccountId`;
         const request = connection.request();
+        request.input('AccountId', accountId);
 
         const result = await request.query(query);
 
@@ -99,14 +101,27 @@ class Patient extends Account {
 
         const insertMemberQuery = `
             INSERT INTO Account (AccountId, AccountName, AccountEmail, AccountPassword, AccountCreationDate) VALUES
-            ('${newAccountId}', '${name}', '${email}', '${password}', ${insertUnixTime});
+            (@AccountId, @AccountName, @AccountEmail, @AccountPassword, @AccountCreationDate);
         `
         const insertPatientQuery = `
             INSERT INTO Patient (PatientId, KnownAllergies, PatientBirthdate, PatientIsApproved) VALUES
-            ('${newAccountId}', '${knownAllergies}', '${birthdate}', 'Pending');
+            (@PatientId, @KnownAllergies, @PatientBirthdate, @PatientIsApproved)
         `;
 
         const request = connection.request();
+
+        // Set Request Inputs
+        request.input('AccountId', newAccountId);
+        request.input('AccountName', name);
+        request.input('AccountEmail', email);
+        request.input('AccountPassword', password);
+        request.input('AccountCreationDate', insertUnixTime);
+
+        request.input('PatientId', newAccountId);
+        request.input('KnownAllergies', knownAllergies);
+        request.input('PatientBirthdate', birthdate);
+        request.input('PatientIsApproved', "Pending");
+
         await request.query(insertMemberQuery);
         await request.query(insertPatientQuery);
 
@@ -125,9 +140,10 @@ class Patient extends Account {
             LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
             LEFT JOIN AvailableSlot s ON s.SlotId = a.SlotId
             LEFT JOIN SlotTime st ON st.SlotTimeId = s.SlotTimeId
-            WHERE p.PatientId = '${patientId}'
+            WHERE p.PatientId = @PatientId
         `;
         const request = connection.request();
+        request.input('PatientId', patientId);
 
         const result = await request.query(query);
         connection.close();
@@ -164,8 +180,9 @@ class Patient extends Account {
     static async deletePatientById(patientId) {
         const connection = await sql.connect(dbConfig);
 
-        const query = `DELETE FROM Patient WHERE PatientId = '${patientId}'`;
+        const query = `DELETE FROM Patient WHERE PatientId = @PatientId`;
         const request = connection.request();
+        request.input('PatientId', patientId);
 
         const deletePatientRes = await request.query(query);
         const deleteAccountRes = await Account.deleteAccountWithId(patientId, connection);
