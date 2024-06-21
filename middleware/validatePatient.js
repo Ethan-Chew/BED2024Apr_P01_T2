@@ -6,7 +6,7 @@ const validatePatient = (req, res, next) => {
         password: Joi.string(),
         email: Joi.string().email({ tlds: { allow: false } }).required(),
         knownAllergies: Joi.string().required(),
-        birthdate: Joi.date().format('YYYY-MM-DD').required(), // UNIX Time
+        birthdate: Joi.date().format('YYYY-MM-DD').required(),
         qns: Joi.object({
             qOne: Joi.string().required(),
             qTwo: Joi.string().required(),
