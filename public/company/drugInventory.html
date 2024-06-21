@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <title>CareLinc - Patient Home</title>
+    </head>
+    <body class="w-screen h-screen flex flex-col">
+        <!-- Navigation Bar -->
+        <header class="z-[1000] bg-primary flex flex-row px-5 py-3 text-white items-center">
+            <a class="text-2xl font-bold">CareLinc</a>
+            <nav class="ml-auto flex flex-row gap-5 items-center">
+                <a class="text-xl" href="./credits.html">Credits</a>
+                <button class="text-xl bg-btnprimary px-4 py-2">
+                    Logout
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <div class="flex flex-col items-center p-8 gap-10">
+            <!--Page title-->
+            <div>
+                <h1 class="text-4.5xl font-bold">Drug Inventory</h1>
+            </div>
+
+            <div class="w-[70%] flex flex-row gap-4 h-screen pt-0 pb-10">
+                <!--Search Bar-->
+                <div class="w-1/3 bg-gray-200 px-6 py-4 text-2xl rounded-3xl flex flex-col gap-5 align-center items-center">
+                    <!-- Search Field -->
+                    <div class="w-full border-r-2 flex flex-row gap-3 items-center align-center">
+                        <i data-feather="search" class="h-8 w-8"></i>
+                        <input id="search-field" placeholder="Search..." class="p-1 w-full">
+                    </div>
+                    <fieldset class="bg-white w-full flex flex-col justify-center items-center">
+                        <legend class="text-center mb-2">Select Medicine</legend>
+                        
+                        <div class="w-full text-center" >
+                            <input class="peer/medicine1 appearance-none" type="radio" id="medicine1" name="medicine" value="medicine1">
+                            <label class="peer-checked/medicine1:bg-black peer-checked/medicine1:text-white" for="medicine1">medicine1</label>
+                        </div>
+                        <div class="w-full text-center" >
+                            <input class="peer/medicine2 appearance-none" type="radio" id="medicine2" name="medicine" value="medicine2">
+                            <label class="peer-checked/medicine2:bg-black peer-checked/medicine2:text-white" for="medicine2">medicine2</label>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <!--Requests List-->
+                <div class="w-2/3 bg-gray-200 px-6 py-4 text-2xl rounded-3xl flex flex-row gap-5 align-center items-center justify-between">
+                    <!--Information-->
+                    <div class="flex flex-row px-6 py-4 gap-8">
+                        
+                    </div>
+                    <!--Button-->
+                    <div>
+                        <a class="bg-white px-6 py-4 rounded-2xl font-bold text-center" href="requestConfirmation.html" id="request-contribute-1">Contribute</a>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+
+        
+    </body>
+    <!-- Import Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../scripts/tailwind.config.js"></script>
+</html>
