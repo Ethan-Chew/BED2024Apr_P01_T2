@@ -86,9 +86,11 @@ const deletePatientById = async (req, res) => {
     try {
         const { patientId } = req.params;
         
-        const deleteRequest = await accounts.Patient.deletePatientById(patientId);
+        const deleteQuestionnaireRequest = await questionnaire.deleteQuestionnaire(patientId);
+        const deletePatientRequest = await accounts.Patient.deletePatientById(patientId);
+        const deleteAccountRequest = await accounts.Account.deleteAccountById(patientId);
 
-        if (deleteRequest) {
+        if (deleteQuestionnaireRequest && deletePatientRequest && deleteAccountRequest) {
             res.status(200).json({
                 message: "Patient Account Deleted Successfully"
             });
@@ -124,7 +126,7 @@ const updatePatientById = async (req, res) => {
         if (updatePatientRes && updateAccountRes) {
             res.status(200).json({
                 message: "Patient Account Updated Successfully",
-                patient: getPatientById(patientId)
+                patient: await accounts.Patient.getPatientById(patientId)
             });
         } else {
             res.status(500).json({

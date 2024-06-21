@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Fetch Patient Information
     const accountId = sessionStorage.getItem('accountId');
     if (accountId === undefined) console.error("Account ID not found in Session Storage."); 
-    const getPatientProfile = await fetch(`/api/patient/${accountId}`);
+    const getPatientProfile = await fetch(`/api/patient/${accountId}`, {
+        method: 'GET'
+    });
     const patientJson = await getPatientProfile.json();
     const patient = patientJson.patient;
 
@@ -30,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const confirmDelete = confirm("Are you sure you want to delete your account? This process is IRREVERSABLE.");
 
         if (confirmDelete) {
-            const fetchDelete = await fetch(`/api/patient/${patientId}`, {
+            const fetchDelete = await fetch(`/api/patient/${accountId}`, {
                 method: 'DELETE'
             });
             if (fetchDelete.status !== 200) {

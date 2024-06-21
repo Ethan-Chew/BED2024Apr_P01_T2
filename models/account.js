@@ -1,6 +1,5 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
-const { all } = require("axios");
 
 class Account {
     constructor(id, name, email, password, creationDate) {
@@ -42,8 +41,9 @@ class Account {
         return incrementString(result.recordset[0].AccountId);
     }
 
-    static async deleteAccountWithId(accountId, connection) {
+    static async deleteAccountById(accountId) {
         const query = `DELETE FROM Account WHERE AccountId = @AccountId`;
+        const connection = await sql.connect(dbConfig);
         const request = connection.request();
         request.input('AccountId', accountId);
 
@@ -185,10 +185,9 @@ class Patient extends Account {
         request.input('PatientId', patientId);
 
         const deletePatientRes = await request.query(query);
-        const deleteAccountRes = await Account.deleteAccountWithId(patientId, connection);
 
         connection.close();
-        return deleteAccountRes && deletePatientRes.rowsAffected[0] === 1
+        return deletePatientRes.rowsAffected[0] === 1
     }
 
     static async updatePatient(patientId, updatedFields) {
@@ -213,12 +212,11 @@ class Patient extends Account {
             }
         }
         query = query.slice(0, -2); // Remove last ', '
-        query += ` WHERE PatientId = '${patientId}'`;
-        console.log(query)
+        query += ` WHERE PatientId = @PatientId`;
+        request.input('PatientId', patientId);
 
         // Send Request
         const result = await request.query(query);
-        console.log(result)
         connection.close();
 
         return result.rowsAffected[0] === 1;

@@ -46,6 +46,19 @@ class Questionnaire {
 
         return result;
     }
+
+    static async deleteQuestionnaire(accountId) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `DELETE FROM Questionnaire WHERE AccountId = @AccountId`;
+        const request = connection.request();
+        request.input('AccountId', accountId);
+
+        const result = await request.query(query);
+        connection.close();
+
+        return result.rowsAffected[0] === 1;
+    }
 }
 
 module.exports = Questionnaire;
