@@ -85,6 +85,10 @@ const getPatientById = async (req, res) => {
 const deletePatientById = async (req, res) => {
     try {
         const { patientId } = req.params;
+
+        if (!patientId) {
+            return res.status(400).send({ message: 'Patient ID is required' });
+        }
         
         const deleteQuestionnaireRequest = await questionnaire.deleteQuestionnaire(patientId);
         const deletePatientRequest = await accounts.Patient.deletePatientById(patientId);
@@ -108,6 +112,11 @@ const deletePatientById = async (req, res) => {
 const updatePatientById = async (req, res) => {
     try {
         const { patientId } = req.params;
+
+        if (!patientId) {
+            return res.status(400).send({ message: 'Patient ID is required' });
+        }
+
         const { name, email, knownAllergies, birthdate, password } = req.body;
     
         // Update Patient
