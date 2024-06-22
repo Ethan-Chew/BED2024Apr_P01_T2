@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <title>CareLinc - Drug Donation Orders</title>
+    </head>
+    <body class="w-screen h-screen flex flex-col">
+        <!-- Navigation Bar -->
+        <header class="z-[1000] bg-primary flex flex-row px-5 py-3 text-white items-center">
+            <a class="text-2xl font-bold">CareLinc</a>
+            <nav class="ml-auto flex flex-row gap-5 items-center">
+                <a class="text-xl" href="./credits.html">Credits</a>
+                <button class="text-xl bg-btnprimary px-4 py-2">
+                    Logout
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <div class="flex flex-col items-center p-8 gap-10">
+            <!--Page title-->
+            <div>
+                <h1 class="text-4.5xl font-bold">View Drug Donation Requests</h1>
+            </div>
+
+            <!--Search Bar-->
+            <div class="w-1/2 bg-gray-200 px-6 py-4 shadow-xl text-2xl rounded-3xl flex flex-row gap-5 align-center items-center justify-between">
+                <!-- Search Field -->
+                <div class="w-1/2 border-r-2 flex flex-row gap-3 items-center align-center">
+                    <i data-feather="search" class="h-8 w-8"></i>
+                    <input id="search-field" placeholder="Search..." class="p-1 w-full">
+                </div>
+                <!-- Filter Search -->
+                <div class="w-1/2 border-r-2 flex flex-row gap-3 items-center align-center">
+                    <select id="filter-field" class="p-1 w-full">
+                        <option value="0">Filter Option</option>
+                    </select>
+                </div>
+            </div>
+
+            <!--Requests List-->
+            <div class="w-3/4 bg-gray-200 px-6 py-4 text-2xl rounded-3xl flex flex-row gap-5 align-center items-center justify-between">
+                <!--Information-->
+                <div class="flex flex-row px-6 py-4 gap-8">
+                    <div class="flex flex-col gap-y-4">
+                        <!--Medicine Name-->
+                        <div>
+                            <p class="font-bold">Medicine Name</p>
+                            <p class="text-xl" id="">Panadol</p>
+                        </div>
+                        <!--Quantity Requested-->
+                        <div>
+                            <p class="font-bold">Quantity</p>
+                            <p class="text-xl" id="">500</p>
+                        </div>
+                        <!--Total Cost of Medicine-->
+                        <div>
+                            <p class="font-bold">Total Cost</p>
+                            <p class="text-xl" id="">$5000</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-y-4">
+                        <div class="flex flex-row gap-12">
+                            <!--Order ID-->
+                            <div>
+                                <p class="font-bold">Order ID</p>
+                                <p class="text-xl" id="">1</p>
+                            </div>
+                            <!--Status-->
+                            <div>
+                                <p class="font-bold">Status</p>
+                                <p class="text-xl" id="">Checking</p>
+                            </div>
+                        </div>
+                        <!--Date of Order-->
+                        <div>
+                            <p class="font-bold">Date of Order</p>
+                            <p class="text-xl" id="">21 May 2024</p>
+                        </div>
+                        <!--Date of Confirmation-->
+                        <div>
+                            <p class="font-bold">Date of Confirmation</p>
+                            <p class="text-xl" id="">Pending</p>
+                        </div>
+                        
+                    </div>
+                </div>
+                <!--Button-->
+                <div class="flex flex-col gap-4">
+                    <a class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center" href="" id="">Confirm request</a>
+                    <a class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center" href="" id="">Cancel</a>
+                </div>
+            </div>
+        </div>
+
+        
+    </body>
+    <!-- Import Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../scripts/tailwind.config.js"></script>
+</html>
