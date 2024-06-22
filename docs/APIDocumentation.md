@@ -2,10 +2,10 @@
 This document outlines the different endpoints contained in the CareLinc Back-End API.  
 All related Schemas are located in the [Schema.md](./Schema.md) file.
 
-## Account Authentication/Authorisation
+## Account Management
 ### Login to an Account
 <details>
-<summary><code>POST</code<code><b>/auth/login</b></code></summary>
+<summary><code>POST</code> <code><b>/api/auth/login</b></code></summary>
 
 **Request Body**
  | name | type | data type |
@@ -23,17 +23,17 @@ All related Schemas are located in the [Schema.md](./Schema.md) file.
 
 **Responses**
 
-| http code | response |
+| HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
 | `200` | `{ message: "Login Successful", account: <account object}` |
 | `403` | `{ message: "Incorrect Password" }` |
-| `404` | `{ message: "Account with email <email addressnot found." }` |
+| `404` | `{ message: "Account with email <email address> not found." }` |
 | `500` | `{ message: "Internal Server Error" }` |
 </details>
 
 ### Create a New Patient Account
 <details>
-<summary><code>POST</code<code><b>/auth/create/patient</b></code></summary>
+<summary><code>POST</code> <code><b>/api/auth/create/patient</b></code></summary>
 
 **Request Body**
 | name | type | data type |
@@ -59,7 +59,7 @@ All related Schemas are located in the [Schema.md](./Schema.md) file.
 }
 ```
 
-**Sample Request Body**
+**Sample Response Body**
 ```json
 {
   "name": "John Doe",
@@ -80,9 +80,146 @@ All related Schemas are located in the [Schema.md](./Schema.md) file.
 
 **Responses**
 
-| http code | response |
+| HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
 | `201` | `{ message: "Account Created Successfully", account: <account object}` |
+| `500` | `{ message: "Internal Server Error" }` |
+</details>
+
+### Retrieve Patient Account
+<details>
+<summary><code>GET</code> <code><b>/api/patient/{patientId}</b></code></summary>
+
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**
+No Request Body is required for the GET request
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `200` | See below |
+| `400` | `{ message: "Patient ID is required" }` |
+| `404` | `{ message: "Patiet with ID <Patient ID> not found." }` |
+| `500` | `{ message: "Internal Server Error" }` |
+
+**Response Body**
+| name | data type |
+|-----------|-------------------------|
+| patientId | string |
+| name | string |
+| email | string |
+| birthdate | string (format: YYYY-MM-DD) |
+| knownAllergies | string |
+| isApproved | string (values: Pending, Approved, Declined) |
+| appointments | object |
+
+**Data Object for `appointments` Object**
+```json
+{
+    "appointmentId": "APP0001",
+    "doctorId": "ACC0001",
+    "slotId": "SLO0001",
+    "consultationCost": 50.00,
+    "reason": "Sick",
+    "doctorNote": "Running a Fever...",
+    "paymentAmount": 100.00,
+    "paymentStatus": "Unpaid",
+    "slotDate": "2024-06-01",
+    "slotTime": "09:30-10:00"
+}
+```
+
+**Sample Response Body**
+```json
+{
+  "name": "User5",
+  "email": "user5@mail.com",
+  "birthdate": "2000-01-01",
+  "patientId": "ACC0005",
+  "knownAllergies": "Mold, Grass, Water",
+  "isApproved": "Approved",
+  "appointments": [
+    {
+      "appointmentId": "APP0001",
+      "doctorId": "ACC0001",
+      "slotId": "SLO0001",
+      "consultationCost": 50.00,
+      "reason": "Sick",
+      "doctorNote": "Running a Fever...",
+      "paymentAmount": 100.00,
+      "paymentStatus": "Unpaid",
+      "slotDate": "2024-06-01",
+      "slotTime": "09:30-10:00"
+    }
+  ]
+}
+```
+
+</details>
+
+### Update Patient Account
+<details>
+<summary><code>PUT</code> <code><b>/api/patient/{patientId}</b></code></summary>
+
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**
+| name | type | data type |
+|-----------|-----------|-------------------------|
+| name | required | string |
+| email | required | string (format: YYYY-MM-DD) |
+| knownAllergies | required | string |
+| birthdate | required | string |
+| password | required | string, null |
+
+**Sample Request Body**
+```json
+{
+    "name": "John Doe",
+    "email": "john_doe@mail.com",
+    "birthdate": "2000-01-01",
+    "knownAllergies": "Grass",
+    "password": null
+}
+```
+
+**Responses**
+
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `200` | `{ message: "Patient Account Updated Successfully", account: <account object> }` |
+| `400` | `{ message: "Patient ID is required" }` |
+| `500` | `{ message: "Failed to Update Patient Account" }` |
+| `500` | `{ message: "Internal Server Error" }` |
+</details>
+
+### Delete Patient Account
+
+<details>
+<summary><code>DELETE</code> <code><b>/api/patient/{patientId}</b></code></summary>
+
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**  
+No Request Body is required for the DELETE request
+
+**Responses**
+
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `200` | `{ message: "Patient Account Deleted Successfully" }` |
+| `400` | `{ message: "Patient ID is required" }` |
+| `500` | `{ message: "Failed to Delete Patient Account" }` |
 | `500` | `{ message: "Internal Server Error" }` |
 </details>
 

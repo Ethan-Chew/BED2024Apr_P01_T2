@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const accountId = sessionStorage.getItem('accountId');
     
     // Fetch Data from Backend
-    const fetchPatientResponse = await fetch(`/patient/${accountId}`, {
+    const fetchPatientResponse = await fetch(`/api/patient/${accountId}`, {
         method: 'GET'
     });
     if (fetchPatientResponse.status !== 200) {

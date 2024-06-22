@@ -30,9 +30,10 @@ class Appointment {
             SELECT a.*, avs.SlotDate, st.SlotTime FROM Appointments a
             LEFT JOIN AvailableSlot avs ON a.SlotId = avs.SlotId
             LEFT JOIN SlotTime st ON avs.SlotTimeId = st.SlotTimeId
-            WHERE a.PatientId = '${patientId}'
+            WHERE a.PatientId = @PatientId
         `
         const request = connection.request();
+        request.input('PatientId', patientId);
 
         const result = await request.query(query);
         connection.close();
@@ -52,9 +53,10 @@ class Appointment {
             LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
             LEFT JOIN PrescribedMedication pm ON a.AppointmentId = pm.AppointmentId
             LEFT JOIN DrugInventory di ON pm.DrugName = di.DrugName
-            WHERE a.AppointmentId = '${appointmentId}'
+            WHERE a.AppointmentId = @AppointmentId
         `
         const request = connection.request();
+        request.input('AppointmentId', appointmentId);
 
         const result = await request.query(query);
         connection.close();
@@ -92,9 +94,13 @@ class Appointment {
 
         const query = `
             INSERT INTO Appointments (AppointmentId, AccountId, SlotId, Reason)
-            VALUES ('${newAppointmentId}', '${patientId}', '${slotId}', '${reason}')
+            VALUES (@AppointmentId, @AccountId, @SlotId, @Reason)
         `;
         const request = connection.request();
+        request.input('AppointmentId', newAppointmentId);
+        request.input('AccountId', patientId);
+        request.input('SlotId', slotId);
+        request.input('Reason', reason);
 
         await request.query(query);
         connection.close();
@@ -107,9 +113,10 @@ class Appointment {
 
         const query = `
             DELETE FROM Appointments
-            WHERE AppointmentId = '${appointmentId}'
+            WHERE AppointmentId = @AppointmentId
         `;
         const request = connection.request();
+        request.input('AppointmentId', appointmentId);
 
         const result = await request.query(query);
         connection.close();
