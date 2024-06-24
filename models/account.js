@@ -156,9 +156,33 @@ class Doctor extends Account {
 }
 
 class Company extends Account {
-    constructor(id, name, email, password, creationDate, createdBy) {
+    constructor(id, name, email, password, creationDate, createdBy, companyAddress) {
         super(id, name, email, password, creationDate);
         this.createdBy = createdBy;
+        this.companyAddress = companyAddress;
+    }
+
+    static async createCompany(name, email, password, companyAddress, createdBy) {
+        const connection = await sql.connect(dbConfig);
+        const newAccountId = await Account.getNextAccountId(connection);
+        const insertUnixTime = Math.floor(Date.now() / 1000);
+
+        const insertMemberQuery = `
+            INSERT INTO Account (AccountId, AccountName, AccountEmail, AccountPassword, AccountCreationDate) VALUES
+            ('${newAccountId}', '${name}', '${email}', '${password}', ${insertUnixTime});
+        `
+        const insertPatientQuery = `
+            INSERT INTO Company (CompanyId, CompanyCreatedBy, CompanyAddress) VALUES
+            ('${newAccountId}', '${createdBy}', '${companyAddress}');
+        `;
+
+        const request = connection.request();
+        const insertMemberResult = await request.query(insertMemberQuery);
+        const insertPatientResult = await request.query(insertPatientQuery);
+
+        connection.close()
+
+        return new Company(newAccountId, name, email, password, insertUnixTime, createdBy, companyAddress);
     }
 }
 
