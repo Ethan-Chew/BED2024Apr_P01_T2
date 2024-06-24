@@ -177,6 +177,28 @@ class Patient extends Account {
         return patientsWithAppointments;
     }
 
+    static async getAllPatient() {
+        const connection = await sql.connect(dbConfig);
+        const query = `
+            SELECT p.*, acc.AccountName, acc.AccountEmail, acc.AccountCreationDate FROM Patient p
+            LEFT JOIN Account acc ON acc.AccountId = p.PatientId
+        `;
+        const result = await connection.query(query);
+        connection.close();
+    
+        const patients = result.recordset.map(patient => ({
+            name: patient.AccountName,
+            email: patient.AccountEmail,
+            birthdate: new Date(patient.PatientBirthdate).toISOString().split("T")[0], // Process each patient's birthdate
+            patientId: patient.PatientId,
+            knownAllergies: patient.KnownAllergies,
+            isApproved: patient.PatientIsApproved,
+            creationDate: new Date(patient.AccountCreationDate * 1000).toISOString().split("T")[0],
+        }));
+    
+        return patients; // Return an array of patient objects
+    }
+
     static async deletePatientById(patientId) {
         const connection = await sql.connect(dbConfig);
 

@@ -82,6 +82,28 @@ const getPatientById = async (req, res) => {
     }
 }
 
+const getAllPatient = async (req, res) => {
+    try {
+
+        const patients = await accounts.Patient.getAllPatient();
+
+        if (!patients) {
+            res.status(404).json({
+                message: `Patients not found.`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: "Patients Found",
+            patients: patients
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 const deletePatientById = async (req, res) => {
     try {
         const { patientId } = req.params;
@@ -171,4 +193,5 @@ module.exports = {
     updatePatientById,
     deletePatientById,
     authCreateCompany,
+    getAllPatient,
 }
