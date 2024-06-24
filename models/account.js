@@ -248,18 +248,28 @@ class Company extends Account {
         const newAccountId = await Account.getNextAccountId(connection);
         const insertUnixTime = Math.floor(Date.now() / 1000);
 
-        const insertMemberQuery = `
+        const insertAccountQuery = `
             INSERT INTO Account (AccountId, AccountName, AccountEmail, AccountPassword, AccountCreationDate) VALUES
             ('${newAccountId}', '${name}', '${email}', '${password}', ${insertUnixTime});
         `
-        const insertPatientQuery = `
+        const insertCompanyQuery = `
             INSERT INTO Company (CompanyId, CompanyCreatedBy, CompanyAddress) VALUES
             ('${newAccountId}', '${createdBy}', '${companyAddress}');
         `;
 
         const request = connection.request();
-        const insertMemberResult = await request.query(insertMemberQuery);
-        const insertPatientResult = await request.query(insertPatientQuery);
+        request.input('AccountId', newAccountId);
+        request.input('AccountName', name);
+        request.input('AccountEmail', email);
+        request.input('AccountPassword', password);
+        request.input('AccountCreationDate', insertUnixTime);
+
+        request.input('CompanyId', newAccountId);
+        request.input('CompanyCreatedBy', createdBy);
+        request.input('CompanyAddress', companyAddress);
+
+        await request.query(insertAccountQuery);
+        await request.query(insertCompanyQuery);
 
         connection.close()
 

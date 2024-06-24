@@ -148,10 +148,27 @@ const updatePatientById = async (req, res) => {
     }
 }
 
+const authCreateCompany = async (req, res) => {
+    try {
+        const { name, email, password, companyAddress, createdBy } = req.body;
+
+        const company = await accounts.Company.createCompany(name, email, password, companyAddress, createdBy);
+
+        res.status(201).json({
+            message: "Company Created Successfully",
+            company: company
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
     authLoginAccount,
     authCreatePatient,
     getPatientById,
     updatePatientById,
     deletePatientById,
+    authCreateCompany,
 }

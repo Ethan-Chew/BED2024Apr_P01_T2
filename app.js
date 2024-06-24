@@ -32,7 +32,12 @@ app.get("/api/appointments/patient/:patientId", appointmentController.getAllPati
 app.get("/api/appointments/:appointmentId", appointmentController.getAppointmentDetailById);
 app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppointmentById);
 
+/// Route for Company Account
+app.post("/api/auth/create/company", accountsController.authCreateCompany);
+
+
 // Initialise Server
+
 app.listen(3000, async () => {
     console.log("CareLinc listening on port 3000.")
 
