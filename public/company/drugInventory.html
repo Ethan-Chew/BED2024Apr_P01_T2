@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
 
-        <title>CareLinc - Patient Home</title>
+        <title>CareLinc - Drug Inventory</title>
     </head>
     <body class="w-screen h-screen flex flex-col">
         <!-- Navigation Bar -->
@@ -34,9 +34,9 @@
                         <i data-feather="search" class="h-8 w-8"></i>
                         <input id="search-field" placeholder="Search..." class="p-1 w-full">
                     </div>
-                    <fieldset class="bg-white w-full flex flex-col justify-center items-center">
+                    <fieldset class="bg-white w-full h-full flex flex-col">
                         <legend class="text-center mb-2">Select Medicine</legend>
-                        
+                        <!--Medicine List-->
                         <div class="w-full text-center" >
                             <input class="peer/medicine1 appearance-none" type="radio" id="medicine1" name="medicine" value="medicine1">
                             <label class="peer-checked/medicine1:bg-black peer-checked/medicine1:text-white" for="medicine1">medicine1</label>
@@ -49,14 +49,68 @@
                 </div>
 
                 <!--Requests List-->
-                <div class="w-2/3 bg-gray-200 px-6 py-4 text-2xl rounded-3xl flex flex-row gap-5 align-center items-center justify-between">
-                    <!--Information-->
-                    <div class="flex flex-row px-6 py-4 gap-8">
-                        
+                <div class="w-2/3 bg-gray-200 px-6 py-4 text-2xl rounded-3xl flex flex-col gap-5">
+                    <!--Drug Info-->
+                    <div class="px-6 py-4 gap-8">
+                        <div class="flex flex-col gap-2">
+
+                            <!--Medicine Name-->
+                            <p class="text-4xl font-bold w-64">Panadol<p>
+
+                            <div class="flex flex-row gap-10">
+
+                                <div class="w-64 h-64 bg-white">
+                                    <!--Image Holder-->
+                                </div>
+
+                                <!--Expiry Dates-->
+                                <div class="flex flex-col gap-2">
+                                    <div>
+                                        <p class="text-4xl font-bold">Drug Info</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold">Closest Expiry Date</p>
+                                        <p class="text-xl">31 December 2024</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold">Farthest Expiry Date</p>
+                                        <p class="text-xl">31 December 2025</p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
                     </div>
-                    <!--Button-->
-                    <div>
-                        <a class="bg-white px-6 py-4 rounded-2xl font-bold text-center" href="requestConfirmation.html" id="request-contribute-1">Contribute</a>
+
+                    <!--Quantity and Price-->
+                    <div class="flex flex-row px-6 py-4 gap-32">
+                        <div>
+                            <!--Quantity-->
+                            <p class="text-4xl font-bold">Quantity</p>
+                            <p>50 Pills</p>
+                        </div>
+                        <div>
+                            <!--Price-->
+                            <p class="text-4xl font-bold">Price/Unit</p>
+                            <p>$10</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col px-6 py-4 gap-1">
+                        <p class="text-4xl font-bold">Medication Info</p>
+                        <!--Medication Information-->
+                        <p>information information information information information information information information information information 
+                            information information information information information information information information information information 
+                        </p>
+                    </div>
+
+                    <!--Empty or Edit Quantity-->
+                    <div class="flex flex-row px-6 py-4 gap-8 w-full justify-end">
+                        <!--Empty Button-->
+                        <a class="bg-btnprimary text-white px-6 py-4 w-32 rounded-2xl font-bold text-center">Empty</a>
+                        <!--Edit Button-->
+                        <a class="bg-btnprimary text-white px-6 py-4 w-32 rounded-2xl font-bold text-center">Edit</a>
                     </div>
                 </div>
             </div>

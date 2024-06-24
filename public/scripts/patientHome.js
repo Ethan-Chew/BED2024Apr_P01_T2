@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Fetch Patient Information
     const accountId = sessionStorage.getItem('accountId');
 
-    const fetchPatient = await fetch(`/patient/${accountId}`, {
+    const fetchPatient = await fetch(`/api/patient/${accountId}`, {
         method: 'GET'
     });
     if (fetchPatient.status !== 200) {
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const confirmCancel = confirm("Are you sure you want to cancel this appointment?");
                 if (!confirmCancel) return;
                 else {
-                    const fetchCancel = await fetch(`/appointments/${futureAppointment.appointmentId}`, {
+                    const fetchCancel = await fetch(`/api/appointments/${futureAppointment.appointmentId}`, {
                         method: 'DELETE'
                     });
                     if (fetchCancel.status !== 200) {

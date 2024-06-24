@@ -19,17 +19,18 @@ app.use(staticMiddleware);
 
 // Routes
 /// Routes for Account Authentication and Authorisation
-app.post("/auth/login", accountsController.authLoginAccount);
-app.post("/auth/create/patient", validatePatient, accountsController.authCreatePatient);
+app.post("/api/auth/login", accountsController.authLoginAccount);
+app.post("/api/auth/create/patient", validatePatient, accountsController.authCreatePatient);
 
 /// Route for Patient Account
-app.get("/patient/:patientId", accountsController.getPatientById);
-app.delete("/patient/:patientId", accountsController.deletePatientById);
+app.get("/api/patient/:patientId", accountsController.getPatientById);
+app.put("/api/patient/:patientId", validatePatient, accountsController.updatePatientById);
+app.delete("/api/patient/:patientId", accountsController.deletePatientById);
 
 /// Route for Appointments
-app.get("/appointments/patient/:patientId", appointmentController.getAllPatientAppointment);
-app.get("/appointments/:appointmentId", appointmentController.getAppointmentDetailById);
-app.delete("/appointments/:appointmentId", appointmentController.deleteAppointmentById);
+app.get("/api/appointments/patient/:patientId", appointmentController.getAllPatientAppointment);
+app.get("/api/appointments/:appointmentId", appointmentController.getAppointmentDetailById);
+app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppointmentById);
 
 // Initialise Server
 app.listen(3000, async () => {

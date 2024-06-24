@@ -29,15 +29,35 @@ class Questionnaire {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            INSERT INTO Questionnaire (AccountId, QOne, QTwo, QThree, QFour, QFive, QSix) VALUES 
-            ('${accountId}', '${qAnswers.qOne}', '${qAnswers.qTwo}', '${qAnswers.qThree}', '${qAnswers.qFour}', '${qAnswers.qFive}', '${qAnswers.qSix}')
+            INSERT INTO Questionnaire (AccountId, QOne, QTwo, QThree, QFour, QFive, QSix) VALUES
+            (@AccountId, @QOne, @QTwo, @QThree, @QFour, @QFive, @QSix)
         `;
         const request = connection.request();
+        request.input('AccountId', accountId);
+        request.input('QOne', qAnswers.qOne);
+        request.input('QTwo', qAnswers.qTwo);
+        request.input('QThree', qAnswers.qThree);
+        request.input('QFour', qAnswers.qFour);
+        request.input('QFive', qAnswers.qFive);
+        request.input('QSix', qAnswers.qSix);
 
         const result = await request.query(query);
         connection.close();
 
         return result;
+    }
+
+    static async deleteQuestionnaire(accountId) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `DELETE FROM Questionnaire WHERE AccountId = @AccountId`;
+        const request = connection.request();
+        request.input('AccountId', accountId);
+
+        const result = await request.query(query);
+        connection.close();
+
+        return result.rowsAffected[0] === 1;
     }
 }
 
