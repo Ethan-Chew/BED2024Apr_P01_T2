@@ -1,5 +1,7 @@
-const accounts = require("../models/account");
-const questionnaire = require("../models/questionnaire");
+const Account = require("../models/account");
+const Patient = require("../models/patient");
+const Company = require("../models/company");
+const Questionnaire = require("../models/questionnaire");
 
 const authLoginAccount = async (req, res) => {
     try {
@@ -11,7 +13,7 @@ const authLoginAccount = async (req, res) => {
             });
         }
         
-        const account = await accounts.Account.getAccountWithEmail(email);
+        const account = await Account.getAccountWithEmail(email);
 
         if (!account) {
             res.status(404).json({
@@ -42,7 +44,7 @@ const authCreatePatient = async (req, res) => {
     try {
         const { name, email, password, knownAllergies, birthdate, qns } = req.body;
 
-        const account = await accounts.Patient.createPatient(name, email, password, knownAllergies, birthdate);
+        const account = await Patient.createPatient(name, email, password, knownAllergies, birthdate);
         const userQuestionnaire = await questionnaire.createQuestionnaire(account.id, qns);
 
         res.status(201).json({
@@ -63,7 +65,7 @@ const getPatientById = async (req, res) => {
             return res.status(400).send({ message: 'Patient ID is required' });
         }
 
-        const patient = await accounts.Patient.getPatientById(patientId);
+        const patient = await Patient.getPatientById(patientId);
 
         if (!patient) {
             res.status(404).json({
@@ -85,7 +87,7 @@ const getPatientById = async (req, res) => {
 const getAllPatient = async (req, res) => {
     try {
 
-        const patients = await accounts.Patient.getAllPatient();
+        const patients = await Patient.getAllPatient();
 
         if (!patients) {
             res.status(404).json({
@@ -107,7 +109,7 @@ const getAllPatient = async (req, res) => {
 const getAllUnapproved = async (req, res) => {
     try {
 
-        const patients = await accounts.Patient.getAllUnapproved();
+        const patients = await Patient.getAllUnapproved();
 
         if (!patients) {
             res.status(404).json({
@@ -161,9 +163,9 @@ const deletePatientById = async (req, res) => {
             return res.status(400).send({ message: 'Patient ID is required' });
         }
         
-        const deleteQuestionnaireRequest = await questionnaire.deleteQuestionnaire(patientId);
-        const deletePatientRequest = await accounts.Patient.deletePatientById(patientId);
-        const deleteAccountRequest = await accounts.Account.deleteAccountById(patientId);
+        const deleteQuestionnaireRequest = await Questionnaire.deleteQuestionnaire(patientId);
+        const deletePatientRequest = await Patient.deletePatientById(patientId);
+        const deleteAccountRequest = await Account.deleteAccountById(patientId);
 
         if (deleteQuestionnaireRequest && deletePatientRequest && deleteAccountRequest) {
             res.status(200).json({
@@ -191,13 +193,13 @@ const updatePatientById = async (req, res) => {
         const { name, email, knownAllergies, birthdate, password } = req.body;
     
         // Update Patient
-        const updatePatientRes = await accounts.Patient.updatePatient(patientId, {
+        const updatePatientRes = await Patient.updatePatient(patientId, {
             knownAllergies: knownAllergies,
             birthdate: birthdate,
         });
 
         // Update Account (Patient's Parent Class)
-        const updateAccountRes = await accounts.Account.updateAccount(patientId, {
+        const updateAccountRes = await Account.updateAccount(patientId, {
             name: name,
             email: email,
             password: password
@@ -206,7 +208,7 @@ const updatePatientById = async (req, res) => {
         if (updatePatientRes && updateAccountRes) {
             res.status(200).json({
                 message: "Patient Account Updated Successfully",
-                patient: await accounts.Patient.getPatientById(patientId)
+                patient: await Patient.getPatientById(patientId)
             });
         } else {
             res.status(500).json({
@@ -223,7 +225,7 @@ const authCreateCompany = async (req, res) => {
     try {
         const { name, email, password, companyAddress, createdBy } = req.body;
 
-        const company = await accounts.Company.createCompany(name, email, password, companyAddress, createdBy);
+        const company = await Company.createCompany(name, email, password, companyAddress, createdBy);
 
         res.status(201).json({
             message: "Company Created Successfully",
