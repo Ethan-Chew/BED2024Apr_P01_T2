@@ -13,7 +13,7 @@
             <a class="text-2xl font-bold">CareLinc</a>
             <nav class="ml-auto flex flex-row gap-5 items-center">
                 <a class="text-xl" href="./credits.html">Credits</a>
-                <button class="text-xl bg-btnprimary px-4 py-2">
+                <button class="text-xl bg-btnprimary px-4 py-2" id="logout">
                     Logout
                 </button>
             </nav>
@@ -81,6 +81,7 @@
                     <a class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center" href="requestConfirmation.html" id="request-contribute-1">Contribute</a>
                 </div>
             </div>
+            <div id="drug-requests-list"></div>
         </div>
 
         
@@ -91,4 +92,14 @@
         feather.replace();
     </script>
     <script src="../scripts/tailwind.config.js"></script>
+    <script>
+        const drugRequestsList = document.getElementById('drug-requests-list');
+      
+        fetch(`/api/drugRequests/${orderID}`)
+          .then(response => response.json())
+          .then(data => {
+            drugRequestsList.innerHTML = data.drugRequestHtml;
+          })
+          .catch(error => console.error(error));
+      </script>
 </html>
