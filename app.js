@@ -7,6 +7,7 @@ const dbConfig = require("./dbConfig");
 const accountsController = require("./controllers/accountsController");
 const appointmentController = require("./controllers/appointmentController");
 const drugRequestController = require ("./controllers/drugRequestController");
+const companyController = require("./controllers/companyController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -41,7 +42,8 @@ app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppoi
 
 /// Route for Company Account
 app.post("/api/auth/create/company", accountsController.authCreateCompany);
-app.get("/api/drugRequests/:orderID", drugRequestController.getAllDrugRequestOrder);
+app.get("/api/company/:companyId", companyController.getCompanyById);
+app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 
 // Initialise Server
 

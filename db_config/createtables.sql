@@ -36,6 +36,17 @@ CREATE TABLE Patient (
 	CONSTRAINT FK_Patient FOREIGN KEY (PatientId) REFERENCES Account(AccountId)
 );
 
+CREATE TABLE PatientPaymentMethods (
+	PatientId VARCHAR(7) NOT NULL,
+	Merchant VARCHAR(255) NOT NULL CHECK (Merchant IN ('Visa', 'Mastercard', 'American Express', 'Discover', 'JCB')),
+	CardName VARCHAR(255) NOT NULL,
+	CardNumber VARCHAR(16) NOT NULL,
+	CardExpiryDate DATE NOT NULL,
+
+	CONSTRAINT PK_PatientPaymentMethods PRIMARY KEY (PatientId, CardNumber),
+	CONSTRAINT FK_PatientPaymentMethods_Account FOREIGN KEY (PatientId) REFERENCES Patient(PatientId)
+);
+
 CREATE TABLE Doctor (
 	DoctorId VARCHAR(7) NOT NULL,
 	DoctorCreatedBy VARCHAR(7) NOT NULL,
