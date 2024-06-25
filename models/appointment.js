@@ -49,10 +49,12 @@ class Appointment {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT a.*, pay.PaymentStatus, pm.DrugName, pm.Quantity, pm.Reason AS 'DrugReason', pm.DrugRequest, di.DrugPrice * pm.Quantity AS 'DrugPrice' FROM Appointments a
+            SELECT a.AppointmentId, a.PatientId, a.DoctorId, a.Reason, avs.SlotDate, st.SlotTime, pay.PaymentStatus, pm.DrugName, pm.Quantity, pm.Reason AS 'DrugReason', pm.DrugRequest, di.DrugPrice * pm.Quantity AS 'DrugPrice' FROM Appointments a
             LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
             LEFT JOIN PrescribedMedication pm ON a.AppointmentId = pm.AppointmentId
             LEFT JOIN DrugInventory di ON pm.DrugName = di.DrugName
+            LEFT JOIN AvailableSlot avs ON avs.SlotId = a.SlotId
+            LEFT JOIN SlotTime st ON st.SlotTimeId = avs.SlotTimeId
             WHERE a.AppointmentId = @AppointmentId
         `
         const request = connection.request();
@@ -65,7 +67,8 @@ class Appointment {
             appointmentId: result.recordset[0].AppointmentId,
             patientId: result.recordset[0].PatientId,
             doctorId: result.recordset[0].DoctorId,
-            slotId: result.recordset[0].SlotId,
+            slotDate: result.recordset[0].SlotDate,
+            slotTime: result.recordset[0].SlotTime,
             consultationCost: result.recordset[0].ConsultationCost,
             reason: result.recordset[0].Reason,
             doctorNote: result.recordset[0].DoctorNote,

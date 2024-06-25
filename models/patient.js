@@ -10,6 +10,7 @@ class Patient extends Account {
         this.isApproved = isApproved;
     }
 
+    // Created by: Ethan Chew
     static async createPatient(name, email, password, knownAllergies, birthdate) {
         const connection = await sql.connect(dbConfig);
         const newAccountId = await Account.getNextAccountId(connection);
@@ -46,16 +47,14 @@ class Patient extends Account {
         return new Patient(newAccountId, name, email, password, insertUnixTime, knownAllergies, birthdate, "Pending");
     }
 
+    // Created by: Ethan Chew
     static async getPatientById(patientId) {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT p.*, acc.AccountName, acc.AccountEmail, acc.AccountCreationDate, a.DoctorId, a.SlotId, a.AppointmentId, a.ConsultationCost, a.Reason, a.DoctorNote, pay.PaymentAmount, pay.PaymentStatus, s.SlotDate, st.SlotTime FROM Patient p
+            SELECT p.*, acc.AccountName, acc.AccountEmail, acc.AccountCreationDate, a.DoctorId, a.SlotId, a.AppointmentId FROM Patient p
             LEFT JOIN Account acc ON acc.AccountId = p.PatientId
             LEFT JOIN Appointments a ON a.PatientId = p.PatientId
-            LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
-            LEFT JOIN AvailableSlot s ON s.SlotId = a.SlotId
-            LEFT JOIN SlotTime st ON st.SlotTimeId = s.SlotTimeId
             WHERE p.PatientId = @PatientId
         `;
         const request = connection.request();
@@ -66,7 +65,7 @@ class Patient extends Account {
 
         // Group Patients with their Associated Appointments
         const birthdate = new Date(result.recordset[0].PatientBirthdate).toISOString().split("T")[0];  // Remove time from date
-        const patientsWithAppointments = {
+        const patientsWithAppointmentIds = {
             name: result.recordset[0].AccountName,
             email: result.recordset[0].AccountEmail,
             birthdate: birthdate,
@@ -74,24 +73,13 @@ class Patient extends Account {
             knownAllergies: result.recordset[0].KnownAllergies,
             isApproved: result.recordset[0].PatientIsApproved,
             creationDate: new Date(result.recordset[0].AccountCreationDate * 1000).toISOString().split("T")[0],
-            appointments: [],
+            appointmentIds: [],
         };
         for (const row of result.recordset) {
-            patientsWithAppointments.appointments.push({
-                appointmentId: row.AppointmentId,
-                doctorId: row.DoctorId,
-                slotId: row.SlotId,
-                consultationCost: row.ConsultationCost,
-                reason: row.Reason,
-                doctorNote: row.DoctorNote,
-                paymentAmount: row.PaymentAmount,
-                paymentStatus: row.PaymentStatus,
-                slotDate: row.SlotDate,
-                slotTime: row.SlotTime,
-            });
+            patientsWithAppointmentIds.appointmentIds.push(row.AppointmentId);
         }
 
-        return patientsWithAppointments;
+        return patientsWithAppointmentIds;
     }
 
     static async getAllPatient() {
@@ -140,6 +128,7 @@ class Patient extends Account {
         return patients; // Return an array of patient objects
     }
 
+    // Created by: Ethan Chew
     static async deletePatientById(patientId) {
         const connection = await sql.connect(dbConfig);
 
@@ -152,7 +141,8 @@ class Patient extends Account {
         connection.close();
         return deletePatientRes.rowsAffected[0] === 1
     }
-
+    
+    // Created by: Ethan Chew
     static async updatePatient(patientId, updatedFields) {
         const allowedFields = {
             'knownAllergies': 'KnownAllergies',

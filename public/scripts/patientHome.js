@@ -36,17 +36,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     const patientJson = await fetchPatient.json();
     const patient = patientJson.patient;
 
+    // Retrieve Appointment Detail Information
+    let appointments = [];
+    for (const appointmentId of patient.appointmentIds) {
+        const fetchAppointment = await fetch(`/api/appointments/${appointmentId}`, {
+            method: 'GET'
+        });
+
+        const appointmentJson = await fetchAppointment.json();
+        appointments.push(appointmentJson.appointment);
+    }
+    console.log(appointments)
     // Populate Screen with Patient Information
     /// Count and Display Number of Unpaid Payments
-    for (const appointment of patient.appointments) {
-        if (appointment.paymentStatus === 'Unpaid') {
+    for (let i = 0; i < appointments.length; i++) {
+        if (appointments[i].paymentStatus === 'Unpaid') {
             document.getElementById('num-unpaid-num').innerText = parseInt(document.getElementById('num-unpaid-num').innerText) + 1;
         }
     }
     /// Get Future Appointments
     const nowDate = new Date();
     nowDate.setHours(0, 0, 0, 0);
-    const futureAppointments = patient.appointments.filter(appointment => {
+    const futureAppointments = appointments.filter(appointment => {
         const appointmentDate = new Date(appointment.slotDate);
         return appointmentDate >= nowDate;
     });
