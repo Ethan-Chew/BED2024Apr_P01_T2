@@ -39,8 +39,15 @@ class DrugRequest {
         console.log(result);
         if (result.recordset.length == 0) return null;
 
-        return result.recordset.map(
-            (row) => new DrugRequest(row.appointmentId, row.drugName, row.drugQuantity, row.drugPrice, row.requestDate)
+        return result.recordset.map(row =>
+            
+            new DrugRequest(
+                row.AppointmentId,
+                row.DrugName,
+                row.Quantity, // Ensure this matches the alias in SQL query
+                row.DrugPrice,
+                row.SlotDate // Ensure this matches the alias in SQL query
+            )
         );
     }
 

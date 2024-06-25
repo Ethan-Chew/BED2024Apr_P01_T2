@@ -42,7 +42,7 @@ app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppoi
 /// Route for Company Account
 app.post("/api/auth/create/company", accountsController.authCreateCompany);
 app.get("/api/company/:companyId", companyController.getCompanyById);
-app.get("/api/drugRequests", drugRequestController.getAllDrugRequestOrder);
+app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 
 // Initialise Server
 
