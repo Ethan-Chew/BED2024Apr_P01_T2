@@ -35,5 +35,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('view-record').addEventListener('click', () => {
         window.location.href = '../company/inventoryRecord.html';
     })
-    //document.getElementById('pending-request').innerHTML = '';
 })

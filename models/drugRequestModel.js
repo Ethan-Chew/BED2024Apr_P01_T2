@@ -14,16 +14,29 @@ class DrugRequest {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT pm.AppointmentId, pm.DrugName, pm.Quantity, di.DrugPrice
-            FROM PrescribedMedication pm
-            JOIN DrugInventory di ON pm.DrugName = di.DrugName
-            WHERE pm.DrugRequest = 'Pending'
+            SELECT 
+                pm.AppointmentId,
+                pm.DrugName,
+                pm.Quantity,
+                di.DrugPrice,
+                s.SlotDate
+            FROM 
+                PrescribedMedication pm
+            JOIN 
+                DrugInventory di ON pm.DrugName = di.DrugName
+            JOIN 
+                Appointments a ON pm.AppointmentId = a.AppointmentId
+            JOIN 
+                AvailableSlot s ON a.SlotId = s.SlotId
+            WHERE 
+                pm.DrugRequest = 'Pending'
         `
 
         const request = connection.request();
         const result = await request.query(query);
+        console.log('SQL query result:', result); // Debug log
         connection.close();
-
+        console.log(result);
         if (result.recordset.length == 0) return null;
 
         return result.recordset.map(
