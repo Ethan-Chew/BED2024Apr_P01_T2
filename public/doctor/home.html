@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
 
-        <title>CareLinc - Patient Home</title>
+        <title>CareLinc - Doctor Home</title>
     </head>
     <body class="w-screen h-screen flex flex-col">
         <!-- Navigation Bar -->
@@ -18,6 +18,30 @@
                 </button>
             </nav>
         </header>
+
+        <!-- Buttons area -->
+
+        <div class="p-8 flex flex-col gap-10">
+            <div>
+                <h1 class="text-4.5xl font-bold">CareLinc Company</h1>
+                <a class="text-xl">Welcome Back. Select a service you require</a>
+            </div>
+    
+            <div class="grid grid-cols-3 gap-5">
+                <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="view-schedule">
+                    <a class="text-2xl">Manage Consultation Schedule</a>
+                </div>
+                <div class="flex flex-col align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="view-appt">
+                    <a class="text-2xl">View Appointments</a>
+                </div>
+                <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="view-medlist">
+                    <a class="text-2xl">View Medication List</a>  
+                </div>
+                <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="view-medrec">
+                    <a class="text-2xl">View Patients' Medical Records</a>  
+                </div>
+            </div>
+        </div>
     </body>
 
     <script src="../scripts/tailwind.config.js"></script>
