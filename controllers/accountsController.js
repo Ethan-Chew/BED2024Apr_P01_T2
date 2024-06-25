@@ -221,6 +221,46 @@ const updatePatientById = async (req, res) => {
     }
 }
 
+//HERVIN
+const adminUpdatePatientById = async (req, res) => {
+    try {
+        const { patientId } = req.params;
+
+        if (!patientId) {
+            return res.status(400).send({ message: 'Patient ID is required' });
+        }
+
+        const { name, knownAllergies, birthdate, creationDate, isApproved } = req.body;
+    
+        // Update Patient
+        const updatePatientRes = await Patient.adminUpdatePatient(patientId, {
+            knownAllergies: knownAllergies,
+            birthdate: birthdate,
+            isApproved: isApproved
+        });
+
+        // Update Account (Patient's Parent Class)
+        const updateAccountRes = await Account.adminUpdateAccount(patientId, {
+            name: name,
+            creationDate: Math.floor(new Date(creationDate).getTime() / 1000),
+        })
+
+        if (updatePatientRes && updateAccountRes) {
+            res.status(201).json({
+                message: "Patient Account Updated Successfully",
+                patient: await Patient.getPatientById(patientId)
+            });
+        } else {
+            res.status(500).json({
+                message: "Failed to Update Patient Account"
+            });
+        }
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 const authCreateCompany = async (req, res) => {
     try {
         const { name, email, password, companyAddress, createdBy } = req.body;
@@ -247,4 +287,5 @@ module.exports = {
     getAllPatient,
     getAllUnapproved,
     getQuestionnaireWithAccountId,
+    adminUpdatePatientById,
 }

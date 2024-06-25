@@ -28,6 +28,7 @@ app.get("/api/patient/:patientId", accountsController.getPatientById);
 app.get("/api/patients/", accountsController.getAllPatient);
 app.get("/api/patients/unapproved", accountsController.getAllUnapproved);
 app.put("/api/patient/:patientId", validatePatient, accountsController.updatePatientById);
+app.put("/api/staff/patient/:patientId", accountsController.adminUpdatePatientById);
 app.delete("/api/patient/:patientId", accountsController.deletePatientById);
 
 /// Route for Questionnaire

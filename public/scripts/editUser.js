@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
             <div>
                 <label class="font-bold" for="isApproved">Approved Status</label>
                 <select id="isApproved">
-                    <option value="true" ${patient.isApproved ? 'selected' : ''}>Approved</option>
-                    <option value="false" ${!patient.isApproved ? 'selected' : ''}>Declined</option>
-                    <option value="pending" ${!patient.isApproved ? 'selected' : ''}>Pending</option>
+                   <option value="Approved" ${patient.isApproved === 'Approved' ? 'selected' : ''}>Approved</option>
+                <option value="Declined" ${patient.isApproved === 'Declined' ? 'selected' : ''}>Declined</option>
+                <option value="Pending" ${patient.isApproved === 'Pending' ? 'selected' : ''}>Pending</option>
                 </select>
             </div>
         </div>
@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const accountElement = createAccountElement(accounts.patient);
         container.appendChild(accountElement);
+        localStorage.setItem('patientId', accounts.patient.patientId);
     }
 
     displayAccounts();

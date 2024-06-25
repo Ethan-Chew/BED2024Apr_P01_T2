@@ -184,6 +184,43 @@ class Patient extends Account {
 
         return result.rowsAffected[0] === 1;
     }
+
+    //HERVIN
+    static async adminUpdatePatient(patientId, updatedFields) {
+        const allowedFields = {
+            'knownAllergies': 'KnownAllergies',
+            'birthDate': 'PatientBirthdate',
+            'isApproved': 'PatientIsApproved',
+        }
+        
+        if (updatedFields.length === 0) {
+            throw new Error("No Fields to Update");
+        }
+    
+        const connection = await sql.connect(dbConfig);
+        const request = connection.request();
+        
+        // Populate Query with Updated Fields
+        let query = `UPDATE Patient SET `;
+        for (const field in updatedFields) {
+            if (Object.keys(allowedFields).includes(field) && updatedFields[field] !== null) {
+                query += `${allowedFields[field]} = @${field}, `;
+                request.input(field, updatedFields[field]);
+            }
+        }
+        query = query.slice(0, -2); // Remove last ', '
+        query += ` WHERE PatientId = @PatientId`;
+        request.input('PatientId', patientId);
+    
+        // Send Request
+        const result = await request.query(query);
+        connection.close();
+    
+        return result.rowsAffected[0] === 1;
+    }
+
 }
+
+
 
 module.exports = Patient;
