@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         for (const futureAppointment of futureAppointments) {
             document.getElementById("upcoming-appointments").innerHTML += `
-                <div class="flex flex-col align-top bg-gray-200 p-5 rounded-xl gap-10" id="appt-${futureAppointment.appointmentId}">
+                <div class="flex flex-col align-top bg-gray-100 p-5 rounded-xl gap-10" id="appt-${futureAppointment.appointmentId}">
                     <div class="flex flex-col">
                         <a class="text-2xl"><span class="font-bold">${new Date(futureAppointment.slotDate).toISOString().split("T")[0]}</span> | ${futureAppointment.slotTime}</a>
                         <a class="text-xl">${futureAppointment.reason}</a>

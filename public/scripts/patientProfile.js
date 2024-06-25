@@ -71,13 +71,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 break;
             }
         }
-
-        if (!isUpdated) {
-            alert("Your Profile has not been updated!");
-            return;
-        }
-
+        
         updatedUser.password = newPassword === "" || newPassword === null ? null : newPassword;
+        if (!isUpdated) {
+            if (updatedUser.password === null) {
+                alert("Your Profile has not been updated!");
+                return;
+            }
+        }
 
         // Send Update Request
         const updateUserRequest = await fetch(`/api/patient/${accountId}`, {

@@ -10,7 +10,7 @@
 
         <!-- Navigation Bar -->
         <header class="z-[1000] bg-primary flex flex-row px-5 py-3 text-white items-center">
-            <a class="text-2xl font-bold">CareLinc</a>
+            <a class="text-2xl font-bold" href="./home.html">CareLinc</a>
             <nav class="ml-auto flex flex-row gap-5 items-center">
                 <a class="text-xl" hrsef="./credits.html">Credits</a>
                 <button class="text-xl bg-btnprimary px-4 py-2" id="logout">
@@ -21,64 +21,12 @@
 
         <div class="flex flex-col flex-grow p-8">
             <h1 class="text-4.5xl font-bold">Outstanding Payments</h1>
-            <div class="mt-5" id="paymentlist-container">
-                <div class="bg-gray-100 shadow-lg p-3 rounded-2xl text-lg">
-                    <h3 class="text-3xl font-bold mb-2">Invoice Details</h3>
-                    <div class="w-1/2 flex flex-row">
-                        <div>
-                            <a>Hello</a>
-                        </div>
-
-                        <div class="ml-auto">
-                            <a>helllllo</a>
-                        </div>
-                    </div>
-                    <div class="flex flex-row gap-10 items-center mt-3">
-                        <div>
-                            <p><span class="font-bold">Total Amount: </span>$100</p>
-                            <p class="text-gray-500">Can't afford it now? Ask for help from a member of the public.</p>
-                        </div>
-                        <button class="ml-auto px-6 py-2 self-start rounded-xl bg-primary text-white hover:bg-btnprimary">
-                            Pay
-                        </button>
-                        <button class="px-6 py-2 self-start rounded-xl bg-gray-400 text-white hover:bg-gray-500">
-                            Request Help
-                        </button>
-                    </div>
-                </div>
+            <div class="mt-5 flex flex-col gap-3" id="paymentlist-container">
+                
             </div>
-            
-            <!-- <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-                <h2 class="text-2xl font-bold mb-6 text-center">Outstanding Payments</h2>
-                <div class="bg-gray-200 p-6 rounded-lg">
-                    <h3 class="text-xl font-bold mb-4">Invoice Details (19th May 2024)</h3>
-                    <ul class="mb-4">
-                        <li class="flex justify-between mb-2">
-                            <span>Consultation Fee</span>
-                            <span>$10</span>
-                        </li>
-                        <li class="flex justify-between mb-2">
-                            <span>Paracetamol (20 Tablets)</span>
-                            <span>$5</span>
-                        </li>
-                        <li class="flex justify-between mb-2">
-                            <span>Zyrtec (20 Tablets)</span>
-                            <span>$4</span>
-                        </li>
-                    </ul>
-                    <div class="flex justify-between font-bold mb-4">
-                        <span>Total Amount:</span>
-                        <span>$19.00</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Pay</button>
-                        <button class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500">Request Help</button>
-                    </div>
-                    <p class="text-sm text-gray-600 mt-4">Can't afford it now? Ask for help from a member of the public.</p>
-                </div>
-            </div> -->
         </div>
     </body>
 
+    <script src="../scripts/patientMakePayment.js"></script>
     <script src="../scripts/tailwind.config.js"></script>
 </html>
