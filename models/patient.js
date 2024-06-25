@@ -50,7 +50,7 @@ class Patient extends Account {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT p.*, acc.AccountName, acc.AccountEmail, a.DoctorId, a.SlotId, a.AppointmentId, a.ConsultationCost, a.Reason, a.DoctorNote, pay.PaymentAmount, pay.PaymentStatus, s.SlotDate, st.SlotTime FROM Patient p
+            SELECT p.*, acc.AccountName, acc.AccountEmail, acc.AccountCreationDate, a.DoctorId, a.SlotId, a.AppointmentId, a.ConsultationCost, a.Reason, a.DoctorNote, pay.PaymentAmount, pay.PaymentStatus, s.SlotDate, st.SlotTime FROM Patient p
             LEFT JOIN Account acc ON acc.AccountId = p.PatientId
             LEFT JOIN Appointments a ON a.PatientId = p.PatientId
             LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
@@ -73,6 +73,7 @@ class Patient extends Account {
             patientId: result.recordset[0].PatientId,
             knownAllergies: result.recordset[0].KnownAllergies,
             isApproved: result.recordset[0].PatientIsApproved,
+            creationDate: new Date(result.recordset[0].AccountCreationDate * 1000).toISOString().split("T")[0],
             appointments: [],
         };
         for (const row of result.recordset) {

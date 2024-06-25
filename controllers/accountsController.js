@@ -136,7 +136,7 @@ const getQuestionnaireWithAccountId = async (req, res) => {
             return res.status(400).send({ message: 'Patient ID is required' });
         }
 
-        const patient = await questionnaire.getQuestionnaireWithAccountId(patientId);
+        const patient = await Questionnaire.getQuestionnaireWithAccountId(patientId);
 
         if (!patient) {
             res.status(404).json({
