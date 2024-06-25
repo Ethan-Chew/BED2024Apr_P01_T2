@@ -61,8 +61,6 @@ class Appointment {
         const result = await request.query(query);
         connection.close();
         
-        if (!connection) return null;
-
         const appointmentWithMedication = {
             appointmentId: result.recordset[0].AppointmentId,
             patientId: result.recordset[0].PatientId,
@@ -75,7 +73,7 @@ class Appointment {
             medication: [],
         }
 
-        for (const row of record.recordset) {
+        for (const row of result.recordset) {
             appointmentWithMedication.medication.push({
                 drugName: row.DrugName,
                 quantity: row.Quantity,
