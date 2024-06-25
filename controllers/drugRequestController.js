@@ -1,10 +1,8 @@
-const DrugRequest = require('../models/drugRequest');
+const DrugRequest = require('../models/drugRequestModel');
 
 const getAllDrugRequestOrder = async (req, res) => {
-    const { orderID } = req.params;
-
     try {
-        const drugRequests = await DrugRequest.getAllDrugRequestOrder(orderID);
+        const drugRequests = await DrugRequest.getAllDrugRequestOrder();
         if (!drugRequests) {
             res.status(404).json({
                 message: `No drug requests found`
@@ -19,17 +17,17 @@ const getAllDrugRequestOrder = async (req, res) => {
                   <!-- Medicine Name -->
                   <div>
                     <p class="font-bold">Medicine Name</p>
-                    <p class="text-xl" id="request-name-${drugRequest.orderID}">${drugRequest.drugName}</p>
+                    <p class="text-xl" id="request-name-${drugRequest.appointmentId}">${drugRequest.drugName}</p>
                   </div>
                   <!-- Quantity Requested -->
                   <div>
                     <p class="font-bold">Quantity Requested</p>
-                    <p class="text-xl" id="request-quantity-${drugRequest.orderID}">${drugRequest.drugQuantity}</p>
+                    <p class="text-xl" id="request-quantity-${drugRequest.appointmentId}">${drugRequest.drugQuantity}</p>
                   </div>
                   <!-- Price -->
                   <div>
                     <p class="font-bold">Price/Unit</p>
-                    <p class="text-xl" id="request-price-${drugRequest.orderID}">$${drugRequest.drugPrice}</p>
+                    <p class="text-xl" id="request-price-${drugRequest.appointmentId}">$${drugRequest.drugPrice}</p>
                   </div>
                 </div>
                 
@@ -37,12 +35,12 @@ const getAllDrugRequestOrder = async (req, res) => {
                   <!-- Order ID -->
                   <div>
                     <p class="font-bold">Order ID</p>
-                    <p class="text-xl" id="request-order-${drugRequest.orderID}">${drugRequest.orderID}</p>
+                    <p class="text-xl" id="request-order-${drugRequest.appointmentId}">${drugRequest.orderID}</p>
                   </div>
                   <!-- Date of Request -->
                   <div>
                     <p class="font-bold">Date of Request</p>
-                    <p class="text-xl" id="request-date-${drugRequest.orderID}">${drugRequest.requestDate}</p>
+                    <p class="text-xl" id="request-date-${drugRequest.appointmentId}">${drugRequest.requestDate}</p>
                   </div>
                 </div>
                 

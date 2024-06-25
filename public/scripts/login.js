@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             } else if (account.CompanyId) {
                 sessionStorage.setItem('accountType', 'company');
-                window.location.href = './company/home.html';
+                window.location.href = './company/companyHome.html';
                 localStorage.setItem('currentUser', account.CompanyId);
             } else if (account.DoctorId) {
                 sessionStorage.setItem('accountType', 'doctor');
