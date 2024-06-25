@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
     async function fetchPatientData() {
-        // Example: Fetching from a local JSON file or API endpoint
         const response = await fetch('/api/patients/');
         return await response.json();
     }
@@ -34,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             <div class="flex space-x-2">
-                <button class="p-3 bg-white rounded-lg shadow hover:bg-gray-300">Edit Details</button>
+                <a class="p-3 bg-white rounded-lg shadow hover:bg-gray-300" href="editUser.html?id=${patient.patientId}">Edit Details</a>
                 <button class="p-3 bg-white rounded-lg shadow hover:bg-gray-300">Remove Patient</button>
             </div>
         `;

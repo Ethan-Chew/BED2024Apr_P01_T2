@@ -128,6 +128,33 @@ const getAllUnapproved = async (req, res) => {
     }
 }
 
+const getQuestionnaireWithAccountId = async (req, res) => {
+    try {
+        const patientId = req.params.accountId;
+
+        if (!patientId) {
+            return res.status(400).send({ message: 'Patient ID is required' });
+        }
+
+        const patient = await Questionnaire.getQuestionnaireWithAccountId(patientId);
+
+        if (!patient) {
+            res.status(404).json({
+                message: `Patient with ID ${patientId} not found.`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: "Patient with ID Found",
+            patient: patient
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 const deletePatientById = async (req, res) => {
     try {
         const { patientId } = req.params;
@@ -219,4 +246,5 @@ module.exports = {
     authCreateCompany,
     getAllPatient,
     getAllUnapproved,
+    getQuestionnaireWithAccountId,
 }
