@@ -66,19 +66,25 @@ INSERT INTO SlotTime(SlotTimeId, SlotTime) VALUES
 
 INSERT INTO AvailableSlot (SlotId, DoctorId, SlotDate, SlotTimeId) VALUES
 ('SLO0001', 'ACC0008', '2024-06-15', 'SLOT001'),
-('SLO0002', 'ACC0009', '2024-06-15', 'SLOT004');
+('SLO0002', 'ACC0009', '2024-06-16', 'SLOT004'),
+('SLO0003', 'ACC0008', '2024-07-01', 'SLOT002'),
+('SLO0004', 'ACC0009', '2024-08-15', 'SLOT008');
 
 INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, ConsultationCost, Reason, DoctorNote) VALUES
-('APP0001', 'ACC0002', 'ACC0008', 'SLO0002', 50.00, 'Checkup', 'Recommend follow up'),
-('APP0002', 'ACC0003', 'ACC0009', 'SLO0001', 60.00, 'Follow-up', NULL);
+('APP0001', 'ACC0005', 'ACC0008', 'SLO0001', 10.00, 'Checkup', 'Recommend follow up'),
+('APP0002', 'ACC0003', 'ACC0009', 'SLO0002', 20.00, 'Follow-up', NULL),
+('APP0003', 'ACC0005', 'ACC0008', 'SLO0003', 10.00, 'Fever and Flu', ''),
+('APP0004', 'ACC0005', 'ACC0009', 'SLO0004', 15.00, 'Checkup', 'Recommend follow up');
 
 INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus) VALUES
 ('REQ0001', 'APP0001', 'Payment for appointment', '2024-06-01', 'Pending'),
 ('REQ0002', 'APP0002', 'Payment for follow-up', '2024-06-02', 'Completed');
 
-INSERT INTO Payments (PaymentId, AppointmentId, PaymentAmount, PaymentStatus) VALUES
-('PAY0001', 'APP0001', 50.00, 'Unpaid'),
-('PAY0002', 'APP0002', 50.00, 'Paid');
+INSERT INTO Payments (PaymentId, AppointmentId, PaymentStatus) VALUES
+('PAY0001', 'APP0001', 'Unpaid'),
+('PAY0002', 'APP0002', 'Paid'),
+('PAY0003', 'APP0003', 'Unpaid'),
+('PAY0004', 'APP0004', 'Unpaid');
 
 INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Aspirin', 5.99, 'Pain relief'),
@@ -121,7 +127,11 @@ INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAva
 
 INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quantity, Reason, DrugRequest) VALUES
 ('PRM0001', 'APP0001', 'Aspirin', 10, 'Pain relief', 'Completed'),
-('PRM0002', 'APP0002', 'Paracetamol', 10, 'Fever', 'Pending');
+('PRM0002', 'APP0002', 'Paracetamol', 10, 'Fever', 'Pending'),
+('PRM0003', 'APP0003', 'Ibuprofen', 10, 'Fever and Pain Relief', 'Pending'),
+('PRM0004', 'APP0003', 'Pheniramine', 10, 'Allergy', 'Pending'),
+('PRM0005', 'APP0004', 'Digoxin', 10, 'Heart Failure', 'Pending'),
+('PRM0006', 'APP0004', 'Magnesium Carbonate', 10, 'Heartburn', 'Pending');
 
 INSERT INTO DrugTopupRequest (TopupId, DrugName, TopupQuantity, TopupRequestDate, TopupStatus) VALUES
 ('DRT0001', 'Paracetamol', 100, '2024-05-01', 'Completed'),

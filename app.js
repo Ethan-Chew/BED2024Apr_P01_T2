@@ -26,6 +26,7 @@ app.post("/api/auth/create/patient", validatePatient, accountsController.authCre
 /// Route for Patient Account
 app.get("/api/patient/:patientId", accountsController.getPatientById);
 app.get("/api/patients/", accountsController.getAllPatient);
+app.get("/api/patients/unapproved", accountsController.getAllUnapproved);
 app.put("/api/patient/:patientId", validatePatient, accountsController.updatePatientById);
 app.delete("/api/patient/:patientId", accountsController.deletePatientById);
 
