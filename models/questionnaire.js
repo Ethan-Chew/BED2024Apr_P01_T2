@@ -16,7 +16,7 @@ class Questionnaire {
     static async getQuestionnaireWithAccountId(accountId) {
         const connection = await sql.connect(dbConfig);
 
-        const query = `SELECT * FROM Questionnaire WHERE AccountId = ${accountId}`;
+        const query = `SELECT * FROM Questionnaire WHERE AccountId = '${accountId}'`;
         const request = connection.request();
 
         const result = await request.query(query);

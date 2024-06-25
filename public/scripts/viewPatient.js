@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
     async function fetchPatientData() {
-        // Example: Fetching from a local JSON file or API endpoint
         const response = await fetch('/api/patients/');
         return await response.json();
     }

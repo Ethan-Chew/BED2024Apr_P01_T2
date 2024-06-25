@@ -30,6 +30,9 @@ app.get("/api/patients/unapproved", accountsController.getAllUnapproved);
 app.put("/api/patient/:patientId", validatePatient, accountsController.updatePatientById);
 app.delete("/api/patient/:patientId", accountsController.deletePatientById);
 
+/// Route for Questionnaire
+app.get("/api/questionnaire/:accountId", accountsController.getQuestionnaireWithAccountId);
+
 /// Route for Appointments
 app.get("/api/appointments/patient/:patientId", appointmentController.getAllPatientAppointment);
 app.get("/api/appointments/:appointmentId", appointmentController.getAppointmentDetailById);
