@@ -177,6 +177,52 @@ class Patient extends Account {
         return patientsWithAppointments;
     }
 
+    static async getAllPatient() {
+        const connection = await sql.connect(dbConfig);
+        const query = `
+            SELECT p.*, acc.AccountName, acc.AccountEmail, acc.AccountCreationDate FROM Patient p
+            LEFT JOIN Account acc ON acc.AccountId = p.PatientId
+        `;
+        const result = await connection.query(query);
+        connection.close();
+    
+        const patients = result.recordset.map(patient => ({
+            name: patient.AccountName,
+            email: patient.AccountEmail,
+            birthdate: new Date(patient.PatientBirthdate).toISOString().split("T")[0], // Process each patient's birthdate
+            patientId: patient.PatientId,
+            knownAllergies: patient.KnownAllergies,
+            isApproved: patient.PatientIsApproved,
+            creationDate: new Date(patient.AccountCreationDate * 1000).toISOString().split("T")[0],
+        }));
+    
+        return patients; // Return an array of patient objects
+    }
+
+    static async getAllUnapproved() {
+        const connection = await sql.connect(dbConfig);
+        const query = `
+            SELECT p.*, acc.AccountName, acc.AccountEmail, acc.AccountCreationDate 
+            FROM Patient p
+            LEFT JOIN Account acc ON acc.AccountId = p.PatientId
+            WHERE p.PatientIsApproved = 'Pending'
+        `;
+        const result = await connection.query(query);
+        connection.close();
+    
+        const patients = result.recordset.map(patient => ({
+            name: patient.AccountName,
+            email: patient.AccountEmail,
+            birthdate: new Date(patient.PatientBirthdate).toISOString().split("T")[0], // Process each patient's birthdate
+            patientId: patient.PatientId,
+            knownAllergies: patient.KnownAllergies,
+            isApproved: patient.PatientIsApproved,
+            creationDate: new Date(patient.AccountCreationDate * 1000).toISOString().split("T")[0],
+        }));
+    
+        return patients; // Return an array of patient objects
+    }
+
     static async deletePatientById(patientId) {
         const connection = await sql.connect(dbConfig);
 
@@ -248,18 +294,28 @@ class Company extends Account {
         const newAccountId = await Account.getNextAccountId(connection);
         const insertUnixTime = Math.floor(Date.now() / 1000);
 
-        const insertMemberQuery = `
+        const insertAccountQuery = `
             INSERT INTO Account (AccountId, AccountName, AccountEmail, AccountPassword, AccountCreationDate) VALUES
             ('${newAccountId}', '${name}', '${email}', '${password}', ${insertUnixTime});
         `
-        const insertPatientQuery = `
+        const insertCompanyQuery = `
             INSERT INTO Company (CompanyId, CompanyCreatedBy, CompanyAddress) VALUES
             ('${newAccountId}', '${createdBy}', '${companyAddress}');
         `;
 
         const request = connection.request();
-        const insertMemberResult = await request.query(insertMemberQuery);
-        const insertPatientResult = await request.query(insertPatientQuery);
+        request.input('AccountId', newAccountId);
+        request.input('AccountName', name);
+        request.input('AccountEmail', email);
+        request.input('AccountPassword', password);
+        request.input('AccountCreationDate', insertUnixTime);
+
+        request.input('CompanyId', newAccountId);
+        request.input('CompanyCreatedBy', createdBy);
+        request.input('CompanyAddress', companyAddress);
+
+        await request.query(insertAccountQuery);
+        await request.query(insertCompanyQuery);
 
         connection.close()
 

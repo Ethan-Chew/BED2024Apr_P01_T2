@@ -82,6 +82,50 @@ const getPatientById = async (req, res) => {
     }
 }
 
+const getAllPatient = async (req, res) => {
+    try {
+
+        const patients = await accounts.Patient.getAllPatient();
+
+        if (!patients) {
+            res.status(404).json({
+                message: `Patients not found.`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: "Patients Found",
+            patients: patients
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+const getAllUnapproved = async (req, res) => {
+    try {
+
+        const patients = await accounts.Patient.getAllUnapproved();
+
+        if (!patients) {
+            res.status(404).json({
+                message: `Patients not found.`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: "Patients Found",
+            patients: patients
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 const deletePatientById = async (req, res) => {
     try {
         const { patientId } = req.params;
@@ -148,10 +192,29 @@ const updatePatientById = async (req, res) => {
     }
 }
 
+const authCreateCompany = async (req, res) => {
+    try {
+        const { name, email, password, companyAddress, createdBy } = req.body;
+
+        const company = await accounts.Company.createCompany(name, email, password, companyAddress, createdBy);
+
+        res.status(201).json({
+            message: "Company Created Successfully",
+            company: company
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
     authLoginAccount,
     authCreatePatient,
     getPatientById,
     updatePatientById,
     deletePatientById,
+    authCreateCompany,
+    getAllPatient,
+    getAllUnapproved,
 }

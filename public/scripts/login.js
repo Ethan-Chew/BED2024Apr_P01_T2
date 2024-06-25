@@ -42,12 +42,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else if (account.CompanyId) {
                 sessionStorage.setItem('accountType', 'company');
                 window.location.href = './company/home.html';
+                localStorage.setItem('currentUser', account.CompanyId);
             } else if (account.DoctorId) {
                 sessionStorage.setItem('accountType', 'doctor');
                 window.location.href = './doctor/home.html';
+                localStorage.setItem('currentUser', account.DoctorId);
             } else if (account.StaffId) {
                 sessionStorage.setItem('accountType', 'staff');
                 window.location.href = './staff/home.html';
+                localStorage.setItem('currentUser', account.StaffId);
             }
         } else {
             const error = await response.json();
