@@ -124,6 +124,29 @@ class Appointment {
 
         return result.rowsAffected == 1;
     }
+
+    static async getAppointmentDetailsByDoctor(doctorId) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `
+        SELECT a.*, avs.SlotDate, st.SlotTime 
+        FROM Appointments a
+        LEFT JOIN AvailableSlot avs ON a.SlotId = avs.SlotId
+        LEFT JOIN SlotTime st ON avs.SlotTimeId = st.SlotTimeId
+        WHERE a.DoctorId = 'ACC0008';
+        `;
+        const request = connection.request();
+        request.input('DoctorId', doctorId)
+
+        const result = await request.query(query);
+        connection.close();
+
+        if (result.recordset.length == 0) return null;
+
+        return result.recordset.map(
+            appointment => new Appointment(appointment.AppointmentId, appointment.AccountId, appointment.DoctorId, appointment.SlotId, appointment.ConsultationCost, appointment.Reason, appointment.DoctorNote)
+        );
+    }
 }
 
 module.exports = Appointment;
