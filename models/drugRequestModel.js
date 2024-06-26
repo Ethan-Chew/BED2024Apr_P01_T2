@@ -94,6 +94,56 @@ class DrugRequest {
         );
     }
 
+    static async contributeDrugRequest(appointmentId, drugName, contributedQuantity) {
+        const connection = await sql.connect(dbConfig);
+    
+        try {
+            const transaction = new sql.Transaction(connection);
+            await transaction.begin();
+    
+            const updateMedicationQuery = `
+                UPDATE PrescribedMedication
+                SET DrugRequest = 'Completed'
+                WHERE AppointmentId = @appointmentId AND DrugName = @drugName
+            `;
+            const updateInventoryQuery = `
+                UPDATE DrugInventoryRecord
+                SET DrugAvailableQuantity = DrugAvailableQuantity - @contributedQuantity
+                WHERE DrugName = @drugName
+                AND DrugAvailableQuantity >= @contributedQuantity
+            `;
+    
+            const request = transaction.request();
+            request.input('appointmentId', sql.VarChar, appointmentId);
+            request.input('drugName', sql.VarChar, drugName);
+            request.input('contributedQuantity', sql.Int, contributedQuantity);
+    
+            // Update prescribed medication status
+            await request.query(updateMedicationQuery);
+    
+            // Update inventory
+            const result = await request.query(updateInventoryQuery);
+            if (result.rowsAffected[0] === 0) {
+                throw new Error('Insufficient drug quantity in inventory.');
+            }
+    
+            await transaction.commit();
+            console.log('Drug request contribution and inventory update completed successfully.');
+        } catch (error) {
+            console.error('Error during transaction:', error);
+            if (transaction) {
+                try {
+                    await transaction.rollback();
+                } catch (rollbackError) {
+                    console.error('Error during transaction rollback:', rollbackError);
+                }
+            }
+            throw error; // Re-throw the error to handle it in the caller
+        } finally {
+            connection.close();
+        }
+    }
+
 }
 
 module.exports = DrugRequest;

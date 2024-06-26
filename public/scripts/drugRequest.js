@@ -77,11 +77,11 @@ document.addEventListener("DOMContentLoaded", async() => {
             </div>
             <!--Button-->
             <div>
-                <a class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center contribute-btn"
+                <button class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center contribute-btn"
                     data-appointment-id="${order.appointmentId}"
                     data-drug-name="${order.drugName}">
                     Contribute
-                </a>
+                </button>
             </div>
         `;
         requestList.appendChild(requestItem);

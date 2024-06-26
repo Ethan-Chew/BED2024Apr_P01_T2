@@ -1,15 +1,16 @@
 document.addEventListener("DOMContentLoaded", async() => {
-    // Check that User is a Company
-    if (sessionStorage.getItem('accountType') !== 'company') {
-        window.location.href = '../login.html';
-        return;
-    }
-
     // Handle Logout Button Press
     document.getElementById('logout').addEventListener('click', () => {
         sessionStorage.removeItem('accountId');
         window.location.href = '../index.html';
     });
+
+    // Handle Cancel Button Press
+    document.getElementById('cancel-btn').addEventListener('click', () => {
+        window.location.href = 'drugRequest.html';
+    });
+
+    
 
     // Get the parameters for fetching the drug order details
     const urlParams = new URLSearchParams(window.location.search);
@@ -43,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     const inputInventory = document.getElementById('input-inventory');
     const inputExcess = document.getElementById('input-excess');
     const contributeQuantityElement = document.getElementById('contribute-quantity');
+    const requestQuantityElement = document.getElementById("request-quantity");
 
     // Event listeners for input fields
     inputInventory.addEventListener('input', updateContributeQuantity);
@@ -73,6 +75,41 @@ document.addEventListener("DOMContentLoaded", async() => {
         // Update the text content of contribute-quantity span
         contributeQuantityElement.textContent = totalContribution;
     }
+
+    // Handle Confirm Button Press
+    document.getElementById('confirm-btn').addEventListener('click', async () => {
+        const totalContribution = parseInt(contributeQuantityElement.textContent);
+        const maxContribution = parseInt(requestQuantityElement.textContent);
+
+        if (totalContribution === maxContribution) {
+            try {
+                // Update the drug request as completed
+                const response = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ contributedQuantity: totalContribution })
+                });
+    
+                if (response.ok) {
+                    // Redirect to the company home page
+                    window.location.href = 'companyHome.html';
+                } else {
+                    const errorData = await response.json();
+                    console.error('Failed to update drug request:', errorData.error || response.statusText);
+                    alert('Failed to complete the drug request.');
+                }
+            } catch (err) {
+                console.error('Error updating drug request:', err);
+                alert('An error occurred while completing the drug request.');
+            }
+        } else {
+            // Display an error message for incomplete contribution
+            alert('Please contribute the required quantity.');
+        }
+        
+    });
 });
 
 function populateDrugOrderInfo(order) {
