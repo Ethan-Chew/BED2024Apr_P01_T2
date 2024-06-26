@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Manage Payment Methods - CareLinc</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-100 flex flex-col min-h-screen">
+
+        <!-- Navigation Bar -->
+        <header class="z-[1000] bg-primary flex flex-row px-5 py-3 text-white items-center">
+            <a class="text-2xl font-bold" href="./home.html">CareLinc</a>
+            <nav class="ml-auto flex flex-row gap-5 items-center">
+                <a class="text-xl" href="./credits.html">Credits</a>
+                <a class="text-xl" href="./profile.html">Profile</a>
+                <button class="text-xl bg-btnprimary px-4 py-2" id="logout">
+                    Logout
+                </button>
+            </nav>
+        </header>
+        
+        <!-- Payment Methods Section -->
+        <div class="flex justify-center items-center flex-grow my-5">
+            <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Manage Payment Methods</h2>
+
+                <!-- Add Payment Method Form -->
+                <div class="bg-gray-200 p-6 rounded-lg mb-6">
+                    <h3 class="text-2xl font-bold mb-4">Add Payment Method</h3>
+                    <form id="addPaymentForm">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2" for="cardHolderName">Card Merchant</label>
+                            <select name="merchant" id="merchant" class="w-full p-2 border border-gray-300 rounded">
+                                <option value="visa">Visa</option>
+                                <option value="mastercard">Mastercard</option>
+                                <option value="americanExpress">American Express</option>
+                                <option value="discover">Discover</option>
+                                <option value="jcb">JCB</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2" for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber" class="w-full p-2 border border-gray-300 rounded" placeholder="1234 5678 9101 1121">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2" for="expiryDate">Expiry Date</label>
+                            <input type="month" id="expiryDate" class="w-full p-2 border border-gray-300 rounded">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2" for="cardHolderName">Card Holder Name</label>
+                            <input type="text" id="cardHolderName" class="w-full p-2 border border-gray-300 rounded" placeholder="John Doe">
+                        </div>
+                        <div class="flex flex-row gap-5 items-center">
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Add Card</button>
+                            <a id="submit-message" class="text-red-800"></a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Existing Payment Methods -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Your Payment Methods</h3>
+                    <div id="added-method-container" class="flex flex-col gap-5">
+                        <div id="no-added-container" class="bg-gray-100 p-4 rounded-lg shadow-lg flex justify-between items-center flex-grow">
+                            <a class="text-lg">Looks like you haven't added a payment method! Add one to pay for appointments.</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="../scripts/patientPaymentMethods.js"></script>
+    <script src="../scripts/tailwind.config.js"></script>
+</html>
