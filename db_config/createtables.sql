@@ -103,7 +103,7 @@ CREATE TABLE Appointments (
 	PatientId VARCHAR(7) NOT NULL,
 	DoctorId VARCHAR(7) NULL,
 	SlotId VARCHAR(7) NOT NULL UNIQUE,
-	ConsultationCost MONEY NOT NULL,
+	ConsultationCost MONEY NULL,
 	Reason VARCHAR(255) NOT NULL,
 	DoctorNote VARCHAR(255) NULL,
 

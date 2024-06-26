@@ -49,8 +49,9 @@ class Appointment {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT a.AppointmentId, a.PatientId, a.DoctorId, a.Reason, avs.SlotDate, st.SlotTime, pay.PaymentStatus, pm.DrugName, pm.Quantity, pm.Reason AS 'DrugReason', pm.DrugRequest, di.DrugPrice * pm.Quantity AS 'DrugPrice' FROM Appointments a
+            SELECT a.AppointmentId, a.ConsultationCost, a.PatientId, a.DoctorId, a.Reason, avs.SlotDate, st.SlotTime, pay.PaymentStatus, payReq.PaymentRequestMessage, payReq.PaymentRequestCreatedDate, payReq.PaymentRequestStatus, pm.DrugName, pm.Quantity, pm.Reason AS 'DrugReason', pm.DrugRequest, di.DrugPrice * pm.Quantity AS 'DrugPrice' FROM Appointments a
             LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
+            LEFT JOIN PaymentRequest payReq ON payReq.AppointmentId = a.AppointmentId
             LEFT JOIN PrescribedMedication pm ON a.AppointmentId = pm.AppointmentId
             LEFT JOIN DrugInventory di ON pm.DrugName = di.DrugName
             LEFT JOIN AvailableSlot avs ON avs.SlotId = a.SlotId
@@ -62,6 +63,15 @@ class Appointment {
 
         const result = await request.query(query);
         connection.close();
+
+        let paymentRequest = null;
+        if (result.recordset[0].PaymentRequestStatus) {
+            paymentRequest = {
+                requestMessage: result.recordset[0].PaymentRequestMessage,
+                createdDate: result.recordset[0].PaymentRequestCreatedDate,
+                status: result.recordset[0].PaymentRequestStatus
+            }
+        }
         
         const appointmentWithMedication = {
             appointmentId: result.recordset[0].AppointmentId,
@@ -73,6 +83,7 @@ class Appointment {
             reason: result.recordset[0].Reason,
             doctorNote: result.recordset[0].DoctorNote,
             paymentStatus: result.recordset[0].PaymentStatus,
+            paymentRequest: paymentRequest,
             medication: [],
         }
 

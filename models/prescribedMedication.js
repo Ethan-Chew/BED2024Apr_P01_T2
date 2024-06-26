@@ -1,20 +1,12 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
-class Payment {
-    constructor(id, appointmentId, amount, paymentDate, paymentStatus) {
-        this.id = id;
-        this.appointmentId = appointmentId;
-        this.amount = amount;
-        this.paymentDate = paymentDate;
-        this.paymentStatus = paymentStatus;
-    }
-
-    static async removePayment(appointmentId) {
+class PrescribedMedication {
+    static async removePrescribedMedication(appointmentId) {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            DELETE FROM Payments
+            DELETE FROM PrescribedMedication
             WHERE AppointmentId = @AppointmentId
         `;
         const request = connection.request();
@@ -25,4 +17,4 @@ class Payment {
     }
 }
 
-module.exports = Payment;
+module.exports = PrescribedMedication;

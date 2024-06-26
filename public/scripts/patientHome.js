@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const appointmentJson = await fetchAppointment.json();
         appointments.push(appointmentJson.appointment);
     }
-    console.log(appointments)
+
     // Populate Screen with Patient Information
     /// Count and Display Number of Unpaid Payments
     for (let i = 0; i < appointments.length; i++) {
@@ -95,6 +95,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     }
                     document.getElementById(`appt-${futureAppointment.appointmentId}`).remove();
                     alert("Appointment Cancelled.");
+
+                    /// Count and Display Number of Appointments
+                    document.getElementById('num-upcoming-txt').innerText = futureAppointments.length - 1;
                 }
             });
 

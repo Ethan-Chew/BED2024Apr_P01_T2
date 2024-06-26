@@ -25,18 +25,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const patientJson = await fetchPatientResponse.json();
     const patient = patientJson.patient;
 
-    // Get Unpaid Appointments
-    let unpaidAppointmentIds = []
-    for (let i = 0; i < patient.appointments.length; i++) {
-        if (patient.appointments[i].paymentStatus === 'Unpaid') {
-            unpaidAppointmentIds.push(patient.appointments[i].appointmentId)
-        }
-    }
-
-    // Retrieve Unpaid Appointment Details from the Database
+    // Retrive Appointments from Database and Filter Unpaid Appointments
+    const appointmentIds = patient.appointmentIds;
     let unpaidAppointments = [];
-    for (let i = 0; i < unpaidAppointmentIds.length; i++) {
-        const fetchAppointmentResponse = await fetch(`/api/appointments/${unpaidAppointmentIds[i]}`, {
+    for (let i = 0; i < appointmentIds.length; i++) {
+        const fetchAppointmentResponse = await fetch(`/api/appointments/${appointmentIds[i]}`, {
             method: 'GET'
         });
         if (fetchAppointmentResponse.status !== 200) {
@@ -44,7 +37,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
         const appointmentJson = await fetchAppointmentResponse.json();
-        unpaidAppointments.push(appointmentJson.appointment);
+        if (appointmentJson.appointment.paymentStatus === 'Unpaid') {
+            unpaidAppointments.push(appointmentJson.appointment);
+        }
     }
 
     // Display Unpaid Appointments on the Screen
@@ -68,20 +63,27 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="flex flex-row gap-10 items-center mt-3">
                     <div>
                         <p><span class="font-bold">Total Amount: </span>$<span id="payment-${i}-totalcost"></span></p>
-                        <p class="text-gray-500">Can't afford it now? Ask for help from a member of the public.</p>
+                        <p class="text-gray-500" id="help-text-${i}">Can't afford it now? Ask for help from a member of the public.</p>
                     </div>
                     <button class="ml-auto px-6 py-2 self-start rounded-xl bg-primary text-white hover:bg-btnprimary">
                         Pay
                     </button>
-                    <button class="px-6 py-2 self-start rounded-xl bg-gray-400 text-white hover:bg-gray-500">
+                    <button class="px-6 py-2 self-start rounded-xl bg-gray-400 text-white hover:bg-gray-500" id="help-btn-${i}">
                         Request Help
                     </button>
                 </div>
             </div>
         `;
+
+        // Set the Text for ask help
+        if (appointment.paymentRequest) {
+            document.getElementById(`help-text-${i}`).innerText = `Help requested on ${appointment.paymentRequest.createdDate.split("T")[0]}. Status: ${appointment.paymentRequest.status}`;
+            document.getElementById(`help-btn-${i}`).disabled = true;
+            document.getElementById(`help-btn-${i}`).classList.add('cursor-not-allowed');
+        }
         
+        // Add Medication and Cost to Screen
         for (let j = 0; j < appointment.medication.length; j++) {
-            // Add Medication and Cost to Screen
             document.getElementById(`payment-med-${i}`).innerHTML += `<a>${appointment.medication[j].drugName}</a>`;
             document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$${appointment.medication[j].drugPrice}</a>`;
             totalAmount += appointment.medication[j].drugPrice;

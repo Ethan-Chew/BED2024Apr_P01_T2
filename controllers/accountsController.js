@@ -45,7 +45,7 @@ const authCreatePatient = async (req, res) => {
         const { name, email, password, knownAllergies, birthdate, qns } = req.body;
 
         const account = await Patient.createPatient(name, email, password, knownAllergies, birthdate);
-        const userQuestionnaire = await questionnaire.createQuestionnaire(account.id, qns);
+        const userQuestionnaire = await Questionnaire.createQuestionnaire(account.id, qns);
 
         res.status(201).json({
             message: "Account Created Successfully",

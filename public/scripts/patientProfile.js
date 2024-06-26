@@ -94,6 +94,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         } else {
             alert("Account Updated Successfully.");
+
+            // Update Screen Info
+            document.getElementById('patient-name').innerText = updatedUser.name; 
+            document.getElementById('name').value = updatedUser.name;
+            document.getElementById('email').value = updatedUser.email;
+            document.getElementById('birthday').value = updatedUser.birthdate.split('T')[0];
+            document.getElementById('medallergies').value = updatedUser.knownAllergies;
         }
     });
 
