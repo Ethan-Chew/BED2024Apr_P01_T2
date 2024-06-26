@@ -23,7 +23,7 @@ class PaymentMethod {
         return result.recordset.map((row) => new PaymentMethod(row.PatientId, row.Merchant, row.CardName, row.CardNumber, row.CardExpiryDate));
     }
 
-    static async createPaymentMethodsForPatientId(patientId, merchant, cardName, cardNumber, cardExpiryDate) {
+    static async createPaymentMethod(patientId, merchant, cardName, cardNumber, cardExpiryDate) {
         const connection = await sql.connect(dbConfig);
 
         const insertQuery = `
