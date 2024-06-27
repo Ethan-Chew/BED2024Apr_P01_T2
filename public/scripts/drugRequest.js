@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", async() => {
         const requestDate = order.requestDate;
         const date = new Date(requestDate);
         const options = { day: '2-digit', month: 'long', year: 'numeric' };
-        const formattedDate = date.toLocaleDateString('en-US', options);
         const day = date.getDate();
         const month = date.toLocaleString('en-US', { month: 'long' }); // Get the month as full name
         const year = date.getFullYear(); // Get the full year
@@ -78,10 +77,24 @@ document.addEventListener("DOMContentLoaded", async() => {
             </div>
             <!--Button-->
             <div>
-                <a class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center" href="requestConfirmation.html" id="request-contribute-${order.appointmentId}-${order.drugName}-${order.drugQuantity}">Contribute</a>
+                <button class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center contribute-btn"
+                    data-appointment-id="${order.appointmentId}"
+                    data-drug-name="${order.drugName}">
+                    Contribute
+                </button>
             </div>
         `;
         requestList.appendChild(requestItem);
     });
 
+    // Add event listeners to the contribute buttons
+    document.querySelectorAll('.contribute-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const appointmentId = button.getAttribute('data-appointment-id');
+            const drugName = button.getAttribute('data-drug-name');
+            window.location.href = `requestConfirmation.html?appointmentId=${appointmentId}&drugName=${encodeURIComponent(drugName)}`;
+        });
+    });
+
+    
 })

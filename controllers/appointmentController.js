@@ -1,4 +1,6 @@
 const appointment = require("../models/appointment");
+const prescribedMedication = require("../models/prescribedMedication");
+const payment = require("../models/payment");
 
 const getAllPatientAppointment = async (req, res) => {
     const { patientId } = req.params;
@@ -50,6 +52,8 @@ const deleteAppointmentById = async (req, res) => {
     const { appointmentId } = req.params;
 
     try {
+        const deleteAppointment = await payment.removePayment(appointmentId);
+        const deletePrescribedMedication = await prescribedMedication.removePrescribedMedication(appointmentId);
         const deleteConfirmation = await appointment.deleteAppointment(appointmentId);
 
         if (deleteConfirmation) {
