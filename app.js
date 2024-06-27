@@ -37,6 +37,11 @@ app.put("/api/patient/:patientId", validatePatient, accountsController.updatePat
 app.put("/api/staff/patient/:patientId", accountsController.adminUpdatePatientById);
 app.delete("/api/patient/:patientId", accountsController.deletePatientById);
 
+/// Route for Doctor Account
+app.get("/api/doctors/", accountsController.getAllDoctor);
+app.get("/api/doctors/:doctorId", accountsController.getDoctorById);
+app.put("/api/doctors/:doctorId", accountsController.updateDoctorById);
+
 /// Route for Patient Payment Methods
 // app.get("/api/patient/paymentMethods/:patientId", );
 

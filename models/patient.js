@@ -81,7 +81,7 @@ class Patient extends Account {
 
         return patientsWithAppointmentIds;
     }
-
+    //HERVIn
     static async getAllPatient() {
         const connection = await sql.connect(dbConfig);
         const query = `
@@ -103,7 +103,7 @@ class Patient extends Account {
     
         return patients; // Return an array of patient objects
     }
-
+    //HERVIN
     static async getAllUnapproved() {
         const connection = await sql.connect(dbConfig);
         const query = `

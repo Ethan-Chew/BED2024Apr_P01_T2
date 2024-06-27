@@ -8,7 +8,7 @@ class Company extends Account {
         this.createdBy = createdBy;
         this.companyAddress = companyAddress;
     }
-
+    //HERVIN
     static async createCompany(name, email, password, companyAddress, createdBy) {
         const connection = await sql.connect(dbConfig);
         const newAccountId = await Account.getNextAccountId(connection);
@@ -41,7 +41,7 @@ class Company extends Account {
 
         return new Company(newAccountId, name, email, password, insertUnixTime, createdBy, companyAddress);
     }
-
+    //HERVIN
     static async getCompanyById(companyId) {
         try {
             const connection = await sql.connect(dbConfig);
