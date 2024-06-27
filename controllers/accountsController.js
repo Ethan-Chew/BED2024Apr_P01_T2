@@ -2,6 +2,7 @@ const Account = require("../models/account");
 const Patient = require("../models/patient");
 const Company = require("../models/company");
 const Questionnaire = require("../models/questionnaire");
+const PaymentMethod = require("../models/paymentMethod");
 const Doctor = require("../models/doctor");
 
 const authLoginAccount = async (req, res) => {
@@ -164,6 +165,7 @@ const deletePatientById = async (req, res) => {
             return res.status(400).send({ message: 'Patient ID is required' });
         }
         
+        await PaymentMethod.deleteAllPaymentMethod(patientId); // Delete all attached payment methods if exists
         const deleteQuestionnaireRequest = await Questionnaire.deleteQuestionnaire(patientId);
         const deletePatientRequest = await Patient.deletePatientById(patientId);
         const deleteAccountRequest = await Account.deleteAccountById(patientId);

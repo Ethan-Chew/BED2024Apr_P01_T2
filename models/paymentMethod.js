@@ -1,3 +1,6 @@
+const sql = require("mssql");
+const dbConfig = require("../dbConfig");
+
 class PaymentMethod {
     constructor (patientId, merchant, cardName, cardNumber, cardExpiryDate) {
         this.patientId = patientId;
@@ -25,10 +28,9 @@ class PaymentMethod {
 
     static async createPaymentMethod(patientId, merchant, cardName, cardNumber, cardExpiryDate) {
         const connection = await sql.connect(dbConfig);
-
         const insertQuery = `
             INSERT INTO PatientPaymentMethods (PatientId, Merchant, CardName, CardNumber, CardExpiryDate) VALUES
-            (@PatientId, @Merchant, @CardName, @CardNumber, @CardExpiryDate),
+            (@PatientId, @Merchant, @CardName, @CardNumber, @CardExpiryDate);
         `;
 
         const request = connection.request();
@@ -37,12 +39,12 @@ class PaymentMethod {
         request.input('Merchant', merchant);
         request.input('CardName', cardName);
         request.input('CardNumber', cardNumber);
-        request.input('CardExpiryDate', cardExpiryDate);
+        request.input('CardExpiryDate', cardExpiryDate + "-01");
 
         await request.query(insertQuery);
         connection.close();
 
-        return true;
+        return new PaymentMethod(patientId, merchant, cardName, cardNumber, cardExpiryDate);
     }
 
     static async deletePaymentMethod(patientId, cardNumber) {
@@ -62,5 +64,23 @@ class PaymentMethod {
         return result.rowsAffected[0] === 1;
     }
 
+    static async deleteAllPaymentMethod(patientId) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `
+            DELETE FROM PatientPaymentMethods
+            WHERE PatientId = @PatientId
+        `;
+        const request = connection.request();
+        request.input('PatientId', patientId);
+
+        const result = await request.query(query);
+        connection.close();
+
+        return result.rowsAffected[0] >= 1;
+    }
+
     // TODO: Add Update Function
 }
+
+module.exports = PaymentMethod;

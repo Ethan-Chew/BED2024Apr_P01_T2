@@ -8,9 +8,11 @@ const accountsController = require("./controllers/accountsController");
 const appointmentController = require("./controllers/appointmentController");
 const drugRequestController = require ("./controllers/drugRequestController");
 const companyController = require("./controllers/companyController");
+const paymentMethodController = require("./controllers/paymentMethodController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
+const validatePaymentMethod = require("./middleware/validatePaymentMethod");
 
 const app = express();
 const staticMiddleware = express.static("public");
@@ -26,6 +28,9 @@ app.post("/api/auth/create/patient", validatePatient, accountsController.authCre
 
 /// Route for Patient Account
 app.get("/api/patient/:patientId", accountsController.getPatientById);
+app.get("/api/patient/:patientId/paymentMethods", paymentMethodController.getPaymentMethodsByPatientId);
+app.post("/api/patient/:patientId/paymentMethods", validatePaymentMethod, paymentMethodController.createPaymentMethod);
+app.delete("/api/patient/:patientId/paymentMethods", paymentMethodController.deletePaymentMethod);
 app.get("/api/patients/", accountsController.getAllPatient);
 app.get("/api/patients/unapproved", accountsController.getAllUnapproved);
 app.put("/api/patient/:patientId", validatePatient, accountsController.updatePatientById);

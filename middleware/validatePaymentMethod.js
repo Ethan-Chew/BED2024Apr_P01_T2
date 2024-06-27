@@ -5,7 +5,7 @@ const validatePaymentMethod = (req, res, next) => {
         patientId: Joi.string().required(),
         merchant: Joi.string().required(),
         cardName: Joi.string().required(),
-        cardNumber: Joi.number().min(16).max(16).required(),
+        cardNumber: Joi.string().min(16).max(16).required(),
         cardExpiryDate: Joi.date().format('YYYY-MM').required(),
     });
 
@@ -20,4 +20,4 @@ const validatePaymentMethod = (req, res, next) => {
     next();
 };
 
-module.exports = validatePatientMethod;
+module.exports = validatePaymentMethod;
