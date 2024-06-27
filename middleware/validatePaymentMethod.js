@@ -2,6 +2,7 @@ const Joi = require("joi").extend(require('@joi/date'));
 
 const validatePaymentMethod = (req, res, next) => {
     const schema = Joi.object({
+        id: Joi.string(),
         patientId: Joi.string().required(),
         merchant: Joi.string().required(),
         cardName: Joi.string().required(),

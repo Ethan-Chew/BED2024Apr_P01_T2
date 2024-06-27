@@ -31,25 +31,25 @@
                     <form id="addPaymentForm">
                         <div class="mb-4">
                             <label class="block text-gray-700 font-bold mb-2" for="cardHolderName">Card Merchant</label>
-                            <select name="merchant" id="merchant" class="w-full p-2 border border-gray-300 rounded">
-                                <option value="visa">Visa</option>
-                                <option value="mastercard">Mastercard</option>
-                                <option value="americanExpress">American Express</option>
-                                <option value="discover">Discover</option>
-                                <option value="jcb">JCB</option>
+                            <select name="merchant" id="merchant" class="w-full p-2 border border-gray-300 rounded" required>
+                                <option value="Visa">Visa</option>
+                                <option value="Mastercard">Mastercard</option>
+                                <option value="American Express">American Express</option>
+                                <option value="Discover">Discover</option>
+                                <option value="Jcb">JCB</option>
                             </select>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 font-bold mb-2" for="cardNumber">Card Number</label>
-                            <input type="text" id="cardNumber" class="w-full p-2 border border-gray-300 rounded" placeholder="1234 5678 9101 1121">
+                            <input type="text" id="cardNumber" class="w-full p-2 border border-gray-300 rounded" placeholder="1234 5678 9123 4567" required>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 font-bold mb-2" for="expiryDate">Expiry Date</label>
-                            <input type="month" id="expiryDate" class="w-full p-2 border border-gray-300 rounded">
+                            <input type="month" id="expiryDate" class="w-full p-2 border border-gray-300 rounded" required>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 font-bold mb-2" for="cardHolderName">Card Holder Name</label>
-                            <input type="text" id="cardHolderName" class="w-full p-2 border border-gray-300 rounded" placeholder="John Doe">
+                            <input type="text" id="cardHolderName" class="w-full p-2 border border-gray-300 rounded" placeholder="John Doe" required>
                         </div>
                         <div class="flex flex-row gap-5 items-center">
                             <button type="submit" class="bg-primary hover:bg-btnprimary text-white px-4 py-2 rounded-lg">Add Card</button>
@@ -74,21 +74,33 @@
                 <h3 class="text-2xl font-bold mb-4">Edit Payment Method</h3>
                 <form id="editPaymentForm">
                     <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2" for="cardHolderName">Card Merchant</label>
+                        <select name="merchant" id="editMerchant" class="w-full p-2 border border-gray-300 rounded" required>
+                            <option value="visa">Visa</option>
+                            <option value="mastercard">Mastercard</option>
+                            <option value="americanExpress">American Express</option>
+                            <option value="discover">Discover</option>
+                            <option value="jcb">JCB</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2" for="editCardNumber">Card Number</label>
-                        <input type="text" id="editCardNumber" class="w-full p-2 border border-gray-300 rounded">
+                        <input type="text" id="editCardNumber" class="w-full p-2 border border-gray-300 rounded" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2" for="editExpiryDate">Expiry Date</label>
-                        <input type="month" id="editExpiryDate" class="w-full p-2 border border-gray-300 rounded">
+                        <input type="month" id="editExpiryDate" class="w-full p-2 border border-gray-300 rounded" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2" for="editCardHolderName">Card Holder Name</label>
-                        <input type="text" id="editCardHolderName" class="w-full p-2 border border-gray-300 rounded">
+                        <input type="text" id="editCardHolderName" class="w-full p-2 border border-gray-300 rounded" required>
                     </div>
+                    <input type="hidden" id="editPaymentMethodId">
                     <div class="flex justify-end space-x-2">
                         <button type="button" id="closeEditForm" class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500">Cancel</button>
                         <button type="submit" class="bg-primary hover:bg-btnprimary text-white px-4 py-2 rounded-lg">Save Changes</button>
                     </div>
+                    <p class="text-red-800" id="error-text"></p>
                 </form>
             </div>
         </div>

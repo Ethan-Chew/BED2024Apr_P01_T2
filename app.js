@@ -28,14 +28,19 @@ app.post("/api/auth/create/patient", validatePatient, accountsController.authCre
 
 /// Route for Patient Account
 app.get("/api/patient/:patientId", accountsController.getPatientById);
+app.get("/api/patients/", accountsController.getAllPatient);
+app.put("/api/patient/:patientId", validatePatient, accountsController.updatePatientById);
+app.delete("/api/patient/:patientId", accountsController.deletePatientById);
+
+// Routes for Patient's Payment Methods
 app.get("/api/patient/:patientId/paymentMethods", paymentMethodController.getPaymentMethodsByPatientId);
 app.post("/api/patient/:patientId/paymentMethods", validatePaymentMethod, paymentMethodController.createPaymentMethod);
-app.delete("/api/patient/:patientId/paymentMethods", paymentMethodController.deletePaymentMethod);
-app.get("/api/patients/", accountsController.getAllPatient);
+app.delete("/api/patient/:patientId/paymentMethods/:methodId", paymentMethodController.deletePaymentMethod);
+app.put("/api/patient/:patientId/paymentMethods/:methodId", validatePaymentMethod, paymentMethodController.updatePaymentMethod);
+
+// Routes for Admin-Managing Patient Accounts
 app.get("/api/patients/unapproved", accountsController.getAllUnapproved);
-app.put("/api/patient/:patientId", validatePatient, accountsController.updatePatientById);
 app.put("/api/staff/patient/:patientId", accountsController.adminUpdatePatientById);
-app.delete("/api/patient/:patientId", accountsController.deletePatientById);
 
 /// Route for Doctor Account
 app.get("/api/doctors/", accountsController.getAllDoctor);

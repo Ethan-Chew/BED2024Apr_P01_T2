@@ -25,13 +25,13 @@ INSERT INTO Patient(PatientId, KnownAllergies, PatientBirthdate, PatientIsApprov
 ('ACC0006', 'Cats', '2000-01-01', 'Declined'),
 ('ACC0007', 'Dogs', '2000-01-01', 'Pending');
 
-INSERT INTO PatientPaymentMethods(PatientId, Merchant, CardName, CardNumber, CardExpiryDate) VALUES
-('ACC0003', 'Visa', 'John Doe', '1234567890123456', '2027-12-01'),
-('ACC0003', 'Mastercard', 'Jane Doe', '1234567890123457', '2028-04-01'),
-('ACC0005', 'American Express', 'John Smith', '1234567890123458', '2030-01-01'),
-('ACC0005', 'Visa', 'John Smith', '9357206739602768', '2023-01-01'),
-('ACC0006', 'Discover', 'Jane Smith', '1234567890123459', '2028-08-01'),
-('ACC0007', 'JCB', 'John Doe', '1234567890123460', '2027-12-01');
+INSERT INTO PatientPaymentMethods(PaymentMethodId, PatientId, Merchant, CardName, CardNumber, CardExpiryDate) VALUES
+('PMI0001', 'ACC0003', 'Visa', 'John Doe', '1234567890123456', '2027-12-01'),
+('PMI0002', 'ACC0003', 'Mastercard', 'Jane Doe', '1234567890123457', '2028-04-01'),
+('PMI0003', 'ACC0005', 'American Express', 'John Smith', '1234567890123458', '2030-01-01'),
+('PMI0004', 'ACC0005', 'Visa', 'John Smith', '9357206739602768', '2023-01-01'),
+('PMI0005', 'ACC0006', 'Discover', 'Jane Smith', '1234567890123459', '2028-08-01'),
+('PMI0006', 'ACC0007', 'JCB', 'John Doe', '1234567890123460', '2027-12-01');
 
 INSERT INTO Doctor(DoctorId, DoctorCreatedBy) VALUES
 ('ACC0008', 'ACC0001'),

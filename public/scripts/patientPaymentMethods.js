@@ -40,11 +40,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Handle Payment Methods Methods
         for (let i = 0; i < paymentMethods.length; i++) {
             // Handle Edit Payment Method
-            document.getElementById("edit-" + i).addEventListener("click", () => {
+            document.getElementById(`edit-${i}`).addEventListener("click", () => {
                 // Set values on the Form
+                document.getElementById("editMerchant").value = paymentMethods[i].merchant;
                 document.getElementById("editCardNumber").value = paymentMethods[i].cardNumber;
                 document.getElementById("editExpiryDate").value = paymentMethods[i].cardExpiryDate.slice(0, 7);
                 document.getElementById("editCardHolderName").value = paymentMethods[i].cardName;
+                document.getElementById("editPaymentMethodId").value = paymentMethods[i].id;
 
                 // Display Form
                 document.getElementById("editPopup").classList.remove("hidden");
@@ -55,14 +57,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const confirmDelete = confirm("Are you sure you want to delete this payment method?");
 
                 if (confirmDelete) {
-                    await fetch(`/api/patient/${accountId}/paymentMethods`, {
+                    await fetch(`/api/patient/${accountId}/paymentMethods/${paymentMethods[i].id}`, {
                         method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            cardNumber: paymentMethods[i].cardNumber,
-                        }),
+                        }
                     });
 
                     alert("Payment Method Deleted Successfully");
@@ -85,18 +84,37 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Validate User Input
         const userInput = {
-            merchant: document.getElementById("merchant").value,
-            cardNumber: document.getElementById("cardNumber").value,
-            expiryDate: document.getElementById("expiryDate").value,
-            cardHolderName: document.getElementById("cardHolderName").value,
+            id: document.getElementById("editPaymentMethodId").value,
+            patientId: sessionStorage.getItem("accountId"), // Get Patient ID from Session Storage (Logged in User
+            merchant: document.getElementById("editMerchant").value,
+            cardNumber: document.getElementById("editCardNumber").value,
+            cardExpiryDate: document.getElementById("editExpiryDate").value,
+            cardName: document.getElementById("editCardHolderName").value,
         };
 
-        if (userInput.cardNumber.length !== 16 || Number.isNaN(value)) {
+        if (String(userInput.cardNumber).length !== 16 || Number.isNaN(userInput.cardNumber)) {
             document.getElementById("error-text").innerText = "Invalid Card Number. Please enter a valid 16-digit card number.";
             return;
         }
 
-        // TODO: Make PUT Request
+        // Make PUT Request
+        const putRequest = await fetch(`/api/patient/${accountId}/paymentMethods/${userInput.id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userInput),
+        });
+
+        if (putRequest.status === 200) {
+            alert("Payment Method Updated Successfully");
+            const paymentMethodIndex = paymentMethods.findIndex((method) => method.id === userInput.id);
+            paymentMethods[paymentMethodIndex] = userInput;
+            displayPaymentMethods(paymentMethods);
+            document.getElementById("editPopup").classList.add("hidden");
+        } else {
+            alert("Failed to update Payment Method. Please try again later.");
+        }
     });
 
     // Set the Minimum Date on Expiry Date
@@ -129,7 +147,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             body: JSON.stringify(userInput),
         });
 
-        paymentMethods.push(userInput);
-        displayPaymentMethods(paymentMethods);
+        if (createRequest.status === 201) {
+            paymentMethods.push(userInput);
+            displayPaymentMethods(paymentMethods);
+        } else {
+            alert("Failed to create Payment Method. Please try again later.");
+        }
     });
 });

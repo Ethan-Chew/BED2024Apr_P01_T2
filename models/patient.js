@@ -11,15 +11,8 @@ class Patient extends Account {
     }
 
     // Created by: Ethan Chew
-    static async createPatient(name, email, password, knownAllergies, birthdate) {
+    static async createPatient(id, name, email, password, insertUnixTime, knownAllergies, birthdate) {
         const connection = await sql.connect(dbConfig);
-        const newAccountId = await Account.getNextAccountId(connection);
-        const insertUnixTime = Math.floor(Date.now() / 1000);
-
-        const insertMemberQuery = `
-            INSERT INTO Account (AccountId, AccountName, AccountEmail, AccountPassword, AccountCreationDate) VALUES
-            (@AccountId, @AccountName, @AccountEmail, @AccountPassword, @AccountCreationDate);
-        `
         const insertPatientQuery = `
             INSERT INTO Patient (PatientId, KnownAllergies, PatientBirthdate, PatientIsApproved) VALUES
             (@PatientId, @KnownAllergies, @PatientBirthdate, @PatientIsApproved)
@@ -28,23 +21,16 @@ class Patient extends Account {
         const request = connection.request();
 
         // Set Request Inputs
-        request.input('AccountId', newAccountId);
-        request.input('AccountName', name);
-        request.input('AccountEmail', email);
-        request.input('AccountPassword', password);
-        request.input('AccountCreationDate', insertUnixTime);
-
         request.input('PatientId', newAccountId);
         request.input('KnownAllergies', knownAllergies);
         request.input('PatientBirthdate', birthdate);
         request.input('PatientIsApproved', "Pending");
 
-        await request.query(insertMemberQuery);
         await request.query(insertPatientQuery);
 
         connection.close()
 
-        return new Patient(newAccountId, name, email, password, insertUnixTime, knownAllergies, birthdate, "Pending");
+        return new Patient(id, name, email, password, insertUnixTime, knownAllergies, birthdate, "Pending");
     }
 
     // Created by: Ethan Chew

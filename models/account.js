@@ -41,6 +41,30 @@ class Account {
         return incrementString(result.recordset[0].AccountId);
     }
 
+    static async createAccount(name, email, password) {
+        const connection = await sql.connect(dbConfig);
+        const newAccountId = await Account.getNextAccountId(connection);
+        const insertUnixTime = Math.floor(Date.now() / 1000);
+        
+        const query = `
+        INSERT INTO Account (AccountId, AccountName, AccountEmail, AccountPassword, AccountCreationDate) VALUES
+        (@AccountId, @AccountName, @AccountEmail, @AccountPassword, @AccountCreationDate);
+        `;
+        
+        const request = connection.request();
+        request.input('AccountId', newAccountId);
+        request.input('AccountName', name);
+        request.input('AccountEmail', email);
+        request.input('AccountPassword', password);
+        request.input('AccountCreationDate', insertUnixTime);
+
+        await request.query(query);
+
+        connection.close();
+
+        return new Account(newAccountId, name, email, password, insertUnixTime);
+    }
+
     static async deleteAccountById(accountId) {
         const query = `DELETE FROM Account WHERE AccountId = @AccountId`;
         const connection = await sql.connect(dbConfig);
