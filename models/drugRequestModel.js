@@ -96,35 +96,55 @@ class DrugRequest {
 
     static async contributeDrugRequest(appointmentId, drugName, contributedQuantity) {
         const connection = await sql.connect(dbConfig);
+        const transaction = new sql.Transaction(connection);
     
         try {
-            const transaction = new sql.Transaction(connection);
             await transaction.begin();
+            
+            let remainingQuantity = contributedQuantity;
+
+            while (remainingQuantity > 0) {
+                const nearestRecord = await DrugRequest.findNearestRecordWithEnoughQuantity(drugName, remainingQuantity, transaction);
+                
+                if (!nearestRecord.recordId) {
+                    throw new Error('Insufficient drug quantity in inventory.');
+                }
     
+                const { recordId, availableQuantity } = nearestRecord;
+    
+                const reduceQuantity = Math.min(remainingQuantity, availableQuantity);
+    
+                const updateInventoryQuery = `
+                    UPDATE DrugInventoryRecord
+                    SET DrugAvailableQuantity = DrugAvailableQuantity - @reduceQuantity
+                    WHERE DrugRecordId = @recordId
+                `;
+    
+                const request = new sql.Request(transaction);
+                request.input('recordId', sql.VarChar, recordId);
+                request.input('reduceQuantity', sql.Int, reduceQuantity);
+    
+                await request.query(updateInventoryQuery);
+    
+                remainingQuantity -= reduceQuantity;
+            }
             const updateMedicationQuery = `
                 UPDATE PrescribedMedication
                 SET DrugRequest = 'Completed'
                 WHERE AppointmentId = @appointmentId AND DrugName = @drugName
             `;
-            const updateInventoryQuery = `
-                UPDATE DrugInventoryRecord
-                SET DrugAvailableQuantity = DrugAvailableQuantity - @contributedQuantity
-                WHERE DrugName = @drugName
-                AND DrugAvailableQuantity >= @contributedQuantity
-            `;
-    
-            const request = transaction.request();
-            request.input('appointmentId', sql.VarChar, appointmentId);
-            request.input('drugName', sql.VarChar, drugName);
-            request.input('contributedQuantity', sql.Int, contributedQuantity);
-    
+
             // Update prescribed medication status
-            await request.query(updateMedicationQuery);
-    
-            // Update inventory
-            const result = await request.query(updateInventoryQuery);
-            if (result.rowsAffected[0] === 0) {
-                throw new Error('Insufficient drug quantity in inventory.');
+            const medicationRequest = new sql.Request(transaction);
+            medicationRequest.input('appointmentId', sql.VarChar, appointmentId);
+            medicationRequest.input('drugName', sql.VarChar, drugName);
+
+            try {
+                await medicationRequest.query(updateMedicationQuery);
+                console.log('Medication request updated successfully.');
+            } catch (queryError) {
+                console.error('Error updating prescribed medication status:', queryError);
+                throw new Error(`Failed to update prescribed medication status. Error: ${queryError.message}`);
             }
     
             await transaction.commit();
@@ -141,6 +161,38 @@ class DrugRequest {
             throw error; // Re-throw the error to handle it in the caller
         } finally {
             connection.close();
+        }
+    }
+
+    // Helper function to find the nearest record with enough quantity
+    static async findNearestRecordWithEnoughQuantity(drugName, requiredQuantity, transaction) {
+        const connection = transaction._connection; // Access the connection from the transaction
+        try {
+            const query = `
+                SELECT TOP 1 DrugRecordId, DrugAvailableQuantity
+                FROM DrugInventoryRecord
+                WHERE DrugName = @drugName
+                    AND DrugAvailableQuantity >= @requiredQuantity
+                ORDER BY ABS(DATEDIFF(day, GETDATE(), DrugExpiryDate)) ASC
+            `;
+    
+            const request = new sql.Request(transaction);
+            request.input('drugName', sql.VarChar, drugName);
+            request.input('requiredQuantity', sql.Int, requiredQuantity);
+    
+            const result = await request.query(query);
+    
+            if (result.recordset.length > 0) {
+                const { DrugRecordId, DrugAvailableQuantity } = result.recordset[0];
+                return { recordId: DrugRecordId, availableQuantity: DrugAvailableQuantity };
+            }
+    
+            return { recordId: null, availableQuantity: 0 };
+        } finally {
+            // Close the connection in the finally block
+            if (connection) {
+                connection.close();
+            }
         }
     }
 

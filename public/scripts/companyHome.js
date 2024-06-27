@@ -20,8 +20,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     const companyJson = await fetchCompany.json();
     console.log("companyJson: ", companyJson);
 
+    // Get Drug Orders
+    const fetchDrugOrders = await fetch('/api/drugRequests', {
+        method: 'GET'
+    });
+    const drugOrders = await fetchDrugOrders.json();
+    console.log("Drug Orders: ", drugOrders);
+
+
     // Display Company Information
     document.getElementById('company-name').innerText = companyJson.name;
+    document.getElementById('pending-request').innerText = drugOrders.length;
 
     document.getElementById('view-request').addEventListener('click', () => {
         window.location.href = '../company/drugRequest.html';
