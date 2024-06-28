@@ -66,7 +66,6 @@ app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderById
 app.patch("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
 
 // Initialise Server
-
 app.listen(3000, async () => {
     console.log("CareLinc listening on port 3000.")
 
