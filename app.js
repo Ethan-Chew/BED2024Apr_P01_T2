@@ -63,7 +63,7 @@ app.post("/api/auth/create/company", accountsController.authCreateCompany);
 app.get("/api/company/:companyId", companyController.getCompanyById);
 app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName)
-app.patch("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
+app.post("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
 
 // Initialise Server
 

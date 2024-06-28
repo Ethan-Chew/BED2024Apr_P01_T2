@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async() => {
             try {
                 // Update the drug request as completed
                 const response = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
-                    method: 'PATCH',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
