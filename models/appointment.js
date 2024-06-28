@@ -72,7 +72,7 @@ class Appointment {
                 status: result.recordset[0].PaymentRequestStatus
             }
         }
-        
+
         const appointmentWithMedication = {
             appointmentId: result.recordset[0].AppointmentId,
             patientId: result.recordset[0].PatientId,
@@ -158,6 +158,22 @@ class Appointment {
             appointment => new Appointment(appointment.AppointmentId, appointment.AccountId, appointment.DoctorId, appointment.SlotId, appointment.ConsultationCost, appointment.Reason, appointment.DoctorNote)
         );
     }
+
+    /*
+    static async rescheduleAppointment(appointmentId, time) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = ``;
+
+        const request = connection.request();
+        request.input('AppointmentId', appointmentId);
+
+        const result = await request.query(query);
+        connection.close();
+
+
+    }
+        */
 }
 
 module.exports = Appointment;
