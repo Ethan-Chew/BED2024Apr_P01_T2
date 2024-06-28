@@ -17,7 +17,7 @@ const authLoginUser = async (req, res) => {
         // Generate JWT Token
         const tokenMaxAge = 10800 // 3 hours (seconds)
         const token = await jwt.sign(
-            JSON.stringify(user),
+            { id: user.id, username: user.username, role: user.role },
             process.env.JWT_SECRET,
             {
                 expiresIn: tokenMaxAge
@@ -35,24 +35,37 @@ const authLoginUser = async (req, res) => {
     }
 };
 
-const getUserByUsername = async (req, res) => {
-    const username = req.params.username;
-
+const authRegisterUser = async (req, res) => {
     try {
+        const { username, password } = req.body;
         const user = await User.getUserByUsername(username);
-        
-        if (user) {
-            return res.status(200).json(user);
-        }
+        if (user) return res.status(400).json({ message: "User already exists" });
 
-        return res.status(404).json({ message: "User not found" });
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        
+        const createUserRequest = await User.createUser(new User(null, username, hashedPassword, "member"));
+        // Generate JWT Token
+        const tokenMaxAge = 10800 // 3 hours (seconds)
+        const token = await jwt.sign(
+            { id: createUserRequest.id, username: createUserRequest.username, role: createUserRequest.role },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: tokenMaxAge
+            }
+        )
+        res.cookie("jwt", token, {
+            httpOnly: true,
+            maxAge: tokenMaxAge * 1000, // 3 hours (ms)
+        });
+
+        res.status(201).json({ message: "User created successfully" });
     } catch (err) {
         console.error(err.message);
         res.status(500).send("Internal Server Error");
     }
 }
-
 module.exports = {
     authLoginUser,
-    getUserByUsername,
+    authRegisterUser,
 }

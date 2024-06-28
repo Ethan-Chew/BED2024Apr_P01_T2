@@ -39,7 +39,6 @@ app.post("/api/auth/create/company", accountsController.authCreateCompany);
 
 
 // Initialise Server
-
 app.listen(3000, async () => {
     console.log("CareLinc listening on port 3000.")
 
