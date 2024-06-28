@@ -159,7 +159,7 @@ class Appointment {
         );
     }
 
-    /*
+    /* WIP
     static async rescheduleAppointment(appointmentId, time) {
         const connection = await sql.connect(dbConfig);
 
