@@ -41,15 +41,28 @@ document.addEventListener('DOMContentLoaded', function() {
         return patientDiv;
     }
 
-    async function displayPatients() {
+    async function displayPatients(searchTerm = '') {
         const patients = await fetchPatientData();
         const container = document.getElementById('viewPatient');
-        
-        patients.patients.forEach(patients => {
-            const patientElement = createPatientElement(patients);
+        container.innerHTML = ''; // Clear existing patients
+    
+        // Filter patients based on the searchTerm
+        const filteredPatients = patients.patients.filter(patient => 
+            patient.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    
+        filteredPatients.forEach(patient => {
+            const patientElement = createPatientElement(patient);
             container.appendChild(patientElement);
         });
     }
 
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value;
+        displayPatients(searchTerm);
+    });
+
     displayPatients();
+
 });
