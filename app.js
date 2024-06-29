@@ -10,6 +10,7 @@ const drugRequestController = require ("./controllers/drugRequestController");
 const companyController = require("./controllers/companyController");
 const paymentMethodController = require("./controllers/paymentMethodController");
 const DrugInventoryController = require("./controllers/drugInventoryController");
+const helpRequestsController = require("./controllers/helpRequestsController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -67,7 +68,13 @@ app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName)
 app.patch("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
 
+//
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);
+
+//
+app.get("/api/helpRequests", helpRequestsController.getPendingRequests);
+app.put("/api/helpRequests/approve/:requestId", helpRequestsController.approveRequest);
+app.put("/api/helpRequests/reject/:requestId", helpRequestsController.rejectRequest);
 
 // Initialise Server
 app.listen(3000, async () => {
