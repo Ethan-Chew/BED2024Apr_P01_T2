@@ -86,7 +86,7 @@ class Doctor extends Account {
     
         return doctorInfo;
     }
-
+    //HERVIN
     static async updateDoctorById(doctorId, name, email, dateOfJoining) {
         const connection = await sql.connect(dbConfig);
     

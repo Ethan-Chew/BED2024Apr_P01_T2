@@ -37,15 +37,26 @@ document.addEventListener('DOMContentLoaded', function() {
         return doctorDiv;
     }
 
-    async function displayDoctors() {
+    async function displayDoctors(searchTerm = '') {
         const doctors = await fetchDoctorData();
         const container = document.getElementById('viewDoctor');
-        
-        doctors.doctors.forEach(doctor => {
+        container.innerHTML = ''; // Clear existing doctors
+    
+        const filteredDoctors = doctors.doctors.filter(doctor => 
+            doctor.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    
+        filteredDoctors.forEach(doctor => {
             const doctorElement = createDoctorElement(doctor);
             container.appendChild(doctorElement);
         });
     }
+
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value;
+        displayDoctors(searchTerm);
+    });
 
     displayDoctors();
 });

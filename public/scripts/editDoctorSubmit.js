@@ -11,8 +11,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             doctorId: document.getElementById('doctorId').value,
         };
 
-        console.log(JSON.stringify(doctorValues));
-
         // Update Doctor Account
         const updateResponse = await fetch(`/api/doctors/${localStorage.getItem('doctorId')}`, {
             method: 'PUT',
@@ -21,8 +19,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
             body: JSON.stringify(doctorValues),
         });
-
-        console.log(updateResponse.json());
         
         if (updateResponse.status === 200) {    
             alert("Doctor Account Updated Successfully!");
