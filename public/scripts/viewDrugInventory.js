@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         nameSection.className = "mb-4";
         const drugName = document.createElement('h2');
         drugName.className = "text-2xl font-bold";
-        drugName.textContent = drug.name; // Use the drug name from the drug object
+        drugName.textContent = drug.name;
         nameSection.appendChild(drugName);
         drugInfoDiv.appendChild(nameSection);
     
