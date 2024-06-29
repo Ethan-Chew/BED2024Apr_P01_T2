@@ -58,9 +58,9 @@ app.get("/api/questionnaire/:accountId", accountsController.getQuestionnaireWith
 
 /// Route for Appointments
 app.get("/api/appointments/patient/:patientId", appointmentController.getAllPatientAppointment);
+app.get("/api/appointments/doctor/:doctorId", appointmentController.getAppointmentDetailsByDoctorId);
 app.get("/api/appointments/:appointmentId", appointmentController.getAppointmentDetailById);
 app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppointmentById);
-app.get("/api/appointments/:doctorId", appointmentController.getAppointmentDetailsByDoctorId);
 
 /// Route for Company Account
 app.post("/api/auth/create/company", accountsController.authCreateCompany);
