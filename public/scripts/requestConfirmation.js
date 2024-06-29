@@ -117,7 +117,7 @@ function populateDrugOrderInfo(order) {
     console.log("Order Properties:", order);
 
     document.getElementById("inventory-quantity").innerHTML = order.drugAvailabilityQuantity;
-    document.getElementById("price").innerHTML = '$' + (order.drugPrice * order.drugAvailabilityQuantity).toFixed(2);
+    document.getElementById("price").innerHTML = '$' + (order.drugPrice * order.drugQuantity).toFixed(2);
     document.getElementById("request-quantity").innerHTML = order.drugQuantity;
     document.getElementById("appointment-id").innerHTML = order.appointmentId;
 }
