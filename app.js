@@ -6,7 +6,7 @@ const dbConfig = require("./dbConfig");
 // Controllers
 const accountsController = require("./controllers/accountsController");
 const appointmentController = require("./controllers/appointmentController");
-const drugRequestController = require ("./controllers/drugRequestController");
+const drugRequestController = require("./controllers/drugRequestController");
 const companyController = require("./controllers/companyController");
 const paymentMethodController = require("./controllers/paymentMethodController");
 const DrugInventoryController = require("./controllers/drugInventoryController");
@@ -60,6 +60,7 @@ app.get("/api/questionnaire/:accountId", accountsController.getQuestionnaireWith
 app.get("/api/appointments/patient/:patientId", appointmentController.getAllPatientAppointment);
 app.get("/api/appointments/:appointmentId", appointmentController.getAppointmentDetailById);
 app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppointmentById);
+app.get("/api/appointments/:doctorId", appointmentController.getAppointmentDetailsByDoctorId);
 
 /// Route for Company Account
 app.post("/api/auth/create/company", accountsController.authCreateCompany);
