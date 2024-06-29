@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async() => {
             try {
                 // Update the drug request as completed
                 const response = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
-                    method: 'PATCH',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -117,7 +117,7 @@ function populateDrugOrderInfo(order) {
     console.log("Order Properties:", order);
 
     document.getElementById("inventory-quantity").innerHTML = order.drugAvailabilityQuantity;
-    document.getElementById("price").innerHTML = '$' + (order.drugPrice * order.drugAvailabilityQuantity).toFixed(2);
+    document.getElementById("price").innerHTML = '$' + (order.drugPrice * order.drugQuantity).toFixed(2);
     document.getElementById("request-quantity").innerHTML = order.drugQuantity;
     document.getElementById("appointment-id").innerHTML = order.appointmentId;
 }
