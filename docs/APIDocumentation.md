@@ -223,5 +223,75 @@ No Request Body is required for the DELETE request
 | `500` | `{ message: "Internal Server Error" }` |
 </details>
 
+## Patient Payment Methods
+### Get all Payment Methods with Patient ID
+
+<details>
+<summary><code>GET</code> <code><b>/api/patient/{patientId}/paymentMethods</b></code></summary>
+
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**  
+No Request Body is required for the DELETE request
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `200` | `{ message: "Found Payment Methods", paymentMethods: <paymentMethod Object> }` |
+| `400` | `{ message: "Patient ID is required" }` |
+| `404` | `{ message: "Payment Methods not found." }` |
+| `500` | `{ message: "Internal Server Error" }` |
+
+**Sample Response Body**
+```json
+{
+  "message": "Found Payment Methods",
+  "paymentMethods": [
+    {
+        "id": "PMI0003",
+        "patientId": "ACC0005",
+        "merchant": "American Express",
+        "cardName": "John Smith",
+        "cardNumber": "1234567890123458",
+        "cardExpiryDate": "2030-01-01T00:00:00.000Z"
+    },
+    {
+        "id": "PMI0004",
+        "patientId": "ACC0005",
+        "merchant": "Visa",
+        "cardName": "John Smith",
+        "cardNumber": "9357206739602768",
+        "cardExpiryDate": "2023-01-01T00:00:00.000Z"
+    }
+  ]
+}
+```
+
+</details>
+
+### Create Payment Method
+
+<details>
+<summary><code>POST</code> <code><b>/api/patient/{patientId}/paymentMethods</b></code></summary>
+
+</details>
+
+### Delete Payment Method
+
+<details>
+<summary><code>DELETE</code> <code><b>/api/patient/{patientId}/paymentMethods/{methodId}</b></code></summary>
+
+</details>
+
+### Update Payment Method
+
+<details>
+<summary><code>PUT</code> <code><b>/api/patient/{patientId}/paymentMethods/{methodId}</b></code></summary>
+
+</details>
+
 ---
 _This API Documentation Template was adopted from [azagniotov's REST API Docs in Markdown](https://gist.github.com/azagniotov/a4b16faf0febd12efbc6c3d7370383a6)._
