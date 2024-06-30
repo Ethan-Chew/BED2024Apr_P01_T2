@@ -136,7 +136,8 @@ class Appointment {
         return result.rowsAffected == 1;
     }
 
-    static async getAppointmentDetailsByDoctor(doctorId) {
+    // Emmanuel
+    static async getAllAppointmentDetailsByDoctorId(doctorId) {
         const connection = await sql.connect(dbConfig);
 
         const query = `
@@ -155,25 +156,17 @@ class Appointment {
         if (result.recordset.length == 0) return null;
 
         return result.recordset.map(
-            appointment => new Appointment(appointment.AppointmentId, appointment.AccountId, appointment.DoctorId, appointment.SlotId, appointment.ConsultationCost, appointment.Reason, appointment.DoctorNote)
+            appointment => new Appointment(
+                appointment.AppointmentId,
+                appointment.AccountId,
+                appointment.DoctorId,
+                appointment.SlotId,
+                appointment.ConsultationCost,
+                appointment.Reason,
+                appointment.DoctorNote)
         );
     }
 
-    /* WIP
-    static async rescheduleAppointment(appointmentId, time) {
-        const connection = await sql.connect(dbConfig);
-
-        const query = ``;
-
-        const request = connection.request();
-        request.input('AppointmentId', appointmentId);
-
-        const result = await request.query(query);
-        connection.close();
-
-
-    }
-        */
 }
 
 module.exports = Appointment;

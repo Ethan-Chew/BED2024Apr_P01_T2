@@ -6,7 +6,7 @@ const dbConfig = require("./dbConfig");
 // Controllers
 const accountsController = require("./controllers/accountsController");
 const appointmentController = require("./controllers/appointmentController");
-const drugRequestController = require ("./controllers/drugRequestController");
+const drugRequestController = require("./controllers/drugRequestController");
 const companyController = require("./controllers/companyController");
 const paymentMethodController = require("./controllers/paymentMethodController");
 const DrugInventoryController = require("./controllers/drugInventoryController");
@@ -58,6 +58,7 @@ app.get("/api/questionnaire/:accountId", accountsController.getQuestionnaireWith
 
 /// Route for Appointments
 app.get("/api/appointments/patient/:patientId", appointmentController.getAllPatientAppointment);
+app.get("/api/appointments/doctor/:doctorId", appointmentController.getAppointmentDetailsByDoctorId);
 app.get("/api/appointments/:appointmentId", appointmentController.getAppointmentDetailById);
 app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppointmentById);
 
@@ -66,7 +67,7 @@ app.post("/api/auth/create/company", accountsController.authCreateCompany);
 app.get("/api/company/:companyId", companyController.getCompanyById);
 app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName)
-app.patch("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
+app.post("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);

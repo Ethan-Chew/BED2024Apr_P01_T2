@@ -72,8 +72,33 @@ const deleteAppointmentById = async (req, res) => {
     }
 }
 
+const getAppointmentDetailsByDoctorId = async (req, res) => {
+    const { doctorId } = req.params;
+
+    try {
+        const appointments = await appointment.getAllAppointmentDetailsByDoctorId(doctorId);
+
+        if (!appointments) {
+            res.status(404).json({
+                message: `No appointments found for Doctor with ID ${doctorId}`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: "Appointments Found",
+            appointments: appointments
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
     getAllPatientAppointment,
     getAppointmentDetailById,
-    deleteAppointmentById
+    deleteAppointmentById,
+    getAppointmentDetailsByDoctorId
 }
