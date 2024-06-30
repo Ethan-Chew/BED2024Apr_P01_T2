@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response.status === 200) {
             const body = await response.json();
             const account = body.account;
-            
+
             // Check for User's Role
             sessionStorage.setItem('accountId', account.AccountId);
             if (account.PatientId) {

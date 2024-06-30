@@ -1,6 +1,8 @@
 const appointment = require("../models/appointment");
 const prescribedMedication = require("../models/prescribedMedication");
 const payment = require("../models/payment");
+const availableSlot = require("../models/availableSlot");
+const slotTime = require("../models/slotTime");
 
 const getAllPatientAppointment = async (req, res) => {
     const { patientId } = req.params;
@@ -89,6 +91,46 @@ const getAppointmentDetailsByDoctorId = async (req, res) => {
             message: "Appointments Found",
             appointments: appointments
         });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+const updateAppointmentDateTime = async (req, res) => {
+    try {
+        // check if date and time slot for doctor already exists 
+        // if does not exist then update slot's date and tme
+
+        const { appointmentId } = req.params;
+
+        if (!appointmentId) {
+            return res.status(400).send({ message: 'Appointment ID is required' });
+        }
+
+        const { doctorId, date, time } = req.body;
+
+        const getAppointment = await appointment.getAppointmentDetail(appointmentId);
+        const availableSlotId = await getAppointment.slotDate
+        const getSlot = await availableSlot.updateAvailableSlot(availableSlotId, {
+            doctor: doctorId,
+            date: date,
+            timeId: time,
+        });
+        const updateSlotDateTime = await availableSlot
+
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+const updateAppointmentNewDoctor = async (req, res) => {
+    const { appointmentId } = req.params;
+
+    try {
 
     } catch (err) {
         console.error(err);

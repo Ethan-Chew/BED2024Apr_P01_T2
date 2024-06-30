@@ -7,10 +7,12 @@
 
         <title>CareLinc - Patient Home</title>
     </head>
+
+    
     <body class="w-screen h-screen flex flex-col">
         <!-- Navigation Bar -->
         <header class="z-[1000] bg-primary flex flex-row px-5 py-3 text-white items-center">
-            <a class="text-2xl font-bold">CareLinc</a>
+            <a class="text-2xl font-bold" href="./home.html">CareLinc</a>
             <nav class="ml-auto flex flex-row gap-5 items-center">
                 <a class="text-xl" href="./credits.html">Credits</a>
                 <button class="text-xl bg-btnprimary px-4 py-2">
@@ -18,6 +20,112 @@
                 </button>
             </nav>
         </header>
+
+        <!-- Main Content -->
+        <!-- imported from company medical drug page -->
+        <div class="flex flex-col items-center p-8 gap-10">
+            <!--Page title-->
+            <div>
+                <h1 class="text-4.5xl font-bold">Viewing Appointments</h1>
+            </div>
+
+            <div class="w-full border-r-2 flex flex-row gap-3 items-center align-center">
+                <i data-feather="search" class="h-8 w-8"></i>
+                <input id="search-field" placeholder="Search..." class="p-1 w-full">
+            </div>
+            <div><h3>Viewing Appointments for <b id="date">31/6/2024</b></h3></div>
+            <div class="w-[70%] flex flex-row gap-4 h-screen pt-0 pb-10">
+                <!--Search Bar-->
+                <div class="w-1/3 bg-gray-200 px-6 py-4 text-2xl rounded-3xl flex flex-col gap-5 align-center items-center">
+                    <!-- Search Field -->
+                    <div class="w-full border-r-2 flex flex-row gap-3 items-center align-center">
+                        <i data-feather="search" class="h-8 w-8"></i>
+                        <input id="search-field" placeholder="Search..." class="p-1 w-full">
+                    </div>
+                    <fieldset class="bg-white w-full h-full flex flex-col">
+                        <!--Patient List-->
+                        <div class="w-full text-center" >
+                            <input class="peer/medicine1 appearance-none" type="radio" id="medicine1" name="medicine" value="medicine1">
+                            <label class="peer-checked/medicine1:bg-black peer-checked/medicine1:text-white" for="medicine1">Patient 1</label>
+                        </div>
+                        <div class="w-full text-center" >
+                            <input class="peer/medicine2 appearance-none" type="radio" id="medicine2" name="medicine" value="medicine2">
+                            <label class="peer-checked/medicine2:bg-black peer-checked/medicine2:text-white" for="medicine2">Patient 2</label>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <!--Requests List-->
+                <div class="w-2/3 bg-gray-200 px-6 py-4 text-2xl rounded-3xl flex flex-col gap-5">
+                    <!--Drug Info-->
+                    <div class="px-6 py-4 gap-8">
+                        <div class="flex flex-col gap-2">
+
+                            <!--Medicine Name-->
+                            <div class="flex flex-row">
+                                <p class="text-4xl font-bold w-64">Patient Name<p>
+                                <a class="bg-btnprimary text-white px-6 py-4 w-32 rounded-2xl font-bold text-center">Cancel</a>
+                            </div>
+                            
+                            
+
+
+                                <!--Expiry Dates-->
+                                <div class="flex flex-col gap-2 justify space-betweem">
+                                    <p class="text-xl font-bold">Appointment Consultation | 31/2/2024<p></p>
+                                    <div>
+                                        <p class="text-4xl font-bold">Drug Info</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold">Closest Expiry Date</p>
+                                        <p class="text-xl">31 December 2024</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold">Farthest Expiry Date</p>
+                                        <p class="text-xl">31 December 2025</p>
+                                    </div>
+                                </div>
+
+                            
+
+                        </div>
+                    </div>
+
+                    <!--Quantity and Price-->
+                    <div class="flex flex-row px-6 py-4 gap-32">
+                        <div>
+                            <!--Quantity-->
+                            <p class="text-4xl font-bold">Quantity</p>
+                            <p>50 Pills</p>
+                        </div>
+                        <div>
+                            <!--Price-->
+                            <p class="text-4xl font-bold">Price/Unit</p>
+                            <p>$10</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col px-6 py-4 gap-1">
+                        <p class="text-4xl font-bold">Medication Info</p>
+                        <!--Medication Information-->
+                        <p>information information information information information information information information information information 
+                            information information information information information information information information information information 
+                        </p>
+                    </div>
+
+                    <!--Empty or Edit Quantity-->
+                    <div class="flex flex-col px-6 py-4 gap-8 w-full justify-end">  
+                        <!--Reschedule Button-->
+                        <a class="bg-btnprimary text-white px-6 py-4 w-48 rounded-2xl font-bold text-center">Reschedule</a>
+                        <a class="bg-btnprimary text-white px-6 py-4 w-64 rounded-2xl font-bold text-center">View Medical Records</a>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+
+
     </body>
 
     <script src="../scripts/tailwind.config.js"></script>

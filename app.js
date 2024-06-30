@@ -11,7 +11,7 @@ const companyController = require("./controllers/companyController");
 const paymentMethodController = require("./controllers/paymentMethodController");
 const DrugInventoryController = require("./controllers/drugInventoryController");
 const helpRequestsController = require("./controllers/helpRequestsController");
-
+const availableSlotController = require("./controllers/availableSlotController")
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
 const validatePaymentMethod = require("./middleware/validatePaymentMethod");
@@ -76,6 +76,9 @@ app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);
 app.get("/api/helpRequests", helpRequestsController.getPendingRequests);
 app.put("/api/helpRequests/approve/:requestId", helpRequestsController.approveRequest);
 app.put("/api/helpRequests/reject/:requestId", helpRequestsController.rejectRequest);
+
+// Route for Available Slot
+app.put("/api/availableSlot/doctor/:slotId", availableSlotController.updateAvailableSlotById);
 
 // Initialise Server
 app.listen(3000, async () => {

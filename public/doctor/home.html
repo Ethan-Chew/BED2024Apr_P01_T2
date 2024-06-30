@@ -10,16 +10,16 @@
     <body class="w-screen h-screen flex flex-col">
         <!-- Navigation Bar -->
         <header class="z-[1000] bg-primary flex flex-row px-5 py-3 text-white items-center">
-            <a class="text-2xl font-bold">CareLinc</a>
+            <a class="text-2xl font-bold" href="./home.html">CareLinc</a>
             <nav class="ml-auto flex flex-row gap-5 items-center">
                 <a class="text-xl" href="./credits.html">Credits</a>
-                <button class="text-xl bg-btnprimary px-4 py-2">
+                <button class="text-xl bg-btnprimary px-4 py-2" id="logout">
                     Logout
                 </button>
             </nav>
         </header>
 
-        <!-- Buttons area -->
+        <!-- Main Content -->
 
         <div class="p-8 flex flex-col gap-10">
             <div>
@@ -41,8 +41,42 @@
                     <a class="text-2xl">View Patients' Medical Records</a>  
                 </div>
             </div>
+
+            <div class="flex flex-col gap-6 hidden" id="upcoming-appointments-container">
+                <hr />
+
+                <h2 class="text-2xl">You have <u id="num-upcoming-txt">1</u> upcoming appointment</h2>
+
+                <div class="grid grid-cols-3 gap-5" id="upcoming-appointments">
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-200 hidden absolute inset-0 w-full h-full" id="reschedule-formed"></div>
+        <div class="bg-gray-100 text-xl fixed cursor-pointer absolute inset-0 w-1/3 h-1/3 mx-auto my-auto rounded-xl hidden" id="reschedule-form">
+                <div class="flex items-center flex-col">
+                    <h3 class="text-2xl">Reschedule the appointment</h1>
+                        <div class="flex flex-col">
+                            <label for="newDate">New Date:</label>
+                            <input type="date" id="newDate" name="newDate" required><br><br>
+        
+                            <div>
+                                <label for="newTime">Start Time:</label>
+                                <input type="time" id="newTimeStart" name="newTimeStart" step="1800" min="09:00" max="19:30" required><br><br>
+                
+                                <label for="newTime">End Time:</label>
+                                <input type="time" id="newTimeEnd" name="newTimeEnd" readonly required><br><br>    
+                            </div>
+                        </div>
+                            <div class="flex w-1/2 space-x-4 justify-between">
+                                <button type="button" class="flex-1 py-2 bg-red-300 rounded-lg hover:bg-red-400" id="reschedule-form-close">Close</button>
+                                <button type="submit" class="flex-1 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400" id="reschedule-form-submit">Reschedule</button>
+                            </div>
+                </div>
+            
         </div>
     </body>
 
     <script src="../scripts/tailwind.config.js"></script>
+    <script src="../scripts/doctorHome.js"></script>
 </html>

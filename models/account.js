@@ -45,12 +45,12 @@ class Account {
         const connection = await sql.connect(dbConfig);
         const newAccountId = await Account.getNextAccountId(connection);
         const insertUnixTime = Math.floor(Date.now() / 1000);
-        
+
         const query = `
         INSERT INTO Account (AccountId, AccountName, AccountEmail, AccountPassword, AccountCreationDate) VALUES
         (@AccountId, @AccountName, @AccountEmail, @AccountPassword, @AccountCreationDate);
         `;
-        
+
         const request = connection.request();
         request.input('AccountId', newAccountId);
         request.input('AccountName', name);
@@ -82,14 +82,14 @@ class Account {
             'email': 'AccountEmail',
             'password': 'AccountPassword',
         };
-        
+
         if (updatedFields.length === 0) {
             throw new Error("No Fields to Update");
         }
 
         const connection = await sql.connect(dbConfig);
         const request = connection.request();
-        
+
         // Populate Query with Updated Fields
         let query = `UPDATE Account SET `;
         for (const field in updatedFields) {
@@ -114,14 +114,14 @@ class Account {
             'name': 'AccountName',
             'creationDate': 'AccountCreationDate',
         };
-        
+
         if (updatedFields.length === 0) {
             throw new Error("No Fields to Update");
         }
 
         const connection = await sql.connect(dbConfig);
         const request = connection.request();
-        
+
         // Populate Query with Updated Fields
         let query = `UPDATE Account SET `;
         for (const field in updatedFields) {
