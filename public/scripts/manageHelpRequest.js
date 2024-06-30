@@ -77,15 +77,26 @@ document.addEventListener('DOMContentLoaded', function() {
         
     }
 
-    async function displayRequests() {
-        const requests = await fetchRequestData();
+    async function displayRequests(searchTerm = '') {
+        const request = await fetchRequestData();
         const container = document.getElementById('viewRequest');
-        
-        requests.requests.forEach(request => {
+        container.innerHTML = '';
+    
+        const filteredRequests = request.requests.filter(request => 
+            request.PaymentRequestId.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    
+        filteredRequests.forEach(request => {
             const requestElement = createRequestElement(request);
             container.appendChild(requestElement);
         });
     }
+    
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value;
+        displayRequests(searchTerm);
+    });
 
     displayRequests();
 });
