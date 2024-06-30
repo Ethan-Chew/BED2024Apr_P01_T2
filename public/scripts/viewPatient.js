@@ -44,9 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
     async function displayPatients(searchTerm = '') {
         const patients = await fetchPatientData();
         const container = document.getElementById('viewPatient');
-        container.innerHTML = ''; // Clear existing patients
+        container.innerHTML = '';
     
-        // Filter patients based on the searchTerm
         const filteredPatients = patients.patients.filter(patient => 
             patient.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
