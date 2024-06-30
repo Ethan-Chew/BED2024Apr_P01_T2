@@ -13,6 +13,7 @@ class Questionnaire {
         this.qSix = qSix;
     }
 
+    // Created by: Ethan Chew
     static async getQuestionnaireWithAccountId(accountId) {
         const connection = await sql.connect(dbConfig);
 
@@ -25,6 +26,7 @@ class Questionnaire {
         return result.recordset[0];
     }
 
+    // Created by: Ethan Chew
     static async createQuestionnaire(accountId, qAnswers) {
         const connection = await sql.connect(dbConfig);
 
@@ -47,6 +49,7 @@ class Questionnaire {
         return result;
     }
 
+    // Created by: Ethan Chew
     static async deleteQuestionnaire(accountId) {
         const connection = await sql.connect(dbConfig);
 

@@ -2,6 +2,7 @@ const express = require("express");
 const sql = require("mssql");
 const bodyParser = require("body-parser");
 const dbConfig = require("./dbConfig");
+const cookieParser = require("cookie-parser");
 
 // Controllers
 const accountsController = require("./controllers/accountsController");
@@ -22,6 +23,7 @@ const staticMiddleware = express.static("public");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(staticMiddleware);
 
 // Routes

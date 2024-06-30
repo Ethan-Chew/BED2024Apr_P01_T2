@@ -10,6 +10,7 @@ class Account {
         this.creationDate = creationDate;
     }
 
+    // Created by: Ethan Chew
     static async getAccountWithEmail(email) {
         const connection = await sql.connect(dbConfig);
 
@@ -30,7 +31,7 @@ class Account {
         return result.recordset[0];
     }
 
-    // Helper Function to get New ID
+    // Helper Function to get New ID -- Created by: Ethan Chew
     static async getNextAccountId(accountConnection) {
         const query = `SELECT * FROM Account WHERE AccountId=(SELECT max(AccountId) FROM Account);`
         const request = accountConnection.request();
@@ -41,6 +42,7 @@ class Account {
         return incrementString(result.recordset[0].AccountId);
     }
 
+    // Created by: Ethan Chew
     static async createAccount(name, email, password) {
         const connection = await sql.connect(dbConfig);
         const newAccountId = await Account.getNextAccountId(connection);
@@ -65,6 +67,7 @@ class Account {
         return new Account(newAccountId, name, email, password, insertUnixTime);
     }
 
+    // Created by: Ethan Chew
     static async deleteAccountById(accountId) {
         const query = `DELETE FROM Account WHERE AccountId = @AccountId`;
         const connection = await sql.connect(dbConfig);
@@ -76,6 +79,7 @@ class Account {
         return result.rowsAffected[0] === 1;
     }
 
+    // Created by: Ethan Chew
     static async updateAccount(accountId, updatedFields) {
         const allowedFields = {
             'name': 'AccountName',

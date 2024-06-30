@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 sessionStorage.setItem('accountType', 'staff');
                 window.location.href = './staff/home.html';
                 localStorage.setItem('currentUser', account.StaffId);
-            }
+            } 
         } else {
             const error = await response.json();
             document.getElementById('error-text').innerText = error.message;

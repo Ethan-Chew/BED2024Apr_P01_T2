@@ -1,5 +1,6 @@
 const PaymentMethod = require('../models/paymentMethod');
 
+// Created by: Ethan Chew
 const getPaymentMethodsByPatientId = async (req, res) => {
     try {
         const patientId = req.params.patientId;
@@ -31,6 +32,7 @@ const getPaymentMethodsByPatientId = async (req, res) => {
     }
 }
 
+// Created by: Ethan Chew
 const createPaymentMethod = async (req, res) => {
     try {
         const { patientId, merchant, cardName, cardNumber, cardExpiryDate } = req.body;
@@ -62,6 +64,7 @@ const createPaymentMethod = async (req, res) => {
     }
 }
 
+// Created by: Ethan Chew
 const updatePaymentMethod = async (req, res) => {
     try {
         const { merchant, cardName, cardNumber, cardExpiryDate } = req.body;
@@ -89,6 +92,7 @@ const updatePaymentMethod = async (req, res) => {
     }
 }
 
+// Created by: Ethan Chew
 const deletePaymentMethod = async (req, res) => {
     try {
         const patientId = req.params.patientId;

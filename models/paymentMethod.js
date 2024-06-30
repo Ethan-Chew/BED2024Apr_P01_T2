@@ -11,7 +11,7 @@ class PaymentMethod {
         this.cardExpiryDate = cardExpiryDate;
     }
 
-    // Helper Function to get New ID
+    // Helper Function to get New ID -- Created by: Ethan Chew
     static async getNextPaymentMethodId(accountConnection) {
         const query = `SELECT * FROM PatientPaymentMethods WHERE PaymentMethodId=(SELECT max(PaymentMethodId) FROM PatientPaymentMethods);`
         const request = accountConnection.request();
@@ -22,6 +22,7 @@ class PaymentMethod {
         return incrementString(result.recordset[0].PaymentMethodId);
     }
 
+    // Created by: Ethan Chew
     static async getPaymentMethodsByPatientId(patientId) {
         const connection = await sql.connect(dbConfig);
 
@@ -38,6 +39,7 @@ class PaymentMethod {
         return result.recordset.map((row) => new PaymentMethod(row.PaymentMethodId, row.PatientId, row.Merchant, row.CardName, row.CardNumber, row.CardExpiryDate));
     }
 
+    // Created by: Ethan Chew
     static async createPaymentMethod(patientId, merchant, cardName, cardNumber, cardExpiryDate) {
         const connection = await sql.connect(dbConfig);
         const newId = await PaymentMethod.getNextPaymentMethodId(connection);
@@ -62,6 +64,7 @@ class PaymentMethod {
         return new PaymentMethod(newId, patientId, merchant, cardName, cardNumber, cardExpiryDate);
     }
 
+    // Created by: Ethan Chew
     static async deletePaymentMethod(id) {
         const connection = await sql.connect(dbConfig);
 
@@ -78,6 +81,7 @@ class PaymentMethod {
         return result.rowsAffected[0] === 1;
     }
 
+    // Created by: Ethan Chew
     static async deleteAllPaymentMethod(patientId) {
         const connection = await sql.connect(dbConfig);
 
@@ -94,6 +98,7 @@ class PaymentMethod {
         return result.rowsAffected[0] >= 1;
     }
 
+    // Created by: Ethan Chew
     static async updatePaymentMethod(id, patientId, merchant, cardName, cardNumber, cardExpiryDate) {
         const connection = await sql.connect(dbConfig);
 

@@ -5,12 +5,17 @@ const Questionnaire = require("../models/questionnaire");
 const PaymentMethod = require("../models/paymentMethod");
 const Doctor = require("../models/doctor");
 
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+require("dotenv").config();
+
+// Created by: Ethan Chew
 const authLoginAccount = async (req, res) => {
     try {
         const { email, password } = req.body;
     
         if (!email || !password) {
-            res.status(400).json({
+            return res.status(400).json({
                 message: "Email and Password are required."
             });
         }
@@ -18,22 +23,55 @@ const authLoginAccount = async (req, res) => {
         const account = await Account.getAccountWithEmail(email);
 
         if (!account) {
-            res.status(404).json({
+            return res.status(404).json({
                 message: `Account with email ${email} not found.`
             });
-            return;
         }
 
-        if (account.AccountPassword !== password) {
-            res.status(403).json({
+        // Check the Account's Password and see if it matches
+        const checkPasswordMatch = await bcrypt.compare(password, account.AccountPassword);
+        if (checkPasswordMatch) {
+            return res.status(403).json({
                 message: "Incorrect Password"
             });
-        } else {
-            res.status(200).json({
-                message: "Login Successful",
-                account: account
-            })
         }
+
+        // Determine the Account's Role
+        let role = "";
+        if (account.PatientId) {
+            // Ensure that the Patient's Account has been Approved by an Admin
+            if (account.PatientIsApproved === "Approved") {
+                role = "patient";
+            } else {
+                return res.status(403).json({
+                    message: "Unauthorised",
+                    approvalStatus: account.isApproved
+                })
+            }
+        } else if (account.CompanyId) {
+            role = "company";
+        } else if (account.DoctorId) {
+            role = "doctor";
+        } else if (account.StaffId) {
+            role = "staff";
+        }
+
+        // Generate a JWT Token
+        const tokenMaxAge = 10800
+        const token = await jwt.sign(
+            { id: account.AccountId, email: account.AccountEmail, role: role },
+            process.env.JWT_SECRET,
+            { expiresIn: tokenMaxAge }
+        );
+        res.cookie("jwt", token, {
+            httpOnly: true,
+            maxAge: tokenMaxAge * 1000
+        });
+
+        res.status(200).json({
+            message: "Login Successful",
+            accountId: account.AccountId,
+        })
     } catch(err) {
         console.error(err);
         res.status(500).json({
@@ -42,6 +80,7 @@ const authLoginAccount = async (req, res) => {
     }
 };
 
+// Created by: Ethan Chew
 const authCreatePatient = async (req, res) => {
     try {
         const { name, email, password, knownAllergies, birthdate, qns } = req.body;
@@ -49,6 +88,18 @@ const authCreatePatient = async (req, res) => {
         const userAccount = await Account.createAccount(name, email, password);
         const patientAccount = await Patient.createPatient(userAccount.id, name, email, password, userAccount.creationDate, knownAllergies, birthdate);
         await Questionnaire.createQuestionnaire(patientAccount.id, qns);
+
+        // Generate a JWT Token
+        const tokenMaxAge = 10800
+        const token = await jwt.sign(
+            { id: userAccount.id, email: userAccount.email, role: "patient" },
+            process.env.JWT_SECRET,
+            { expiresIn: tokenMaxAge }
+        );
+        res.cookie("jwt", token, {
+            httpOnly: true,
+            maxAge: tokenMaxAge * 1000
+        });
 
         res.status(201).json({
             message: "Account Created Successfully",
@@ -60,6 +111,7 @@ const authCreatePatient = async (req, res) => {
     }
 }
 
+// Created by: Ethan Chew
 const getPatientById = async (req, res) => {
     try {
         const patientId = req.params.patientId;
@@ -158,6 +210,7 @@ const getQuestionnaireWithAccountId = async (req, res) => {
     }
 }
 
+// Created by: Ethan Chew
 const deletePatientById = async (req, res) => {
     try {
         const { patientId } = req.params;
@@ -186,6 +239,7 @@ const deletePatientById = async (req, res) => {
     }
 }
 
+// Created by: Ethan Chew
 const updatePatientById = async (req, res) => {
     try {
         const { patientId } = req.params;
