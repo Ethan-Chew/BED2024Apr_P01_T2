@@ -70,7 +70,8 @@ const authLoginAccount = async (req, res) => {
 
         res.status(200).json({
             message: "Login Successful",
-            accountId: account.AccountId,
+            acconutId: account.AccountId,
+            role: role
         })
     } catch(err) {
         console.error(err);
@@ -88,18 +89,6 @@ const authCreatePatient = async (req, res) => {
         const userAccount = await Account.createAccount(name, email, password);
         const patientAccount = await Patient.createPatient(userAccount.id, name, email, password, userAccount.creationDate, knownAllergies, birthdate);
         await Questionnaire.createQuestionnaire(patientAccount.id, qns);
-
-        // Generate a JWT Token
-        const tokenMaxAge = 10800
-        const token = await jwt.sign(
-            { id: userAccount.id, email: userAccount.email, role: "patient" },
-            process.env.JWT_SECRET,
-            { expiresIn: tokenMaxAge }
-        );
-        res.cookie("jwt", token, {
-            httpOnly: true,
-            maxAge: tokenMaxAge * 1000
-        });
 
         res.status(201).json({
             message: "Account Created Successfully",
