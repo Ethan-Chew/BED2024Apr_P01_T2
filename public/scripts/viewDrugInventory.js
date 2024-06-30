@@ -83,15 +83,26 @@ document.addEventListener('DOMContentLoaded', function() {
         return drugDiv;
     }
 
-    async function displayDrugs() {
-        const drugs = await fetchDrugData();
+    async function displayDrugs(searchTerm = '') {
+        const drug = await fetchDrugData();
         const container = document.getElementById('drugPanel');
-        
-        drugs.inventory.forEach(drug => {
+        container.innerHTML = '';
+    
+        const filteredDrugs = drug.inventory.filter(drug => 
+            drug.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    
+        filteredDrugs.forEach(drug => {
             const drugElement = createDrugElement(drug);
             container.appendChild(drugElement);
         });
     }
+
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value;
+        displayDrugs(searchTerm);
+    });
 
     displayDrugs();
 });
