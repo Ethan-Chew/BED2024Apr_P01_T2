@@ -33,3 +33,5 @@ class SlotTime {
     }
 
 }
+
+module.exports = SlotTime;

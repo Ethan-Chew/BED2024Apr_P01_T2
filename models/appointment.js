@@ -157,16 +157,39 @@ class Appointment {
 
         if (result.recordset.length == 0) return null;
 
-        return result.recordset.map(
-            appointment => new Appointment(
-                appointment.AppointmentId,
-                appointment.AccountId,
-                appointment.DoctorId,
-                appointment.SlotId,
-                appointment.ConsultationCost,
-                appointment.Reason,
-                appointment.DoctorNote)
-        );
+        return result.recordset;
+    }
+
+    // Emmanuel
+    // requires controller to handle finding an existing/create a new slotId
+    static async updateAppointmentDoctorSlot(appointmentId, updatedFields) {
+        const allowedFields = {
+            'doctor': 'DoctorId',
+            'slotId': 'SlotId',
+        }
+
+        if (updatedFields.length === 0) {
+            throw new Error("No Fields to Update");
+        }
+
+        const connection = await sql.connect(dbConfig);
+        const request = connection.request();
+
+        let query = `UPDATE Appointment SET `;
+        for (const field in updatedFields) {
+            if (Object.keys(allowedFields).includes(field) && updatedFields[field] !== null) {
+                query += `${allowedFields[field]} = @${field}, `;
+                request.input(field, updatedFields[field]);
+            }
+        }
+        query = query.slice(0, -2); // Remove last ', '
+        query += ` WHERE AppointmentId = '${appointmentId}'`;
+
+        // Send Request
+        const result = await request.query(query);
+        connection.close();
+
+        return result.rowsAffected[0] === 1;
     }
 
 }

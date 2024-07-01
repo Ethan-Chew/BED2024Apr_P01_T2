@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response.status === 200) {
             const body = await response.json();
             sessionStorage.setItem('accountId', body.accountId);
-            
+
             switch (body.role) {
                 case 'patient':
                     window.location.href = '/patient/home.html';

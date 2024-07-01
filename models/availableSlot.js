@@ -47,8 +47,9 @@ class AvailableSlot {
     }
 
     // Emmanuel
-    static async updateDateAndTime(slotId, date, slotTimeId) {
+    static async updateAvailableSlot(slotId, updatedFields) {
         const allowedFields = {
+            'doctor': 'DoctorId',
             'date': 'SlotDate',
             'timeId': 'SlotTimeId',
         };
@@ -70,6 +71,9 @@ class AvailableSlot {
         }
         query = query.slice(0, -2); // Remove last ', '
         query += ` WHERE SlotId = '${slotId}'`;
+        request.input("SlotId", slotId);
+        console.log(await query);
+        console.log(updatedFields);
 
         const result = await request.query(query);
         connection.close();
@@ -78,13 +82,93 @@ class AvailableSlot {
     }
 
     // Emmanuel
-    static async getAvailableSlotById(slotId) {
+    static async getAvailableSlotsBySlotTimeId(timeId) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `
+            SELECT aslot.*
+            FROM AvailableSlot aslot
+            LEFT JOIN SlotTime st ON aslot.SlotTimeId = st.SlotTimeId
+            WHERE st.SlotTimeId = @SlotTimeId;
+        `;
+
+        const request = connection.request();
+        request.input('SlotTimeId', timeId);
+
+        const result = await request.query(query);
+        connection.close();
+
+        if (result.recordset.length == 0) return null;
+
+        return result.recordset.map(
+            availableSlot => new AvailableSlot(
+                availableSlot.slotId,
+                availableSlot.doctorId,
+                availableSlot.slotDate,
+                availableSlot.slotTimeId)
+        );
+    }
+
+    // Emmanuel
+    static async getAvailableSlotsByDoctorId(doctorId) {
         const connection = await sql.connect(dbConfig);
 
         const query = `
             SELECT *
             FROM AvailableSlot
-            WHERE SlotId = @SlotId;
+            WHERE DoctorId = @DoctorId;
         `;
+
+        const request = connection.request();
+        request.input('DoctorId', doctorId);
+
+        const result = await request.query(query);
+        connection.close();
+
+        if (result.recordset.length == 0) return null;
+
+        return result.recordset.map(
+            availableSlot => new AvailableSlot(
+                availableSlot.slotId,
+                availableSlot.doctorId,
+                availableSlot.slotDate,
+                availableSlot.slotTimeId)
+        );
+    }
+
+    // Emmanuel
+    // configurable WHERE select for AvailableSlot
+    static async getAvailableSlotsByConditions(conditionFields) {
+        const allowedFields = {
+            'slotId': 'SlotId',
+            'doctor': 'DoctorId',
+            'date': 'SlotDate',
+            'timeId': 'SlotTimeId',
+        };
+
+        if (conditionFields.length === 0) {
+            throw new Error("No Fields to get slots");
+        }
+
+        const connection = await sql.connect(dbConfig);
+        const request = connection.request()
+
+        // Populate Query with conditionFields
+        let query = `SELECT * FROM AvailableSlot WHERE `;
+        for (const field in conditionFields) {
+            if (Object.keys(allowedFields).includes(field) && conditionFields[field] !== null) {
+                query += `${allowedFields[field]} = @${field}, `;
+                request.input(field, conditionFields[field]);
+            }
+        }
+        query = query.slice(0, -2); // Remove last ', '
+
+        // Send Request
+        const result = await request.query(query);
+        connection.close();
+
+        return result.recordset.length > 0;
     }
 }
+
+module.exports = AvailableSlot;
