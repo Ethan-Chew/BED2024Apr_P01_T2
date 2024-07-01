@@ -84,9 +84,10 @@ INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, Consultati
 ('APP0001', 'ACC0005', 'ACC0008', 'SLO0001', 10.00, 'High Fever and Coughing', 'Prescribed Medication to Patient, to monitor.'),
 ('APP0002', 'ACC0005', 'ACC0009', 'SLO0002', 10.00, 'High Fever and Sneezing', 'Follow-up appointment to be made.'),
 ('APP0003', 'ACC0006', 'ACC0008', 'SLO0003', 15.00, 'Chest Pain', 'Medication prescribed, follow-up appointment required.'),
-('APP0004', 'ACC0007', 'ACC0009', 'SLO0004', NULL, 'MRI Scan', NULL),
-('APP0005', 'ACC0005', 'ACC0008', 'SLO0005', NULL, 'Follow-up Appointment', NULL),
-('APP0006', 'ACC0005', 'ACC0009', 'SLO0006', NULL, 'Follow-up Appointment', NULL);
+('APP0004', 'ACC0005', 'ACC0008', 'SLO0003', 15.00, 'Flu', 'Medication prescribed, patient is fine.'),
+('APP0005', 'ACC0007', 'ACC0009', 'SLO0004', NULL, 'MRI Scan', NULL),
+('APP0006', 'ACC0005', 'ACC0008', 'SLO0005', NULL, 'Follow-up Appointment', NULL),
+('APP0007', 'ACC0005', 'ACC0009', 'SLO0006', NULL, 'Follow-up Appointment', NULL);
 
 INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus) VALUES
 ('REQ0001', 'APP0001', 'Not enough money to pay for this appointment', '2024-05-20', 'Pending');
@@ -95,6 +96,7 @@ INSERT INTO Payments (PaymentId, AppointmentId, PaymentStatus) VALUES
 ('PAY0001', 'APP0001', 'Unpaid'),
 ('PAY0002', 'APP0002', 'Paid'),
 ('PAY0003', 'APP0003', 'Unpaid');
+('PAY0004', 'APP0004', 'Unpaid');
 
 INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Aspirin', 5.99, 'Pain relief'),
@@ -142,6 +144,7 @@ INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quan
 ('PRM0004', 'APP0002', 'Pheniramine', 10, 'Allergy', 'Pending'),
 ('PRM0005', 'APP0003', 'Digoxin', 10, 'Heart Failure', 'Pending'),
 ('PRM0006', 'APP0003', 'Magnesium Carbonate', 10, 'Heartburn', 'Pending');
+('PRM0007', 'APP0004', 'Magnesium Carbonate', 10, 'Heartburn', 'Pending');
 
 INSERT INTO DrugTopupRequest (TopupId, DrugName, TopupQuantity, TopupRequestDate, TopupStatus) VALUES
 ('DRT0001', 'Paracetamol', 100, '2024-05-01', 'Completed'),

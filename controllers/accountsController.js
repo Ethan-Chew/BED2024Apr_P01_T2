@@ -70,7 +70,7 @@ const authLoginAccount = async (req, res) => {
 
         res.status(200).json({
             message: "Login Successful",
-            acconutId: account.AccountId,
+            accountId: account.AccountId,
             role: role
         })
     } catch(err) {
