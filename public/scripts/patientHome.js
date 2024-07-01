@@ -1,10 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // Check that the User is a Patient
-    if (sessionStorage.getItem('accountType') !== 'patient') {
-        window.location.href = '../login.html';
-        return;
-    }
-
     // Handle Logout Button Press
     document.getElementById('logout').addEventListener('click', () => {
         sessionStorage.removeItem('accountId');

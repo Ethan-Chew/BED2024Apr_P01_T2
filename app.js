@@ -12,11 +12,16 @@ const companyController = require("./controllers/companyController");
 const paymentMethodController = require("./controllers/paymentMethodController");
 const DrugInventoryController = require("./controllers/drugInventoryController");
 const helpRequestsController = require("./controllers/helpRequestsController");
+const paymentController = require("./controllers/paymentController");
+const mailController = require("./controllers/mailController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
 const validatePaymentMethod = require("./middleware/validatePaymentMethod");
-const DrugInventory = require("./models/drugInventory");
+const validatePaymentConfirmationEmail = require("./middleware/validatePaymentConfirmationEmail");
+
+// JWT Verification Middleware
+const authoriseJWT = require("./middleware/authoriseJWT");
 
 const app = express();
 const staticMiddleware = express.static("public");
@@ -43,6 +48,12 @@ app.post("/api/patient/:patientId/paymentMethods", validatePaymentMethod, paymen
 app.delete("/api/patient/:patientId/paymentMethods/:methodId", paymentMethodController.deletePaymentMethod);
 app.put("/api/patient/:patientId/paymentMethods/:methodId", validatePaymentMethod, paymentMethodController.updatePaymentMethod);
 
+// Route for Managing Patient Payments
+app.post("/api/patient/makePayment", authoriseJWT, paymentController.patientMakePayment);
+
+// Route for Sending a Payment Confirmation Email
+app.post("/api/mail/paymentConfirmation", authoriseJWT, validatePaymentConfirmationEmail, mailController.sendPaymentConfirmation);
+
 // Routes for Admin-Managing Patient Accounts
 app.get("/api/patients/unapproved", accountsController.getAllUnapproved);
 app.put("/api/staff/patient/:patientId", accountsController.adminUpdatePatientById);
@@ -51,9 +62,6 @@ app.put("/api/staff/patient/:patientId", accountsController.adminUpdatePatientBy
 app.get("/api/doctors/", accountsController.getAllDoctor);
 app.get("/api/doctors/:doctorId", accountsController.getDoctorById);
 app.put("/api/doctors/:doctorId", accountsController.updateDoctorById);
-
-/// Route for Patient Payment Methods
-// app.get("/api/patient/paymentMethods/:patientId", );
 
 /// Route for Questionnaire
 app.get("/api/questionnaire/:accountId", accountsController.getQuestionnaireWithAccountId);

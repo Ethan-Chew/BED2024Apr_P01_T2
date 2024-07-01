@@ -23,6 +23,7 @@ class Appointment {
         return incrementString(result.recordset[0].AppointmentId);
     }
 
+    // Created by: Ethan Chew
     static async getAllPatientAppointment(patientId) {
         const connection = await sql.connect(dbConfig);
 
@@ -45,6 +46,7 @@ class Appointment {
         );
     }
 
+    // Created by: Ethan Chew
     static async getAppointmentDetail(appointmentId) {
         const connection = await sql.connect(dbConfig);
 

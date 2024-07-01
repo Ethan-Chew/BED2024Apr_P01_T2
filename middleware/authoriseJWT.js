@@ -15,9 +15,21 @@ const authoriseJWT = (req, res, next) => {
         }
 
         // Compare the user's role to an object of routes and their authorised roles
+        const requestedEndpoint = req.url;
+        const userRole = decoded.role;
+
+        const authorizedRole = Object.entries(authorisedRoles).find(([endpoint, roles]) => {
+            const regex = new RegExp(`^${endpoint}$`);
+            return regex.test(requestedEndpoint) && roles.includes(userRole);
+        });
+
+        if (!authorizedRole) {
+            return res.status(403).json({ message: "Forbidden" });
+        }
 
         req.user = decoded;
         next();
     });
-
 }
+
+module.exports = authoriseJWT;

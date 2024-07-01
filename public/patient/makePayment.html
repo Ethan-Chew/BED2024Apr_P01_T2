@@ -26,6 +26,48 @@
                 
             </div>
         </div>
+
+        <!-- Make Payment Popup -->
+        <div class="w-screen h-screen bg-black/30 backdrop-blur-sm fixed z-[1001] flex items-center justify-center hidden" id="make-payment-popup">
+            <div class="bg-white shadow-lg rounded-lg p-8 m-2 w-full max-w-2xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Confirm Payment</h2>
+                
+                <!-- Payment Methods List -->
+                <form id="paymentForm">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-4">Select Payment Methods</h3>
+                        <div class="space-y-4" id="payment-method-list">
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="cvv" class="block text-xl font-bold mb-2">CVV</label>
+                        <input type="text" id="cvv" name="cvv" maxlength="3" placeholder="000" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-600">
+                    </div>
+
+                    <div class="mb-6 space-y-2">
+                        <div>
+                            <a class="block text-xl font-bold">Email Address</a>
+                            <a class="b-8 text-gray-600">An Email Receipt will be sent to this address</a>    
+                        </div>
+                        <input type="text" id="email" name="email" value="user5@mail.com" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-600">
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-4">Payment Amount</h3>
+                        <p class="text-gray-700 text-xl">$<span id="payment-amount">50.00</span></p>
+                    </div>
+
+                    <!-- Hidden Fields -->
+                    <input type="hidden" id="appointment-date" name="appointment-date">
+                    <input type="hidden" id="appointment-time" name="appointment-time">
+                    <input type="hidden" id="appointment-id" name="appointment-id">
+    
+                    <button type="submit" class="bg-primary hover:bg-btnprimary text-white px-4 py-2 rounded-lg w-full">Make Payment</button>
+                </form>
+            </div>
+        </div>
     </body>
 
     <script src="../scripts/patientMakePayment.js"></script>

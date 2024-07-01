@@ -1,9 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // Check that the User is a Patient
-    if (sessionStorage.getItem('accountType') !== 'patient') {
-        window.location.href = '../login.html';
-        return;
-    }
 
     // Handle Logout Button Press
     document.getElementById('logout').addEventListener('click', () => {
@@ -40,6 +35,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (appointmentJson.appointment.paymentStatus === 'Unpaid') {
             unpaidAppointments.push(appointmentJson.appointment);
         }
+    }
+
+    // Get Patient's Payment Methods
+    const fetchPaymentMethodsResponse = await fetch(`/api/patient/${accountId}/paymentMethods`, {
+        method: 'GET'
+    });
+
+    if (fetchPaymentMethodsResponse.status !== 200) {
+        alert("Error Retrieving Payment Methods. Please try again.");
+        return;
+    }
+
+    const paymentMethodsJson = await fetchPaymentMethodsResponse.json();
+    const paymentMethods = paymentMethodsJson.paymentMethods;
+
+    // Pre-Load into Payment Confirmation Screen
+    const paymentMethodList = document.getElementById('payment-method-list');
+    for (let i = 0; i < paymentMethods.length; i++) {
+        paymentMethodList.innerHTML += `
+            <div class="flex items-center">
+                <input type="radio" id="card${i}" name="paymentMethod" value="${String(paymentMethods[i].cardNumber).slice(-4)}" class="mr-2" ${i == 0 ? "checked" : ""}>
+                <label for="card${i}" class="text-gray-700">**** **** **** ${String(paymentMethods[i].cardNumber).slice(-4)} (Expires ${paymentMethods[i].cardExpiryDate.slice(0, 7)})</label>
+            </div>
+        `;
     }
 
     // Display Unpaid Appointments on the Screen
@@ -90,6 +109,74 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         document.getElementById(`payment-${i}-totalcost`).innerText = totalAmount; // Set total cost amount
 
+        // Set Event Listeners for Payment and Help Buttons
+        document.getElementById(`payment-${i}`).addEventListener('click', async () => {
+            // Send Text to Payment Confirmation Popup
+            document.getElementById('payment-amount').innerText = totalAmount;
+            document.getElementById('appointment-date').value = appointment.slotDate;
+            document.getElementById('appointment-time').value = appointment.slotTime;
+            document.getElementById('appointment-id').value = appointment.appointmentId;
+
+            // Display Payment Confirmation Popup
+            document.getElementById('make-payment-popup').classList.remove('hidden');
+        });
     }
-    console.log(unpaidAppointments);
+
+    // Handle Payment Confirmation Submission
+    document.getElementById('paymentForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Get Selected Payment Method
+        const last4DigitCard = document.querySelector('input[name="paymentMethod"]:checked').value;
+        const cardMerchant = paymentMethods.find(method => String(method.cardNumber).slice(-4) === last4DigitCard).merchant;
+
+        if (!last4DigitCard) {
+            console.log(document.querySelector('input[name="paymentMethod"]:checked'))
+            alert("Please select a payment method.");
+            return;
+        }
+
+        // Send Payment Paid Request
+        const makePaymentRequest = await fetch('/api/patient/makePayment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                appointmentId: document.getElementById('appointment-id').value,
+            })
+        });
+
+        if (makePaymentRequest.status !== 200) {
+            alert("Error Making Payment. Please try again.");
+            return;
+        }
+
+        // Send Payment Confirmation Email
+        const sendConfirmationEmail = await fetch('/api/mail/paymentConfirmation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                recepient: document.getElementById("email").value,
+                cardMerchant: cardMerchant,
+                paymentAmount: Number(document.getElementById("payment-amount").innerText),
+                appointmentDate: new Date(unpaidAppointments[0].consultationCost).toISOString().split("T")[0],
+                appointmentTime: unpaidAppointments[0].slotDate,
+            })
+        });
+
+        if (sendConfirmationEmail.status !== 201) {
+            alert("Error Sending Confirmation Email. Please try again.");
+            return;
+        }
+
+        alert("Payment Successful. Confirmation Email Sent.");
+        document.getElementById('make-payment-popup').classList.add('hidden');
+
+        // Remove from Screen
+        document.getElementById("method-" + i).remove();
+        paymentMethods.splice(i, 1);
+    });
 });
