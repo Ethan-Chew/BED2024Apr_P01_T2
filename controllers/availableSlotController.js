@@ -21,7 +21,7 @@ const updateAvailableSlotById = async (req, res) => {
         });
 
         if (updateDateTime) {
-            res.status(201).json({
+            res.status(200).json({
                 message: "Available Slot Updated Successfully",
             });
         } else {

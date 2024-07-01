@@ -1,10 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // Check that the User is a Doctor
-    if (sessionStorage.getItem('accountType') !== 'doctor') {
-        window.location.href = '../login.html';
-        return;
-    }
-
     // Handle Logout Button Press
     document.getElementById('logout').addEventListener('click', () => {
         sessionStorage.removeItem('accountId');
@@ -149,7 +143,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function updateAppointmentDateTime(slotId, doctorId, date, time) {
         const fields = {
-            doctor: doctorId,
+            doctorId: doctorId,
             date: date,
             time: time
         }
