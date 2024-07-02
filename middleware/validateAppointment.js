@@ -1,11 +1,10 @@
 const Joi = require("joi");
 
-const validatePaymentConfirmationMail = (req, res, next) => {
+const validateAppointment = (req, res, next) => {
     const schema = Joi.object({
-        appointmentId: Joi.string().length(7).required(),
-        paymentDetails: Joi.object({
-            
-        }).required()
+        patientId: Joi.string().length(7).required(),
+        slotId: Joi.string().length(7).required(),
+        reason: Joi.string().required(),
     });
 
     const validation = schema.validate(req.body, { abortEarly: false });
@@ -17,6 +16,6 @@ const validatePaymentConfirmationMail = (req, res, next) => {
     }
 
     next();
-}
+};
 
-module.exports = validateMakePayment;
+module.exports = validateAppointment;

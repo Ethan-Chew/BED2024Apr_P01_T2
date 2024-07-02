@@ -4,6 +4,7 @@ const payment = require("../models/payment");
 const availableSlot = require("../models/availableSlot");
 const slotTime = require("../models/slotTime");
 
+// Created by: Ethan Chew
 const getAllPatientAppointment = async (req, res) => {
     const { patientId } = req.params;
 
@@ -27,6 +28,7 @@ const getAllPatientAppointment = async (req, res) => {
     }
 }
 
+// Created By: Ethan Chew
 const getAppointmentDetailById = async (req, res) => {
     const { appointmentId } = req.params;
 
@@ -50,6 +52,7 @@ const getAppointmentDetailById = async (req, res) => {
     }
 }
 
+// Created by: Ethan Chew
 const deleteAppointmentById = async (req, res) => {
     const { appointmentId } = req.params;
 
@@ -66,6 +69,31 @@ const deleteAppointmentById = async (req, res) => {
         } else {
             res.status(500).json({
                 message: `Failed to delete Appointment.`
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+// Created by: Ethan Chew
+const createAppointmentById = async (req, res) => {
+    const { appointmentId } = req.params;
+    const { patientId, slotId, reason } = req.body;
+    
+    try {
+        const createAppointment = await appointment.createAppointment(patientId, slotId, reason);
+
+        if (createAppointment) {
+            res.status(200).json({
+                message: `Appointment with ID ${appointmentId} has been created.`,
+                appointment: createAppointment
+            });
+            return;
+        } else {
+            res.status(500).json({
+                message: `Failed to create Appointment.`
             });
         }
     } catch (err) {

@@ -2,7 +2,7 @@ const mailgun = require("mailgun-js")
 require("dotenv").config();
 
 class Mail {
-    static async sendPaymentConfirmation(recepient, paymentAmount, cardMerchant, appointmentDate, appointmentTime) {
+    static async sendPaymentConfirmation(recepient, paymentAmount, cardMerchant, cardLFDigits, appointmentDate, appointmentTime) {
         const mg = mailgun({ apiKey: process.env.MAILGUN_APIKEY, domain: process.env.MAILGUN_DOMAIN });
 
         const mainData = {
@@ -12,7 +12,7 @@ class Mail {
             text: `
                 Dear Customer, 
                 \n\nWe have received your payment of $${paymentAmount} for your appointment on ${appointmentDate} at ${appointmentTime}. 
-                \nPayment was made using your ${cardMerchant} ending in 1234 on ${new Date().toDateString()}. 
+                \nPayment was made using your ${cardMerchant} ending in ${cardLFDigits} on ${new Date().toDateString()}. 
                 \nThank you for using CareLinc.
                 \n\nRegards,
                 \nCareLinc Team`

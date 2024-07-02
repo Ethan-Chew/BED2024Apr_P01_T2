@@ -277,12 +277,46 @@ No Request Body is required for the DELETE request
 <details>
 <summary><code>POST</code> <code><b>/api/patient/{patientId}/paymentMethods</b></code></summary>
 
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**  
+| name | type | data type |
+|-----------|-----------|-------------------------|
+| merchant | required | string |
+| cardName | required | string |
+| cardNumber | required | string (required: 16 characters) |
+| cardExpiryDate | required | string (format: YYYY-MM) |
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `201` | `{ message: "Payment Method Created", paymentMethods: <paymentMethod Object> }` |
+| `400` | `{ message: "Patient ID is required" }` |
+| `400` | `{ message: "Validation Error", errors: <Joi Error> }` |
+| `500` | `{ message: "Internal Server Error" }` |
+
 </details>
 
 ### Delete Payment Method
 
 <details>
 <summary><code>DELETE</code> <code><b>/api/patient/{patientId}/paymentMethods/{methodId}</b></code></summary>
+
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+| methodId | required | Unique Identifier given to every Payment Method |
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `204` | `{ message: "Payment Method Deleted" }` |
+| `400` | `{ message: "Patient ID and Payment Method Id are required." }` |
+| `500` | `{ message: "Internal Server Error" }` |
 
 </details>
 
@@ -291,7 +325,55 @@ No Request Body is required for the DELETE request
 <details>
 <summary><code>PUT</code> <code><b>/api/patient/{patientId}/paymentMethods/{methodId}</b></code></summary>
 
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+| methodId | required | Unique Identifier given to every Payment Method |
+
+**Request Body**  
+| name | type | data type |
+|-----------|-----------|-------------------------|
+| merchant | required | string |
+| cardName | required | string |
+| cardNumber | required | string (required: 16 characters) |
+| cardExpiryDate | required | string (format: YYYY-MM) |
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `200` | `{ message: "Payment Method Updated", paymentMethod: <PaymentMethod Object> }` |
+| `400` | `{ message: "Method Id, Patient ID, Merchant, Card Name, Card Number, and Card Expiry Date are required." }` |
+| `500` | `{ message: "Internal Server Error" }` |
+
 </details>
+
+## Send Email
+
+<details>
+<summary><code>POST</code> <code><b>/api/mail/paymentConfirmation</b></code></summary>
+
+**Parameters**
+No URL Parameters required.
+
+**Request Body**  
+| name | type | data type |
+|-----------|-----------|-------------------------|
+| recepient | required | string |
+| paymentAmount | required | string |
+| cardMerchant | required | string |
+| cardLFDigits | required | string (4 characters) |
+| appointmentDate | required | string (format: YYYY-MM-DD) |
+| appointmentTime | required | string |
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `201` | `{ message: "Payment Confirmation Email Sent" }` |
+| `500` | `{ message: "Internal Server Error" }` |
+
+</details>
+
 
 ---
 _This API Documentation Template was adopted from [azagniotov's REST API Docs in Markdown](https://gist.github.com/azagniotov/a4b16faf0febd12efbc6c3d7370383a6)._

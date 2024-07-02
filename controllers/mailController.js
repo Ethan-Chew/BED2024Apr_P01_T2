@@ -7,12 +7,13 @@ const sendPaymentConfirmation = async (req, res) => {
         const recepient = req.body.recepient;
         const paymentAmount = req.body.paymentAmount;
         const cardMerchant = req.body.cardMerchant;
+        const cardLFDigits = req.body.cardLFDigits;
         const appointmentDate = req.body.appointmentDate;
         const appointmentTime = req.body.appointmentTime;
 
         // TODO: REMOVE BEFORE SUBMISSION
         if (process.env.ENVIRONMENT !== "dev") {
-            const sendRequest = await Mail.sendPaymentConfirmation(recepient, paymentAmount, cardMerchant, appointmentDate, appointmentTime);
+            const sendRequest = await Mail.sendPaymentConfirmation(recepient, paymentAmount, cardMerchant, cardLFDigits, appointmentDate, appointmentTime);
             
             if (sendRequest) {
                 res.status(201).json({
