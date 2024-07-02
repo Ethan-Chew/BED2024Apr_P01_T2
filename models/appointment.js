@@ -2,14 +2,16 @@ const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
 class Appointment {
-    constructor(id, patientId, doctorId, slotId, consultationCost, reason, doctorNote) {
+    constructor(id, patientId, doctorId, consultationCost, reason, doctorNote, slotDate, slotTime, paymentStatus) {
         this.id = id;
         this.patientId = patientId;
         this.doctorId = doctorId;
-        this.slotId = slotId;
         this.consultationCost = consultationCost;
         this.reason = reason;
         this.doctorNote = doctorNote;
+        this.slotDate = slotDate;
+        this.slotTime = slotTime;
+        this.paymentStatus = paymentStatus;
     }
 
     // Helper Function to get New ID
@@ -28,9 +30,10 @@ class Appointment {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT a.*, avs.SlotDate, st.SlotTime FROM Appointments a
+            SELECT a.*, avs.SlotDate, st.SlotTime, pay.PaymentStatus FROM Appointments a
             LEFT JOIN AvailableSlot avs ON a.SlotId = avs.SlotId
             LEFT JOIN SlotTime st ON avs.SlotTimeId = st.SlotTimeId
+            LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
             WHERE a.PatientId = @PatientId
         `
         const request = connection.request();
@@ -40,9 +43,8 @@ class Appointment {
         connection.close();
 
         if (result.recordset.length == 0) return null;
-
         return result.recordset.map(
-            appointment => new Appointment(appointment.AppointmentId, appointment.AccountId, appointment.DoctorId, appointment.SlotId, appointment.ConsultationCost, appointment.Reason, appointment.DoctorNote)
+            appointment => new Appointment(appointment.AppointmentId, appointment.PatientId, appointment.DoctorId, appointment.ConsultationCost, appointment.Reason, appointment.DoctorNote, appointment.SlotDate, appointment.SlotTime, appointment.PaymentStatus)
         );
     }
 
@@ -104,23 +106,23 @@ class Appointment {
 
     // Created By: Ethan Chew
     static async createAppointment(patientId, slotId, reason) {
-        const connection = await sql.connect(dbConfig);
-        const newAppointmentId = await Appointment.getNextAppointmentId(connection);
+        // const connection = await sql.connect(dbConfig);
+        // const newAppointmentId = await Appointment.getNextAppointmentId(connection);
 
-        const query = `
-            INSERT INTO Appointments (AppointmentId, AccountId, SlotId, Reason)
-            VALUES (@AppointmentId, @AccountId, @SlotId, @Reason)
-        `;
-        const request = connection.request();
-        request.input('AppointmentId', newAppointmentId);
-        request.input('AccountId', patientId);
-        request.input('SlotId', slotId);
-        request.input('Reason', reason);
+        // const query = `
+        //     INSERT INTO Appointments (AppointmentId, AccountId, SlotId, Reason)
+        //     VALUES (@AppointmentId, @AccountId, @SlotId, @Reason)
+        // `;
+        // const request = connection.request();
+        // request.input('AppointmentId', newAppointmentId);
+        // request.input('AccountId', patientId);
+        // request.input('SlotId', slotId);
+        // request.input('Reason', reason);
 
-        await request.query(query);
-        connection.close();
+        // await request.query(query);
+        // connection.close();
 
-        return new Appointment(newAppointmentId, patientId, null, slotId, null, reason, null);
+        // return new Appointment(newAppointmentId, patientId, null, slotId, null, reason, null);
     }
 
     static async deleteAppointment(appointmentId) {

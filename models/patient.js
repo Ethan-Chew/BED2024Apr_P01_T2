@@ -40,7 +40,6 @@ class Patient extends Account {
         const query = `
             SELECT p.*, acc.AccountName, acc.AccountEmail, acc.AccountCreationDate, a.DoctorId, a.SlotId, a.AppointmentId FROM Patient p
             LEFT JOIN Account acc ON acc.AccountId = p.PatientId
-            LEFT JOIN Appointments a ON a.PatientId = p.PatientId
             WHERE p.PatientId = @PatientId
         `;
         const request = connection.request();
@@ -51,21 +50,8 @@ class Patient extends Account {
 
         // Group Patients with their Associated Appointments
         const birthdate = new Date(result.recordset[0].PatientBirthdate).toISOString().split("T")[0];  // Remove time from date
-        const patientsWithAppointmentIds = {
-            name: result.recordset[0].AccountName,
-            email: result.recordset[0].AccountEmail,
-            birthdate: birthdate,
-            patientId: result.recordset[0].PatientId,
-            knownAllergies: result.recordset[0].KnownAllergies,
-            isApproved: result.recordset[0].PatientIsApproved,
-            creationDate: new Date(result.recordset[0].AccountCreationDate * 1000).toISOString().split("T")[0],
-            appointmentIds: [],
-        };
-        for (const row of result.recordset) {
-            patientsWithAppointmentIds.appointmentIds.push(row.AppointmentId);
-        }
 
-        return patientsWithAppointmentIds;
+        return  new Patient(result.recordset[0].PatientId, result.recordset[0].AccountName, result.recordset[0].AccountEmail, null, new Date(result.recordset[0].AccountCreationDate * 1000).toISOString().split("T")[0], result.recordset[0].KnownAllergies, birthdate, result.recordset[0].PatientIsApproved);
     }
     //HERVIn
     static async getAllPatient() {
