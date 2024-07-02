@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <button class="ml-auto px-6 py-2 self-start rounded-xl bg-primary text-white hover:bg-btnprimary">
                         Pay
                     </button>
-                    <button class="px-6 py-2 self-start rounded-xl bg-gray-400 text-white hover:bg-gray-500" id="help-btn-${i}">
+                    <button class="px-6 py-2 self-start rounded-xl bg-gray-400 text-white hover:bg-gray-500" id="help-${i}">
                         Request Help
                     </button>
                 </div>
@@ -119,6 +119,32 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // Display Payment Confirmation Popup
             document.getElementById('make-payment-popup').classList.remove('hidden');
+        });
+        document.getElementById(`help-${i}`).addEventListener('click', async () => {
+            // Confirm Help Request
+            const confirmHelpRequest = confirm("Are you sure you want to request help for this payment?");
+
+            if (confirmHelpRequest) {
+                const requestHelpResponse = await fetch(`/api/patient/${accountId}/requestHelp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        appointmentId: appointment.appointmentId,
+                    })
+                });
+
+                if (requestHelpResponse.status !== 200) {
+                    alert("Error Requesting Help. Please try again.");
+                    return;
+                }
+
+                alert("Help Request Sent. Please wait for approval.");
+                document.getElementById(`help-text-${i}`).innerText = `Help requested on ${new Date().toISOString().split("T")[0]}. Status: Pending`;
+                document.getElementById(`help-${i}`).disabled = true;
+                document.getElementById(`help-${i}`).classList.add('cursor-not-allowed');
+            }
         });
     }
 

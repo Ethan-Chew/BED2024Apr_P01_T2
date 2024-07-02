@@ -79,6 +79,7 @@ app.get("/api/company/:companyId", companyController.getCompanyById);
 app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName)
 app.post("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
+app.put("/api/drugRequest/drugContribution", drugRequestController.addRequestContribution);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);

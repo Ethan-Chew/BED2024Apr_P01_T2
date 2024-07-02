@@ -102,6 +102,7 @@ class Appointment {
         return appointmentWithMedication;
     }
 
+    // Created By: Ethan Chew
     static async createAppointment(patientId, slotId, reason) {
         const connection = await sql.connect(dbConfig);
         const newAppointmentId = await Appointment.getNextAppointmentId(connection);

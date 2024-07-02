@@ -35,7 +35,8 @@ const getPaymentMethodsByPatientId = async (req, res) => {
 // Created by: Ethan Chew
 const createPaymentMethod = async (req, res) => {
     try {
-        const { patientId, merchant, cardName, cardNumber, cardExpiryDate } = req.body;
+        const { patientId } = req.params;
+        const { merchant, cardName, cardNumber, cardExpiryDate } = req.body;
 
         if (!patientId || !merchant || !cardName || !cardNumber || !cardExpiryDate) {
             res.status(400).json({
@@ -98,7 +99,7 @@ const deletePaymentMethod = async (req, res) => {
         const patientId = req.params.patientId;
         const methodId = req.params.methodId;
 
-        if (!patientId || !cardNumber) {
+        if (!patientId || !methodId) {
             res.status(400).json({
                 message: "Patient ID and Payment Method Id are required."
             });
@@ -114,7 +115,9 @@ const deletePaymentMethod = async (req, res) => {
             return;
         }
         
-        res.status(204);
+        res.status(204).json({
+            message: "Payment Method Deleted"
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({
