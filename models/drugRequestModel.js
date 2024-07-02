@@ -164,6 +164,44 @@ class DrugRequest {
         }
     }
 
+    static async addRequestContribution(appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate = null, contributionStatus = 'Pending'){
+        const connection = await sql.connect(dbConfig);
+        const transaction = new sql.Transaction(connection);
+        try {
+            await transaction.begin();
+            // Validate input parameters (e.g., check for positive quantity)
+            if (quantity <= 0) {
+                throw new Error('Quantity must be greater than zero.');
+            }
+            
+            const query = `
+                INSERT INTO DrugRequestContribution 
+                (AppointmentId, DrugName, Quantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus) VALUES
+                (@appointmentId, @drugName, @quantity, @totalCost, @contributeDate, @confirmationDate, @contributionStatus)
+            `
+
+            const request = new sql.Request(transaction);
+            request.input('appointmentId', sql.VarChar, appointmentId);
+            request.input('drugName', sql.VarChar, drugName);
+            request.input('quantity', sql.Int, quantity);
+            request.input('totalCost', sql.Money, totalCost);
+            request.input('contributeDate', sql.Date, contributeDate);
+            request.input('confirmationDate', sql.Date, confirmationDate);
+            request.input('contributionStatus', sql.VarChar, contributionStatus);
+
+            await request.query(query);
+            await transaction.commit();
+            console.log('Drug request contribution added/updated successfully.');
+        } catch (error) {
+            console.error('Error adding/updating drug request contribution:', error);
+            throw error;
+        } finally {
+            if (connection) {
+                connection.close();
+            }
+        }
+    }
+    
     // Helper function to find the nearest record with enough quantity
     static async findNearestRecordWithEnoughQuantity(drugName, requiredQuantity, transaction) {
         const connection = transaction._connection; // Access the connection from the transaction
