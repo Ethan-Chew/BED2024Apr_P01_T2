@@ -53,7 +53,7 @@ const authLoginAccount = async (req, res) => {
         } else if (account.DoctorId) {
             role = "doctor";
         } else if (account.StaffId) {
-            role = "staff";
+            role = "admin";
         }
 
         // Generate a JWT Token
