@@ -25,7 +25,7 @@ const getDrugOrderByIdAndDrugName = async (req, res) => {
 
 const addRequestContribution = async (req, res) => {
     try {
-        const { appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate, contributionStatus } = req.body;
+        const { appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate, contributionStatus, companyId } = req.body;
 
         console.log('Received body:', req.body); // Log request body
 
@@ -50,7 +50,8 @@ const addRequestContribution = async (req, res) => {
             totalCost,
             contributeDate,
             confirmationDate,
-            status
+            status,
+            companyId
         );
 
         console.log('Drug request contribution added successfully');

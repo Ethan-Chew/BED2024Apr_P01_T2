@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", async() => {
         contributeQuantityElement.textContent = totalContribution;
     }
 
+    const companyId = sessionStorage.getItem('accountId');
     // Handle Confirm Button Press
     document.getElementById('confirm-btn').addEventListener('click', async () => {
         const totalContribution = parseInt(contributeQuantityElement.textContent);
@@ -105,7 +106,8 @@ document.addEventListener("DOMContentLoaded", async() => {
                         quantity: totalContribution,
                         totalCost: parseFloat(totalContribution) * parseFloat(totalCost), // Replace drugPrice with actual value or calculation
                         contributeDate: getTodayDate(),
-                        contributionStatus: 'Pending'
+                        contributionStatus: 'Pending',
+                        companyId: companyId
                     })
                 });
     

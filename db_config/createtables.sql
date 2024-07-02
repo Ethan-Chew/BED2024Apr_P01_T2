@@ -171,9 +171,11 @@ CREATE TABLE DrugRequestContribution (
 	ContributeDate DATE NOT NULL,
 	ConfirmationDate DATE NULL,
 	ContributionStatus VARCHAR(10) NOT NULL CHECK (ContributionStatus IN ('Pending', 'Completed')),
+	CompanyId VARCHAR(7) NOT NULL,
 
 	CONSTRAINT PK_DrugRequestContribution PRIMARY KEY (AppointmentId, DrugName),
-    CONSTRAINT FK_DrugRequestContribution_PrescribedMedication FOREIGN KEY (AppointmentId, DrugName) REFERENCES PrescribedMedication(AppointmentId, DrugName)
+    CONSTRAINT FK_DrugRequestContribution_PrescribedMedication FOREIGN KEY (AppointmentId, DrugName) REFERENCES PrescribedMedication(AppointmentId, DrugName),
+	CONSTRAINT FK_DrugRequestContribution_Company FOREIGN KEY (CompanyId) REFERENCES Company(CompanyId)
 );
 
 CREATE TABLE DrugTopupRequest (

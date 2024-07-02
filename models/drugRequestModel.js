@@ -164,7 +164,7 @@ class DrugRequest {
         }
     }
 
-    static async addRequestContribution(appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate = null, contributionStatus = 'Pending'){
+    static async addRequestContribution(appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate = null, contributionStatus = 'Pending', companyId){
         const connection = await sql.connect(dbConfig);
         const transaction = new sql.Transaction(connection);
         try {
@@ -176,8 +176,8 @@ class DrugRequest {
             
             const query = `
                 INSERT INTO DrugRequestContribution 
-                (AppointmentId, DrugName, Quantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus) VALUES
-                (@appointmentId, @drugName, @quantity, @totalCost, @contributeDate, @confirmationDate, @contributionStatus)
+                (AppointmentId, DrugName, Quantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId) VALUES
+                (@appointmentId, @drugName, @quantity, @totalCost, @contributeDate, @confirmationDate, @contributionStatus, @companyId)
             `
 
             const request = new sql.Request(transaction);
@@ -188,6 +188,7 @@ class DrugRequest {
             request.input('contributeDate', sql.Date, contributeDate);
             request.input('confirmationDate', sql.Date, confirmationDate);
             request.input('contributionStatus', sql.VarChar, contributionStatus);
+            request.input('companyId', sql.VarChar, companyId);
 
             await request.query(query);
             await transaction.commit();
