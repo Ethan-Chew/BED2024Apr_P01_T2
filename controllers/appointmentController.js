@@ -126,18 +126,16 @@ const getAppointmentDetailsByDoctorId = async (req, res) => {
     }
 }
 
-const updateAppointmentDateTime = async (req, res) => {
+const updateAppointmentDoctorSlot = async (req, res) => {
     try {
-        // check if date and time slot for doctor already exists 
-        // if does not exist then update slot's date and tme
+        // check if date and time slot for another already exists and is available
+        // if does not exist then delete the appt and notify the patient
 
         const { appointmentId } = req.params;
 
         if (!appointmentId) {
             return res.status(400).send({ message: 'Appointment ID is required' });
         }
-
-        const { doctorId, date, time } = req.body;
 
         const getAppointment = await appointment.getAppointmentDetail(appointmentId);
         const availableSlotId = await getAppointment.slotDate

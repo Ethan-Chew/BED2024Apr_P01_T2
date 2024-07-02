@@ -160,6 +160,22 @@ CREATE TABLE PrescribedMedication (
 	CONSTRAINT PK_PrescribedMedication PRIMARY KEY (PrescribedMedId),
 	CONSTRAINT PK_PrescribedMedication_Appointment FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
 	CONSTRAINT FK_PrescribedMedication_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName),
+	CONSTRAINT UQ_PrescribedMedication UNIQUE (AppointmentId, DrugName)
+);
+
+CREATE TABLE DrugRequestContribution (
+	AppointmentId VARCHAR(7) NOT NULL,
+	DrugName VARCHAR(255) NOT NULL,
+	Quantity INT NOT NULL,
+	TotalCost MONEY NOT NULL,
+	ContributeDate DATE NOT NULL,
+	ConfirmationDate DATE NULL,
+	ContributionStatus VARCHAR(10) NOT NULL CHECK (ContributionStatus IN ('Pending', 'Completed')),
+	CompanyId VARCHAR(7) NOT NULL,
+
+	CONSTRAINT PK_DrugRequestContribution PRIMARY KEY (AppointmentId, DrugName),
+    CONSTRAINT FK_DrugRequestContribution_PrescribedMedication FOREIGN KEY (AppointmentId, DrugName) REFERENCES PrescribedMedication(AppointmentId, DrugName),
+	CONSTRAINT FK_DrugRequestContribution_Company FOREIGN KEY (CompanyId) REFERENCES Company(CompanyId)
 );
 
 CREATE TABLE DrugTopupRequest (

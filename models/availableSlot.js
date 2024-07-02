@@ -137,6 +137,29 @@ class AvailableSlot {
     }
 
     // Emmanuel
+    static async getAllAvailableSlotsDateTimes(date) {
+        const connection = await sql.connect(dbConfig);
+
+        // gets date and times that are not being used in existing appointments
+        let query = `
+        SELECT avs.SlotDate, st.SlotTime
+        FROM availableSlot avs
+        LEFT JOIN Appointments a ON avs.SlotId = a.SlotId
+        LEFT JOIN SlotTime st ON avs.SlotTimeId = st.SlotTimeId
+        WHERE a.SlotId IS NULL AND avs.SlotDate = @Date`;
+
+        const request = connection.request();
+        request.input('Date', date);
+
+        const result = await request.query(query);
+        connection.close();
+
+        if (result.recordset.length == 0) return null;
+
+        return result.recordset;
+    }
+
+    // Emmanuel
     // configurable WHERE select for AvailableSlot
     static async getAvailableSlotsByConditions(conditionFields) {
         const allowedFields = {

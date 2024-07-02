@@ -79,6 +79,7 @@ app.get("/api/company/:companyId", companyController.getCompanyById);
 app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName)
 app.post("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
+app.put("/api/drugRequest/drugContribution", drugRequestController.addRequestContribution);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);
@@ -89,6 +90,7 @@ app.put("/api/helpRequests/approve/:requestId", helpRequestsController.approveRe
 app.put("/api/helpRequests/reject/:requestId", helpRequestsController.rejectRequest);
 
 // Route for Available Slot
+app.get("/api/availableSlots/:date", availableSlotController.getAllAvailableSlotsTimesByDate)
 app.put("/api/availableSlot/doctor/:slotId", availableSlotController.updateAvailableSlotById);
 
 // Initialise Server

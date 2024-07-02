@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     window.location.href = '/admin/home.html';
                     break;
                 case 'company':
-                    window.location.href = '/company/home.html';
+                    window.location.href = '/company/companyHome.html';
                     break;
             }
         } else {

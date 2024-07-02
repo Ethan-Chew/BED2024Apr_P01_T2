@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", async() => {
     // Handle Logout Button Press
-    document.getElementById('logout').addEventListener('click', () => {
-        sessionStorage.removeItem('accountId');
-        window.location.href = '../index.html';
-    });
+    // document.getElementById('logout').addEventListener('click', () => {
+    //     sessionStorage.removeItem('accountId');
+    //     window.location.href = '../index.html';
+    // });
 
     // Handle Cancel Button Press
     document.getElementById('cancel-btn').addEventListener('click', () => {
@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", async() => {
         contributeQuantityElement.textContent = totalContribution;
     }
 
+    const companyId = sessionStorage.getItem('accountId');
     // Handle Confirm Button Press
     document.getElementById('confirm-btn').addEventListener('click', async () => {
         const totalContribution = parseInt(contributeQuantityElement.textContent);
@@ -84,20 +85,38 @@ document.addEventListener("DOMContentLoaded", async() => {
         if (totalContribution === maxContribution) {
             try {
                 // Update the drug request as completed
-                const response = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
+                const postResponse = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ contributedQuantity: totalContribution })
                 });
+
+                const totalCost = parseFloat(document.getElementById('price').innerText.replace('$', ''));
+
+                const putResponse = await fetch(`/api/drugRequest/drugContribution`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        appointmentId,
+                        drugName,
+                        quantity: totalContribution,
+                        totalCost: parseFloat(totalContribution) * parseFloat(totalCost), // Replace drugPrice with actual value or calculation
+                        contributeDate: getTodayDate(),
+                        contributionStatus: 'Pending',
+                        companyId: companyId
+                    })
+                });
     
-                if (response.ok) {
+                if (postResponse.ok && putResponse.ok) {
                     // Redirect to the company home page
                     window.location.href = 'companyHome.html';
                 } else {
-                    const errorData = await response.json();
-                    console.error('Failed to update drug request:', errorData.error || response.statusText);
+                    const errorData = await postResponse.json();
+                    console.error('Failed to update drug request:', errorData.error || postResponse.statusText || putResponse.statusText);
                     alert('Failed to complete the drug request.');
                 }
             } catch (err) {
@@ -122,3 +141,11 @@ function populateDrugOrderInfo(order) {
     document.getElementById("appointment-id").innerHTML = order.appointmentId;
 }
 
+function getTodayDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}

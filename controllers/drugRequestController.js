@@ -23,6 +23,45 @@ const getDrugOrderByIdAndDrugName = async (req, res) => {
     }
 }
 
+const addRequestContribution = async (req, res) => {
+    try {
+        const { appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate, contributionStatus, companyId } = req.body;
+
+        console.log('Received body:', req.body); // Log request body
+
+        // Validate input data
+        if (!appointmentId || !drugName || quantity == null || !totalCost || !contributeDate) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        // Ensure quantity is a positive integer
+        if (quantity <= 0) {
+            return res.status(400).json({ error: 'Quantity must be greater than zero' });
+        }
+
+        // Default contributionStatus to 'Pending' if not provided
+        const status = contributionStatus || 'Pending';
+
+        // Call the addRequestContribution method from the DrugRequest class
+        await DrugRequest.addRequestContribution(
+            appointmentId,
+            drugName,
+            quantity,
+            totalCost,
+            contributeDate,
+            confirmationDate,
+            status,
+            companyId
+        );
+
+        console.log('Drug request contribution added successfully');
+        res.status(201).json({ message: 'Drug request contribution added successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' }); // Return JSON
+    }
+}
+
 const contributeDrugRequest = async (req, res) => {
     try {
         const { id, drugName } = req.params;
@@ -47,5 +86,6 @@ const contributeDrugRequest = async (req, res) => {
 module.exports = {
     getAllDrugRequestOrder,
     getDrugOrderByIdAndDrugName,
+    addRequestContribution,
     contributeDrugRequest
 }
