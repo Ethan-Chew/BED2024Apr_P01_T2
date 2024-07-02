@@ -89,6 +89,7 @@ app.put("/api/helpRequests/approve/:requestId", helpRequestsController.approveRe
 app.put("/api/helpRequests/reject/:requestId", helpRequestsController.rejectRequest);
 
 // Route for Available Slot
+app.get("/api/availableSlots/:date", availableSlotController.getAllAvailableSlotsTimesByDate)
 app.put("/api/availableSlot/doctor/:slotId", availableSlotController.updateAvailableSlotById);
 
 // Initialise Server

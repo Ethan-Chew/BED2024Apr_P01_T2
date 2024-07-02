@@ -35,6 +35,34 @@ const updateAvailableSlotById = async (req, res) => {
     }
 }
 
+const getAllAvailableSlotsTimesByDate = async (req,res) => {
+    try {
+        const { date } = req.params;
+
+        if (!date) {
+            return res.status(400).send({ message: 'Date is required' });
+        }
+
+        const DateTimeSlots = await availableSlot.getAllAvailableSlotsDateTimes(date);
+
+
+        if (DateTimeSlots) {
+            res.status(200).json({
+                message: "Available Slots Returned Successfully",
+            });
+        } else {
+            res.status(500).json({
+                message: "Failed to get Available Slots"
+            });
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
-    updateAvailableSlotById
+    updateAvailableSlotById,
+    getAllAvailableSlotsTimesByDate
 }
