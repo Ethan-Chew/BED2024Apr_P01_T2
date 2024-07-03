@@ -19,7 +19,8 @@ const authoriseJWT = (req, res, next) => {
         const userRole = decoded.role;
 
         const authorizedRole = Object.entries(authorisedRoles).find(([endpoint, roles]) => {
-            const regex = new RegExp(`^${endpoint}$`);
+            const regexPattern = endpoint.replace(/:\w+/g, '[^/]+');
+            const regex = new RegExp(`^${regexPattern}$`);
             return regex.test(requestedEndpoint) && roles.includes(userRole);
         });
 

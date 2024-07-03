@@ -81,6 +81,16 @@ CREATE TABLE Questionnaire (
 	CONSTRAINT FK_Questionnaire_Patient FOREIGN KEY (AccountId) REFERENCES Patient(PatientId)
 );
 
+CREATE TABLE ChatbotHistory (
+	PatientId VARCHAR(7) NOT NULL,
+	MessageBody VARCHAR(255) NOT NULL,
+	MessageRole VARCHAR(10) NOT NULL CHECK (MessageRole IN ('user', 'model')),
+	MessageDate BIGINT NOT NULL,
+
+	CONSTRAINT PK_ChatbotHistory PRIMARY KEY (PatientId, MessageDate),
+	CONSTRAINT FK_ChatbotHistory_Patient FOREIGN KEY (PatientId) REFERENCES Patient(PatientId)
+)
+
 CREATE TABLE SlotTime (
 	SlotTimeId VARCHAR(7) NOT NULL,
 	SlotTime VARCHAR(20) NOT NULL UNIQUE,

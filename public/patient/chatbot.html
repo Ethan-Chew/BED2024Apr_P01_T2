@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <title>CareLinc - Patient Chatbot</title>
+    </head>
+    <body class="bg-gray-100 flex flex-col min-h-screen min-w-screen">
+        <!-- Navigation Bar -->
+        <header class="z-[1000] bg-primary flex flex-row px-5 py-3 text-white items-center">
+            <a class="text-2xl font-bold" href="./home.html">CareLinc</a>
+            <nav class="ml-auto flex flex-row gap-5 items-center">
+                <a class="text-xl" href="./credits.html">Credits</a>
+                <a class="text-xl" href="./profile.html">Profile</a>
+                <button class="text-xl bg-btnprimary px-4 py-2" id="logout">
+                    Logout
+                </button>
+            </nav>
+        </header>
+
+        <!-- ChatBot Content Container -->
+        <div class="flex flex-grow items-center justify-center">
+            <div class="bg-white shadow-lg rounded-lg w-full max-w-lg p-4 m-4">
+                <div class="flex flex-col mb-4">
+                    <h1 class="text-2xl font-bold text-center">CareLinc Helper Chatbot</h1>
+                    <a class="text-center text-gray-500">Have any queries? Ask CareLinc's helpful Chatbot!</a>
+                </div>
+
+                <div id="chat-container" class="flex flex-col space-y-4 overflow-auto max-h-96 p-2">
+                    <div class="self-end bg-green-100 p-3 rounded-lg shadow">
+                        <p class="text-gray-800"><strong>CareBot:</strong> Hi! I'm CareBot, do ask me any questions you have!</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 duration-200">
+                    <textarea id="user-input" class="w-full p-2 border rounded-lg" rows="3" placeholder="Type your message..."></textarea>
+                    <button id="send-button" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg mt-2">Send</button>
+                    <div class="flex flex-row space-x-3">
+                        <button id="load-chat" class="w-full border-2 border-blue-500 hover:bg-blue-500 text-blue-500 hover:text-white p-2 rounded-lg mt-2">Load Chat</button>
+                        <button id="save-chat" class="w-full border-2 border-blue-500 hover:bg-blue-500 text-blue-500 hover:text-white p-2 rounded-lg mt-2">Save Chat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Disclaimer and Warning -->
+        <div id="disclaimerMessage" class="fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-[1001]">
+            <div class="max-h-full overflow-y-scroll">
+                <div class="bg-white p-10 rounded-xl max-w-2xl m-8">
+                    <h1 class="text-3xl font-bold text-center mb-6">Disclaimer and Warning</h1>
+    
+                    <section class="mb-6">
+                        <h2 class="text-2xl font-bold mb-4">Disclaimer</h2>
+                        <p class="text-gray-700 mb-4">The CareBot is an AI-powered assistant designed to provide general health information. However, it is important to note the following:</p>
+                        <ul class="list-disc list-inside text-gray-700 mb-4">
+                            <li>The information provided by CareBot is not intended to be a substitute for professional medical advice, diagnosis, or treatment.</li>
+                            <li>Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.</li>
+                            <li>Never disregard professional medical advice or delay in seeking it because of something you have read on this platform.</li>
+                        </ul>
+                        <p class="text-gray-700">If you think you may have a medical emergency, call <b>995 immediately</b>.</p>
+                    </section>
+                    
+                    <section class="mb-4">
+                        <h2 class="text-2xl font-bold mb-4">Warning</h2>
+                        <p class="text-gray-700 mb-4">The CareBot is intended to provide helpful information and support, but it has limitations. Please be aware of the following:</p>
+                        <ul class="list-disc list-inside text-gray-700 mb-4">
+                            <li>CareBot may not always provide accurate or up-to-date information. It is a tool to assist you, not a definitive source of medical knowledge.</li>
+                            <li>Do not rely solely on CareBot for managing serious or life-threatening health conditions. Professional medical consultation is always recommended.</li>
+                            <li>Do not enter any identifying personal information into CareBot.</li>
+                            <li>Data is stored in an unencrypted database.</li>
+                        </ul>
+                        <p class="text-gray-700">By using CareBot, you acknowledge and agree to these terms.</p>
+                    </section>
+                    <button id="agree-tnc" class="bg-primary hover:bg-btnprimary text-white px-4 py-2 rounded-lg">I agree.</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="../scripts/patient/patientChatbot.js"></script>
+        <script src="../scripts/tailwind.config.js"></script>
+    </body>
+</html>

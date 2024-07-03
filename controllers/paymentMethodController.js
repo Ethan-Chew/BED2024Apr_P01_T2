@@ -35,6 +35,7 @@ const getPaymentMethodsByPatientId = async (req, res) => {
 // Created by: Ethan Chew
 const createPaymentMethod = async (req, res) => {
     try {
+        console.log(req)
         const { patientId } = req.params;
         const { merchant, cardName, cardNumber, cardExpiryDate } = req.body;
 

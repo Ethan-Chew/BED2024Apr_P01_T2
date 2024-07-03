@@ -15,31 +15,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('view-history').addEventListener('click', () => {
         window.location.href = '../patient/prescriptionHistory.html';
     });
+    document.getElementById('chatbot').addEventListener('click', () => {
+        window.location.href = '../patient/chatbot.html';
+    });
 
     // Fetch Patient Information
     const accountId = sessionStorage.getItem('accountId');
 
-    const fetchPatient = await fetch(`/api/patient/${accountId}`, {
+    // Retrieve Appointment Detail Information
+    const fetchAppointment = await fetch(`/api/appointments/patient/${accountId}`, {
         method: 'GET'
     });
-    if (fetchPatient.status !== 200) {
-        alert("Error Retrieving Patient Information. Please try again.");
-        return;
-    }
 
-    const patientJson = await fetchPatient.json();
-    const patient = patientJson.patient;
-
-    // Retrieve Appointment Detail Information
-    let appointments = [];
-    for (const appointmentId of patient.appointmentIds) {
-        const fetchAppointment = await fetch(`/api/appointments/${appointmentId}`, {
-            method: 'GET'
-        });
-
-        const appointmentJson = await fetchAppointment.json();
-        appointments.push(appointmentJson.appointment);
-    }
+    const appointmentsJson = await fetchAppointment.json();
+    const appointments = appointmentsJson.appointments;
 
     // Populate Screen with Patient Information
     /// Count and Display Number of Unpaid Payments

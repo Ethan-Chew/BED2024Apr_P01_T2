@@ -15,6 +15,7 @@ const helpRequestsController = require("./controllers/helpRequestsController");
 const availableSlotController = require("./controllers/availableSlotController")
 const paymentController = require("./controllers/paymentController");
 const mailController = require("./controllers/mailController");
+const chatbotController = require("./controllers/chatbotController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -38,10 +39,10 @@ app.post("/api/auth/login", accountsController.authLoginAccount);
 app.post("/api/auth/create/patient", validatePatient, accountsController.authCreatePatient);
 
 /// Route for Patient Account
-app.get("/api/patient/:patientId", accountsController.getPatientById);
-app.get("/api/patients/", accountsController.getAllPatient);
-app.put("/api/patient/:patientId", validatePatient, accountsController.updatePatientById);
-app.delete("/api/patient/:patientId", accountsController.deletePatientById);
+app.get("/api/patient/:patientId", authoriseJWT, accountsController.getPatientById);
+app.get("/api/patients/", authoriseJWT, accountsController.getAllPatient);
+app.put("/api/patient/:patientId", authoriseJWT, validatePatient, accountsController.updatePatientById);
+app.delete("/api/patient/:patientId", authoriseJWT, accountsController.deletePatientById);
 
 // Routes for Patient's Payment Methods
 app.get("/api/patient/:patientId/paymentMethods", paymentMethodController.getPaymentMethodsByPatientId);
@@ -54,6 +55,9 @@ app.post("/api/patient/makePayment", authoriseJWT, paymentController.patientMake
 
 // Route for Sending a Payment Confirmation Email
 app.post("/api/mail/paymentConfirmation", authoriseJWT, validatePaymentConfirmationEmail, mailController.sendPaymentConfirmation);
+
+// Route for Sending a Message to the CareLinc Chatbot
+app.post("/api/chatbot/sendMessage", chatbotController.sendMessageToChatbot);
 
 // Routes for Admin-Managing Patient Accounts
 app.get("/api/patients/unapproved", accountsController.getAllUnapproved);

@@ -85,7 +85,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Validate User Input
         const userInput = {
             id: document.getElementById("editPaymentMethodId").value,
-            patientId: sessionStorage.getItem("accountId"), // Get Patient ID from Session Storage (Logged in User
             merchant: document.getElementById("editMerchant").value,
             cardNumber: document.getElementById("editCardNumber").value,
             cardExpiryDate: document.getElementById("editExpiryDate").value,
@@ -126,14 +125,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Validate User Input
         const userInput = {
-            patientId: sessionStorage.getItem("accountId"), // Get Patient ID from Session Storage (Logged in User
             merchant: document.getElementById("merchant").value,
             cardNumber: String(document.getElementById("cardNumber").value),
             cardExpiryDate: document.getElementById("expiryDate").value,
             cardName: document.getElementById("cardHolderName").value,
         };
 
-        if (userInput.cardNumber.length !== 16 || Number.isNaN(userInput.cardNumber.length)) {
+        const regex = /^\d{16}$/;
+        if (regex.test(userInput.cardNumber) === false) {
             document.getElementById("error-text").innerText = "Invalid Card Number. Please enter a valid 16-digit card number.";
             return;
         }
@@ -148,8 +147,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         if (createRequest.status === 201) {
+            alert("Payment Method Created Successfully");
             paymentMethods.push(userInput);
             displayPaymentMethods(paymentMethods);
+
+            // Clear Form
+            document.getElementById("cardNumber").value = "";
+            document.getElementById("expiryDate").value = "";
+            document.getElementById("cardHolderName").value = "";
         } else {
             alert("Failed to create Payment Method. Please try again later.");
         }
