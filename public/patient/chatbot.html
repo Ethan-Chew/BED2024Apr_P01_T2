@@ -22,7 +22,7 @@
 
         <!-- ChatBot Content Container -->
         <div class="flex flex-grow items-center justify-center">
-            <div class="bg-white shadow-lg rounded-lg w-full max-w-md p-4 m-4">
+            <div class="bg-white shadow-lg rounded-lg w-full max-w-lg p-4 m-4">
                 <div class="flex flex-col mb-4">
                     <h1 class="text-2xl font-bold text-center">CareLinc Helper Chatbot</h1>
                     <a class="text-center text-gray-500">Have any queries? Ask CareLinc's helpful Chatbot!</a>
@@ -34,13 +34,13 @@
                     </div>
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-4 duration-200">
                     <textarea id="user-input" class="w-full p-2 border rounded-lg" rows="3" placeholder="Type your message..."></textarea>
-                    <button id="send-button" class="w-full bg-blue-500 text-white p-2 rounded-lg mt-2">Send</button>
-                    <!-- <div class="flex flex-row space-x-3">
-                        <button id="" class="w-full bg-blue-500 text-white p-2 rounded-lg mt-2">Load Chat</button>
-                        <button id="" class="w-full bg-blue-500 text-white p-2 rounded-lg mt-2">Save Chat</button>
-                    </div> -->
+                    <button id="send-button" class="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg mt-2">Send</button>
+                    <div class="flex flex-row space-x-3">
+                        <button id="load-chat" class="w-full border-2 border-blue-500 hover:bg-blue-500 text-blue-500 hover:text-white p-2 rounded-lg mt-2">Load Chat</button>
+                        <button id="save-chat" class="w-full border-2 border-blue-500 hover:bg-blue-500 text-blue-500 hover:text-white p-2 rounded-lg mt-2">Save Chat</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,8 +67,9 @@
                         <p class="text-gray-700 mb-4">The CareBot is intended to provide helpful information and support, but it has limitations. Please be aware of the following:</p>
                         <ul class="list-disc list-inside text-gray-700 mb-4">
                             <li>CareBot may not always provide accurate or up-to-date information. It is a tool to assist you, not a definitive source of medical knowledge.</li>
-                            <li>Do not enter any identifying personal information into CareBot.</li>
                             <li>Do not rely solely on CareBot for managing serious or life-threatening health conditions. Professional medical consultation is always recommended.</li>
+                            <li>Do not enter any identifying personal information into CareBot.</li>
+                            <li>Data is stored in an unencrypted database.</li>
                         </ul>
                         <p class="text-gray-700">By using CareBot, you acknowledge and agree to these terms.</p>
                     </section>

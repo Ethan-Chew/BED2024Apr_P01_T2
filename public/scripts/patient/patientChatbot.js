@@ -24,6 +24,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>
         `;
 
+        // Set History Timestamp (User)
+        const chatbotHistoryTimestamp = sessionStorage.getItem("chatbotHistoryTimestamp") ? JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp")) : [];
+        chatbotHistoryTimestamp.push(new Date().getTime());
+        sessionStorage.setItem("chatbotHistoryTimestamp", JSON.stringify(chatbotHistoryTimestamp));
+
         // Freeze the send button while the chatbot is responding
         document.getElementById("send-button").disabled = true;
         document.getElementById("send-button").classList.add("cursor-not-allowed");
@@ -37,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             },
             body: JSON.stringify({ 
                 message: userInput,
-                history: sessionStorage.getItem("chatbotHistory") ? JSON.parse(sessionStorage.getItem("chatbotHistory")) : []
+                history: sessionStorage.getItem("chatbotHistory") ? JSON.parse(sessionStorage.getItem("chatbotHistory")) : [],
             }),
         });
         
@@ -63,6 +68,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 parts: [{ text: response }]
             });
             sessionStorage.setItem("chatbotHistory", JSON.stringify(chatbotHistory));
+
+            // Set History Timestamp (Model)
+            const chatbotHistoryTimestamp = sessionStorage.getItem("chatbotHistoryTimestamp") ? JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp")) : [];
+            chatbotHistoryTimestamp.push(new Date().getTime());
+            sessionStorage.setItem("chatbotHistoryTimestamp", JSON.stringify(chatbotHistoryTimestamp));
         } else {
             alert("An error occurred while sending the message to the chatbot. Please try again later.");
         }

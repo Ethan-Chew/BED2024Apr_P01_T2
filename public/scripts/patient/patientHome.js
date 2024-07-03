@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('view-history').addEventListener('click', () => {
         window.location.href = '../patient/prescriptionHistory.html';
     });
+    document.getElementById('chatbot').addEventListener('click', () => {
+        window.location.href = '../patient/chatbot.html';
+    });
 
     // Fetch Patient Information
     const accountId = sessionStorage.getItem('accountId');
