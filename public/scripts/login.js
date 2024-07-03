@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         if (response.status === 200) {
+            console.log('Login successful');
             const body = await response.json();
             sessionStorage.setItem('accountId', body.accountId);
 

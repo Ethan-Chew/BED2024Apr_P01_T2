@@ -84,39 +84,44 @@ document.addEventListener("DOMContentLoaded", async() => {
 
         if (totalContribution === maxContribution) {
             try {
-                // Update the drug request as completed
-                const postResponse = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ contributedQuantity: totalContribution })
-                });
-
                 const totalCost = parseFloat(document.getElementById('price').innerText.replace('$', ''));
 
-                const putResponse = await fetch(`/api/drugRequest/drugContribution`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        appointmentId,
-                        drugName,
-                        quantity: totalContribution,
-                        totalCost: parseFloat(totalContribution) * parseFloat(totalCost), // Replace drugPrice with actual value or calculation
-                        contributeDate: getTodayDate(),
-                        contributionStatus: 'Pending',
-                        companyId: companyId
+
+                // Execute both requests in parallel
+                const [postResponse, putResponse] = await Promise.all([
+                    fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ contributedQuantity: totalContribution })
+                    }),
+                    fetch(`/api/drugRequest/drugContribution`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            appointmentId,
+                            drugName,
+                            quantity: totalContribution,
+                            totalCost: parseFloat(totalContribution) * parseFloat(totalCost),
+                            contributeDate: getTodayDate(),
+                            contributionStatus: 'Pending',
+                            companyId: companyId
+                        })
                     })
-                });
+                ]);
     
                 if (postResponse.ok && putResponse.ok) {
                     // Redirect to the company home page
                     window.location.href = 'companyHome.html';
                 } else {
-                    const errorData = await postResponse.json();
-                    console.error('Failed to update drug request:', errorData.error || postResponse.statusText || putResponse.statusText);
+                    // Retrieve and log error details
+                    const postError = postResponse.ok ? null : await postResponse.json();
+                    const putError = putResponse.ok ? null : await putResponse.json();
+                    
+                    console.error('Failed to update drug request:', postError || postResponse.statusText, putError || putResponse.statusText);
                     alert('Failed to complete the drug request.');
                 }
             } catch (err) {
