@@ -38,10 +38,10 @@ app.post("/api/auth/login", accountsController.authLoginAccount);
 app.post("/api/auth/create/patient", validatePatient, accountsController.authCreatePatient);
 
 /// Route for Patient Account
-app.get("/api/patient/:patientId", accountsController.getPatientById);
-app.get("/api/patients/", accountsController.getAllPatient);
-app.put("/api/patient/:patientId", validatePatient, accountsController.updatePatientById);
-app.delete("/api/patient/:patientId", accountsController.deletePatientById);
+app.get("/api/patient/:patientId", authoriseJWT, accountsController.getPatientById);
+app.get("/api/patients/", authoriseJWT, accountsController.getAllPatient);
+app.put("/api/patient/:patientId", authoriseJWT, validatePatient, accountsController.updatePatientById);
+app.delete("/api/patient/:patientId", authoriseJWT, accountsController.deletePatientById);
 
 // Routes for Patient's Payment Methods
 app.get("/api/patient/:patientId/paymentMethods", paymentMethodController.getPaymentMethodsByPatientId);

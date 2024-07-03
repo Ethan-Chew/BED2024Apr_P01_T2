@@ -38,7 +38,7 @@ class Patient extends Account {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT p.*, acc.AccountName, acc.AccountEmail, acc.AccountCreationDate, a.DoctorId, a.SlotId, a.AppointmentId FROM Patient p
+            SELECT p.*, acc.AccountName, acc.AccountEmail, acc.AccountCreationDate FROM Patient p
             LEFT JOIN Account acc ON acc.AccountId = p.PatientId
             WHERE p.PatientId = @PatientId
         `;
