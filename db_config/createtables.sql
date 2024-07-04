@@ -83,7 +83,7 @@ CREATE TABLE Questionnaire (
 
 CREATE TABLE ChatbotHistory (
 	PatientId VARCHAR(7) NOT NULL,
-	MessageBody VARCHAR(255) NOT NULL,
+	MessageBody VARCHAR(8000) NOT NULL,
 	MessageRole VARCHAR(10) NOT NULL CHECK (MessageRole IN ('user', 'model')),
 	MessageDate BIGINT NOT NULL,
 

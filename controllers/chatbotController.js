@@ -30,16 +30,19 @@ const getChatbotHistory = async (req, res) => {
         const history = await Chatbot.getChatbotHistory(patientId);
 
         let formattedHistory = [];
+        let historyTimestamps = [];
         for (let i = 0; i < history.length; i++) {
             formattedHistory.push({
                 role: history[i].MessageRole,
-                parts: [{ text: history[i].MessageText }]
+                parts: [{ text: history[i].MessageBody }]
             });
+            historyTimestamps.push(history[i].MessageTimestamp);
         }
 
-        req.status(200).json({
+        res.status(200).json({
             message: "Successfully retrieved chatbot history for patient",
-            history: formattedHistory
+            history: formattedHistory,
+            historyTimestamps: historyTimestamps,
         });
     } catch (err) {
         console.error(err);
@@ -57,7 +60,6 @@ const saveChatbotHistory = async (req, res) => {
             res.status(403).json({ error: "Unauthorized" });
             return;
         }
-
         for (let i = 0; i < history.length; i++) {
             await Chatbot.saveChatbotHistory(patientId, history[i].parts[0].text, history[i].role, historyTimestamps[i]);
         }

@@ -82,4 +82,70 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("send-button").classList.remove("cursor-not-allowed");
         document.getElementById("send-button").innerText = "Send";
     });
+
+    // Handle Save Chat Button
+    document.getElementById("save-chat").addEventListener("click", async () => {
+        console.log(sessionStorage.getItem("chatbotHistoryTimestamp"));
+        console.log(sessionStorage.getItem("chatbotHistory"));
+
+        if (!confirm("Are you sure you want to save this chat history?")) {
+            return;
+        }
+
+        // Send the chat history to the Backend
+        const saveChatResponse = await fetch(`/api/chatbot/history/${sessionStorage.getItem("accountId")}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                history: JSON.parse(sessionStorage.getItem("chatbotHistory")),
+                historyTimestamps: JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp")),
+            }),
+        });
+
+        if (saveChatResponse.status === 200) {
+            alert("Chat history saved successfully!");
+        } else {
+            alert("An error occurred while saving the chat history. Please try again later.");
+        }
+    });
+
+    // Handle Load Chat Button
+    document.getElementById("load-chat").addEventListener("click", async () => {
+        if (!confirm("Are you sure you want to load the chat history? This will overwrite the current chat history.")) {
+            return;
+        }
+
+        // Get the chat history from the Backend
+        const loadChatResponse = await fetch(`/api/chatbot/history/${sessionStorage.getItem("accountId")}`, {
+            method: "GET",
+        });
+
+        if (loadChatResponse.status === 200) {
+            const loadChatResponseJson = await loadChatResponse.json();
+            const history = loadChatResponseJson.history;
+            const historyTimestamps = loadChatResponseJson.historyTimestamps;
+
+            // Display the chat history on the screen
+            const chatContainer = document.getElementById("chat-container");
+            for (let i = 0; i < history.length; i++) {
+                if (history[i].role === "user") {
+                    chatContainer.innerHTML += `
+                        <div class="self-start bg-blue-100 p-3 rounded-lg shadow">
+                            <p class="text-gray-800"><strong>User:</strong> ${history[i].parts[0].text}</p>
+                        </div>
+                    `;
+                } else {
+                    chatContainer.innerHTML += `
+                        <div class="self-end bg-green-100 p-3 rounded-lg shadow">
+                            <p class="text-gray-800"><strong>CareBot:</strong> ${history[i].parts[0].text}</p>
+                        </div>
+                    `;
+                }
+            }
+        } else {
+            alert("An error occurred while loading the chat history. Please try again later.");
+        }
+    });
 });

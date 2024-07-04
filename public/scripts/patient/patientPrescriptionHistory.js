@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <p class="text-gray-700 mb-5">Date: ${appointment.slotDate}</p>
                 <div class="flex flex-row gap-5">
                     <!-- Prescription Details -->
-                    <div class="flex flex-col gap-3">
+                    <div class="flex flex-auto flex-col gap-3">
                         ${appointment.medication.map((drug) => `
                             <div class="bg-white p-4 rounded-lg shadow">
                                 <h4 class="text-xl font-bold">${drug.drugName}</h4>
