@@ -127,7 +127,7 @@ const getPatientById = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 }
-
+//HERVIN
 const getAllPatient = async (req, res) => {
     try {
 
@@ -149,7 +149,7 @@ const getAllPatient = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 }
-
+//HERVIN
 const getAllUnapproved = async (req, res) => {
     try {
 
@@ -171,7 +171,7 @@ const getAllUnapproved = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 }
-
+//HERVIN
 const getQuestionnaireWithAccountId = async (req, res) => {
     try {
         const patientId = req.params.accountId;
@@ -357,7 +357,7 @@ const getDoctorById = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 }
-
+//HERVIn
 const authCreateCompany = async (req, res) => {
     try {
         const { name, email, password, companyAddress, createdBy } = req.body;
@@ -368,6 +368,32 @@ const authCreateCompany = async (req, res) => {
             message: "Company Created Successfully",
             company: company
         });
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+const deleteDoctorById = async (req, res) => {
+    try {
+        const { doctorId } = req.params;
+
+        if (!doctorId) {
+            return res.status(400).send({ message: 'Doctor ID is required' });
+        }
+        
+        const deleteDoctorRequest = await Doctor.deleteDoctorById(doctorId);
+        const deleteAccountRequest = await Account.deleteAccountById(doctorId);
+
+        if ( deleteDoctorRequest && deleteAccountRequest) {
+            res.status(200).json({
+                message: "Doctor Account Deleted Successfully"
+            });
+        } else {
+            res.status(500).json({
+                message: "Failed to Delete Doctor Account"
+            });
+        }
     } catch(err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
@@ -418,5 +444,6 @@ module.exports = {
     adminUpdatePatientById,
     getAllDoctor,
     getDoctorById,
-    updateDoctorById
+    updateDoctorById,
+    deleteDoctorById,
 }

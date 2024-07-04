@@ -70,6 +70,7 @@ app.put("/api/staff/patient/:patientId", accountsController.adminUpdatePatientBy
 app.get("/api/doctors/", accountsController.getAllDoctor);
 app.get("/api/doctors/:doctorId", accountsController.getDoctorById);
 app.put("/api/doctors/:doctorId", accountsController.updateDoctorById);
+app.delete("/api/doctors/:doctorId", accountsController.deleteDoctorById);
 
 /// Route for Questionnaire
 app.get("/api/questionnaire/:accountId", accountsController.getQuestionnaireWithAccountId);
