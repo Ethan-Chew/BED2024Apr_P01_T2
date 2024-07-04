@@ -34,11 +34,36 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="flex space-x-2">
                 <a class="p-3 bg-white rounded-lg shadow hover:bg-gray-300" href="editUser.html?id=${patient.patientId}">Edit Details</a>
-                <button class="p-3 bg-white rounded-lg shadow hover:bg-gray-300">Remove Patient</button>
+                <button class="del-btn p-3 bg-white rounded-lg shadow hover:bg-gray-300">Remove Patient</button>
             </div>
         `;
+
+        const delBtn = patientDiv.querySelector('.del-btn');
+        delBtn.addEventListener('click', () => deletePatient(patient.patientId));
         
         return patientDiv;
+    }
+
+    
+
+    async function deletePatient(patientId) {
+        try {
+            const deleteResponse = await fetch(`/api/patient/${patientId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (deleteResponse.status !== 200) {
+                alert(`Error: Unable to delete patient. ${errorText}`);
+            } else {
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error("Error deleting patient:", error);
+            alert("Error: Unable to delete patient. Please try again later.");
+        }
     }
 
     async function displayPatients(searchTerm = '') {
