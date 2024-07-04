@@ -60,7 +60,7 @@ app.post("/api/mail/paymentConfirmation", authoriseJWT, validatePaymentConfirmat
 app.post("/api/chatbot/sendMessage", chatbotController.sendMessageToChatbot);
 
 // Routes for Admin-Managing Patient Accounts
-app.get("/api/patients/unapproved", accountsController.getAllUnapproved);
+app.get("/api/patients/unapproved", authoriseJWT, accountsController.getAllUnapproved);
 app.put("/api/staff/patient/:patientId", accountsController.adminUpdatePatientById);
 
 /// Route for Doctor Account
