@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const accountsController = require("./controllers/accountsController");
 const appointmentController = require("./controllers/appointmentController");
 const drugRequestController = require("./controllers/drugRequestController");
+const drugOrderController = require("./controllers/drugOrderController");
 const companyController = require("./controllers/companyController");
 const paymentMethodController = require("./controllers/paymentMethodController");
 const DrugInventoryController = require("./controllers/drugInventoryController");
@@ -84,6 +85,7 @@ app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName)
 app.post("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
 app.put("/api/drugRequest/drugContribution", drugRequestController.addRequestContribution);
+app.get("/api/drugContributionOrders/", drugOrderController.getAllDrugOrders);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);
