@@ -1,30 +1,31 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
     // Handle Logout Button Press
     document.getElementById('logout').addEventListener('click', () => {
         sessionStorage.removeItem('accountId');
         window.location.href = '../index.html';
     });
 
-    // Fetch Patient's AccountId
+    // Get Patient's AccountId from Session Storage
     const accountId = sessionStorage.getItem('accountId');
-    
-    // Fetch Data from Backend
-    const fetchPatientResponse = await fetch(`/api/patient/${accountId}`, {
-        method: 'GET'
-    });
-    if (fetchPatientResponse.status !== 200) {
-        alert("Error Retrieving Patient Information. Please try again.");
+    if (!accountId) window.location.href = '../login.html';
+
+    // Fetch Patient's Appointments
+    const fetchPatientAppointmentsResponse = await fetch(`/api/appointments/patient/${accountId}`);
+    if (fetchPatientAppointmentsResponse.status === 401 || fetchPatientAppointmentsResponse.status === 403) window.location.href = '../login.html';
+    else if (fetchPatientAppointmentsResponse.status !== 200) {
+        alert("Error Retrieving Patient Appointments. Please try again.");
         return;
     }
-    const patientJson = await fetchPatientResponse.json();
-    const patient = patientJson.patient;
+    const patientAppointmentsJson = await fetchPatientAppointmentsResponse.json();
+    const patientAppointments = patientAppointmentsJson.appointments;
+    
+    // Filter to get Unpaid Appointment
+    const unpaidAppointments = patientAppointments.filter(appointment => appointment.paymentStatus === 'Unpaid');
 
-    // Retrive Appointments from Database and Filter Unpaid Appointments
-    const appointmentIds = patient.appointmentIds;
-    let unpaidAppointments = [];
-    for (let i = 0; i < appointmentIds.length; i++) {
-        const fetchAppointmentResponse = await fetch(`/api/appointments/${appointmentIds[i]}`, {
+    // Get Details of Unpaid Appointments
+    let unpaidAppointmentsDetail = [];
+    for (let i = 0; i < unpaidAppointments.length; i++) {
+        const fetchAppointmentResponse = await fetch(`/api/appointments/${unpaidAppointments[i].id}`, {
             method: 'GET'
         });
         if (fetchAppointmentResponse.status !== 200) {
@@ -32,9 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
         const appointmentJson = await fetchAppointmentResponse.json();
-        if (appointmentJson.appointment.paymentStatus === 'Unpaid') {
-            unpaidAppointments.push(appointmentJson.appointment);
-        }
+        unpaidAppointmentsDetail.push(appointmentJson.appointment);
     }
 
     // Get Patient's Payment Methods
@@ -63,8 +62,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Display Unpaid Appointments on the Screen
     const paymentListContainer = document.getElementById('paymentlist-container');
-    for (let i = 0; i < unpaidAppointments.length; i++) {
-        const appointment = unpaidAppointments[i];
+    for (let i = 0; i < unpaidAppointmentsDetail.length; i++) {
+        const appointment = unpaidAppointmentsDetail[i];
         let totalAmount = appointment.consultationCost;
 
         paymentListContainer.innerHTML += `
@@ -97,8 +96,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Set the Text for ask help
         if (appointment.paymentRequest) {
             document.getElementById(`help-text-${i}`).innerText = `Help requested on ${appointment.paymentRequest.createdDate.split("T")[0]}. Status: ${appointment.paymentRequest.status}`;
-            document.getElementById(`help-btn-${i}`).disabled = true;
-            document.getElementById(`help-btn-${i}`).classList.add('cursor-not-allowed');
+            document.getElementById(`help-${i}`).disabled = true;
+            document.getElementById(`help-${i}`).classList.add('cursor-not-allowed');
         }
         
         // Add Medication and Cost to Screen

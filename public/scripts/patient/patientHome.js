@@ -27,6 +27,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         method: 'GET'
     });
 
+    if (fetchAppointment.status === 401 || fetchAppointment.status === 403) {
+        window.location.href = '../login.html';
+    }
+
     const appointmentsJson = await fetchAppointment.json();
     const appointments = appointmentsJson.appointments;
 

@@ -1,17 +1,11 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
-    // Handle Logout Button Press
-    document.getElementById('logout').addEventListener('click', () => {
-        sessionStorage.removeItem('accountId');
-        window.location.href = '../index.html';
-    });
-
     // Fetch Patient Information
     const accountId = sessionStorage.getItem('accountId');
-    if (accountId === undefined) console.error("Account ID not found in Session Storage."); 
+    if (!accountId) window.location.href = '../login.html';
     const getPatientProfile = await fetch(`/api/patient/${accountId}`, {
         method: 'GET'
     });
+    if (getPatientProfile.status === 401 || getPatientProfile.status === 403) window.location.href = '../login.html';
     const patientJson = await getPatientProfile.json();
     const patient = patientJson.patient;
 

@@ -1,4 +1,19 @@
 document.addEventListener("DOMContentLoaded", async () => {
+    // Verify User Logged In
+    const accountId = sessionStorage.getItem("accountId");
+    if (!accountId) window.location.href = "./login.html";
+    //. Try to get Patient Profile to verify JWT validity
+    const getPatientProfileRequest = await fetch(`/api/patient/${accountId}`);
+    if (getPatientProfileRequest.status === 401 || getPatientProfileRequest.status === 403) {
+        window.location.href = "../login.html";
+    }
+
+    // Handle Logout Button Press
+    document.getElementById('logout').addEventListener('click', () => {
+        sessionStorage.removeItem('accountId');
+        window.location.href = '../index.html';
+    });
+
     // Hide the Disclaimer once button press
     document.getElementById("agree-tnc").addEventListener("click", () => {
         document.getElementById("disclaimerMessage").classList.add("hidden");

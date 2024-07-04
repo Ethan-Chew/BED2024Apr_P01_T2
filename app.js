@@ -46,10 +46,10 @@ app.put("/api/patient/:patientId", authoriseJWT, validatePatient, accountsContro
 app.delete("/api/patient/:patientId", authoriseJWT, accountsController.deletePatientById);
 
 // Routes for Patient's Payment Methods
-app.get("/api/patient/:patientId/paymentMethods", paymentMethodController.getPaymentMethodsByPatientId);
-app.post("/api/patient/:patientId/paymentMethods", validatePaymentMethod, paymentMethodController.createPaymentMethod);
-app.delete("/api/patient/:patientId/paymentMethods/:methodId", paymentMethodController.deletePaymentMethod);
-app.put("/api/patient/:patientId/paymentMethods/:methodId", validatePaymentMethod, paymentMethodController.updatePaymentMethod);
+app.get("/api/patient/:patientId/paymentMethods", authoriseJWT, paymentMethodController.getPaymentMethodsByPatientId);
+app.post("/api/patient/:patientId/paymentMethods", authoriseJWT, validatePaymentMethod, paymentMethodController.createPaymentMethod);
+app.delete("/api/patient/:patientId/paymentMethods/:methodId", authoriseJWT, paymentMethodController.deletePaymentMethod);
+app.put("/api/patient/:patientId/paymentMethods/:methodId", authoriseJWT, validatePaymentMethod, paymentMethodController.updatePaymentMethod);
 
 // Route for Managing Patient Payments
 app.post("/api/patient/makePayment", authoriseJWT, paymentController.patientMakePayment);
@@ -76,9 +76,9 @@ app.delete("/api/doctors/:doctorId", accountsController.deleteDoctorById);
 app.get("/api/questionnaire/:accountId", accountsController.getQuestionnaireWithAccountId);
 
 /// Route for Appointments
-app.get("/api/appointments/patient/:patientId", appointmentController.getAllPatientAppointment);
+app.get("/api/appointments/patient/:patientId", authoriseJWT, appointmentController.getAllPatientAppointment);
 app.get("/api/appointments/doctor/:doctorId", appointmentController.getAppointmentDetailsByDoctorId);
-app.get("/api/appointments/:appointmentId", appointmentController.getAppointmentDetailById);
+app.get("/api/appointments/:appointmentId", authoriseJWT, appointmentController.getAppointmentDetailById);
 app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppointmentById);
 
 /// Route for Company Account

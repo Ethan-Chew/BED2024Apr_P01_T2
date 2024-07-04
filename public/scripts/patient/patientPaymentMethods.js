@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Get User Payment Methods
     const paymentMethodsRequest = await fetch(`/api/patient/${accountId}/paymentMethods`);
+    if (paymentMethodsRequest.status === 401 || paymentMethodsRequest.status === 403) window.location.href = '../login.html';
     const paymentMethodsJson = await paymentMethodsRequest.json();
     const paymentMethods = paymentMethodsJson.paymentMethods;
 

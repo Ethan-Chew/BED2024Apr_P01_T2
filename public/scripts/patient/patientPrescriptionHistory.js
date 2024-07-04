@@ -1,15 +1,13 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Check if the user has logged in
-    const accountId = sessionStorage.getItem('accountId');
-    if (!accountId) {
-        window.location.href = '../index.html';
-        return;
-    }
-
+    // Verify User Logged In
+    const accountId = sessionStorage.getItem("accountId");
+    if (!accountId) window.location.href = "./login.html";
+    
     // Get all Appointments with the Patient's Account Id
     const fetchAppointmentsResponse = await fetch(`/api/appointments/patient/${accountId}`, {
         method: 'GET'
     });
+    if (fetchAppointmentsResponse.status === 401 || fetchAppointmentsResponse.status === 403) window.location.href = '../login.html';
     const appointmentsJson = await fetchAppointmentsResponse.json();
     const appointments = appointmentsJson.appointments;
 
