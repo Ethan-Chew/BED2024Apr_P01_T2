@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const accountsController = require("./controllers/accountsController");
 const appointmentController = require("./controllers/appointmentController");
 const drugRequestController = require("./controllers/drugRequestController");
+const drugOrderController = require("./controllers/drugOrderController");
 const companyController = require("./controllers/companyController");
 const paymentMethodController = require("./controllers/paymentMethodController");
 const DrugInventoryController = require("./controllers/drugInventoryController");
@@ -62,7 +63,7 @@ app.get("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.getCh
 app.post("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.saveChatbotHistory);
 
 // Routes for Admin-Managing Patient Accounts
-app.get("/api/patients/unapproved", accountsController.getAllUnapproved);
+app.get("/api/patients/unapproved", authoriseJWT, accountsController.getAllUnapproved);
 app.put("/api/staff/patient/:patientId", accountsController.adminUpdatePatientById);
 
 /// Route for Doctor Account
@@ -86,6 +87,7 @@ app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName)
 app.post("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
 app.put("/api/drugRequest/drugContribution", drugRequestController.addRequestContribution);
+app.get("/api/drugContributionOrders/", drugOrderController.getAllDrugOrders);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);

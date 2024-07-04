@@ -374,6 +374,37 @@ No URL Parameters required.
 
 </details>
 
+## Company
+
+<details>
+<summary><code>GET</code> <code><b>/api/drugRequest</b></code></summary>
+
+**Parameters**
+No URL Parameters required.
+
+**Request Body**  
+No Request Body is required for the GET request
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `200` | `See Below` |
+| `500` | `{ "error": "Internal server error" }` |
+
+**Sample Response Body**
+```json
+[
+    {
+        "appointmentId": "APP0001",
+        "drugName": "Aspirin",
+        "drugQuantity": 10,
+        "drugPrice": 2.00,
+        "requestDate": "2024-06-01"
+    },
+]
+```
+
+</details>
 
 ---
 _This API Documentation Template was adopted from [azagniotov's REST API Docs in Markdown](https://gist.github.com/azagniotov/a4b16faf0febd12efbc6c3d7370383a6)._

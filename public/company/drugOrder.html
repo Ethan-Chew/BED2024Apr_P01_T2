@@ -13,7 +13,7 @@
             <a class="text-2xl font-bold">CareLinc</a>
             <nav class="ml-auto flex flex-row gap-5 items-center">
                 <a class="text-xl" href="./credits.html">Credits</a>
-                <button class="text-xl bg-btnprimary px-4 py-2">
+                <button class="text-xl bg-btnprimary px-4 py-2" id="logout">
                     Logout
                 </button>
             </nav>
@@ -41,59 +41,8 @@
                 </div>
             </div>
 
-            <!--Requests List-->
-            <div class="w-3/4 bg-gray-200 px-6 py-4 text-2xl rounded-3xl flex flex-row gap-5 align-center items-center justify-between">
-                <!--Information-->
-                <div class="flex flex-row px-6 py-4 gap-8">
-                    <div class="flex flex-col gap-y-4">
-                        <!--Medicine Name-->
-                        <div>
-                            <p class="font-bold">Medicine Name</p>
-                            <p class="text-xl" id="">Panadol</p>
-                        </div>
-                        <!--Quantity Requested-->
-                        <div>
-                            <p class="font-bold">Quantity</p>
-                            <p class="text-xl" id="">500</p>
-                        </div>
-                        <!--Total Cost of Medicine-->
-                        <div>
-                            <p class="font-bold">Total Cost</p>
-                            <p class="text-xl" id="">$5000</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col gap-y-4">
-                        <div class="flex flex-row gap-12">
-                            <!--Order ID-->
-                            <div>
-                                <p class="font-bold">Order ID</p>
-                                <p class="text-xl" id="">1</p>
-                            </div>
-                            <!--Status-->
-                            <div>
-                                <p class="font-bold">Status</p>
-                                <p class="text-xl" id="">Checking</p>
-                            </div>
-                        </div>
-                        <!--Date of Order-->
-                        <div>
-                            <p class="font-bold">Date of Order</p>
-                            <p class="text-xl" id="">21 May 2024</p>
-                        </div>
-                        <!--Date of Confirmation-->
-                        <div>
-                            <p class="font-bold">Date of Confirmation</p>
-                            <p class="text-xl" id="">Pending</p>
-                        </div>
-                        
-                    </div>
-                </div>
-                <!--Button-->
-                <div class="flex flex-col gap-4">
-                    <a class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center" href="" id="">Confirm request</a>
-                    <a class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center" href="" id="">Cancel</a>
-                </div>
+            <div class="w-3/4 flex flex-col align-center items-center justify-center gap-4" id="contribution-list">
+                <!--Requests Info-->
             </div>
         </div>
 
@@ -105,4 +54,5 @@
         feather.replace();
     </script>
     <script src="../scripts/tailwind.config.js"></script>
+    <script src="../scripts/company/drugOrder.js"></script>
 </html>
