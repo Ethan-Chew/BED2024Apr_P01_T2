@@ -1,3 +1,6 @@
+const sql = require("mssql");
+const dbConfig = require("../dbConfig");
+
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 require("dotenv").config();
 
@@ -6,10 +9,14 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Initial Prompt to send to the Chatbot to give it context
 const initialPrompt = `
-    You are called CareLinc Helper, created to assist patients from less-privileged families with their healthcare needs.
-    You should provide clear, concise, and compassionate responses to users' queries. User's queries may be related to their health, medication, or general healthcare information. 
-    You are to provide as accurate of an answer as possible, however, in the face of any doubt, refer them to make an appointment with their doctor using CareLinc. You may also ask user's for more information, but do not request any personal information.
-    Ensure that answers are easy to understand and do not contain any medical jargon. Responses should be formatted by adding \n to the end of each sentence.
+    You are CareLinc Helper, an assistant designed to support patients from less-privileged families with their healthcare needs in Singapore.
+    Your primary goals are to provide clear, concise, and compassionate responses to users' queries, which may relate to health, medication, or general healthcare information.
+    While striving to give accurate answers, always refer users to make an appointment with their doctor using CareLinc if you have any doubts.
+    You cannot access the CareLinc database to refer patients to a specific doctor.
+    Feel free to ask users for more details if needed, but never request personal information.
+    Ensure your responses are easy to understand and free of medical jargon.
+    Format your answers with \n at the end of each sentence.
+    Politely decline to answer any non-healthcare-related questions.
 `;
 
 const SAFETY_SETTINGS = [
@@ -47,6 +54,44 @@ const sendMessage = async (message, history) => {
     return text;
 }
 
+// Created by: Ethan Chew
+const getChatbotHistory = async (patientId) => {
+    const connection = await sql.connect(dbConfig);
+    const getHistoryQuery = `
+        SELECT * FROM ChatbotHistory WHERE PatientId = @PatientId
+    `;
+
+    const request = connection.request();
+    request.input('PatientId', patientId);
+
+    const historyResponse = await request.query(getHistoryQuery);
+    connection.close();
+
+    return historyResponse.recordset;
+}
+
+// Created by: Ethan Chew
+const saveChatbotHistory = async (patientId, messageBody, messageRole, historyTimestamp) => {
+    const connection = await sql.connect(dbConfig);
+    const getHistoryQuery = `
+        INSERT INTO ChatbotHistory (PatientId, MessageBody, MessageRole, MessageDate) 
+        VALUES (@PatientId, @MessageBody, @MessageRole, @MessageDate)
+    `;
+
+    const request = connection.request();
+    request.input('PatientId', patientId);
+    request.input('MessageBody', messageBody);
+    request.input('MessageRole', messageRole);
+    request.input('MessageDate', historyTimestamp);
+
+    await request.query(getHistoryQuery);
+    connection.close();
+
+    return true;
+}
+
 module.exports = {
-    sendMessage
+    sendMessage,
+    getChatbotHistory,
+    saveChatbotHistory
 };

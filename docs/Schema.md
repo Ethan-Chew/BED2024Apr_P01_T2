@@ -96,6 +96,16 @@ This file outlines the Schema for all Classes used in the CareLinc Database. It 
 - **Reason**: `VARCHAR(255)`, NOT NULL
 - **DrugRequest**: `VARCHAR(10)`, NULL, CHECK (DrugRequest IN ('Cancelled', 'Pending', 'Completed'))
 
+## DrugRequestContribution
+- **AppointmentId**: `VARCHAR(7)`, NOT NULL, PRIMARY KEY
+- **DrugName**: `VARCHAR(255)`, NOT NULL, PRIMARY KEY
+- **Quantity**: `INT`, NOT NULL
+- **TotalCost**: `MONEY`, NOT NULL
+- **ContributeDate**: `DATE`, NOT NULL
+- **ConfirmationDate**: `DATE`, NULL
+- **ContributionStatus**: `VARCHAR(10)`, NOT NULL CHECK (ContributionStatus IN ('Pending', 'Completed')),
+- **CompanyId**: `VARCHAR(7)`, NOT NULL
+
 ## DrugTopupRequest
 - **TopupId**: `VARCHAR(7)`, NOT NULL, PRIMARY KEY
 - **DrugName**: `VARCHAR(255)`, NOT NULL
