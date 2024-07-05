@@ -7,13 +7,18 @@ const sendMessageToChatbot = async (req, res) => {
 
         const response = await Chatbot.sendMessage(message, history ? history : []);
 
-        res.status(200).json({ 
+        res.status(200).json({
+            status: "Success",
             message: "Successfully sent message to chatbot",
             response: response
          });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Internal Server Error" })
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 
@@ -23,7 +28,10 @@ const getChatbotHistory = async (req, res) => {
         const { patientId } = req.params;
 
         if (req.user.id !== patientId) {
-            res.status(403).json({ error: "Unauthorized" });
+            res.status(403).json({ 
+                error: "Unauthorised",
+                message: "You are not allowed to view the chatbot history for this patient."
+             });
             return;
         }
 
@@ -46,7 +54,11 @@ const getChatbotHistory = async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 
@@ -57,17 +69,27 @@ const saveChatbotHistory = async (req, res) => {
         const { history, historyTimestamps } = req.body;
 
         if (req.user.id !== patientId) {
-            res.status(403).json({ error: "Unauthorized" });
+            res.status(403).json({ 
+                error: "Unauthorised",
+                message: "You are not allowed to save chatbot history for this patient."
+             });
             return;
         }
         for (let i = 0; i < history.length; i++) {
             await Chatbot.saveChatbotHistory(patientId, history[i].parts[0].text, history[i].role, historyTimestamps[i]);
         }
 
-        res.status(200).json({ message: "Successfully saved chatbot history" });
+        res.status(200).json({ 
+            status: "Success",
+            message: "Successfully saved chatbot history"
+         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 
@@ -78,7 +100,10 @@ const updateChatbotHistory = async (req, res) => {
         const { history, historyTimestamps } = req.body;
 
         if (req.user.id !== patientId) {
-            res.status(403).json({ error: "Unauthorized" });
+            res.status(403).json({ 
+                error: "Unauthorised",
+                
+             });
             return;
         }
 
@@ -89,7 +114,11 @@ const updateChatbotHistory = async (req, res) => {
         res.status(200).json({ message: "Successfully saved chatbot history" });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 

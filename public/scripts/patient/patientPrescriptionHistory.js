@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Display Appointment Details on the Screen
-    appointmentDetails.filter((appointment) => appointment.doctorNote !== null).forEach((appointment) => {
+    appointmentDetails.filter((appointment) => appointment.paymentStatus !== null).forEach((appointment) => {
         document.getElementById('history-container').innerHTML += `
             <div class="bg-gray-200 p-6 mb-3 rounded-lg">
                 <h3 class="text-2xl font-bold">${appointment.reason}</h3>

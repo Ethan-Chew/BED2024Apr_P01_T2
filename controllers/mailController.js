@@ -17,11 +17,13 @@ const sendPaymentConfirmation = async (req, res) => {
             
             if (sendRequest) {
                 res.status(201).json({
+                    status: "Success",
                     message: "Payment Confirmation Email Sent"
                 });
             }
         } else {
             res.status(201).json({
+                status: "Success",
                 message: "Payment Confirmation Email Sent",
                 info: "Email Sending Disabled in Development"
             });
@@ -30,7 +32,9 @@ const sendPaymentConfirmation = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({
-            message: "Internal Server Error"
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
         });
     }
 }

@@ -15,17 +15,25 @@ const patientMakePayment = async (req, res) => {
         const appointment = await Appointment.getAppointmentDetail(appointmentId);
 
         if (appointment.patientId !== patientId) {
-            return res.status(403).json({ message: "You are not allowed to make payment for this Appointment." });
+            return res.status(403).json({ 
+                status: "Unauthorised",
+                message: "You are not allowed to make payment for this Appointment." 
+            });
         }
 
         // Update the Payment Status to Paid
         await Payment.updatePaymentStatus(appointmentId);
 
-        res.status(200).json({ message: "Payment Successful" });
+        res.status(200).json({ 
+            status: "Success",
+            message: "Payment Successful"
+         });
     } catch (err) {
         console.error(err);
         res.status(500).json({
-            message: "Internal Server Error"
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
         });
     }
 }

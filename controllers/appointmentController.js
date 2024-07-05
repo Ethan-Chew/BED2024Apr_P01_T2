@@ -102,6 +102,10 @@ const createAppointmentById = async (req, res) => {
     }
 }
 
+const updateAppointmentById = async (req, res) => {
+    
+}
+
 const getAppointmentDetailsByDoctorId = async (req, res) => {
     const { doctorId } = req.params;
 

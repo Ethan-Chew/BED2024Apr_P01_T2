@@ -16,7 +16,8 @@ const authLoginAccount = async (req, res) => {
     
         if (!email || !password) {
             return res.status(400).json({
-                message: "Email and Password are required."
+                status: 'Error'
+,               message: "Email and Password are required in the request body.",
             });
         }
         
@@ -24,6 +25,7 @@ const authLoginAccount = async (req, res) => {
 
         if (!account) {
             return res.status(404).json({
+                status: 'Not Found',
                 message: `Account with email ${email} not found.`
             });
         }
@@ -32,7 +34,8 @@ const authLoginAccount = async (req, res) => {
         const checkPasswordMatch = await bcrypt.compare(password, account.AccountPassword);
         if (checkPasswordMatch) {
             return res.status(403).json({
-                message: "Incorrect Password"
+                status: 'Error',
+                message: "Incorrect Password",
             });
         }
 
@@ -69,6 +72,7 @@ const authLoginAccount = async (req, res) => {
         });
 
         res.status(200).json({
+            status: "Success",
             message: "Login Successful",
             accountId: account.AccountId,
             role: role
@@ -76,7 +80,9 @@ const authLoginAccount = async (req, res) => {
     } catch(err) {
         console.error(err);
         res.status(500).json({
-            message: "Internal Server Error"
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
         });
     }
 };
@@ -91,12 +97,17 @@ const authCreatePatient = async (req, res) => {
         await Questionnaire.createQuestionnaire(patientAccount.id, qns);
 
         res.status(201).json({
+            status: "Success",
             message: "Account Created Successfully",
             account: patientAccount
         });
     } catch(err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 
@@ -106,25 +117,42 @@ const getPatientById = async (req, res) => {
         const patientId = req.params.patientId;
 
         if (!patientId) {
-            return res.status(400).send({ message: 'Patient ID is required' });
+            return res.status(400).send({
+                status: 'Error',
+                message: 'Patient ID is required'
+            });
+        }
+
+        // Ensure that AccountId in JWT matches PatientId
+        if (req.user.id !== patientId) {
+            return res.status(403).send({ 
+                status: 'Unauthorised',
+                message: 'User is not authorised to view this account\'s details'
+            });
         }
 
         const patient = await Patient.getPatientById(patientId);
 
         if (!patient) {
             res.status(404).json({
+                status: 'Not Found',
                 message: `Patient with ID ${patientId} not found.`
             });
             return;
         }
 
         res.status(200).json({
+            status: "Success",
             message: "Patient with ID Found",
             patient: patient
         });
     } catch(err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 //HERVIN
@@ -205,7 +233,18 @@ const deletePatientById = async (req, res) => {
         const { patientId } = req.params;
 
         if (!patientId) {
-            return res.status(400).send({ message: 'Patient ID is required' });
+            return res.status(400).send({ 
+                status: 'Error',
+                message: 'Patient ID is required'
+            });
+        }
+
+        // Ensure that AccountId in JWT matches PatientId
+        if (req.user.id !== patientId) {
+            return res.status(403).send({ 
+                status: 'Unauthorised',
+                message: "User is not authorised to delete this account"
+            });
         }
         
         await PaymentMethod.deleteAllPaymentMethod(patientId); // Delete all attached payment methods if exists
@@ -215,16 +254,22 @@ const deletePatientById = async (req, res) => {
 
         if (deleteQuestionnaireRequest && deletePatientRequest && deleteAccountRequest) {
             res.status(200).json({
+                status: "Success",
                 message: "Patient Account Deleted Successfully"
             });
         } else {
             res.status(500).json({
+                status: "Error",
                 message: "Failed to Delete Patient Account"
             });
         }
     } catch(err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 
@@ -234,7 +279,18 @@ const updatePatientById = async (req, res) => {
         const { patientId } = req.params;
 
         if (!patientId) {
-            return res.status(400).send({ message: 'Patient ID is required' });
+            return res.status(400).send({ 
+                status: 'Error',
+                message: 'Patient ID is required'
+            });
+        }
+
+        // Ensure that AccountId in JWT matches PatientId
+        if (req.user.id !== patientId) {
+            return res.status(403).send({ 
+                status: 'Unauthorised',
+                message: 'User is not authorised to update this account\'s details'
+            });
         }
 
         const { name, email, knownAllergies, birthdate, password } = req.body;
@@ -264,7 +320,11 @@ const updatePatientById = async (req, res) => {
         }
     } catch(err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 
