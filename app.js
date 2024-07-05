@@ -58,7 +58,7 @@ app.post("/api/patient/makePayment", authoriseJWT, paymentController.patientMake
 app.post("/api/mail/paymentConfirmation", authoriseJWT, validatePaymentConfirmationEmail, mailController.sendPaymentConfirmation);
 
 // Route for CareLinc Chatbot
-app.post("/api/chatbot/sendMessage", chatbotController.sendMessageToChatbot);
+app.post("/api/chatbot/sendMessage", authoriseJWT,chatbotController.sendMessageToChatbot);
 app.get("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.getChatbotHistory);
 app.post("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.saveChatbotHistory);
 

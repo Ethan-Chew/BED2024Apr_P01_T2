@@ -29,7 +29,7 @@ const getChatbotHistory = async (req, res) => {
 
         if (req.user.id !== patientId) {
             res.status(403).json({ 
-                error: "Unauthorised",
+                error: "Forbidden",
                 message: "You are not allowed to view the chatbot history for this patient."
              });
             return;
@@ -70,7 +70,7 @@ const saveChatbotHistory = async (req, res) => {
 
         if (req.user.id !== patientId) {
             res.status(403).json({ 
-                error: "Unauthorised",
+                error: "Forbidden",
                 message: "You are not allowed to save chatbot history for this patient."
              });
             return;
@@ -101,7 +101,7 @@ const updateChatbotHistory = async (req, res) => {
 
         if (req.user.id !== patientId) {
             res.status(403).json({ 
-                error: "Unauthorised",
+                error: "Forbidden",
                 
              });
             return;

@@ -21,7 +21,7 @@ class Patient extends Account {
         const request = connection.request();
 
         // Set Request Inputs
-        request.input('PatientId', newAccountId);
+        request.input('PatientId', id);
         request.input('KnownAllergies', knownAllergies);
         request.input('PatientBirthdate', birthdate);
         request.input('PatientIsApproved', "Pending");

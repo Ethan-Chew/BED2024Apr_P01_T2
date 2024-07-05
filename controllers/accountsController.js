@@ -47,6 +47,7 @@ const authLoginAccount = async (req, res) => {
                 role = "patient";
             } else {
                 return res.status(403).json({
+                    status: "Forbidden",
                     message: "Unauthorised",
                     approvalStatus: account.isApproved
                 })
@@ -126,7 +127,7 @@ const getPatientById = async (req, res) => {
         // Ensure that AccountId in JWT matches PatientId
         if (req.user.id !== patientId) {
             return res.status(403).send({ 
-                status: 'Unauthorised',
+                status: 'Forbidden',
                 message: 'User is not authorised to view this account\'s details'
             });
         }
@@ -242,8 +243,7 @@ const deletePatientById = async (req, res) => {
         // Ensure that AccountId in JWT matches PatientId
         if (req.user.id !== patientId) {
             return res.status(403).send({ 
-                status: 'Unauthorised',
-                message: "User is not authorised to delete this account"
+                status: 'Forbidden',                message: "User is not authorised to delete this account"
             });
         }
         
@@ -288,8 +288,7 @@ const updatePatientById = async (req, res) => {
         // Ensure that AccountId in JWT matches PatientId
         if (req.user.id !== patientId) {
             return res.status(403).send({ 
-                status: 'Unauthorised',
-                message: 'User is not authorised to update this account\'s details'
+                status: 'Forbidden',                message: 'User is not authorised to update this account\'s details'
             });
         }
 

@@ -15,7 +15,7 @@ const getPaymentMethodsByPatientId = async (req, res) => {
 
         if (req.user.id !== patientId) {
             res.status(403).json({
-                status: "Unauthorised",
+                status: "Forbidden",
                 message: "You are not allowed to view the Payment Methods for this Patient."
             });
             return;
@@ -52,7 +52,7 @@ const createPaymentMethod = async (req, res) => {
 
         if (req.user.id !== patientId) {
             res.status(403).json({
-                status: "Unauthorised",
+                status: "Forbidden",
                 message: "You are not allowed to create a Payment Method for this Patient."
             });
             return;
@@ -100,7 +100,7 @@ const updatePaymentMethod = async (req, res) => {
 
         if (req.user.id !== patientId) {
             res.status(403).json({
-                status: "Unauthorised",
+                status: "Forbidden",
                 message: "You are not allowed to update a Payment Method for this Patient."
             });
             return;
@@ -149,7 +149,7 @@ const deletePaymentMethod = async (req, res) => {
 
         if (req.user.id !== patientId) {
             res.status(403).json({
-                status: "Unauthorised",
+                status: "Forbidden",
                 message: "You are not allowed to delete a Payment Method for this Patient."
             });
             return;

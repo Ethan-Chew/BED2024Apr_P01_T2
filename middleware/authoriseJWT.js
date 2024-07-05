@@ -6,7 +6,10 @@ const authoriseJWT = (req, res, next) => {
     const token = req.cookies.jwt;
 
     if (!token) {
-        return res.status(401).json({ message: "Unauthorised" });
+        return res.status(401).json({ 
+            error: "Unauthorised",
+            message: "Invalid or no JWT"
+         });
     }
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {

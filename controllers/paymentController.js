@@ -16,7 +16,7 @@ const patientMakePayment = async (req, res) => {
 
         if (appointment.patientId !== patientId) {
             return res.status(403).json({ 
-                status: "Unauthorised",
+                status: "Forbidden",
                 message: "You are not allowed to make payment for this Appointment." 
             });
         }

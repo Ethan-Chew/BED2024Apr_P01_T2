@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
     // Verify User Logged In
     const accountId = sessionStorage.getItem("accountId");
-    if (!accountId) window.location.href = "./login.html";
+    if (!accountId) window.location.href = "../login.html";
     //. Try to get Patient Profile to verify JWT validity
     const getPatientProfileRequest = await fetch(`/api/patient/${accountId}`);
     if (getPatientProfileRequest.status === 401 || getPatientProfileRequest.status === 403) {

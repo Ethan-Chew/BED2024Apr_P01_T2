@@ -6,9 +6,10 @@ const authorisedRoles = {
     "/api/patient/makePayment": ["patient"],
     "/api/mail/paymentConfirmation": ["patient"],
     "/api/patients/unapproved": ["admin"],
-    "/api/chatbot/history/:patientId": ["patient"],
     "/api/patient/:patientId/paymentMethods": ["patient"],
     "/api/patient/:patientId/paymentMethods/:methodId": ["patient"],
+    "/api/chatbot/sendMessage": ["patient"],
+    "/api/chatbot/history/:patientId": ["patient"],
 };
 
 module.exports = authorisedRoles;
