@@ -58,7 +58,7 @@ app.post("/api/patient/makePayment", authoriseJWT, paymentController.patientMake
 app.post("/api/mail/paymentConfirmation", authoriseJWT, validatePaymentConfirmationEmail, mailController.sendPaymentConfirmation);
 
 // Route for CareLinc Chatbot
-app.post("/api/chatbot/sendMessage", authoriseJWT,chatbotController.sendMessageToChatbot);
+app.post("/api/chatbot/sendMessage", authoriseJWT, chatbotController.sendMessageToChatbot);
 app.get("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.getChatbotHistory);
 app.post("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.saveChatbotHistory);
 app.delete("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.deleteChatbotHistory);
@@ -101,6 +101,7 @@ app.put("/api/helpRequests/reject/:requestId", helpRequestsController.rejectRequ
 
 // Route for Available Slot
 app.get("/api/availableSlots/:date", availableSlotController.getAllAvailableSlotsTimesByDate)
+app.post("/api/availableSlot", availableSlotController.getAvailableSlotByDateAndTime)
 app.put("/api/availableSlot/doctor/:slotId", availableSlotController.updateAvailableSlotById);
 
 // Initialise Server

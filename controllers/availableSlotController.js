@@ -66,7 +66,35 @@ const getAllAvailableSlotsTimesByDate = async (req, res) => {
     }
 }
 
+const getAvailableSlotByDateAndTime = async (req, res) => {
+    try {
+        const { date, time } = req.body;
+
+        if (!date || !time) {
+            return res.status(400).send({ message: 'Date and Time are required' });
+        }
+
+        const avSlot = await availableSlot.getAvailableSlotByDateAndTime({ date: date, time: time })
+
+        if (avSlot) {
+            res.status(200).json({
+                message: "Available Slot returned Successfully",
+                availableSlot: avSlot
+            });
+        } else {
+            res.status(404).json({
+                message: "Failed to get Available Slot, Available Slot does not exist"
+            });
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
     updateAvailableSlotById,
-    getAllAvailableSlotsTimesByDate
+    getAllAvailableSlotsTimesByDate,
+    getAvailableSlotByDateAndTime
 }

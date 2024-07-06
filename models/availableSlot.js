@@ -149,7 +149,7 @@ class AvailableSlot {
         WHERE a.SlotId IS NULL AND avs.SlotDate = @Date`;
         const request = connection.request();
         request.input('Date', date);
-    
+
         const result = await request.query(query);
         connection.close();
 
@@ -160,13 +160,7 @@ class AvailableSlot {
 
     // Emmanuel
     // configurable WHERE select for AvailableSlot
-    static async getAvailableSlotsByConditions(conditionFields) {
-        const allowedFields = {
-            'slotId': 'SlotId',
-            'doctor': 'DoctorId',
-            'date': 'SlotDate',
-            'timeId': 'SlotTimeId',
-        };
+    static async getAvailableSlotByDateAndTime(conditionFields) {
 
         if (conditionFields.length === 0) {
             throw new Error("No Fields to get slots");
@@ -176,20 +170,20 @@ class AvailableSlot {
         const request = connection.request()
 
         // Populate Query with conditionFields
-        let query = `SELECT * FROM AvailableSlot WHERE `;
-        for (const field in conditionFields) {
-            if (Object.keys(allowedFields).includes(field) && conditionFields[field] !== null) {
-                query += `${allowedFields[field]} = @${field}, `;
-                request.input(field, conditionFields[field]);
-            }
-        }
-        query = query.slice(0, -2); // Remove last ', '
+        let query = `
+        SELECT TOP 1 aslot.* 
+        FROM AvailableSlot aslot
+        LEFT JOIN SlotTime st ON aslot.SlotTimeId = st.SlotTimeId
+        WHERE aslot.SlotDate = @SlotDate AND st.SlotTime = @Time`;
+
+        request.input('SlotDate', conditionFields.date);
+        request.input('Time', conditionFields.time);
 
         // Send Request
         const result = await request.query(query);
         connection.close();
 
-        return result.recordset.length > 0;
+        return result.recordset;
     }
 }
 
