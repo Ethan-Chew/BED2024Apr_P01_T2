@@ -32,7 +32,7 @@ class DrugOrder{
 
         const request = connection.request();
         const result = await request.query(query);
-        console.log('SQL query result:', result); // Debug log
+        //console.log('SQL query result:', result); // Debug log
         connection.close();
 
         if (result.recordset.length == 0) return null;
@@ -49,6 +49,27 @@ class DrugOrder{
             )
         );
     }
+
+    static async deleteDrugOrder(appointmentId, drugName){
+        try{
+            const connection = await sql.connect(dbConfig);
+
+            const query = `
+                DELETE FROM DrugRequestContribution
+                WHERE AppointmentId = @appointmentId AND DrugName = @drugName
+            `
+            const request = connection.request();
+            request.input('appointmentId', sql.VarChar, appointmentId);
+            request.input('drugName', sql.VarChar, drugName);
+            await request.query(query);
+
+            connection.close();
+        } catch (error) {
+            console.error('Error Deleting drug order: ', error);
+            throw error;
+        }
+    }
+
 }
 
 module.exports = DrugOrder;

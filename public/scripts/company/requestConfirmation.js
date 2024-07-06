@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async() => {
             method: 'GET'
         });
         const drugOrder = await response.json();
-        console.log("Drug Order: ", drugOrder);
+        //console.log("Drug Order: ", drugOrder);
 
         if (response.ok && drugOrder) {
             populateDrugOrderInfo(drugOrder);
@@ -86,7 +86,6 @@ document.addEventListener("DOMContentLoaded", async() => {
             try {
                 const totalCost = parseFloat(document.getElementById('price').innerText.replace('$', ''));
 
-
                 // Execute both requests in parallel
                 const [postResponse, putResponse] = await Promise.all([
                     fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
@@ -112,6 +111,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                         })
                     })
                 ]);
+                
     
                 if (postResponse.ok && putResponse.ok) {
                     // Redirect to the company home page
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
 function populateDrugOrderInfo(order) {
     // Log properties to debug
-    console.log("Order Properties:", order);
+    //console.log("Order Properties:", order);
 
     document.getElementById("inventory-quantity").innerHTML = order.drugAvailabilityQuantity;
     document.getElementById("price").innerHTML = '$' + (order.drugPrice * order.drugQuantity).toFixed(2);

@@ -35,7 +35,7 @@ class DrugRequest {
 
         const request = connection.request();
         const result = await request.query(query);
-        console.log('SQL query result:', result); // Debug log
+        //console.log('SQL query result:', result); // Debug log
         connection.close();
 
         if (result.recordset.length == 0) return null;
@@ -77,7 +77,7 @@ class DrugRequest {
         request.input('appointmentId', sql.VarChar, appointmentId);
         request.input('drugName', sql.VarChar, drugName);
         const result = await request.query(query);
-        console.log('SQL query result:', result); // Debug log
+        //console.log('SQL query result:', result); // Debug log
         connection.close();
 
         if (result.recordset.length === 0) return null; // Handle case when no result is found
@@ -232,6 +232,29 @@ class DrugRequest {
             if (connection) {
                 connection.close();
             }
+        }
+    }
+
+    static async cancelDrugOrder(appointmentId, drugName){
+        const connection = await sql.connect(dbConfig);
+        const query = `
+            UPDATE PrescribedMedication
+            SET DrugRequest = 'Pending'
+            WHERE AppointmentId = @appointmentId AND DrugName = @drugName
+        `;
+
+        const request = new sql.Request(connection);
+        request.input('appointmentId', sql.VarChar, appointmentId);
+        request.input('drugName', sql.VarChar, drugName);
+
+        try {
+            await request.query(query);
+            console.log('Drug request status updated to "Cancelled" successfully.');
+        } catch (queryError) {
+            console.error('Error updating drug request status:', queryError);
+            throw new Error(`Failed to update drug request status. Error: ${queryError.message}`);
+        } finally {
+            connection.close();
         }
     }
 

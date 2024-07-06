@@ -89,10 +89,12 @@ app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppoi
 app.post("/api/auth/create/company", accountsController.authCreateCompany);
 app.get("/api/company/:companyId", companyController.getCompanyById);
 app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
-app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName)
+app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName);
+app.post("/api/drugRequest/:id/:drugName", drugRequestController.cancelDrugOrder);
 app.post("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
 app.put("/api/drugRequest/drugContribution", drugRequestController.addRequestContribution);
 app.get("/api/drugContributionOrders/", drugOrderController.getAllDrugOrders);
+app.delete("/api/drugContributionOrders/:appointmentId/:drugName", drugOrderController.deleteDrugOrder);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);

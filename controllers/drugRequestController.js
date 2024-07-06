@@ -13,9 +13,9 @@ const getAllDrugRequestOrder = async (req, res) => {
 const getDrugOrderByIdAndDrugName = async (req, res) => {
     try {
         const { id, drugName } = req.params;
-        console.log('Received parameters:', { id, drugName }); // Log parameters
+        //console.log('Received parameters:', { id, drugName }); // Log parameters
         const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(id, drugName);
-        console.log('Drug Order: ', drugOrder)
+        //console.log('Drug Order: ', drugOrder)
         res.json(drugOrder);
     } catch (err) {
         console.error(err);
@@ -27,7 +27,7 @@ const addRequestContribution = async (req, res) => {
     try {
         const { appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate, contributionStatus, companyId } = req.body;
 
-        console.log('Received body:', req.body); // Log request body
+        //console.log('Received body:', req.body); // Log request body
 
         // Validate input data
         if (!appointmentId || !drugName || quantity == null || !totalCost || !contributeDate) {
@@ -66,9 +66,9 @@ const contributeDrugRequest = async (req, res) => {
     try {
         const { id, drugName } = req.params;
         const contributedQuantity = req.body.contributedQuantity;
-        console.log('Received parameters:', { id, drugName }); // Log parameters
+        //console.log('Received parameters:', { id, drugName }); // Log parameters
         const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(id, drugName);
-        console.log('Drug Order: ', drugOrder)
+        //console.log('Drug Order: ', drugOrder)
         if (!drugOrder) {
             return res.status(404).json({ error: 'Drug order not found' });
         }
@@ -82,10 +82,31 @@ const contributeDrugRequest = async (req, res) => {
     }
 }
 
+const cancelDrugOrder = async (req, res) => {
+    try {
+        const { id, drugName } = req.params;
+        //console.log('Received parameters:', { id, drugName }); // Log parameters
+        const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(id, drugName);
+        //console.log('Drug Order: ', drugOrder)
+        if (!drugOrder) {
+            return res.status(404).json({ error: 'Drug order not found' });
+        }
+        // Cancel the drug request (Update the status to 'Cancelled')
+        await DrugRequest.cancelDrugOrder(id, drugName);
+        // Send success response
+        res.json({ success: true, message: 'Drug request cancelled successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' }); // Return JSON
+    }
+}
+
+
 
 module.exports = {
     getAllDrugRequestOrder,
     getDrugOrderByIdAndDrugName,
     addRequestContribution,
-    contributeDrugRequest
+    contributeDrugRequest,
+    cancelDrugOrder
 }
