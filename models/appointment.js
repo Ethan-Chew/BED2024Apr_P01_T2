@@ -106,25 +106,26 @@ class Appointment {
 
     // Created By: Ethan Chew
     static async createAppointment(patientId, slotId, reason) {
-        // const connection = await sql.connect(dbConfig);
-        // const newAppointmentId = await Appointment.getNextAppointmentId(connection);
+        const connection = await sql.connect(dbConfig);
+        const newAppointmentId = await Appointment.getNextAppointmentId(connection);
 
-        // const query = `
-        //     INSERT INTO Appointments (AppointmentId, AccountId, SlotId, Reason)
-        //     VALUES (@AppointmentId, @AccountId, @SlotId, @Reason)
-        // `;
-        // const request = connection.request();
-        // request.input('AppointmentId', newAppointmentId);
-        // request.input('AccountId', patientId);
-        // request.input('SlotId', slotId);
-        // request.input('Reason', reason);
+        const query = `
+            INSERT INTO Appointments (AppointmentId, PatientId, SlotId, Reason)
+            VALUES (@AppointmentId, @PatientId, @SlotId, @Reason)
+        `;
+        const request = connection.request();
+        request.input('AppointmentId', newAppointmentId);
+        request.input('PatientId', patientId);
+        request.input('SlotId', slotId);
+        request.input('Reason', reason);
 
-        // await request.query(query);
-        // connection.close();
+        await request.query(query);
+        connection.close();
 
-        // return new Appointment(newAppointmentId, patientId, null, slotId, null, reason, null);
+        return new Appointment(newAppointmentId, patientId, null, slotId, null, reason, null);
     }
 
+    // Created by: Ethan Chew
     static async deleteAppointment(appointmentId) {
         const connection = await sql.connect(dbConfig);
 
@@ -134,6 +135,27 @@ class Appointment {
         `;
         const request = connection.request();
         request.input('AppointmentId', appointmentId);
+
+        const result = await request.query(query);
+        connection.close();
+
+        return result.rowsAffected == 1;
+    }
+
+    // Created by: Ethan Chew
+    static async updateAppointment(appointmentId, patientId, slotId, reason) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `
+            UPDATE Appointments
+            SET PatientId = @PatientId, SlotId = @SlotId, Reason = @Reason
+            WHERE AppointmentId = @AppointmentId
+        `;
+        const request = connection.request();
+        request.input('AppointmentId', appointmentId);
+        request.input('PatientId', patientId);
+        request.input('SlotId', slotId);
+        request.input('Reason', reason);
 
         const result = await request.query(query);
         connection.close();

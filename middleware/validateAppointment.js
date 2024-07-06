@@ -1,10 +1,9 @@
-const Joi = require("joi").extend(require('@joi/date'));
+const Joi = require("joi");
 
 const validateAppointment = (req, res, next) => {
     const schema = Joi.object({
         patientId: Joi.string().length(7).required(),
-        slotDate: Joi.date().format('YYYY-MM-DD').required(),
-        slotTime: Joi.string().required(),
+        slotId: Joi.string().length(7).required(),
         reason: Joi.string().required(),
     });
 

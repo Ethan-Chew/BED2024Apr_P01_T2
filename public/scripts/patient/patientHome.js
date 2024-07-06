@@ -54,33 +54,36 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById('upcoming-appointments-container').classList.remove('hidden'); // Display Container
         document.getElementById('num-upcoming-txt').innerText = futureAppointments.length;
 
-        for (const futureAppointment of futureAppointments) {
+        for (let i = 0; i < futureAppointments.length; i++) {
             document.getElementById("upcoming-appointments").innerHTML += `
-                <div class="flex flex-col align-top bg-gray-100 p-5 rounded-xl gap-10" id="appt-${futureAppointment.appointmentId}">
+                <div class="flex flex-col align-top bg-gray-100 p-5 rounded-xl gap-10" id="appt-${i}">
                     <div class="flex flex-col">
-                        <a class="text-2xl"><span class="font-bold">${new Date(futureAppointment.slotDate).toISOString().split("T")[0]}</span> | ${futureAppointment.slotTime}</a>
-                        <a class="text-xl">${futureAppointment.reason}</a>
+                        <a class="text-2xl"><span class="font-bold">${new Date(futureAppointments[i].slotDate).toISOString().split("T")[0]}</span> | ${futureAppointments[i].slotTime}</a>
+                        <a class="text-xl">${futureAppointments[i].reason}</a>
                     </div>
 
                     <div class="flex space-x-4">
-                        <button class="flex-1 py-2 bg-red-300 rounded-lg hover:bg-red-400" id="appt-cancel-${futureAppointment.appointmentId}">Cancel</button>
-                        <button class="flex-1 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400" id="appt-reschedule-${futureAppointment.appointmentId}">Reschedule</button>
+                        <button class="flex-1 py-2 bg-red-300 rounded-lg hover:bg-red-400" id="appt-cancel-${i}">Cancel</button>
+                        <button class="flex-1 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400" id="appt-reschedule-${i}">Reschedule</button>
                     </div>
                 </div>
             `;
-            const cancelApptId = `appt-cancel-${futureAppointment.appointmentId}`;
+        }
+
+        for (let i = 0; i < futureAppointments.length; i++) {
+            const cancelApptId = `appt-cancel-${i}`;
             document.getElementById(cancelApptId).addEventListener('click', async () => {
                 const confirmCancel = confirm("Are you sure you want to cancel this appointment?");
                 if (!confirmCancel) return;
                 else {
-                    const fetchCancel = await fetch(`/api/appointments/${futureAppointment.appointmentId}`, {
+                    const fetchCancel = await fetch(`/api/appointments/${futureAppointments[i].appointmentId}`, {
                         method: 'DELETE'
                     });
                     if (fetchCancel.status !== 200) {
                         alert("Error Cancelling Appointment. Please try again.");
                         return;
                     }
-                    document.getElementById(`appt-${futureAppointment.appointmentId}`).remove();
+                    document.getElementById(`appt-${i}`).remove();
                     alert("Appointment Cancelled.");
 
                     /// Count and Display Number of Appointments
@@ -88,9 +91,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             });
 
-            const rescheduleApptId = `appt-reschedule-${futureAppointment.appointmentId}`;
+            const rescheduleApptId = `appt-reschedule-${i}`;
             document.getElementById(rescheduleApptId).addEventListener('click', () => {
-                window.location.href = '../patient/rescheduleAppointment.html?appointmentId=' + futureAppointment.appointmentId;
+                window.location.href = '../patient/rescheduleAppointment.html?appointmentId=' + futureAppointments[i].id;
             });
         }
     }

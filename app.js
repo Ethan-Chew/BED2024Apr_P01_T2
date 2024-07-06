@@ -22,6 +22,7 @@ const chatbotController = require("./controllers/chatbotController");
 const validatePatient = require("./middleware/validatePatient");
 const validatePaymentMethod = require("./middleware/validatePaymentMethod");
 const validatePaymentConfirmationEmail = require("./middleware/validatePaymentConfirmationEmail");
+const validateAppointment = require("./middleware/validateAppointment");
 
 // JWT Verification Middleware
 const authoriseJWT = require("./middleware/authoriseJWT");
@@ -80,6 +81,8 @@ app.get("/api/questionnaire/:accountId", accountsController.getQuestionnaireWith
 app.get("/api/appointments/patient/:patientId", authoriseJWT, appointmentController.getAllPatientAppointment);
 app.get("/api/appointments/doctor/:doctorId", appointmentController.getAppointmentDetailsByDoctorId);
 app.get("/api/appointments/:appointmentId", authoriseJWT, appointmentController.getAppointmentDetailById);
+app.put("/api/appointments/:appointmentId", authoriseJWT, validateAppointment, appointmentController.updateAppointmentById);
+app.post("/api/appointments", authoriseJWT, validateAppointment, appointmentController.createAppointmentById);
 app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppointmentById);
 
 /// Route for Company Account

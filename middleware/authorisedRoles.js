@@ -1,6 +1,7 @@
 const authorisedRoles = {
     "/api/patient/:patientId": ["patient", "admin"],
     "/api/patients/": ["patient", "admin"],
+    "/api/appointments": ["patient"],
     "/api/appointments/patient/:patientId": ["patient"],
     "/api/appointments/:appointmentId": ["patient"],
     "/api/patient/makePayment": ["patient"],

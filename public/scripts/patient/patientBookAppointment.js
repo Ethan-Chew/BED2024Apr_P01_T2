@@ -19,12 +19,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         const date = document.getElementById("date").value;
         const fetchAvailTimeslotsReq = await fetch(`/api/availableSlots/${date}`);
         
-        // If the Request is not successful, show an error message
         if (fetchAvailTimeslotsReq.status === 404) {
             // If there are no timeslots, show a message
             timeslotItem.innerHTML = "<option value='noselect'>No Timeslots Available</option>";
             return;
         } else if (fetchAvailTimeslotsReq.status !== 200) {
+            // If the Request is not successful, show an error message
             alert("Error Fetching Available Timeslots. Please try again.");
             return;
         }
@@ -40,6 +40,54 @@ document.addEventListener('DOMContentLoaded', async function() {
             option.value = timeslots[i];
             option.text = timeslots[i];
             timeslotItem.appendChild(option);
+        }
+    });
+
+    document.getElementById("booking-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Get Form Data
+        const reason = document.getElementById("reason").value;
+        const date = document.getElementById("date").value;
+        const timeslot = document.getElementById("timeslot").value;
+
+        if (timeslot.value === "noselect") {
+            alert("Please select a timeslot.");
+            return;
+        }
+
+        // Get Timeslot Detail
+        const timeslotDetail = await fetch(`/api/availableSlot`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ date: date, time: timeslot })
+        });
+        const timeslotDetailJson = await timeslotDetail.json();
+        const availSlot = timeslotDetailJson.availableSlot[0].SlotId;
+        // Create the Appointment
+        const appointmentBody = {
+            patientId: accountId,
+            slotId: availSlot,
+            reason: reason
+        };
+
+        const createAppointmentReq = await fetch("/api/appointments", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(appointmentBody)
+        });
+
+        if (createAppointmentReq.status === 201) {
+            alert("Appointment Booked Successfully");
+            window.location.href = "./home.html";
+            return;
+        } else {
+            alert("Failed to Book Appointment. Please try again.");
+            return;
         }
     });
 });

@@ -24,7 +24,11 @@ const getAllPatientAppointment = async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 
@@ -48,7 +52,11 @@ const getAppointmentDetailById = async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 
@@ -73,37 +81,85 @@ const deleteAppointmentById = async (req, res) => {
         }
     } catch (err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 
 // Created by: Ethan Chew
 const createAppointmentById = async (req, res) => {
-    const { appointmentId } = req.params;
-    const { patientId, slotDate, slotTime, reason } = req.body;
+    const { patientId, slotId, reason } = req.body;
+
+    if (req.user.id !== patientId) {
+        res.status(403).json({
+            status: "Forbidden",
+            message: "You are not allowed to create an appointment for this Patient."
+        });
+        return;
+    }
     
     try {
-        // const createAppointment = await appointment.createAppointment(patientId, slotId, reason);
+        const createAppointment = await appointment.createAppointment(patientId, slotId, reason);
 
-        if (createAppointment) {
-            res.status(200).json({
-                message: `Appointment with ID ${appointmentId} has been created.`,
-                appointment: createAppointment
-            });
-            return;
-        } else {
+        if (!createAppointment) {
             res.status(500).json({
                 message: `Failed to create Appointment.`
             });
+            return;
         }
+
+        res.status(201).json({
+            message: `Appointment with ID ${appointmentId} has been created.`,
+            appointment: createAppointment
+        });
     } catch (err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
     }
 }
 
+// Created by: Ethan Chew
 const updateAppointmentById = async (req, res) => {
+    const { appointmentId } = req.params;
+    const { patientId, slotId, reason } = req.body;
+
+    if (req.user.id !== patientId) {
+        res.status(403).json({
+            status: "Forbidden",
+            message: "You are not allowed to update an appointment for this Patient."
+        });
+        return;
+    }
     
+    try {
+        const updateAppointment = await appointment.updateAppointment(appointmentId, patientId, slotId, reason);
+
+        if (!updateAppointment) {
+            res.status(500).json({
+                message: `Failed to update Appointment.`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: `Appointment with ID ${appointmentId} has been updated.`,
+            appointment: updateAppointment
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
+    }
 }
 
 const getAppointmentDetailsByDoctorId = async (req, res) => {
@@ -174,4 +230,5 @@ module.exports = {
     deleteAppointmentById,
     createAppointmentById,
     getAppointmentDetailsByDoctorId,
+    updateAppointmentById,
 }
