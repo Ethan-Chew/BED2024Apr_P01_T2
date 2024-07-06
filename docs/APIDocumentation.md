@@ -25,10 +25,10 @@ All related Schemas are located in the [Schema.md](./Schema.md) file.
 
 | HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
-| `200` | `{ message: "Login Successful", account: <account object}` |
-| `403` | `{ message: "Incorrect Password" }` |
-| `404` | `{ message: "Account with email <email address> not found." }` |
-| `500` | `{ message: "Internal Server Error" }` |
+| `200` | `{ status: "Success", message: "Login Successful", account: <account object}` |
+| `403` | `{ status: "Error", message: "Incorrect Password" }` |
+| `404` | `{ status: "Error", message: "Account with email <email address> not found." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 </details>
 
 ### Create a New Patient Account
@@ -82,8 +82,8 @@ All related Schemas are located in the [Schema.md](./Schema.md) file.
 
 | HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
-| `201` | `{ message: "Account Created Successfully", account: <account object}` |
-| `500` | `{ message: "Internal Server Error" }` |
+| `201` | `{ status: "Success", message: "Account Created Successfully", account: <account object}` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 </details>
 
 ### Retrieve Patient Account
@@ -101,12 +101,13 @@ No Request Body is required for the GET request
 **Responses**
 | HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
-| `200` | See below |
-| `400` | `{ message: "Patient ID is required" }` |
-| `404` | `{ message: "Patiet with ID <Patient ID> not found." }` |
-| `500` | `{ message: "Internal Server Error" }` |
+| `200` | `{ status: "Success", message: "Patient with ID Found", patient: <Patient Object>}` |
+| `400` | `{ status: "Error", message: "Patient ID is required" }` |
+| `403` | `{ status: "Forbidden", message: "You are not authorised to view this account's details" }` |
+| `404` | `{ status: "Not Found", message: "Patiet with ID <Patient ID> not found." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 
-**Response Body**
+**Patient Response Body**
 | name | data type |
 |-----------|-------------------------|
 | patientId | string |
@@ -115,47 +116,20 @@ No Request Body is required for the GET request
 | birthdate | string (format: YYYY-MM-DD) |
 | knownAllergies | string |
 | isApproved | string (values: Pending, Approved, Declined) |
-| appointments | object |
-
-**Data Object for `appointments` Object**
-```json
-{
-    "appointmentId": "APP0001",
-    "doctorId": "ACC0001",
-    "slotId": "SLO0001",
-    "consultationCost": 50.00,
-    "reason": "Sick",
-    "doctorNote": "Running a Fever...",
-    "paymentAmount": 100.00,
-    "paymentStatus": "Unpaid",
-    "slotDate": "2024-06-01",
-    "slotTime": "09:30-10:00"
-}
-```
 
 **Sample Response Body**
 ```json
 {
-  "name": "User5",
-  "email": "user5@mail.com",
-  "birthdate": "2000-01-01",
-  "patientId": "ACC0005",
-  "knownAllergies": "Mold, Grass, Water",
-  "isApproved": "Approved",
-  "appointments": [
-    {
-      "appointmentId": "APP0001",
-      "doctorId": "ACC0001",
-      "slotId": "SLO0001",
-      "consultationCost": 50.00,
-      "reason": "Sick",
-      "doctorNote": "Running a Fever...",
-      "paymentAmount": 100.00,
-      "paymentStatus": "Unpaid",
-      "slotDate": "2024-06-01",
-      "slotTime": "09:30-10:00"
-    }
-  ]
+  "status": "Success",
+  "message": "Patient with ID Found",
+  "patient": {
+    "name": "User5",
+    "email": "user5@mail.com",
+    "birthdate": "2000-01-01",
+    "patientId": "ACC0005",
+    "knownAllergies": "Mold, Grass, Water",
+    "isApproved": "Approved"
+  }
 }
 ```
 
@@ -194,10 +168,11 @@ No Request Body is required for the GET request
 
 | HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
-| `200` | `{ message: "Patient Account Updated Successfully", account: <account object> }` |
-| `400` | `{ message: "Patient ID is required" }` |
-| `500` | `{ message: "Failed to Update Patient Account" }` |
-| `500` | `{ message: "Internal Server Error" }` |
+| `200` | `{ status: "Success", message: "Patient Account Updated Successfully", account: <account object> }` |
+| `400` | `{ status: "Error", message: "Patient ID is required" }` |
+| `403` | `{ status: "Forbidden", message: "User is not authorised to update this account's details" }` |
+| `500` | `{ status: "Error", message: "Failed to Update Patient Account" }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 </details>
 
 ### Delete Patient Account
@@ -217,10 +192,11 @@ No Request Body is required for the DELETE request
 
 | HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
-| `200` | `{ message: "Patient Account Deleted Successfully" }` |
-| `400` | `{ message: "Patient ID is required" }` |
-| `500` | `{ message: "Failed to Delete Patient Account" }` |
-| `500` | `{ message: "Internal Server Error" }` |
+| `200` | `{ status: "Success", message: "Patient Account Deleted Successfully" }` |
+| `400` | `{ status: "Error", message: "Patient ID is required" }` |
+| `403` | `{ status: "Forbidden", message: "User is not authorised to delete this account" }` |
+| `500` | `{ status: "Error", message: "Failed to Delete Patient Account" }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 </details>
 
 ## Patient Payment Methods
@@ -240,14 +216,16 @@ No Request Body is required for the DELETE request
 **Responses**
 | HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
-| `200` | `{ message: "Found Payment Methods", paymentMethods: <paymentMethod Object> }` |
-| `400` | `{ message: "Patient ID is required" }` |
-| `404` | `{ message: "Payment Methods not found." }` |
-| `500` | `{ message: "Internal Server Error" }` |
+| `200` | `{ status: "Success", message: "Found Payment Methods", paymentMethods: <paymentMethod Object> }` |
+| `400` | `{ status: "Error", message: "Patient ID is required" }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to view the Payment Methods for this Patient." }` |
+| `404` | `{ status: "Error", message: "Payment Methods not found." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 
 **Sample Response Body**
 ```json
 {
+  "status": "Success",
   "message": "Found Payment Methods",
   "paymentMethods": [
     {
@@ -293,10 +271,11 @@ No Request Body is required for the DELETE request
 **Responses**
 | HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
-| `201` | `{ message: "Payment Method Created", paymentMethods: <paymentMethod Object> }` |
-| `400` | `{ message: "Patient ID is required" }` |
-| `400` | `{ message: "Validation Error", errors: <Joi Error> }` |
-| `500` | `{ message: "Internal Server Error" }` |
+| `201` | `{ status: "Success", message: "Payment Method Created", paymentMethods: <paymentMethod Object> }` |
+| `400` | `{ status: "Error", message: "Patient ID is required" }` |
+| `400` | `{ status: "Error", message: "Validation Error", errors: <Joi Error> }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to create a Payment Method for this Patient." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 
 </details>
 
@@ -314,9 +293,10 @@ No Request Body is required for the DELETE request
 **Responses**
 | HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
-| `204` | `{ message: "Payment Method Deleted" }` |
-| `400` | `{ message: "Patient ID and Payment Method Id are required." }` |
-| `500` | `{ message: "Internal Server Error" }` |
+| `204` | `{ status: "Success", message: "Payment Method Deleted" }` |
+| `400` | `{ status: "Error", message: "Patient ID and Payment Method Id are required." }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to delete a Payment Method for this Patient." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 
 </details>
 
@@ -342,9 +322,10 @@ No Request Body is required for the DELETE request
 **Responses**
 | HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
-| `200` | `{ message: "Payment Method Updated", paymentMethod: <PaymentMethod Object> }` |
-| `400` | `{ message: "Method Id, Patient ID, Merchant, Card Name, Card Number, and Card Expiry Date are required." }` |
-| `500` | `{ message: "Internal Server Error" }` |
+| `200` | `{ status: "Success", message: "Payment Method Updated", paymentMethod: <PaymentMethod Object> }` |
+| `400` | `{ status: "Error", message: "Method Id, Patient ID, Merchant, Card Name, Card Number, and Card Expiry Date are required." }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to update a Payment Method for this Patient." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 
 </details>
 
@@ -370,7 +351,145 @@ No URL Parameters required.
 | HTTP Status | response |
 |---------------|---------------------------------------------------------------------|
 | `201` | `{ message: "Payment Confirmation Email Sent" }` |
-| `500` | `{ message: "Internal Server Error" }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
+
+</details>
+
+## Helper Chatbot
+
+### Send Request to the Backend Gemini API
+<details>
+<summary><code>POST</code> <code><b>/api/chatbot/sendMessage</b></code></summary>
+
+**Parameters**
+No URL Parameters required.
+
+**Request Body**  
+| name | type | data type |
+|-----------|-----------|-------------------------|
+| message | required | string |
+| history | required | object array |
+
+**Sample Request Body**
+```json
+{
+  "message": "This is a sample request message",
+  "history": [
+    {
+        "role": "user",
+        "parts": [{ "text": "Sample User Text" }]
+    },
+    {
+        "role": "model",
+        "parts": [{ "text": "Sample Model Text" }]
+    },
+  ]
+}
+```
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `200` | `{ status: "Success", message: "Successfully sent message to chatbot", response: "Model Response Message" }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
+
+</details>
+
+### Get Chatbot History
+<details>
+<summary><code>GET</code> <code><b>/api/chatbot/history/{patientId}</b></code></summary>
+
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**  
+No Request Body is required for the GET request
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `200` | `{ status: "Success", message: "Successfully retrieved chatbot history for patient", history: <Array of Objects>, historyTimestamps: <Array<Int>> }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to view the chatbot history for this patient." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
+
+</details>
+
+### Save Chatbot History
+<details>
+<summary><code>POST</code> <code><b>/api/chatbot/history/{patientId}</b></code></summary>
+
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**  
+| name | type | data type |
+|-----------|-----------|-------------------------|
+| history | required | object array |
+| historyTimestamps | required | int array |
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `200` | `{ status: "Success", message: "Successfully retrieved chatbot history for patient", history: <Array of Objects>, historyTimestamps: <Array<Int>> }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to view the chatbot history for this patient." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
+
+</details>
+
+### Delete Chatbot History
+<details>
+<summary><code>DELETE</code> <code><b>/api/chatbot/history/{patientId}</b></code></summary>
+
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**  
+No Request Body is required for the DELETE request
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `204` | `{ status: "Success" }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to save chatbot history for this patient." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
+
+</details>
+
+## Appointments
+
+### Get All Patient Appointments
+<details>
+<summary><code>GET</code> <code><b>/api/appointments/patient/{patientId}</b></code></summary>
+
+</details>
+
+### Get Specific Appointment Detail
+<details>
+<summary><code>GET</code> <code><b>/api/appointments/{appointmentId}</b></code></summary>
+
+</details>
+
+### Delete Appointment 
+<details>
+<summary><code>POST</code> <code><b>/api/appointments/{appointmentId}</b></code></summary>
+
+</details>
+
+### Create Appointment
+<details>
+<summary><code>DELETE</code> <code><b>/api/appointments/{appointmentId}</b></code></summary>
+
+</details>
+
+### Update Appointment
+<details>
+<summary><code>DELETE</code> <code><b>/api/appointments/{appointmentId}</b></code></summary>
 
 </details>
 
