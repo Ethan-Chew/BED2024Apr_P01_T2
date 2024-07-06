@@ -97,7 +97,6 @@ class AvailableSlot {
 
         const result = await request.query(query);
         connection.close();
-
         if (result.recordset.length == 0) return null;
 
         return result.recordset.map(
@@ -148,10 +147,9 @@ class AvailableSlot {
         LEFT JOIN Appointments a ON avs.SlotId = a.SlotId
         LEFT JOIN SlotTime st ON avs.SlotTimeId = st.SlotTimeId
         WHERE a.SlotId IS NULL AND avs.SlotDate = @Date`;
-
         const request = connection.request();
         request.input('Date', date);
-
+    
         const result = await request.query(query);
         connection.close();
 

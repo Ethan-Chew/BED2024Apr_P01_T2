@@ -79,7 +79,13 @@ INSERT INTO AvailableSlot (SlotId, DoctorId, SlotDate, SlotTimeId) VALUES
 ('SLO0004', 'ACC0008', '2024-06-03', 'SLOT007'),
 ('SLO0005', 'ACC0009', '2024-07-01', 'SLOT020'),
 ('SLO0006', 'ACC0008', '2024-08-20', 'SLOT010'),
-('SLO0007', 'ACC0009', '2024-10-15', 'SLOT017');
+('SLO0007', 'ACC0009', '2024-10-15', 'SLOT017'),
+('SLO0008', 'ACC0008', '2024-09-11', 'SLOT001'),
+('SLO0009', 'ACC0009', '2024-09-11', 'SLOT002'),
+('SLO0010', 'ACC0008', '2024-09-11', 'SLOT003'),
+('SLO0011', 'ACC0008', '2024-09-11', 'SLOT004'),
+('SLO0012', 'ACC0009', '2024-09-11', 'SLOT005'),
+('SLO0013', 'ACC0008', '2024-09-11', 'SLOT006');
 
 INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, ConsultationCost, Reason, DoctorNote) VALUES
 ('APP0001', 'ACC0005', 'ACC0008', 'SLO0001', 10.00, 'High Fever and Coughing', 'Prescribed Medication to Patient, to monitor.'),

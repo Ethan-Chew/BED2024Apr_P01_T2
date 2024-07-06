@@ -80,10 +80,10 @@ const deleteAppointmentById = async (req, res) => {
 // Created by: Ethan Chew
 const createAppointmentById = async (req, res) => {
     const { appointmentId } = req.params;
-    const { patientId, slotId, reason } = req.body;
+    const { patientId, slotDate, slotTime, reason } = req.body;
     
     try {
-        const createAppointment = await appointment.createAppointment(patientId, slotId, reason);
+        // const createAppointment = await appointment.createAppointment(patientId, slotId, reason);
 
         if (createAppointment) {
             res.status(200).json({
@@ -172,5 +172,6 @@ module.exports = {
     getAllPatientAppointment,
     getAppointmentDetailById,
     deleteAppointmentById,
-    getAppointmentDetailsByDoctorId
+    createAppointmentById,
+    getAppointmentDetailsByDoctorId,
 }

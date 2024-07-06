@@ -45,7 +45,6 @@ const getAllAvailableSlotsTimesByDate = async (req, res) => {
 
         const dateTimeSlots = await availableSlot.getAllAvailableSlotsDateTimes(date);
 
-
         if (dateTimeSlots) {
             let timeSlots = [];
             for (i = 0; i < dateTimeSlots.length; i++) {
@@ -56,8 +55,8 @@ const getAllAvailableSlotsTimesByDate = async (req, res) => {
                 dateTimeSlots: timeSlots
             });
         } else {
-            res.status(500).json({
-                message: "Failed to get Available Slots"
+            res.status(404).json({
+                message: "No available time slots"
             });
         }
 

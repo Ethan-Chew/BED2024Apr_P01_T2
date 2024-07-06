@@ -34,8 +34,10 @@
                         <input type="date" id="date" name="date" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" required>
                     </div>
                     <div class="mb-6">
-                        <label for="time" class="block text-gray-700 font-semibold mb-2">Time Slot</label>
-                        <input type="time" id="time" name="time" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+                        <label for="timeslot" class="block text-gray-700 font-semibold mb-2">Time Slot</label>
+                        <select name="timeslot" id="timeslot" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+                            <option value="noselect">Select an appointment date first</option>
+                        </select>
                     </div>
                     <div class="flex justify-center">
                         <button type="submit" class="bg-primary hover:bg-btnprimary text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">Make Booking</button>
