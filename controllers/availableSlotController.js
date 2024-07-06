@@ -35,7 +35,7 @@ const updateAvailableSlotById = async (req, res) => {
     }
 }
 
-const getAllAvailableSlotsTimesByDate = async (req,res) => {
+const getAllAvailableSlotsTimesByDate = async (req, res) => {
     try {
         const { date } = req.params;
 
@@ -43,12 +43,17 @@ const getAllAvailableSlotsTimesByDate = async (req,res) => {
             return res.status(400).send({ message: 'Date is required' });
         }
 
-        const DateTimeSlots = await availableSlot.getAllAvailableSlotsDateTimes(date);
+        const dateTimeSlots = await availableSlot.getAllAvailableSlotsDateTimes(date);
 
 
-        if (DateTimeSlots) {
+        if (dateTimeSlots) {
+            let timeSlots = [];
+            for (i = 0; i < dateTimeSlots.length; i++) {
+                timeSlots.push(dateTimeSlots[i].SlotTime)
+            }
             res.status(200).json({
                 message: "Available Slots Returned Successfully",
+                dateTimeSlots: timeSlots
             });
         } else {
             res.status(500).json({

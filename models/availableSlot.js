@@ -139,6 +139,7 @@ class AvailableSlot {
     // Emmanuel
     static async getAllAvailableSlotsDateTimes(date) {
         const connection = await sql.connect(dbConfig);
+        //console.log(date)
 
         // gets date and times that are not being used in existing appointments
         let query = `
