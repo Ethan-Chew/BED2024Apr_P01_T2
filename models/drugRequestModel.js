@@ -102,6 +102,7 @@ class DrugRequest {
             await transaction.begin();
             
             let remainingQuantity = contributedQuantity;
+            let lastUpdatedRecordId = null;
 
             while (remainingQuantity > 0) {
                 const nearestRecord = await DrugRequest.findNearestRecordWithEnoughQuantity(drugName, remainingQuantity, transaction);
@@ -127,6 +128,7 @@ class DrugRequest {
                 await request.query(updateInventoryQuery);
     
                 remainingQuantity -= reduceQuantity;
+                lastUpdatedRecordId = recordId;
             }
             const updateMedicationQuery = `
                 UPDATE PrescribedMedication
@@ -149,6 +151,7 @@ class DrugRequest {
     
             await transaction.commit();
             console.log('Drug request contribution and inventory update completed successfully.');
+            return { recordId: lastUpdatedRecordId }; // Return the last updated recordId
         } catch (error) {
             console.error('Error during transaction:', error);
             if (transaction) {
@@ -164,7 +167,7 @@ class DrugRequest {
         }
     }
 
-    static async addRequestContribution(appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate = null, contributionStatus = 'Pending', companyId){
+    static async addRequestContribution(appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate = null, contributionStatus = 'Pending', companyId, drugRecordId){
         const connection = await sql.connect(dbConfig);
         const transaction = new sql.Transaction(connection);
         try {
@@ -176,8 +179,8 @@ class DrugRequest {
             
             const query = `
                 INSERT INTO DrugRequestContribution 
-                (AppointmentId, DrugName, Quantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId) VALUES
-                (@appointmentId, @drugName, @quantity, @totalCost, @contributeDate, @confirmationDate, @contributionStatus, @companyId)
+                (AppointmentId, DrugName, Quantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES
+                (@appointmentId, @drugName, @quantity, @totalCost, @contributeDate, @confirmationDate, @contributionStatus, @companyId, @drugRecordId)
             `
 
             const request = new sql.Request(transaction);
@@ -189,6 +192,7 @@ class DrugRequest {
             request.input('confirmationDate', sql.Date, confirmationDate);
             request.input('contributionStatus', sql.VarChar, contributionStatus);
             request.input('companyId', sql.VarChar, companyId);
+            request.input('drugRecordId', sql.VarChar, drugRecordId);
 
             await request.query(query);
             await transaction.commit();
