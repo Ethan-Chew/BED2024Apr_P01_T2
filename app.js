@@ -61,6 +61,7 @@ app.post("/api/mail/paymentConfirmation", authoriseJWT, validatePaymentConfirmat
 app.post("/api/chatbot/sendMessage", authoriseJWT,chatbotController.sendMessageToChatbot);
 app.get("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.getChatbotHistory);
 app.post("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.saveChatbotHistory);
+app.delete("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.deleteChatbotHistory);
 
 // Routes for Admin-Managing Patient Accounts
 app.get("/api/patients/unapproved", authoriseJWT, accountsController.getAllUnapproved);

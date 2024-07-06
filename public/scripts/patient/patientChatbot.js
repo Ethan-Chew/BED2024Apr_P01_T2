@@ -19,6 +19,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("disclaimerMessage").classList.add("hidden");
     });
 
+    // Load Messages from Session Storage
+    const messageHistory = JSON.parse(sessionStorage.getItem("chatbotHistory"));
+
+    if (messageHistory) {
+        for (let i = 0; i < messageHistory.length; i++) {
+            if (messageHistory[i].role === "user") {
+                document.getElementById("chat-container").innerHTML += `
+                    <div class="self-start bg-blue-100 p-3 rounded-lg shadow">
+                        <p class="text-gray-800"><strong>User:</strong> ${messageHistory[i].parts[0].text}</p>
+                    </div>
+                `;
+            } else {
+                document.getElementById("chat-container").innerHTML += `
+                    <div class="self-end bg-green-100 p-3 rounded-lg shadow">
+                        <p class="text-gray-800"><strong>CareBot:</strong> ${messageHistory[i].parts[0].text}</p>
+                    </div>
+                `;
+            }
+        }
+    }
+
     // Handle Message Send
     document.getElementById("send-button").addEventListener("click", async () => {
         const userInput = document.getElementById("user-input").value;
@@ -100,22 +121,35 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Handle Save Chat Button
     document.getElementById("save-chat").addEventListener("click", async () => {
-        console.log(sessionStorage.getItem("chatbotHistoryTimestamp"));
-        console.log(sessionStorage.getItem("chatbotHistory"));
-
         if (!confirm("Are you sure you want to save this chat history?")) {
             return;
         }
 
-        // Send the chat history to the Backend
+        // Check if the user has a currently saved history
+        const retrieveChatResponse = await fetch(`/api/chatbot/history/${sessionStorage.getItem("accountId")}`)
+
+        let history = JSON.parse(sessionStorage.getItem("chatbotHistory"));
+        let historyTimestamps = JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp"));
+
+        if (retrieveChatResponse.status !== 404) {
+            // User already has a saved history
+            const retrieveChatResponseJson = await retrieveChatResponse.json()
+            const currentChatHistory = retrieveChatResponseJson.history;
+
+            if (sessionStorage.getItem("chatbotHistory")) {
+                history = JSON.parse(sessionStorage.getItem("chatbotHistory")).slice(currentChatHistory.length);
+                historyTimestamps = JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp")).slice(currentChatHistory.length);
+            }
+        }
+
         const saveChatResponse = await fetch(`/api/chatbot/history/${sessionStorage.getItem("accountId")}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                history: JSON.parse(sessionStorage.getItem("chatbotHistory")),
-                historyTimestamps: JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp")),
+                history: history,
+                historyTimestamps: historyTimestamps,
             }),
         });
 
@@ -142,8 +176,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             const history = loadChatResponseJson.history;
             const historyTimestamps = loadChatResponseJson.historyTimestamps;
 
+            // Reset Session Storage
+            sessionStorage.setItem("chatbotHistory", JSON.stringify(history));
+            sessionStorage.setItem("chatbotHistoryTimestamp", JSON.stringify(historyTimestamps));
+
             // Display the chat history on the screen
             const chatContainer = document.getElementById("chat-container");
+            chatContainer.innerHTML = ""; // Reset the Chat Container
             for (let i = 0; i < history.length; i++) {
                 if (history[i].role === "user") {
                     chatContainer.innerHTML += `
@@ -159,8 +198,38 @@ document.addEventListener("DOMContentLoaded", async () => {
                     `;
                 }
             }
-        } else {
-            alert("An error occurred while loading the chat history. Please try again later.");
+        } else if (loadChatResponse.status === 404) {
+            alert("No saved history found!")
         }
+    });
+
+    // Handle Delete and Clear Chat Button
+    document.getElementById("delete-chat").addEventListener("click", async () => {
+        if (!confirm("Are you sure you want to delete the chat? This process is IRREVERSIBLE.")) {
+            return;
+        }
+
+        // Send Delete Request to Backend
+        const deleteRequest = await fetch(`/api/chatbot/history/${accountId}`, {
+            method: "DELETE"
+        });
+
+        if (deleteRequest.status !== 204) {
+            alert("Failed to delete chat history. Try again later.")
+            return;
+        }
+
+        // Reset Session Storage
+        sessionStorage.setItem("chatbotHistory", []);
+        sessionStorage.setItem("chatbotHistoryTimestamp", []);
+
+        // Delete Chat Container Info
+        const chatContainer = document.getElementById("chat-container");
+        chatContainer.innerHTML = "";
+        chatContainer.innerHTML += `
+            <div class="self-end bg-green-100 p-3 rounded-lg shadow">
+                <p class="text-gray-800"><strong>CareBot:</strong> Hi! I'm CareBot, do ask me any questions you have!</p>
+            </div>
+        `;
     });
 });

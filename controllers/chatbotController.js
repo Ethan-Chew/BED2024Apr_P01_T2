@@ -44,10 +44,18 @@ const getChatbotHistory = async (req, res) => {
                 role: history[i].MessageRole,
                 parts: [{ text: history[i].MessageBody }]
             });
-            historyTimestamps.push(history[i].MessageTimestamp);
+            historyTimestamps.push(history[i].MessageDate);
+        }
+
+        if (formattedHistory.length === 0) {
+            return res.status(404).json({
+                status: "Not Found",
+                message: "No Chatbot History found for user"
+            })
         }
 
         res.status(200).json({
+            status: "Success",
             message: "Successfully retrieved chatbot history for patient",
             history: formattedHistory,
             historyTimestamps: historyTimestamps,
@@ -82,7 +90,7 @@ const saveChatbotHistory = async (req, res) => {
         res.status(200).json({ 
             status: "Success",
             message: "Successfully saved chatbot history"
-         });
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({
@@ -94,24 +102,23 @@ const saveChatbotHistory = async (req, res) => {
 }
 
 // Created by: Ethan Chew
-const updateChatbotHistory = async (req, res) => {
+const deleteChatbotHistory = async (req, res) => {
     try {
         const { patientId } = req.params;
-        const { history, historyTimestamps } = req.body;
 
         if (req.user.id !== patientId) {
             res.status(403).json({ 
                 error: "Forbidden",
-                
-             });
+                message: "You are not allowed to save chatbot history for this patient."
+            });
             return;
         }
 
-        // Get currently saved history
-        const savedHistory = await Chatbot.getChatbotHistory(patientId);
-        
+        await Chatbot.deleteChatbotHistory(patientId);
 
-        res.status(200).json({ message: "Successfully saved chatbot history" });
+        res.status(204).json({
+            status: "success"
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({
@@ -125,5 +132,6 @@ const updateChatbotHistory = async (req, res) => {
 module.exports = {
     sendMessageToChatbot,
     getChatbotHistory,
-    saveChatbotHistory
+    saveChatbotHistory,
+    deleteChatbotHistory
 };

@@ -90,8 +90,24 @@ const saveChatbotHistory = async (patientId, messageBody, messageRole, historyTi
     return true;
 }
 
+const deleteChatbotHistory = async (patientId) => {
+    const connection = await sql.connect(dbConfig);
+    const deleteHistoryQuery = `
+        DELETE FROM ChatbotHistory WHERE PatientId = @PatientId
+    `;
+
+    const request = connection.request();
+    request.input("PatientId", patientId);
+
+    const deleteRequest = await request.query(deleteHistoryQuery);
+    connection.close();
+
+    return deleteRequest.rowsAffected > 0;
+}
+
 module.exports = {
     sendMessage,
     getChatbotHistory,
-    saveChatbotHistory
+    saveChatbotHistory,
+    deleteChatbotHistory
 };
