@@ -86,31 +86,71 @@ document.addEventListener("DOMContentLoaded", async() => {
             try {
                 const totalCost = parseFloat(document.getElementById('price').innerText.replace('$', ''));
 
-                // Execute both requests in parallel
-                const [postResponse, putResponse] = await Promise.all([
-                    fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ contributedQuantity: totalContribution })
-                    }),
-                    fetch(`/api/drugRequest/drugContribution`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            appointmentId,
-                            drugName,
-                            quantity: totalContribution,
-                            totalCost: parseFloat(totalContribution) * parseFloat(totalCost),
-                            contributeDate: getTodayDate(),
-                            contributionStatus: 'Pending',
-                            companyId: companyId
-                        })
+                // // Execute both requests in parallel
+                // const [postResponse, putResponse] = await Promise.all([
+                //     fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
+                //         method: 'POST',
+                //         headers: {
+                //             'Content-Type': 'application/json'
+                //         },
+                //         body: JSON.stringify({ contributedQuantity: totalContribution })
+                //     }),
+                //     fetch(`/api/drugRequest/drugContribution`, {
+                //         method: 'PUT',
+                //         headers: {
+                //             'Content-Type': 'application/json'
+                //         },
+                //         body: JSON.stringify({
+                //             appointmentId,
+                //             drugName,
+                //             quantity: totalContribution,
+                //             totalCost: parseFloat(totalContribution) * parseFloat(totalCost),
+                //             contributeDate: getTodayDate(),
+                //             contributionStatus: 'Pending',
+                //             companyId: companyId,
+                //             drugRecordId: drugRecordId,
+                //         })
+                //     })
+                // ]);
+
+                // Execute both requests in sequence to get recordId first
+                const postResponse = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ contributedQuantity: totalContribution })
+                });
+
+                if (!postResponse.ok) {
+                    const error = await postResponse.json();
+                    throw new Error(`POST request failed: ${error.error}`);
+                }
+
+                const { recordId } = await postResponse.json();
+                console.log(recordId.recordId);
+
+                const putResponse = await fetch(`/api/drugRequest/drugContribution`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        appointmentId,
+                        drugName,
+                        quantity: totalContribution,
+                        totalCost: parseFloat(totalContribution) * parseFloat(totalCost),
+                        contributeDate: getTodayDate(),
+                        contributionStatus: 'Pending',
+                        companyId: companyId,
+                        drugRecordId: recordId.recordId
                     })
-                ]);
+                });
+
+                if (!putResponse.ok) {
+                    const error = await putResponse.json();
+                    throw new Error(`PUT request failed: ${error.error}`);
+                }
                 
     
                 if (postResponse.ok && putResponse.ok) {
