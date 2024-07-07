@@ -95,6 +95,7 @@ app.post("/api/drugRequest/contribute/:id/:drugName", drugRequestController.cont
 app.put("/api/drugRequest/drugContribution", drugRequestController.addRequestContribution);
 app.get("/api/drugContributionOrders/", drugOrderController.getAllDrugOrders);
 app.delete("/api/drugContributionOrders/:appointmentId/:drugName", drugOrderController.deleteDrugOrder);
+app.post("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", drugOrderController.returnMedicine);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);

@@ -3,6 +3,7 @@ const DrugOrder = require('../models/drugOrderModel');
 const getAllDrugOrders = async (req, res) =>{
     try {
         const drugOrders = await DrugOrder.getAllDrugOrders();
+        console.log(drugOrders);
         res.json(drugOrders);
     } catch (err) {
         console.error(err);
@@ -29,7 +30,28 @@ const deleteDrugOrder = async (req, res) =>{
     }
 }
 
+const returnMedicine = async (req, res) =>{
+    try {
+        const { drugQuantity, drugRecordId } = req.params;
+        
+        // Validate input
+        if (!drugQuantity || !drugRecordId) {
+            return res.status(400).json({ error: 'Missing required parameters' });
+        }
+        
+        await DrugOrder.returnMedicine(drugQuantity, drugRecordId);
+
+        // Respond with success message
+        res.status(200).json({ message: 'Medicine returned successfully' });
+    } catch (err) {
+        console.error('Error returning medicine:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+
+}
+
 module.exports = {
     getAllDrugOrders,
-    deleteDrugOrder
+    deleteDrugOrder,
+    returnMedicine
 }

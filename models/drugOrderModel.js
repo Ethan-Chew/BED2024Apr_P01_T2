@@ -2,14 +2,15 @@ const sql = require("mssql");
 const dbConfig = require ("../dbConfig");
 
 class DrugOrder{
-    constructor(appointmentId, drugName, drugQuantity, totalCost, contributeDate, confirmationDate, contributionStatus) {
+    constructor(appointmentId, drugName, drugQuantity, totalCost, contributeDate, confirmationDate, contributionStatus, drugRecordId) {
         this.appointmentId = appointmentId;
         this.drugName = drugName;
         this.drugQuantity = drugQuantity;
         this.totalCost = totalCost;
         this.contributeDate = contributeDate;
         this.confirmationDate = confirmationDate;
-        this.contributionStatus = contributionStatus
+        this.contributionStatus = contributionStatus;
+        this.drugRecordId = drugRecordId;
     }
 
     static async getAllDrugOrders(){
@@ -23,7 +24,8 @@ class DrugOrder{
                 do.TotalCost,
                 do.ContributeDate,
                 do.ConfirmationDate,
-                do.ContributionStatus
+                do.ContributionStatus,
+                do.DrugRecordId
             FROM
                 DrugRequestContribution do
             WHERE
@@ -37,6 +39,7 @@ class DrugOrder{
 
         if (result.recordset.length == 0) return null;
 
+        console.log(result.recordset);
         return result.recordset.map(row =>
             new DrugOrder(
                 row.AppointmentId,
@@ -45,7 +48,8 @@ class DrugOrder{
                 row.TotalCost,
                 row.ContributeDate,
                 row.ConfirmationDate,
-                row.ContributionStatus
+                row.ContributionStatus,
+                row.DrugRecordId
             )
         );
     }
@@ -70,6 +74,26 @@ class DrugOrder{
         }
     }
 
+    static async returnMedicine(drugQuantity, drugRecordId){
+        try{
+            const connection = await sql.connect(dbConfig);
+
+            const query = `
+                UPDATE DrugInventoryRecord
+                SET DrugAvailableQuantity = DrugAvailableQuantity + @drugQuantity
+                WHERE DrugRecordId = @drugRecordId
+            `
+            const request = connection.request();
+            request.input('drugQuantity', sql.Int, drugQuantity);
+            request.input('drugRecordId', sql.VarChar, drugRecordId);
+            await request.query(query);
+
+            connection.close();
+        } catch (error) {
+            console.error('Error Returning drug order: ', error);
+            throw error;
+        }
+    }
 }
 
 module.exports = DrugOrder;
