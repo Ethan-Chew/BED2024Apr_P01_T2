@@ -467,29 +467,105 @@ No Request Body is required for the DELETE request
 <details>
 <summary><code>GET</code> <code><b>/api/appointments/patient/{patientId}</b></code></summary>
 
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**  
+No Request Body is required for the DELETE request
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `204` | `{ status: "Success", message: "Appointments Found", appointments: <Appointments Object> }` |
+| `404` | `{ status: "Not Found", message: "No appointments found for patient with ID patientId" }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to view appointments for this Patient." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
+
 </details>
 
 ### Get Specific Appointment Detail
 <details>
 <summary><code>GET</code> <code><b>/api/appointments/{appointmentId}</b></code></summary>
 
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**  
+No Request Body is required for the GET request
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `204` | `{ status: "Success", message: "Appointment with ID: appointmentId found", appointment: <Appointment Object> }` |
+| `404` | `{ status: "Not Found", message: "No appointments found for patient with ID patientId" }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to view this appointment." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
+
 </details>
 
 ### Delete Appointment 
 <details>
-<summary><code>POST</code> <code><b>/api/appointments/{appointmentId}</b></code></summary>
+<summary><code>DELETE</code> <code><b>/api/appointments/{appointmentId}</b></code></summary>
+
+**Parameters**
+| name | type | description |
+|-----------|-----------|-------------------------|
+| patientId | required | Unique Identifier given to the Patient being retrieved |
+
+**Request Body**  
+No Request Body is required for the GET request
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `204` | `{ status: "Success", message: "Appointment with ID <appointmentId> has been deleted" }` |
+| `404` | `{ status: "Not Found", message: "Appointment with ID <appointmentId> not found." }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to delete this appointment." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 
 </details>
 
 ### Create Appointment
 <details>
-<summary><code>DELETE</code> <code><b>/api/appointments/{appointmentId}</b></code></summary>
+<summary><code>POST</code> <code><b>/api/appointments</b></code></summary>
+
+**Request Body**  
+| name | type | data type |
+|-----------|-----------|-------------------------|
+| patientId | required | string |
+| slotId | required | string |
+| reason | required | string |
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `201` | `{ status: "Success", message: "Appointment with ID <appointmentId> has been created", appointment: <Appointment Object> }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to create an appointment for this patient." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 
 </details>
 
 ### Update Appointment
 <details>
-<summary><code>DELETE</code> <code><b>/api/appointments/{appointmentId}</b></code></summary>
+<summary><code>PUT</code> <code><b>/api/appointments/{appointmentId}</b></code></summary>
+
+**Request Body**  
+| name | type | data type |
+|-----------|-----------|-------------------------|
+| patientId | required | string |
+| slotId | required | string |
+| reason | required | string |
+
+**Responses**
+| HTTP Status | response |
+|---------------|---------------------------------------------------------------------|
+| `201` | `{ status: "Success", message: "Appointment with ID <appointmentId> has been updated", appointment: <Appointment Object> }` |
+| `403` | `{ status: "Forbidden", message: "You are not allowed to update an appointment for this patient." }` |
+| `500` | `{ status: "Error", message: "Internal Server Error", error: <Error Object> }` |
 
 </details>
 

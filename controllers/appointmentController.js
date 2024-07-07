@@ -9,16 +9,26 @@ const getAllPatientAppointment = async (req, res) => {
     const { patientId } = req.params;
 
     try {
+        if (req.user.id !== patientId) {
+            res.status(403).json({
+                status: "Forbidden",
+                message: "You are not allowed to view appointments for this Patient."
+            });
+            return;
+        }
+
         const appointments = await appointment.getAllPatientAppointment(patientId);
 
         if (!appointments) {
             res.status(404).json({
+                status: "Not Found",
                 message: `No appointments found for patient with ID ${patientId}`
             });
             return;
         }
 
         res.status(200).json({
+            status: "Success",
             message: "Appointments Found",
             appointments: appointments
         });
@@ -41,12 +51,22 @@ const getAppointmentDetailById = async (req, res) => {
 
         if (!appointmentDetail) {
             res.status(404).json({
+                status: "Not Found",
                 message: `Appointment with ID ${appointmentId} not found.`
             });
             return;
         }
 
+        if (req.user.id !== appointmentDetail.patientId) {
+            res.status(403).json({
+                status: "Forbidden",
+                message: "You are not allowed to view this appointment."
+            });
+            return;
+        }
+
         res.status(200).json({
+            status: "Success",
             message: `Appointment with ID: ${appointmentId} found`,
             appointment: appointmentDetail
         });
@@ -65,20 +85,31 @@ const deleteAppointmentById = async (req, res) => {
     const { appointmentId } = req.params;
 
     try {
-        const deleteAppointment = await payment.removePayment(appointmentId);
-        const deletePrescribedMedication = await prescribedMedication.removePrescribedMedication(appointmentId);
-        const deleteConfirmation = await appointment.deleteAppointment(appointmentId);
-
-        if (deleteConfirmation) {
-            res.status(200).json({
-                message: `Appointment with ID ${appointmentId} has been deleted.`
+        // Ensure that the User is the Patient of the Appointment
+        const appointmentDetail = await appointment.getAppointmentDetail(appointmentId);
+        if (!appointmentDetail) {
+            res.status(404).json({
+                status: "Not Found",
+                message: `Appointment with ID ${appointmentId} not found.`
             });
             return;
-        } else {
-            res.status(500).json({
-                message: `Failed to delete Appointment.`
-            });
         }
+        if (req.user.id !== appointmentDetail.patientId) {
+            res.status(403).json({
+                status: "Forbidden",
+                message: "You are not allowed to delete this appointment."
+            });
+            return;
+        }
+
+        await payment.removePayment(appointmentId);
+        await prescribedMedication.removePrescribedMedication(appointmentId);
+        await appointment.deleteAppointment(appointmentId);
+
+        res.status(200).json({
+            status: "Success",
+            message: `Appointment with ID ${appointmentId} has been deleted.`
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({
@@ -104,15 +135,9 @@ const createAppointmentById = async (req, res) => {
     try {
         const createAppointment = await appointment.createAppointment(patientId, slotId, reason);
 
-        if (!createAppointment) {
-            res.status(500).json({
-                message: `Failed to create Appointment.`
-            });
-            return;
-        }
-
         res.status(201).json({
-            message: `Appointment with ID ${appointmentId} has been created.`,
+            status: "Success", 
+            message: `Appointment with ID ${createAppointment.id} has been created.`,
             appointment: createAppointment
         });
     } catch (err) {
@@ -141,14 +166,8 @@ const updateAppointmentById = async (req, res) => {
     try {
         const updateAppointment = await appointment.updateAppointment(appointmentId, patientId, slotId, reason);
 
-        if (!updateAppointment) {
-            res.status(500).json({
-                message: `Failed to update Appointment.`
-            });
-            return;
-        }
-
         res.status(200).json({
+            status: "Success",
             message: `Appointment with ID ${appointmentId} has been updated.`,
             appointment: updateAppointment
         });
