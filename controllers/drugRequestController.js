@@ -25,7 +25,7 @@ const getDrugOrderByIdAndDrugName = async (req, res) => {
 
 const addRequestContribution = async (req, res) => {
     try {
-        const { appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate, contributionStatus, companyId } = req.body;
+        const { appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate, contributionStatus, companyId, drugRecordId } = req.body;
 
         //console.log('Received body:', req.body); // Log request body
 
@@ -51,7 +51,8 @@ const addRequestContribution = async (req, res) => {
             contributeDate,
             confirmationDate,
             status,
-            companyId
+            companyId,
+            drugRecordId
         );
 
         console.log('Drug request contribution added successfully');
@@ -73,9 +74,9 @@ const contributeDrugRequest = async (req, res) => {
             return res.status(404).json({ error: 'Drug order not found' });
         }
         // Contribute to the drug request (Update the status to 'Completed' and update Drug Inventory Record Quantity)
-        await DrugRequest.contributeDrugRequest(id, drugName, contributedQuantity);
+        const recordId = await DrugRequest.contributeDrugRequest(id, drugName, contributedQuantity);
         // Send success response
-        res.json({ success: true, message: 'Drug request contribution completed successfully' });
+        res.json({ recordId, success: true, message: 'Drug request contribution completed successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' }); // Return JSON

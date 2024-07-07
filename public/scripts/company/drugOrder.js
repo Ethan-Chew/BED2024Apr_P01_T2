@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async() => {
         method: 'GET'
     });
     const drugContributionOrders = await fetchDrugContributionOrders.json();
-    //console.log("Drug Orders: ", drugContributionOrders);
+    console.log("Drug Orders: ", drugContributionOrders);
 
     const contributionList = document.getElementById('contribution-list');
     contributionList.innerHTML = '';
@@ -94,7 +94,9 @@ document.addEventListener("DOMContentLoaded", async() => {
                     <button class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center confirm-btn">Confirm request</button>
                     <button class="bg-btnprimary text-white px-6 py-4 rounded-2xl font-bold text-center cancel-btn"
                     data-appointment-id="${order.appointmentId}"
-                    data-drug-name="${order.drugName}">
+                    data-drug-record-id="${order.drugRecordId}"
+                    data-drug-name="${order.drugName}"
+                    data-drug-quantity="${order.drugQuantity}">
                     Cancel
                     </button>
                 </div>
@@ -115,7 +117,9 @@ document.addEventListener("DOMContentLoaded", async() => {
     document.querySelectorAll('.cancel-btn').forEach(button => {
         button.addEventListener('click', async () => {
             const appointmentId = button.getAttribute('data-appointment-id');
+            const drugRecordId = button.getAttribute('data-drug-record-id');
             const drugName = button.getAttribute('data-drug-name');
+            const drugQuantity = button.getAttribute('data-drug-quantity');
     
             try {
                 // First fetch for DELETE request
@@ -131,16 +135,23 @@ document.addEventListener("DOMContentLoaded", async() => {
                     const response2 = await fetch(`/api/drugRequest/${appointmentId}/${drugName}`, {
                         method: 'POST'
                     });
+
+                    const response3 = await fetch(`/api/drugInventoryRecord/${drugRecordId}/${drugQuantity}`, {
+                        method: 'POST'
+                    });
+
+                    console.log(response3); 
     
-                    if (response2.ok) {
+                    if (response2.ok && response3.ok) {
                         // Parse the response from POST request
                         const cancelOrder2 = await response2.json();
                         //console.log("Cancel Order:", cancelOrder, " + ", cancelOrder2);
+                        const cancelOrder3 = await response3.json();
                         
                         // Redirect only if both requests are successful
                         window.location.href = 'companyHome.html';
                     } else {
-                        console.error('Failed to process drug request:', response2.statusText);
+                        console.error('Failed to process drug request:', response2.statusText, response3.statusText);
                         // Optionally, you can show an error message to the user here
                     }
                 } else {

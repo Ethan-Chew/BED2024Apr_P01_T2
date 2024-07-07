@@ -11,7 +11,7 @@ const sendMessageToChatbot = async (req, res) => {
             status: "Success",
             message: "Successfully sent message to chatbot",
             response: response
-         });
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({
@@ -117,7 +117,7 @@ const deleteChatbotHistory = async (req, res) => {
         await Chatbot.deleteChatbotHistory(patientId);
 
         res.status(204).json({
-            status: "success"
+            status: "Success"
         });
     } catch (err) {
         console.error(err);
