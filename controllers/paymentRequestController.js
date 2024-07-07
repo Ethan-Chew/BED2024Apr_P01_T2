@@ -16,9 +16,7 @@ const createPaymentRequest = async (req, res) => {
                 message: `Failed to create Payment Request.`
             });
             return;
-        }
-
-        if (payment) {
+        } else {
             res.status(201).json({
                 status: "Success",
                 message: "Payment request created",
@@ -38,7 +36,7 @@ const cancelPaymentRequest = async (req, res) => {
     try {
         const { id } = req.params
 
-        if (!id) {
+        if (id === undefined) {
             return res.status(400).json({ message: 'Payment Request Id is required' })
         }
 
@@ -64,13 +62,14 @@ const cancelPaymentRequest = async (req, res) => {
 
 const getPaymentRequestByAppointmentId = async (req, res) => {
     try {
-        const { id } = req.params
+        const { appointmentId } = req.params;
+        // console.log(appointmentId);
 
-        if (!id) {
-            return res.status(400).json({ message: 'Appointment Id is required' })
+        if (appointmentId === undefined) {
+            return res.status(400).json({ message: 'Appointment Id is required' });
         }
 
-        const getRequest = await PaymentRequest.getPaymentRequestByAppointmentId(id);
+        const getRequest = await PaymentRequest.getPaymentRequestByAppointmentId(appointmentId);
 
         if (getRequest) {
             res.status(200).json({

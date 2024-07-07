@@ -29,7 +29,7 @@ class PaymentRequest {
     // Emmanuel
     static async createPaymentRequest(appointmentId, message, createdDate) {
         const connection = await sql.connect(dbConfig);
-        const newRequestId = await PaymentRequest.getNextRequestId(dbConnection);
+        const newRequestId = await PaymentRequest.getNextRequestId(connection);
         const status = "Pending";
 
         const query = `
@@ -48,7 +48,7 @@ class PaymentRequest {
         await request.query(query);
         connection.close();
 
-        return new AvailableSlot(newSlotId, doctorId, slotDate, slotTimeId);
+        return new PaymentRequest(newRequestId, appointmentId, message, createdDate, status);
     }
 
     // Emmanuel
