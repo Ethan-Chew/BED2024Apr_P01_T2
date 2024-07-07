@@ -62,7 +62,7 @@ class PaymentRequest {
 
         const request = connection.request();
         request.input("Id", id);
-        request.input("Status", "Pending");
+        request.input("Status", "Rejected");
 
         const result = await request.query(query);
         connection.close();

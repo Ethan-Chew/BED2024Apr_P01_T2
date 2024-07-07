@@ -41,7 +41,7 @@ const cancelPaymentRequest = async (req, res) => {
         }
 
         const deleteRequest = await PaymentRequest.cancelPaymentRequestById(id);
-
+        console.log("Controller response: ", deleteRequest)
         if (deleteRequest) {
             res.status(201).json({
                 status: "Success",
