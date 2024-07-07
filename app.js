@@ -17,12 +17,14 @@ const availableSlotController = require("./controllers/availableSlotController")
 const paymentController = require("./controllers/paymentController");
 const mailController = require("./controllers/mailController");
 const chatbotController = require("./controllers/chatbotController");
+const paymentRequestController = require("./controllers/paymentRequestController")
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
 const validatePaymentMethod = require("./middleware/validatePaymentMethod");
 const validatePaymentConfirmationEmail = require("./middleware/validatePaymentConfirmationEmail");
 const validateAppointment = require("./middleware/validateAppointment");
+const validatePaymentRequest = require("./middleware/validatePaymentRequest")
 
 // JWT Verification Middleware
 const authoriseJWT = require("./middleware/authoriseJWT");
@@ -105,9 +107,14 @@ app.put("/api/helpRequests/approve/:requestId", helpRequestsController.approveRe
 app.put("/api/helpRequests/reject/:requestId", helpRequestsController.rejectRequest);
 
 // Route for Available Slot
-app.get("/api/availableSlots/:date", availableSlotController.getAllAvailableSlotsTimesByDate)
-app.post("/api/availableSlot", availableSlotController.getAvailableSlotByDateAndTime)
+app.get("/api/availableSlots/:date", availableSlotController.getAllAvailableSlotsTimesByDate);
+app.post("/api/availableSlot", availableSlotController.getAvailableSlotByDateAndTime);
 app.put("/api/availableSlot/doctor/:slotId", availableSlotController.updateAvailableSlotById);
+
+// Route for Payment Request
+app.get("/api/paymentRequest/:appointmentId", paymentRequestController.getPaymentRequestByAppointmentId);
+app.post("/api/paymentRequest", validatePaymentRequest, paymentRequestController.createPaymentRequest);
+app.delete("/api/paymentRequest/:id", paymentRequestController.cancelPaymentRequest);
 
 // Initialise Server
 app.listen(3000, async () => {

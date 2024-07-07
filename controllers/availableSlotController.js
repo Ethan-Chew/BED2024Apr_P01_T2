@@ -2,12 +2,44 @@ const availableSlot = require("../models/availableSlot");
 const appointment = require("../models/appointment");
 const slotTime = require("../models/slotTime");
 
+// Emmanuel
+const createAvailableSlot = async (req, res) => {
+    try {
+        const { doctorId, slotDate, slotTimeId } = req.body;
+
+        if (!doctorId || !slotDate || !slotTimeId) {
+            return res.status(400).json({
+                status: "Error",
+                message: 'Doctor Id, slotDate and slotTimeId are'
+            });
+        }
+
+        const createRequest = availableSlot.createAvailableSlot(doctorId, slotDate, slotTimeId);
+
+        if (createRequest) {
+            res.status(201).json({
+                status: "Success",
+                message: "Available slot created",
+                availableSlot: createRequest
+            })
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+// Emmanuel
 const updateAvailableSlotById = async (req, res) => {
     try {
         const { slotId } = req.params;
 
         if (!slotId) {
-            return res.status(400).send({ message: 'Slot ID is required' });
+            return res.status(400).json({
+                status: "Error",
+                message: 'Slot ID is required'
+            });
         }
 
         const { doctorId, date, time } = req.body;
@@ -35,12 +67,13 @@ const updateAvailableSlotById = async (req, res) => {
     }
 }
 
+// Emmanuel
 const getAllAvailableSlotsTimesByDate = async (req, res) => {
     try {
         const { date } = req.params;
 
         if (!date) {
-            return res.status(400).send({ message: 'Date is required' });
+            return res.status(400).json({ message: 'Date is required' });
         }
 
         const dateTimeSlots = await availableSlot.getAllAvailableSlotsDateTimes(date);
@@ -66,6 +99,7 @@ const getAllAvailableSlotsTimesByDate = async (req, res) => {
     }
 }
 
+// Emmanuel
 const getAvailableSlotByDateAndTime = async (req, res) => {
     try {
         const { date, time } = req.body;

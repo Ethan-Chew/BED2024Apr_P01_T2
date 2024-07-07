@@ -72,8 +72,8 @@ class AvailableSlot {
         query = query.slice(0, -2); // Remove last ', '
         query += ` WHERE SlotId = '${slotId}'`;
         request.input("SlotId", slotId);
-        console.log(await query);
-        console.log(updatedFields);
+        // console.log(await query);
+        // console.log(updatedFields);
 
         const result = await request.query(query);
         connection.close();

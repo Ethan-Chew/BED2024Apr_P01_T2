@@ -100,7 +100,7 @@ const createAppointmentById = async (req, res) => {
         });
         return;
     }
-    
+
     try {
         const createAppointment = await appointment.createAppointment(patientId, slotId, reason);
 
@@ -137,7 +137,7 @@ const updateAppointmentById = async (req, res) => {
         });
         return;
     }
-    
+
     try {
         const updateAppointment = await appointment.updateAppointment(appointmentId, patientId, slotId, reason);
 
@@ -162,6 +162,7 @@ const updateAppointmentById = async (req, res) => {
     }
 }
 
+// Emmanuel
 const getAppointmentDetailsByDoctorId = async (req, res) => {
     const { doctorId } = req.params;
 
@@ -186,6 +187,7 @@ const getAppointmentDetailsByDoctorId = async (req, res) => {
     }
 }
 
+// Emmanuel
 const updateAppointmentDoctorSlot = async (req, res) => {
     try {
         // check if date and time slot for another already exists and is available
@@ -194,7 +196,7 @@ const updateAppointmentDoctorSlot = async (req, res) => {
         const { appointmentId } = req.params;
 
         if (!appointmentId) {
-            return res.status(400).send({ message: 'Appointment ID is required' });
+            return res.status(400).json({ message: 'Appointment ID is required' });
         }
 
         const getAppointment = await appointment.getAppointmentDetail(appointmentId);
@@ -213,8 +215,13 @@ const updateAppointmentDoctorSlot = async (req, res) => {
     }
 }
 
+// Emmanuel
 const updateAppointmentNewDoctor = async (req, res) => {
     const { appointmentId } = req.params;
+
+    if (!appointmentId) {
+        return res.status(400).json({ message: 'Appointment ID is required' });
+    }
 
     try {
 
