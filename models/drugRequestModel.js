@@ -167,9 +167,12 @@ class DrugRequest {
         }
     }
 
-    static async addRequestContribution(appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate = null, contributionStatus = 'Pending', companyId, drugRecordId){
+    static async addRequestContribution(appointmentId, drugName, quantity, totalCost, contributeDate, companyId, drugRecordId){
         const connection = await sql.connect(dbConfig);
         const transaction = new sql.Transaction(connection);
+        const confirmationDate = null;
+        const contributionStatus = 'Pending';
+
         try {
             await transaction.begin();
             // Validate input parameters (e.g., check for positive quantity)

@@ -18,6 +18,7 @@ const paymentController = require("./controllers/paymentController");
 const mailController = require("./controllers/mailController");
 const chatbotController = require("./controllers/chatbotController");
 const paymentRequestController = require("./controllers/paymentRequestController")
+const companyDrugInventoryController = require("./controllers/companyDrugInventoryController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -98,6 +99,7 @@ app.put("/api/drugRequest/drugContribution", drugRequestController.addRequestCon
 app.get("/api/drugContributionOrders/", drugOrderController.getAllDrugOrders);
 app.delete("/api/drugContributionOrders/:appointmentId/:drugName", drugOrderController.deleteDrugOrder);
 app.post("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", drugOrderController.returnMedicine);
+app.get("/api/companyDrugInventory/", companyDrugInventoryController.getDrugName);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);

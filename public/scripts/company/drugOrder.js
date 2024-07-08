@@ -14,10 +14,12 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     const contributionList = document.getElementById('contribution-list');
     contributionList.innerHTML = '';
+    console.log(drugContributionOrders);
 
     if (drugContributionOrders === null) {
         contributionList.innerHTML = 'No Order Found';
     } else {
+        
         drugContributionOrders.forEach((order) => {
             //console.log("Order: ", order);
             // Create a div element for the request item
