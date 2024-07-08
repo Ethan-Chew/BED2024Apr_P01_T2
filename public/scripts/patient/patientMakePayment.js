@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         let totalAmount = appointment.consultationCost;
 
         paymentListContainer.innerHTML += `
-            <div class="bg-gray-100 shadow-lg p-3 rounded-2xl text-lg" id="payment-${i}">
+            <div class="bg-gray-100 shadow-lg p-3 rounded-2xl text-lg" id="payment-${i}-container">
                 <h3 class="text-3xl font-bold mb-2">Invoice Details</h3>
                 <div class="w-1/2 flex flex-row">
                     <div id="payment-med-${i}" class="flex flex-col gap-2">
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <p><span class="font-bold">Total Amount: </span>$<span id="payment-${i}-totalcost"></span></p>
                         <p class="text-gray-500" id="help-text-${i}">Can't afford it now? Ask for help from a member of the public.</p>
                     </div>
-                    <button class="ml-auto px-6 py-2 self-start rounded-xl bg-primary text-white hover:bg-btnprimary">
+                    <button class="ml-auto px-6 py-2 self-start rounded-xl bg-primary text-white hover:bg-btnprimary" id="payment-${i}">
                         Pay
                     </button>
                     <button class="px-6 py-2 self-start rounded-xl bg-gray-400 text-white hover:bg-gray-500" id="help-${i}">
@@ -107,11 +107,36 @@ document.addEventListener("DOMContentLoaded", async () => {
             totalAmount += appointment.medication[j].drugPrice;
         }
         document.getElementById(`payment-${i}-totalcost`).innerText = totalAmount; // Set total cost amount
+    }
 
-        // Set Event Listeners for Payment and Help Buttons
+    for (let i = 0; i < unpaidAppointmentsDetail.length; i++) {
+        const appointment = unpaidAppointmentsDetail[i];
+
+        // Set Event Listeners for Payment Buttons
         document.getElementById(`payment-${i}`).addEventListener('click', async () => {
+            console.log(appointment)
+            // Check if the User has a Pending Payment Request
+            if (appointment.paymentRequest) {
+                const confirmPayment = confirm("You have a pending Payment Help Request. Are you sure you want to make this payment? The request will be cancelled.");
+                if (!confirmPayment) return;
+
+                // Delete Payment Help Request
+                const deletePaymentRequestResponse = await fetch(`/api/paymentRequest/${appointment.paymentRequest.id}`, {
+                    method: 'DELETE'
+                });
+
+                if (deletePaymentRequestResponse.status === 201) {
+                    alert("Payment Request Cancelled.");
+                    document.getElementById(`help-text-${i}`).innerText = `Can't afford it now? Ask for help from a member of the public.`;
+                    document.getElementById(`help-${i}`).disabled = false;
+                    document.getElementById(`help-${i}`).classList.remove('cursor-not-allowed');
+                } else {
+                    alert("Failed to cancel Payment Request.");
+                    return;
+                }
+            }
             // Send Text to Payment Confirmation Popup
-            document.getElementById('payment-amount').innerText = totalAmount;
+            document.getElementById('payment-amount').innerText = document.getElementById(`payment-${i}-totalcost`).innerText;
             document.getElementById('appointment-date').value = appointment.slotDate;
             document.getElementById('appointment-time').value = appointment.slotTime;
             document.getElementById('appointment-id').value = appointment.appointmentId;
@@ -119,33 +144,53 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Display Payment Confirmation Popup
             document.getElementById('make-payment-popup').classList.remove('hidden');
         });
-        document.getElementById(`help-${i}`).addEventListener('click', async () => {
-            // Confirm Help Request
-            const confirmHelpRequest = confirm("Are you sure you want to request help for this payment?");
 
-            if (confirmHelpRequest) {
-                const requestHelpResponse = await fetch(`/api/patient/${accountId}/requestHelp`, {
-                    method: 'POST',
+        // Set Event Listeners for Help Buttons
+        document.getElementById(`help-${i}`).addEventListener('click', async () => {
+            // Display Help Popup
+            document.getElementById('help-appt-id').value = appointment.appointmentId;
+            document.getElementById('reqHelpPopup').classList.remove('hidden');
+    
+            // Handle Submit Help Request
+            document.getElementById('submit-help').addEventListener('click', async () => {
+                const helpReason = document.getElementById('help-reason').value;
+                
+                const helpRequestResponse = await fetch('/api/paymentRequest', {
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         appointmentId: appointment.appointmentId,
+                        message: helpReason,
+                        createdDate: new Date().toISOString()
                     })
                 });
-
-                if (requestHelpResponse.status !== 200) {
-                    alert("Error Requesting Help. Please try again.");
-                    return;
+    
+                if (helpRequestResponse.status === 201) {
+                    alert("Help Request Sent. Please wait for approval.");
+                    document.getElementById('reqHelpPopup').classList.add('hidden');
+    
+                    // Set Text for Help Request
+                    document.getElementById(`help-text-${i}`).innerText = `Help requested on ${new Date().toISOString().split("T")[0]}. Status: Pending`;
+                    document.getElementById(`help-${i}`).disabled = true;
+                    document.getElementById(`help-${i}`).classList.add('cursor-not-allowed');
+                } else {
+                    alert("Error Sending Help Request. Please try again.");
                 }
-
-                alert("Help Request Sent. Please wait for approval.");
-                document.getElementById(`help-text-${i}`).innerText = `Help requested on ${new Date().toISOString().split("T")[0]}. Status: Pending`;
-                document.getElementById(`help-${i}`).disabled = true;
-                document.getElementById(`help-${i}`).classList.add('cursor-not-allowed');
-            }
+            });
+    
+            // Handle Close Popup
+            document.getElementById('cancel-help').addEventListener('click', () => {
+                document.getElementById('reqHelpPopup').classList.add('hidden');
+            });
         });
     }
+
+    // Handle Close Confirm Payment Popup
+    document.getElementById('close-payment-popup').addEventListener('click', () => {
+        document.getElementById('make-payment-popup').classList.add('hidden');
+    });
 
     // Handle Payment Confirmation Submission
     document.getElementById('paymentForm').addEventListener('submit', async (event) => {

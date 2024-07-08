@@ -64,8 +64,38 @@
                     <input type="hidden" id="appointment-time" name="appointment-time">
                     <input type="hidden" id="appointment-id" name="appointment-id">
     
-                    <button type="submit" class="bg-primary hover:bg-btnprimary text-white px-4 py-2 rounded-lg w-full">Make Payment</button>
+                    <div class="flex flex-row gap-4">
+                        <button type="submit" class="bg-primary hover:bg-btnprimary text-white px-4 py-2 rounded-lg w-full">Make Payment</button>
+                        <button class="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg" id="close-payment-popup">Close</button>
+                    </div>
                 </form>
+            </div>
+        </div>
+
+        <div id="reqHelpPopup" class="fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex items-center justify-center hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                <div  class="mb-5">
+                    <h2 class="font-bold text-2xl">Request Help</h2>
+                    <p>If you aren't able to make payment for your appointment, you may request help from a member of the public.</p>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-xl font-bold" for="help-reason">
+                        Reason for Requesting Help
+                    </label>
+                    <input class="mt-2 appearance-none border rounded w-full py-2 px-3 text-gray-700" id="help-reason" type="text" placeholder="Your Answer" required>
+                </div>
+
+                <input type="hidden" id="help-appt-id" name="help-appt-id">
+
+                <div class="flex flex-row space-x-3">
+                    <button class="bg-primary hover:bg-btnprimary text-white px-4 py-2 rounded-lg" id="submit-help">
+                        Submit
+                    </button>
+                    <button class="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg" id="cancel-help">
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     </body>
