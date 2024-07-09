@@ -101,6 +101,7 @@ app.delete("/api/drugContributionOrders/:appointmentId/:drugName", drugOrderCont
 app.post("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", drugOrderController.returnMedicine);
 app.get("/api/companyDrugInventory/", companyDrugInventoryController.getDrugName);
 app.get("/api/companyDrugInventory/:companyId/:drugName", companyDrugInventoryController.getInventoryByDrugName);
+app.delete("/api/companyDrugInventory/:companyId/:drugName", companyDrugInventoryController.emptyMedicineFromInventory);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);

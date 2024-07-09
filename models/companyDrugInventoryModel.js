@@ -93,6 +93,68 @@ class CompanyDrugInventory {
         };
         return result.recordset.map(row => new CompanyDrugInventory(row.DrugName, row.DrugExpiryDateClose, row.DrugExpiryDateFar, row.DrugQuantity, row.DrugPrice, row.DrugDescription, row.CompanyId));
     }
+
+    static async emptyMedicineFromInventory(drugName, companyId) {
+        const connection = await sql.connect(dbConfig);
+    
+        const transaction = new sql.Transaction(connection);
+        try {
+            await transaction.begin();
+    
+            // Select the current quantities
+            const selectQuery = `
+                SELECT DrugRecordId, DrugAvailableQuantity, DrugTotalQuantity
+                FROM DrugInventoryRecord
+                WHERE DrugName = @drugName AND CompanyId = @companyId
+            `;
+            const request = new sql.Request(transaction);
+            request.input('drugName', sql.VarChar, drugName);
+            request.input('companyId', sql.VarChar, companyId);
+            const selectResult = await request.query(selectQuery);
+    
+            if (selectResult.recordset.length === 0) {
+                throw new Error("Record not found");
+            }
+    
+            for (const record of selectResult.recordset) {
+                const { DrugRecordId, DrugAvailableQuantity, DrugTotalQuantity } = record;
+    
+                if (DrugAvailableQuantity === DrugTotalQuantity) {
+                    // Delete the record
+                    const deleteQuery = `
+                        DELETE
+                        FROM DrugInventoryRecord
+                        WHERE DrugRecordId = @DrugRecordId
+                    `;
+                    const deleteRequest = new sql.Request(transaction);
+                    deleteRequest.input('DrugRecordId', sql.VarChar, DrugRecordId);
+                    await deleteRequest.query(deleteQuery);
+                } else {
+                    // Update the quantities
+                    const updateQuery = `
+                        UPDATE DrugInventoryRecord
+                        SET 
+                            DrugAvailableQuantity = 0, 
+                            DrugTotalQuantity = DrugTotalQuantity - @DrugAvailableQuantity
+                        WHERE DrugRecordId = @DrugRecordId
+                    `;
+                    const updateRequest = new sql.Request(transaction);
+                    updateRequest.input('DrugAvailableQuantity', sql.Int, DrugAvailableQuantity);
+                    updateRequest.input('DrugRecordId', sql.VarChar, DrugRecordId);
+                    await updateRequest.query(updateQuery);
+                }
+            }
+    
+            await transaction.commit();
+            connection.close();
+    
+            return 'Updaet Complete'; // Indicate success
+        } catch (error) {
+            await transaction.rollback();
+            connection.close();
+            throw error;
+        }
+    }
 }
 
 module.exports = CompanyDrugInventory;

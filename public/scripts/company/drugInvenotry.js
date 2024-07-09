@@ -49,6 +49,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const selectedDrug = event.target.value;
             console.log(selectedDrug);
             showDrugInfo(selectedDrug, companyId);
+            emptyBtn.removeEventListener('click', handleEmptyInventory);
+            emptyBtn.addEventListener('click', handleEmptyInventory);
         }
     })
 
@@ -70,9 +72,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         drugInfo.innerHTML = drugInformation[0].drugDescription;
     }
 
+    async function emptyInventory(drug, companyId) {
+        try {
+            const fetchEmptyInventory = await fetch(`/api/companyDrugInventory/${companyId}/${drug}`, {
+                method: 'DELETE'
+            });
+            if (!fetchEmptyInventory.ok) {
+                throw new Error('Network response was not ok');
+            }
+            showDrugInfo(drug, companyId);
+        } catch (error) {
+            console.error('Error emptying inventory:', error);
+        }
+    }
+
     function formatDate(dateString) {
         const options = { day: 'numeric', month: 'long', year: 'numeric' };
         const date = new Date(dateString);
         return date.toLocaleDateString('en-GB', options);
+    }
+
+    function handleEmptyInventory() {
+        const selectedDrug = document.querySelector('input[name="medicine"]:checked').value;
+        emptyInventory(selectedDrug, companyId);
     }
 })

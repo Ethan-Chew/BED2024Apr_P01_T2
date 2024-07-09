@@ -21,7 +21,19 @@ const getInventoryByDrugName = async (req, res) => {
     }
 }
 
+const emptyMedicineFromInventory = async (req, res) => {
+    try {
+        const { companyId, drugName } = req.params;
+        const message = await CompanyDrugInventory.emptyMedicineFromInventory(drugName, companyId);
+        res.json({ message });
+    } catch (error) {
+        console.error('Error emptying medicine from inventory:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 module.exports = {
     getDrugName,
-    getInventoryByDrugName
+    getInventoryByDrugName,
+    emptyMedicineFromInventory
 };
