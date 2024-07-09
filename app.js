@@ -3,6 +3,8 @@ const sql = require("mssql");
 const bodyParser = require("body-parser");
 const dbConfig = require("./dbConfig");
 const cookieParser = require("cookie-parser");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json");
 
 // Controllers
 const accountsController = require("./controllers/accountsController");
@@ -37,6 +39,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(staticMiddleware);
+
+// Configure Swagger Documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 /// Routes for Account Authentication and Authorisation
