@@ -20,13 +20,13 @@
         </header>
 
         <!-- Main Content -->
-        <div class="flex flex-col items-center p-8 gap-10">
+        <div class="flex flex-col items-center p-8 gap-6">
             <!--Page title-->
             <div>
                 <h1 class="text-4.5xl font-bold">Drug Inventory</h1>
             </div>
 
-            <div class="w-[70%] flex flex-row gap-4 h-screen pt-0 pb-10">
+            <div class="w-[70%] flex flex-row gap-4 h-[80%] pt-0 pb-10">
                 <!--Search Bar-->
                 <div class="w-1/3 bg-gray-200 px-6 py-4 text-2xl rounded-3xl flex flex-col gap-5 align-center items-center">
                     <!-- Search Field -->
@@ -36,15 +36,8 @@
                     </div>
                     <fieldset class="bg-white w-full h-full flex flex-col overflow-auto" id="drug-list">
                         <legend class="text-center mb-2">Select Medicine</legend>
-                        <!--Medicine List-->
-                        <div class="w-full text-center" >
-                            <input class="peer/medicine1 appearance-none" type="radio" id="medicine1" name="medicine" value="medicine1">
-                            <label class="peer-checked/medicine1:bg-black peer-checked/medicine1:text-white" for="medicine1">medicine1</label>
-                        </div>
-                        <div class="w-full text-center" >
-                            <input class="peer/medicine2 appearance-none" type="radio" id="medicine2" name="medicine" value="medicine2">
-                            <label class="peer-checked/medicine2:bg-black peer-checked/medicine2:text-white" for="medicine2">medicine2</label>
-                        </div>
+                        <!-- Medicine List -->
+                         <p>No Medicine Found</p>
                     </fieldset>
                 </div>
 
@@ -55,7 +48,7 @@
                         <div class="flex flex-col gap-2">
 
                             <!--Medicine Name-->
-                            <p class="text-2xl font-bold w-64" id="drug-name">Drug Name<p>
+                            <p class="text-2xl font-bold w-full" id="drug-name">Drug Name<p>
 
                             <div class="flex flex-row gap-10">
 

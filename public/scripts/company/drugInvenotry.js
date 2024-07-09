@@ -31,12 +31,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         drugList.innerHtml = 'No Medicine Found';
     } else {
         drugNameList.forEach(drug => {
+            const drugId = drug.replace(/ /g, '-');
             const drugItem = document.createElement('div');
             drugItem.className = 'w-full text-center';
 
             drugItem.innerHTML = `
-                <input class="peer/${drug} appearance-none" type="radio" id="${drug}" name="medicine" value="${drug}">
-                <label class="peer-checked/${drug}:bg-black peer-checked/${drug}:text-white" for="${drug}">${drug}</label>
+                <input class="peer/${drugId} appearance-none" type="radio" id="${drugId}" name="medicine" value="${drug}">
+                <label class="peer-checked/${drugId}:bg-black peer-checked/${drugId}:text-white" for="${drugId}">${drug}</label>
             `;
 
             drugList.appendChild(drugItem);
@@ -62,8 +63,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const drugInformation = await fetchDrugInformation.json();
         console.log(drugInformation[0]);
         drugName.innerHTML = drugInformation[0].drugName;
-        drugExpiryClose.innerHTML = formatDate(drugInformation[0].drugExpiryDateClose);
-        drugExpiryFar.innerHTML = formatDate(drugInformation[0].drugExpiryDateFar);
+        drugExpiryClose.innerHTML = drugInformation[0].drugExpiryDateClose === null ? 'N.A' : formatDate(drugInformation[0].drugExpiryDateClose);
+        drugExpiryFar.innerHTML = drugInformation[0].drugExpiryDateFar === null ? 'N.A' : formatDate(drugInformation[0].drugExpiryDateFar);
         drugQuantity.innerHTML = drugInformation[0].drugQuantity + ' Pills';
         drugPrice.innerHTML = '$' + drugInformation[0].drugPrice;
         drugInfo.innerHTML = drugInformation[0].drugDescription;

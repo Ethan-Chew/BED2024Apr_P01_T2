@@ -54,7 +54,7 @@ class CompanyDrugInventory {
             ON
                 di.DrugName = dr.DrugName
             WHERE
-                di.DrugName = @drugName' AND dr.CompanyId = @companyId
+                di.DrugName = @drugName AND dr.CompanyId = @companyId
             GROUP BY
                 di.DrugName,
                 di.DrugPrice,
@@ -62,14 +62,35 @@ class CompanyDrugInventory {
                 dr.CompanyId
         `
 
+        const query2 = `
+            SELECT
+                DrugName,
+                DrugPrice,
+                DrugDescription
+            FROM
+                DrugInventory
+            WHERE
+                DrugName = @drugName
+        `
+
         const request = connection.request();
         request.input('drugName', sql.VarChar, drugName);
         request.input('companyId', sql.VarChar, companyId);
         const result = await request.query(query);
+        const result2 = await request.query(query2);
         connection.close();
 
-        if (result.recordset.length == 0) return null;
-        
+        if (result.recordset.length == 0) {
+            return result2.recordset.map(row => new CompanyDrugInventory(
+                row.DrugName,
+                null,
+                null,
+                0,
+                row.DrugPrice,
+                row.DrugDescription,
+                companyId
+            ));
+        };
         return result.recordset.map(row => new CompanyDrugInventory(row.DrugName, row.DrugExpiryDateClose, row.DrugExpiryDateFar, row.DrugQuantity, row.DrugPrice, row.DrugDescription, row.CompanyId));
     }
 }
