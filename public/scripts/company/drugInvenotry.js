@@ -15,8 +15,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const emptyBtn = document.getElementById('empty-btn');
     const editBtn = document.getElementById('edit-btn');
 
+    const companyId = sessionStorage.getItem('accountId');
+
     // Retrive List of drugs
-    const fetchDrugNameList = await fetch('/api/companyDrugInventory/', {
+    const fetchDrugNameList = await fetch(`/api/companyDrugInventory/`, {
         method: 'GET'
     });
 
@@ -44,12 +46,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.addEventListener('change', event => {
         if (event.target.name === 'medicine') {
             const selectedDrug = event.target.value;
-            showDrugInfo(selectedDrug);
+            console.log(selectedDrug);
+            showDrugInfo(selectedDrug, companyId);
         }
     })
 
     // Show Drug Details
-    function showDrugInfo(drug) {
-        drugName.innerHTML = drug;
+    async function showDrugInfo(drug, companyId) {
+        const fetchDrugInformation = await fetch(`/api/companyDrugInventory/${companyId}/${drug}`, {
+            method: 'GET'
+        })
+        if (!fetchDrugInformation.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const drugInformation = await fetchDrugInformation.json();
+        console.log(drugInformation[0]);
+        drugName.innerHTML = drugInformation[0].drugName;
+        drugExpiryClose.innerHTML = formatDate(drugInformation[0].drugExpiryDateClose);
+        drugExpiryFar.innerHTML = formatDate(drugInformation[0].drugExpiryDateFar);
+        drugQuantity.innerHTML = drugInformation[0].drugQuantity + ' Pills';
+        drugPrice.innerHTML = '$' + drugInformation[0].drugPrice;
+        drugInfo.innerHTML = drugInformation[0].drugDescription;
+    }
+
+    function formatDate(dateString) {
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', options);
     }
 })

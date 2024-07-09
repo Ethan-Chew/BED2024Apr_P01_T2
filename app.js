@@ -100,6 +100,7 @@ app.get("/api/drugContributionOrders/", drugOrderController.getAllDrugOrders);
 app.delete("/api/drugContributionOrders/:appointmentId/:drugName", drugOrderController.deleteDrugOrder);
 app.post("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", drugOrderController.returnMedicine);
 app.get("/api/companyDrugInventory/", companyDrugInventoryController.getDrugName);
+app.get("/api/companyDrugInventory/:companyId/:drugName", companyDrugInventoryController.getInventoryByDrugName);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);
