@@ -25,9 +25,7 @@ const getDrugOrderByIdAndDrugName = async (req, res) => {
 
 const addRequestContribution = async (req, res) => {
     try {
-        const { appointmentId, drugName, quantity, totalCost, contributeDate, confirmationDate, contributionStatus, companyId, drugRecordId } = req.body;
-
-        //console.log('Received body:', req.body); // Log request body
+        const { appointmentId, drugName, quantity, totalCost, contributeDate, companyId, drugRecordId } = req.body;
 
         // Validate input data
         if (!appointmentId || !drugName || quantity == null || !totalCost || !contributeDate) {
@@ -39,9 +37,6 @@ const addRequestContribution = async (req, res) => {
             return res.status(400).json({ error: 'Quantity must be greater than zero' });
         }
 
-        // Default contributionStatus to 'Pending' if not provided
-        const status = contributionStatus || 'Pending';
-
         // Call the addRequestContribution method from the DrugRequest class
         await DrugRequest.addRequestContribution(
             appointmentId,
@@ -49,8 +44,6 @@ const addRequestContribution = async (req, res) => {
             quantity,
             totalCost,
             contributeDate,
-            confirmationDate,
-            status,
             companyId,
             drugRecordId
         );
