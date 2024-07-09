@@ -1,3 +1,5 @@
+const { request } = require("express");
+
 document.addEventListener('DOMContentLoaded', function() {
     async function fetchDrugData() {
         const response = await fetch('/api/drugInventory');
@@ -64,12 +66,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const requestMoreButton = document.createElement('button');
         requestMoreButton.className = "p-3 bg-white rounded-lg shadow hover:bg-gray-300";
         requestMoreButton.textContent = "Request for more";
+        requestMoreButton.addEventListener('click', () => requestMore(drug));
         requestMoreSection.appendChild(requestMoreButton);
     
         drugInfoDiv.appendChild(requestMoreSection);
 
         document.getElementById('drugInfoPanel').innerHTML = "";
         document.getElementById('drugInfoPanel').appendChild(drugInfoDiv); 
+    }
+
+    function requestMore(drug) {
+        
     }
 
     function createDrugElement(drug) {

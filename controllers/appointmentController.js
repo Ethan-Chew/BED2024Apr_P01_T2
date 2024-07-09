@@ -200,8 +200,9 @@ const updateAppointmentDoctorSlot = async (req, res) => {
         }
 
         const getAppointment = await appointment.getAppointmentDetail(appointmentId);
-        const availableSlotId = await getAppointment.slotDate
-        const getSlot = await availableSlot.updateAvailableSlot(availableSlotId, {
+        const availableSlotId = await getAppointment.slotDate;
+        const getAvailableSlot = await availableSlot.getAvailableSlotByDateAndTime;
+        const updategetAvailableSlot =  await availableSlot.updateAvailableSlot(availableSlotId, {
             doctor: doctorId,
             date: date,
             timeId: time,
