@@ -15,8 +15,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const emptyBtn = document.getElementById('empty-btn');
     const editBtn = document.getElementById('edit-btn');
 
+    const companyId = sessionStorage.getItem('accountId');
+
     // Retrive List of drugs
-    const fetchDrugNameList = await fetch('/api/companyDrugInventory/', {
+    const fetchDrugNameList = await fetch(`/api/companyDrugInventory/`, {
         method: 'GET'
     });
 
@@ -29,12 +31,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         drugList.innerHtml = 'No Medicine Found';
     } else {
         drugNameList.forEach(drug => {
+            const drugId = drug.replace(/ /g, '-');
             const drugItem = document.createElement('div');
             drugItem.className = 'w-full text-center';
 
             drugItem.innerHTML = `
-                <input class="peer/${drug} appearance-none" type="radio" id="${drug}" name="medicine" value="${drug}">
-                <label class="peer-checked/${drug}:bg-black peer-checked/${drug}:text-white" for="${drug}">${drug}</label>
+                <input class="peer/${drugId} appearance-none" type="radio" id="${drugId}" name="medicine" value="${drug}">
+                <label class="peer-checked/${drugId}:bg-black peer-checked/${drugId}:text-white" for="${drugId}">${drug}</label>
             `;
 
             drugList.appendChild(drugItem);
@@ -44,12 +47,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.addEventListener('change', event => {
         if (event.target.name === 'medicine') {
             const selectedDrug = event.target.value;
-            showDrugInfo(selectedDrug);
+            console.log(selectedDrug);
+            showDrugInfo(selectedDrug, companyId);
+            emptyBtn.removeEventListener('click', handleEmptyInventory);
+            emptyBtn.addEventListener('click', handleEmptyInventory);
         }
     })
 
     // Show Drug Details
-    function showDrugInfo(drug) {
-        drugName.innerHTML = drug;
+    async function showDrugInfo(drug, companyId) {
+        const fetchDrugInformation = await fetch(`/api/companyDrugInventory/${companyId}/${drug}`, {
+            method: 'GET'
+        })
+        if (!fetchDrugInformation.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const drugInformation = await fetchDrugInformation.json();
+        console.log(drugInformation[0]);
+        drugName.innerHTML = drugInformation[0].drugName;
+        drugExpiryClose.innerHTML = drugInformation[0].drugExpiryDateClose === null ? 'N.A' : formatDate(drugInformation[0].drugExpiryDateClose);
+        drugExpiryFar.innerHTML = drugInformation[0].drugExpiryDateFar === null ? 'N.A' : formatDate(drugInformation[0].drugExpiryDateFar);
+        drugQuantity.innerHTML = drugInformation[0].drugQuantity + ' Pills';
+        drugPrice.innerHTML = '$' + drugInformation[0].drugPrice;
+        drugInfo.innerHTML = drugInformation[0].drugDescription;
+    }
+
+    async function emptyInventory(drug, companyId) {
+        try {
+            const fetchEmptyInventory = await fetch(`/api/companyDrugInventory/${companyId}/${drug}`, {
+                method: 'DELETE'
+            });
+            if (!fetchEmptyInventory.ok) {
+                throw new Error('Network response was not ok');
+            }
+            showDrugInfo(drug, companyId);
+        } catch (error) {
+            console.error('Error emptying inventory:', error);
+        }
+    }
+
+    function formatDate(dateString) {
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', options);
+    }
+
+    function handleEmptyInventory() {
+        const selectedDrug = document.querySelector('input[name="medicine"]:checked').value;
+        emptyInventory(selectedDrug, companyId);
     }
 })
