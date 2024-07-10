@@ -155,6 +155,59 @@ class CompanyDrugInventory {
             throw error;
         }
     }
+
+    static async createDrugInventoryRecord(drugName, drugExpiryDate, drugQuantity, companyId) {
+        const connection = await sql.connect(dbConfig);
+    
+        const transaction = new sql.Transaction(connection);
+        try {
+            await transaction.begin();
+
+            // Get the latest DrugRecordId from the table
+            const getLastRecordQuery = `
+                SELECT TOP 1 DrugRecordId
+                FROM DrugInventoryRecord
+                ORDER BY DrugRecordEntryDate DESC;
+            `;
+            const recordRequest = new sql.Request(transaction);
+            const recordResult = await recordRequest.query(getLastRecordQuery);
+
+            let lastDrugRecordId = recordResult.recordset[0].DrugRecordId;
+            let drugRecordId = incrementDrugRecordId(lastDrugRecordId);
+    
+            const insertQuery = `
+                INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAvailableQuantity, DrugTotalQuantity, DrugRecordEntryDate, CompanyId)
+                VALUES (@drugRecordId, @drugName, @drugExpiryDate, @drugQuantity, @drugQuantity,  CAST(GETDATE() AS DATE), @companyId)
+            `;
+            const request = new sql.Request(transaction);
+            request.input('drugRecordId', sql.VarChar, drugRecordId);
+            request.input('drugName', sql.VarChar, drugName);
+            request.input('drugExpiryDate', sql.Date, drugExpiryDate);
+            request.input('drugQuantity', sql.Int, drugQuantity);
+            request.input('companyId', sql.VarChar, companyId);
+            await request.query(insertQuery);
+    
+            await transaction.commit();
+            connection.close();
+    
+            return 'Insert Complete'; // Indicate success
+        } catch (error) {
+            await transaction.rollback();
+            connection.close();
+            throw error;
+        }
+    }
+
+    
+}
+
+// Helper function to increment DrugRecordId
+function incrementDrugRecordId(lastDrugRecordId) {
+    const prefix = lastDrugRecordId.substring(0, 3); // Assuming DRI is constant prefix
+    const number = parseInt(lastDrugRecordId.substring(3)); // Extract number part
+    const newNumber = number + 1;
+    const newDrugRecordId = `${prefix}${newNumber.toString().padStart(4, '0')}`; // Assuming 4-digit number
+    return newDrugRecordId;
 }
 
 module.exports = CompanyDrugInventory;

@@ -32,8 +32,20 @@ const emptyMedicineFromInventory = async (req, res) => {
     }
 }
 
+const createDrugInventoryRecord = async (req, res) => {
+    try {
+        const { drugName, drugExpiryDate, drugQuantity, companyId } = req.body;
+        const result = await CompanyDrugInventory.createDrugInventoryRecord(drugName, drugExpiryDate, drugQuantity, companyId);
+        res.json({ message: result });
+    } catch (error) {
+        console.error('Error creating drug inventory record:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 module.exports = {
     getDrugName,
     getInventoryByDrugName,
-    emptyMedicineFromInventory
+    emptyMedicineFromInventory,
+    createDrugInventoryRecord
 };

@@ -63,7 +63,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error('Network response was not ok');
         }
         const drugInformation = await fetchDrugInformation.json();
-        console.log(drugInformation[0]);
         drugName.innerHTML = drugInformation[0].drugName;
         drugExpiryClose.innerHTML = drugInformation[0].drugExpiryDateClose === null ? 'N.A' : formatDate(drugInformation[0].drugExpiryDateClose);
         drugExpiryFar.innerHTML = drugInformation[0].drugExpiryDateFar === null ? 'N.A' : formatDate(drugInformation[0].drugExpiryDateFar);
