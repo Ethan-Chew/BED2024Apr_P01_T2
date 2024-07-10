@@ -70,7 +70,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         drugQuantity.innerHTML = drugInformation[0].drugQuantity + ' Pills';
         drugPrice.innerHTML = '$' + drugInformation[0].drugPrice;
         drugInfo.innerHTML = drugInformation[0].drugDescription;
+        editBtn.setAttribute('data-DrugName', drugInformation[0].drugName);
+        editBtn.setAttribute('data-CompanyId', companyId);
     }
+
+    editBtn.addEventListener('click', () => {
+        const drug = editBtn.getAttribute('data-DrugName');
+        const companyId = editBtn.getAttribute('data-CompanyId');
+        window.location.href = `editDrugInventory.html?companyId=${companyId}&drugName=${drug}`;
+    })
 
     async function emptyInventory(drug, companyId) {
         try {
