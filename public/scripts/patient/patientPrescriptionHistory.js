@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('history-container').innerHTML += `
             <div class="bg-gray-200 p-6 mb-3 rounded-lg">
                 <h3 class="text-2xl font-bold">${appointment.reason}</h3>
-                <p class="text-gray-700 mb-5">Date: ${appointment.slotDate}</p>
+                <p class="text-gray-700 mb-5">Date: ${appointment.slotDate.split("T")[0]}</p>
                 <div class="flex flex-row gap-5">
                     <!-- Prescription Details -->
                     <div class="flex flex-auto flex-col gap-3">

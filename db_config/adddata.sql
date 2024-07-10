@@ -1,18 +1,18 @@
 ﻿USE CareLinc;
 
 INSERT INTO Account(AccountId, AccountName, AccountPassword, AccountEmail, AccountCreationDate) VALUES
-('ACC0001', 'User1', 'password1', 'user1@mail.com', 1718096320), 
-('ACC0002', 'User2', 'password2', 'user2@mail.com', 1717839920),
-('ACC0003', 'User3', 'password3', 'user3@mail.com', 1717773120),
-('ACC0004', 'User4', 'password4', 'user4@mail.com', 1718361520),
-('ACC0005', 'User5', 'password5', 'user5@mail.com', 1717607320), 
-('ACC0006', 'User6', 'password6', 'user6@mail.com', 1718446720),
-('ACC0007', 'User7', 'password7', 'user7@mail.com', 1717931520),
-('ACC0008', 'User8', 'password8', 'user8@mail.com', 1717607320),
-('ACC0009', 'User9', 'password9', 'user9@mail.com', 1718446720),
-('ACC0010', 'User10', 'password10', 'user10@mail.com', 1717931520),
-('ACC0011', 'User11', 'password11', 'user11@mail.com', 1717607320),
-('ACC0012', 'User12', 'password12', 'user12@mail.com', 1718446720);
+('ACC0001', 'User1', '$2a$10$rP1fkh4ouGntzi2R./73Cu/3v5lBi.PiM8LdY/3.oZNfPvpUw/oUy', 'user1@mail.com', 1718096320), 
+('ACC0002', 'User2', '$2a$10$O.nB4Hki64pvw9j0T05dau4vViKiBDFUVtgKtJBu6PO0bHoKfW8rS', 'user2@mail.com', 1717839920),
+('ACC0003', 'User3', '$2a$10$ShLvNLcG1t/Cd5yJErL0l.gbxvQwXx/b4VU3VoqLaYlcZ5JFGhKRi', 'user3@mail.com', 1717773120),
+('ACC0004', 'User4', '$2a$10$Qeqj8IazE925Tl4rSQ.FnOWZvZiqyMIqEauiominYrADX0dSvzRFy', 'user4@mail.com', 1718361520),
+('ACC0005', 'User5', '$2a$10$2bkrSl8z1zxWOgVect1C5u3nUTXfF1MFVjDkLlRZwBLT0NqVzmJYy', 'user5@mail.com', 1717607320), 
+('ACC0006', 'User6', '$2a$10$TIUmtJ2r25mPc8zehoxLLe4axWgRjCnDNnNUBsZt7Q6481j8ugweO', 'user6@mail.com', 1718446720),
+('ACC0007', 'User7', '$2a$10$3BnKKhkH41BaDj6Q06fFQewWq6N5j0pbg4LZWDoUl/f7/MXVjQay6', 'user7@mail.com', 1717931520),
+('ACC0008', 'User8', '$2a$10$EgGc2W8RtnnaNzr1CrlcPOM/fsV.Ffd3QGEvRjwVMNyZrlF7AVhFG', 'user8@mail.com', 1717607320),
+('ACC0009', 'User9', '$2a$10$ZFuJFid/f/aRtfKmMVN8bOb7Hhrt0UxtlD2whCMlYkTzDZbU4fkQ.', 'user9@mail.com', 1718446720),
+('ACC0010', 'User10', '$2a$10$e6mDvpOpbBD.ilex2kYiHelknfpb8HbYSsGOcMj7AMzNrswhc75E2', 'user10@mail.com', 1717931520),
+('ACC0011', 'User11', '$2a$10$Y8NLtDGLpYUpOhnTpaM9eu/KxDjAtfj0MQPDYl5JIG2WxhyF/Zv.i', 'user11@mail.com', 1717607320),
+('ACC0012', 'User12', '$2a$10$JqORjogVhWCrpwCf.3bTO.OewtplB2r08J5v4w/rdTmr3BCghpjMu', 'user12@mail.com', 1718446720);
 
 INSERT INTO Staff(StaffId) VALUES
 ('ACC0001'),

@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         paymentListContainer.innerHTML += `
             <div class="bg-gray-100 shadow-lg p-3 rounded-2xl text-lg" id="payment-${i}-container">
-                <h3 class="text-3xl font-bold mb-2">Invoice Details</h3>
+                <h3 class="text-3xl font-bold mb-2">Invoice Details (${appointment.slotDate.split("T")[0]})</h3>
                 <div class="w-1/2 flex flex-row">
                     <div id="payment-med-${i}" class="flex flex-col gap-2">
                         
@@ -106,6 +106,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$${appointment.medication[j].drugPrice}</a>`;
             totalAmount += appointment.medication[j].drugPrice;
         }
+
+        // Add Consultation Cost to Screen
+        document.getElementById(`payment-med-${i}`).innerHTML += `<a>Consultation Fee</a>`;
+        document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$${appointment.consultationCost}</a>`;
+
         document.getElementById(`payment-${i}-totalcost`).innerText = totalAmount; // Set total cost amount
     }
 

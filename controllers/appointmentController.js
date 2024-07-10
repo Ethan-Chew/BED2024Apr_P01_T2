@@ -13,12 +13,14 @@ const getAllPatientAppointment = async (req, res) => {
 
         if (!appointments) {
             res.status(404).json({
+                status: "Not Found",
                 message: `No appointments found for patient with ID ${patientId}`
             });
             return;
         }
 
         res.status(200).json({
+            status: "Success",
             message: "Appointments Found",
             appointments: appointments
         });
@@ -42,6 +44,14 @@ const getAppointmentDetailById = async (req, res) => {
         if (!appointmentDetail) {
             res.status(404).json({
                 message: `Appointment with ID ${appointmentId} not found.`
+            });
+            return;
+        }
+
+        if (req.user.id !== appointmentDetail.patientId) {
+            res.status(403).json({
+                status: "Forbidden",
+                message: "You are not allowed to view this Appointment."
             });
             return;
         }

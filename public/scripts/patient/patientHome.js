@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const confirmCancel = confirm("Are you sure you want to cancel this appointment?");
                 if (!confirmCancel) return;
                 else {
-                    const fetchCancel = await fetch(`/api/appointments/${futureAppointments[i].appointmentId}`, {
+                    const fetchCancel = await fetch(`/api/appointments/${futureAppointments[i].id}`, {
                         method: 'DELETE'
                     });
                     if (fetchCancel.status !== 200) {

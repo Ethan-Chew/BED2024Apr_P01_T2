@@ -29,10 +29,10 @@ const authLoginAccount = async (req, res) => {
                 message: `Account with email ${email} not found.`
             });
         }
-
+        console.log(password, account.AccountPassword)
         // Check the Account's Password and see if it matches
         const checkPasswordMatch = await bcrypt.compare(password, account.AccountPassword);
-        if (checkPasswordMatch) {
+        if (!checkPasswordMatch) {
             return res.status(403).json({
                 status: 'Error',
                 message: "Incorrect Password",
@@ -93,7 +93,10 @@ const authCreatePatient = async (req, res) => {
     try {
         const { name, email, password, knownAllergies, birthdate, qns } = req.body;
 
-        const userAccount = await Account.createAccount(name, email, password);
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const userAccount = await Account.createAccount(name, email, hashedPassword);
         const patientAccount = await Patient.createPatient(userAccount.id, name, email, password, userAccount.creationDate, knownAllergies, birthdate);
         await Questionnaire.createQuestionnaire(patientAccount.id, qns);
 
@@ -303,10 +306,12 @@ const updatePatientById = async (req, res) => {
         });
 
         // Update Account (Patient's Parent Class)
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
         const updateAccountRes = await Account.updateAccount(patientId, {
             name: name,
             email: email,
-            password: password
+            password: hashedPassword
         })
 
         if (updatePatientRes && updateAccountRes) {
