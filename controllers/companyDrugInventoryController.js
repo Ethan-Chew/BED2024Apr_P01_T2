@@ -43,9 +43,24 @@ const createDrugInventoryRecord = async (req, res) => {
     }
 }
 
+const removeDrugFromInventoryRecord = async (req, res) => {
+    try {
+        const { drugName, drugQuantity, companyId } = req.params;
+        if (!companyId || !drugName || !drugQuantity) {
+            return res.status(400).send('Missing required parameters.');
+        }
+        const result = await CompanyDrugInventory.removeDrugFromInventoryRecord(drugName, drugQuantity, companyId);
+        res.json({ message: result });
+    } catch (error) {
+        console.error('Error removing drug from inventory record:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 module.exports = {
     getDrugName,
     getInventoryByDrugName,
     emptyMedicineFromInventory,
-    createDrugInventoryRecord
+    createDrugInventoryRecord,
+    removeDrugFromInventoryRecord
 };

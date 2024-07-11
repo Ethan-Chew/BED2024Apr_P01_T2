@@ -93,6 +93,50 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     });
 
+    removeQuantity.addEventListener('input', () => {
+        const quantity = parseInt(removeQuantity.value.trim());
+        const availableQuantity = parseInt(drugQuantity.textContent.split(' ')[0]);
+        if (quantity > availableQuantity) {
+            alert('Quantity to remove exceeds available quantity');
+            removeQuantity.value = availableQuantity;
+        }
+    });
+
+    // Remove Drug from Drug Inventory
+    removeBtn.addEventListener('click', async() => {
+        const quantity = removeQuantity.value.trim();
+
+         // Validate quantity
+        if (quantity === '') {
+            alert('Please fill in the quantity');
+            return;
+        }
+
+        // Validate quantity is a positive integer
+        if (parseInt(quantity) <= 0 || isNaN(parseInt(quantity))) {
+            alert('Quantity must be a valid number greater than 0');
+            return;
+        }
+
+        try {
+            const removeDrug = await fetch(`/api/companyDrugInventory/${companyId}/${drug}/${quantity}`, {
+                method: 'DELETE'
+            });
+    
+            if (!removeDrug.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const response = await removeDrug.json();
+            if (response.message) {
+                alert(response.message);
+                window.location.reload();
+            }
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    });
+
     function isValidDateFormat(dateString) {
         const regex = /^\d{4}-\d{2}-\d{2}$/; // Regex pattern for YYYY-MM-DD format
         return regex.test(dateString);

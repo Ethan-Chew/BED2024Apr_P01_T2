@@ -198,6 +198,76 @@ class CompanyDrugInventory {
         }
     }
 
+    static async removeDrugFromInventoryRecord(drugName, drugQuantity, companyId) {
+        const connection = await sql.connect(dbConfig);
+        
+        const transaction = new sql.Transaction(connection);
+        try {
+            await transaction.begin();
+
+            // Get records with available quantity greater than 0, ordered by expiry date
+            const getRecordQuery = `
+                SELECT DrugRecordId, DrugAvailableQuantity, DrugTotalQuantity, DrugExpiryDate
+                FROM DrugInventoryRecord
+                WHERE DrugAvailableQuantity > 0 AND CompanyId = @companyId AND DrugName = @drugName
+                ORDER BY DrugExpiryDate ASC;
+            `;
+            const recordRequest = new sql.Request(transaction);
+            recordRequest.input('drugName', sql.VarChar, drugName);
+            recordRequest.input('companyId', sql.VarChar, companyId);
+            const recordResult = await recordRequest.query(getRecordQuery);
+
+            let remainingQuantityToRemove = drugQuantity;
+
+            for (let record of recordResult.recordset) {
+                if (remainingQuantityToRemove <= 0){
+                    break;
+                }
+
+                const availableQuantity = record.DrugAvailableQuantity;
+                const totalQuantity = record.DrugTotalQuantity;
+                const quantityToRemove = Math.min(availableQuantity, remainingQuantityToRemove);
+
+                if (quantityToRemove === totalQuantity) {
+                    const deleteQuery = `
+                        DELETE FROM DrugInventoryRecord
+                        WHERE DrugRecordId = @drugRecordId;
+                    `;
+
+                    const deleteRequest = new sql.Request(transaction);
+                    deleteRequest.input('drugRecordId', sql.VarChar, record.DrugRecordId);
+                    await deleteRequest.query(deleteQuery);
+                } else {
+                    const updateQuery = `
+                        UPDATE DrugInventoryRecord
+                        SET
+                            DrugAvailableQuantity = DrugAvailableQuantity - @quantityToRemove,
+                            DrugTotalQuantity = DrugTotalQuantity - @quantityToRemove
+                        WHERE
+                            DrugRecordId = @drugRecordId;
+                    `
+
+                    const updateRequest = new sql.Request(transaction);
+                    updateRequest.input('quantityToRemove', sql.Int, quantityToRemove);
+                    updateRequest.input('drugRecordId', sql.VarChar, record.DrugRecordId);
+                    await updateRequest.query(updateQuery);
+                }
+                
+                
+                remainingQuantityToRemove -= quantityToRemove;
+            }
+
+            await transaction.commit();
+            connection.close();
+
+            return 'Update Complete'
+        } catch (error) {
+            await transaction.rollback();
+            connection.close();
+            throw error;
+        }
+    }
+
     
 }
 
