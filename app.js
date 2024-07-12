@@ -21,6 +21,7 @@ const mailController = require("./controllers/mailController");
 const chatbotController = require("./controllers/chatbotController");
 const paymentRequestController = require("./controllers/paymentRequestController")
 const companyDrugInventoryController = require("./controllers/companyDrugInventoryController");
+const companyInventoryRecordController = require("./controllers/companyInventoryRecordController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -109,6 +110,9 @@ app.get("/api/companyDrugInventory/:companyId/:drugName", companyDrugInventoryCo
 app.delete("/api/companyDrugInventory/:companyId/:drugName", companyDrugInventoryController.emptyMedicineFromInventory);
 app.post("/api/companyDrugInventory/addDrug", companyDrugInventoryController.createDrugInventoryRecord);
 app.delete("/api/companyDrugInventory/:companyId/:drugName/:drugQuantity", companyDrugInventoryController.removeDrugFromInventoryRecord);
+app.get("/api/inventoryRecord/:companyId", companyInventoryRecordController.getInventoryRecordByCompanyId);
+app.put("/api/inventoryRecord/:drugRecordId", companyInventoryRecordController.updateDrugQuantityByRecordId);
+app.delete("/api/inventoryRecord/:drugRecordId", companyInventoryRecordController.deleteDrugRecordByRecordId);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);
