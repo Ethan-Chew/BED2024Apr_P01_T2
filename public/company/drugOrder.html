@@ -21,6 +21,9 @@
 
         <!-- Main Content -->
         <div class="flex flex-col items-center p-8 gap-10">
+            <div class="self-start bg-gray-200 p-2 rounded-xl text-xl font-bold z-[1000] absolute">
+                <button class="w-auto h-auto" id="home-btn">Home</button>
+            </div>
             <!--Page title-->
             <div>
                 <h1 class="text-4.5xl font-bold">View Drug Donation Order</h1>
@@ -29,15 +32,9 @@
             <!--Search Bar-->
             <div class="w-1/2 bg-gray-200 px-6 py-4 shadow-xl text-2xl rounded-3xl flex flex-row gap-5 align-center items-center justify-between">
                 <!-- Search Field -->
-                <div class="w-1/2 border-r-2 flex flex-row gap-3 items-center align-center">
+                <div class="w-full border-r-2 flex flex-row gap-3 items-center align-center">
                     <i data-feather="search" class="h-8 w-8"></i>
                     <input id="search-field" placeholder="Search..." class="p-1 w-full">
-                </div>
-                <!-- Filter Search -->
-                <div class="w-1/2 border-r-2 flex flex-row gap-3 items-center align-center">
-                    <select id="filter-field" class="p-1 w-full">
-                        <option value="0">Filter Option</option>
-                    </select>
                 </div>
             </div>
 

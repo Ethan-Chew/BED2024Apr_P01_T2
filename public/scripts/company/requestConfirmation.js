@@ -1,16 +1,13 @@
 document.addEventListener("DOMContentLoaded", async() => {
-    // Handle Logout Button Press
-    // document.getElementById('logout').addEventListener('click', () => {
-    //     sessionStorage.removeItem('accountId');
-    //     window.location.href = '../index.html';
-    // });
-
     // Handle Cancel Button Press
     document.getElementById('cancel-btn').addEventListener('click', () => {
         window.location.href = 'drugRequest.html';
     });
 
-    
+    // Handle Back Button Press
+    document.getElementById('back-btn').addEventListener('click', () => {
+        window.location.href = './drugRequest.html';
+    });    
 
     // Get the parameters for fetching the drug order details
     const urlParams = new URLSearchParams(window.location.search);
