@@ -21,14 +21,14 @@ const mailController = require("./controllers/mailController");
 const chatbotController = require("./controllers/chatbotController");
 const paymentRequestController = require("./controllers/paymentRequestController")
 const companyDrugInventoryController = require("./controllers/companyDrugInventoryController");
-const companyInventoryRecordController = require("./controllers/companyInventoryRecordController.js");
+const companyInventoryRecordController = require("./controllers/inventoryRecordController.js");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
 const validatePaymentMethod = require("./middleware/validatePaymentMethod");
 const validatePaymentConfirmationEmail = require("./middleware/validatePaymentConfirmationEmail");
 const validateAppointment = require("./middleware/validateAppointment");
-const validatePaymentRequest = require("./middleware/validatePaymentRequest")
+const validatePaymentRequest = require("./middleware/validatePaymentRequest");
 
 // JWT Verification Middleware
 const authoriseJWT = require("./middleware/authoriseJWT");
@@ -97,19 +97,24 @@ app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppoi
 /// Route for Company Account
 app.post("/api/auth/create/company", accountsController.authCreateCompany);
 app.get("/api/company/:companyId", companyController.getCompanyById);
+// Drug Requests (Company)
 app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName);
-app.post("/api/drugRequest/:id/:drugName", drugRequestController.cancelDrugOrder);
-app.post("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
-app.put("/api/drugRequest/drugContribution", drugRequestController.addRequestContribution);
-app.get("/api/drugContributionOrders/", drugOrderController.getAllDrugOrders);
+app.put("/api/drugRequest/:id/:drugName", drugRequestController.cancelDrugOrder);
+app.put("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
+// Drug Orders (Company)
+app.post("/api/drugRequest/drugContribution", drugRequestController.addRequestContribution);
+app.get("/api/drugContributionOrders/:companyId", drugOrderController.getAllDrugOrders);
+app.put("/api/drugContributionOrders/:appointmentId/:drugName", drugOrderController.confirmDrugOrder);
 app.delete("/api/drugContributionOrders/:appointmentId/:drugName", drugOrderController.deleteDrugOrder);
-app.post("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", drugOrderController.returnMedicine);
+app.put("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", drugOrderController.returnMedicine);
+// Drug Inventory (Company)
 app.get("/api/companyDrugInventory/", companyDrugInventoryController.getDrugName);
 app.get("/api/companyDrugInventory/:companyId/:drugName", companyDrugInventoryController.getInventoryByDrugName);
 app.delete("/api/companyDrugInventory/:companyId/:drugName", companyDrugInventoryController.emptyMedicineFromInventory);
 app.post("/api/companyDrugInventory/addDrug", companyDrugInventoryController.createDrugInventoryRecord);
 app.delete("/api/companyDrugInventory/:companyId/:drugName/:drugQuantity", companyDrugInventoryController.removeDrugFromInventoryRecord);
+// Drug Inventory Record (Company)
 app.get("/api/inventoryRecord/:companyId", companyInventoryRecordController.getInventoryRecordByCompanyId);
 app.put("/api/inventoryRecord/:drugRecordId", companyInventoryRecordController.updateDrugQuantityByRecordId);
 app.delete("/api/inventoryRecord/:drugRecordId", companyInventoryRecordController.deleteDrugRecordByRecordId);
