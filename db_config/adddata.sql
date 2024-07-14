@@ -99,11 +99,11 @@ INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, Consultati
 INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus) VALUES
 ('REQ0001', 'APP0001', 'Not enough money to pay for this appointment', '2024-05-20', 'Pending');
 
-INSERT INTO Payments (PaymentId, AppointmentId, PaymentStatus) VALUES
-('PAY0001', 'APP0001', 'Unpaid'),
-('PAY0002', 'APP0002', 'Paid'),
-('PAY0003', 'APP0003', 'Unpaid'),
-('PAY0004', 'APP0004', 'Unpaid');
+INSERT INTO Payments (PaymentId, AppointmentId, PaymentStatus, PaymentType) VALUES
+('PAY0001', 'APP0001', 'Unpaid', NULL),
+('PAY0002', 'APP0002', 'Paid', 'Card'),
+('PAY0003', 'APP0003', 'Unpaid', NULL),
+('PAY0004', 'APP0004', 'Unpaid', NULL);
 
 INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Aspirin', 5.99, 'Pain relief'),

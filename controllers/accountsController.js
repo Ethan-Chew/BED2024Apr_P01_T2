@@ -29,7 +29,7 @@ const authLoginAccount = async (req, res) => {
                 message: `Account with email ${email} not found.`
             });
         }
-        console.log(password, account.AccountPassword)
+
         // Check the Account's Password and see if it matches
         const checkPasswordMatch = await bcrypt.compare(password, account.AccountPassword);
         if (!checkPasswordMatch) {

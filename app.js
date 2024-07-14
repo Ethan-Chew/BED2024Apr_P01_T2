@@ -22,6 +22,7 @@ const chatbotController = require("./controllers/chatbotController");
 const paymentRequestController = require("./controllers/paymentRequestController")
 const companyDrugInventoryController = require("./controllers/companyDrugInventoryController");
 const companyInventoryRecordController = require("./controllers/companyInventoryRecordController");
+const digitalWalletController = require("./controllers/digitalWalletController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -60,6 +61,12 @@ app.get("/api/patient/:patientId/paymentMethods", authoriseJWT, paymentMethodCon
 app.post("/api/patient/:patientId/paymentMethods", authoriseJWT, validatePaymentMethod, paymentMethodController.createPaymentMethod);
 app.delete("/api/patient/:patientId/paymentMethods/:methodId", authoriseJWT, paymentMethodController.deletePaymentMethod);
 app.put("/api/patient/:patientId/paymentMethods/:methodId", authoriseJWT, validatePaymentMethod, paymentMethodController.updatePaymentMethod);
+
+// Routes for Patient's Digital Wallet
+app.get("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.getDigitalWallet);
+app.post("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.createDigitalWallet);
+app.delete("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.deleteDigitalWallet);
+app.put("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.updateDigitalWallet);
 
 // Route for Managing Patient Payments
 app.post("/api/patient/makePayment", authoriseJWT, paymentController.patientMakePayment);

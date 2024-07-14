@@ -36,6 +36,24 @@ CREATE TABLE Patient (
 	CONSTRAINT FK_Patient FOREIGN KEY (PatientId) REFERENCES Account(AccountId)
 );
 
+CREATE TABLE DigitalWallet (
+	PatientId VARCHAR(7) NOT NULL UNIQUE,
+	WalletBalance MONEY NOT NULL,
+
+	CONSTRAINT PK_DigitalWallet PRIMARY KEY (PatientId),
+)
+
+CREATE TABLE DigitalWalletTopUpHistory (
+	PatientId VARCHAR(7) NOT NULL UNIQUE,
+	WalletTransactionId INT IDENTITY(1,1),
+	TransactionAmount MONEY NOT NULL,
+	TransactionDate BIGINT NOT NULL,
+
+	CONSTRAINT PK_DigitalWalletHistory PRIMARY KEY (PatientId, WalletTransactionId),
+	CONSTRAINT FK_DigitalWalletHistory_Patient FOREIGN KEY (PatientId) REFERENCES Patient(PatientId),
+	CONSTRAINT FK_DigitalWalletHistory_Wallet FOREIGN KEY (PatientId) REFERENCES DigitalWallet(PatientId),
+)
+
 CREATE TABLE PatientPaymentMethods (
 	PaymentMethodId VARCHAR(7) NOT NULL,
 	PatientId VARCHAR(7) NOT NULL,
@@ -138,8 +156,8 @@ CREATE TABLE PaymentRequest (
 CREATE TABLE Payments (
 	PaymentId VARCHAR(7),
 	AppointmentId VARCHAR(7) NOT NULL,
-	PaymentAmount MONEY NULL,
 	PaymentStatus VARCHAR (10) NOT NULL CHECK (PaymentStatus IN ('Paid','Unpaid')),
+	PaymentType VARCHAR(10) NULL CHECK (PaymentType IN ('DWallet', 'Card')),
 
 	CONSTRAINT PK_Payments PRIMARY KEY (PaymentId),
 	CONSTRAINT FK_Payments_Appointments FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
