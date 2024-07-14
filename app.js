@@ -21,7 +21,7 @@ const mailController = require("./controllers/mailController");
 const chatbotController = require("./controllers/chatbotController");
 const paymentRequestController = require("./controllers/paymentRequestController")
 const companyDrugInventoryController = require("./controllers/companyDrugInventoryController");
-const companyInventoryRecordController = require("./controllers/companyInventoryRecordController");
+const companyInventoryRecordController = require("./controllers/companyInventoryRecordController.js");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
