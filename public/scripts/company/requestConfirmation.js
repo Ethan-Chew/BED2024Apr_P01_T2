@@ -1,16 +1,13 @@
 document.addEventListener("DOMContentLoaded", async() => {
-    // Handle Logout Button Press
-    // document.getElementById('logout').addEventListener('click', () => {
-    //     sessionStorage.removeItem('accountId');
-    //     window.location.href = '../index.html';
-    // });
-
     // Handle Cancel Button Press
     document.getElementById('cancel-btn').addEventListener('click', () => {
         window.location.href = 'drugRequest.html';
     });
 
-    
+    // Handle Back Button Press
+    document.getElementById('back-btn').addEventListener('click', () => {
+        window.location.href = './drugRequest.html';
+    });    
 
     // Get the parameters for fetching the drug order details
     const urlParams = new URLSearchParams(window.location.search);
@@ -86,23 +83,23 @@ document.addEventListener("DOMContentLoaded", async() => {
                 const totalCost = parseFloat(document.getElementById('price').innerText.replace('$', ''));
 
                 // Execute both requests in sequence to get recordId first
-                const postResponse = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
-                    method: 'POST',
+                const putResponse = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ contributedQuantity: totalContribution })
                 });
 
-                if (!postResponse.ok) {
-                    const error = await postResponse.json();
-                    throw new Error(`POST request failed: ${error.error}`);
+                if (!putResponse.ok) {
+                    const error = await putResponse.json();
+                    throw new Error(`PUT request failed: ${error.error}`);
                 }
 
-                const { recordId } = await postResponse.json();
+                const { recordId } = await putResponse.json();
 
-                const putResponse = await fetch(`/api/drugRequest/drugContribution`, {
-                    method: 'PUT',
+                const postResponse = await fetch(`/api/drugRequest/drugContribution`, {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -110,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                         appointmentId,
                         drugName,
                         quantity: totalContribution,
-                        totalCost: parseFloat(totalContribution) * parseFloat(totalCost),
+                        totalCost: parseFloat(totalCost),
                         contributeDate: getTodayDate(),
                         contributionStatus: 'Pending',
                         companyId: companyId,
@@ -119,9 +116,9 @@ document.addEventListener("DOMContentLoaded", async() => {
                 });
 
 
-                if (!putResponse.ok) {
-                    const error = await putResponse.json();
-                    throw new Error(`PUT request failed: ${error.error}`);
+                if (!postResponse.ok) {
+                    const error = await postResponse.json();
+                    throw new Error(`POST request failed: ${error.error}`);
                 }
                 
     

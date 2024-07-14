@@ -13,7 +13,7 @@ class DrugOrder{
         this.drugRecordId = drugRecordId;
     }
 
-    static async getAllDrugOrders(){
+    static async getAllDrugOrders(companyId){
         const connection = await sql.connect(dbConfig);
 
         const query = `
@@ -29,12 +29,13 @@ class DrugOrder{
             FROM
                 DrugRequestContribution do
             WHERE
-                do.ContributionStatus = 'Pending'
+                do.ContributionStatus IN ('Pending', 'Completed')
+                AND do.CompanyId = @companyId
         `
 
         const request = connection.request();
+        request.input('companyId', sql.VarChar, companyId);
         const result = await request.query(query);
-        //console.log('SQL query result:', result); // Debug log
         connection.close();
 
         if (result.recordset.length == 0) return null;
@@ -91,6 +92,29 @@ class DrugOrder{
             connection.close();
         } catch (error) {
             console.error('Error Returning drug order: ', error);
+            throw error;
+        }
+    }
+
+    static async confirmDrugOrder(appointmentId, drugName) {
+        try {
+            const connection = await sql.connect(dbConfig);
+
+            const query = `
+                UPDATE DrugRequestContribution
+                SET ContributionStatus = 'Completed',
+                    ConfirmationDate = CONVERT(date, GETDATE())
+                WHERE AppointmentId = @appointmentId AND DrugName = @drugName
+            `
+
+            const request = connection.request();
+            request.input('appointmentId', sql.VarChar, appointmentId);
+            request.input('drugName', sql.VarChar, drugName);
+            await request.query(query);
+
+            connection.close();
+        } catch (error) {
+            console.error('Error Confirming drug order: ', error);
             throw error;
         }
     }

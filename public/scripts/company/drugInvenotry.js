@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = '../index.html';
     });
 
+    // Handle Home Button Press
+    document.getElementById('home-btn').addEventListener('click', () => {
+        window.location.href = './companyHome.html';
+    });    
+
     const drugList = document.getElementById('drug-list');
     const drugName = document.getElementById('drug-name');
     const drugExpiryClose = document.getElementById('expiry-date-close');
@@ -17,6 +22,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const companyId = sessionStorage.getItem('accountId');
 
+    // Initially disable buttons
+    emptyBtn.disabled = true;
+    editBtn.disabled = true;
+
     // Retrive List of drugs
     const fetchDrugNameList = await fetch(`/api/companyDrugInventory/`, {
         method: 'GET'
@@ -24,35 +33,85 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const drugNameList = await fetchDrugNameList.json();
 
-    drugList.innerHTML = '';
-    drugList.innerHTML = '<legend class="text-center mb-2">Select Medicine</legend>';
+    const renderDrugList = (drugs) => {
+        drugList.innerHTML = '';
+        drugList.innerHTML = '<legend class="text-center mb-2">Select Medicine</legend>';
 
-    if (!Array.isArray(drugNameList) || drugNameList.length === 0) {
-        drugList.innerHtml = 'No Medicine Found';
-    } else {
-        drugNameList.forEach(drug => {
-            const drugId = drug.replace(/ /g, '-');
-            const drugItem = document.createElement('div');
-            drugItem.className = 'w-full text-center';
-
-            drugItem.innerHTML = `
-                <input class="peer/${drugId} appearance-none" type="radio" id="${drugId}" name="medicine" value="${drug}">
-                <label class="peer-checked/${drugId}:bg-black peer-checked/${drugId}:text-white" for="${drugId}">${drug}</label>
+        if (!Array.isArray(drugs) || drugs.length === 0) {
+            drugList.innerHTML = `
+                <legend class="text-center mb-2">Select Medicine</legend>
+                <p class="text-center">No Medicine Found</p>
             `;
+        } else {
+            drugs.forEach(drug => {
+                const drugId = drug.replace(/ /g, '-');
+                const drugItem = document.createElement('div');
+                drugItem.className = 'w-full text-center';
 
-            drugList.appendChild(drugItem);
-        })
-    }
+                drugItem.innerHTML = `
+                    <input class="peer/${drugId} appearance-none" type="radio" id="${drugId}" name="medicine" value="${drug}">
+                    <label class="peer-checked/${drugId}:bg-black peer-checked/${drugId}:text-white" for="${drugId}">${drug}</label>
+                `;
 
-    document.addEventListener('change', event => {
-        if (event.target.name === 'medicine') {
-            const selectedDrug = event.target.value;
-            console.log(selectedDrug);
-            showDrugInfo(selectedDrug, companyId);
-            emptyBtn.removeEventListener('click', handleEmptyInventory);
-            emptyBtn.addEventListener('click', handleEmptyInventory);
+                drugList.appendChild(drugItem);
+            });
         }
-    })
+
+        document.addEventListener('change', event => {
+            if (event.target.name === 'medicine') {
+                const selectedDrug = event.target.value;
+                console.log(selectedDrug);
+                showDrugInfo(selectedDrug, companyId);
+                emptyBtn.disabled = false;
+                editBtn.disabled = false;
+                emptyBtn.removeEventListener('click', handleEmptyInventory);
+                emptyBtn.addEventListener('click', handleEmptyInventory);
+            }
+        })
+    };
+
+    // Initial render of the drug list
+    renderDrugList(drugNameList);
+
+    // Add event listener to the search field
+    const searchField = document.getElementById('search-field');
+    searchField.addEventListener('input', (event) => {
+        const searchValue = event.target.value.toLowerCase();
+        const filteredDrugs = drugNameList.filter((drug) => {
+            return drug.toLowerCase().includes(searchValue);
+        });
+        renderDrugList(filteredDrugs);
+    });
+
+    // drugList.innerHTML = '';
+    // drugList.innerHTML = '<legend class="text-center mb-2">Select Medicine</legend>';
+
+    // if (!Array.isArray(drugNameList) || drugNameList.length === 0) {
+    //     drugList.innerHtml = 'No Medicine Found';
+    // } else {
+    //     drugNameList.forEach(drug => {
+    //         const drugId = drug.replace(/ /g, '-');
+    //         const drugItem = document.createElement('div');
+    //         drugItem.className = 'w-full text-center';
+
+    //         drugItem.innerHTML = `
+    //             <input class="peer/${drugId} appearance-none" type="radio" id="${drugId}" name="medicine" value="${drug}">
+    //             <label class="peer-checked/${drugId}:bg-black peer-checked/${drugId}:text-white" for="${drugId}">${drug}</label>
+    //         `;
+
+    //         drugList.appendChild(drugItem);
+    //     })
+    // }
+
+    // document.addEventListener('change', event => {
+    //     if (event.target.name === 'medicine') {
+    //         const selectedDrug = event.target.value;
+    //         console.log(selectedDrug);
+    //         showDrugInfo(selectedDrug, companyId);
+    //         emptyBtn.removeEventListener('click', handleEmptyInventory);
+    //         emptyBtn.addEventListener('click', handleEmptyInventory);
+    //     }
+    // })
 
     // Show Drug Details
     async function showDrugInfo(drug, companyId) {

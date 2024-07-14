@@ -1,4 +1,4 @@
-const InventoryRecord = require('../models/companyInventoryRecordModel');
+const InventoryRecord = require('../models/inventoryRecordModel');
 
 const getInventoryRecordByCompanyId = async (req, res) => {
     try {

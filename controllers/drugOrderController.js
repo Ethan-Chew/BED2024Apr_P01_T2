@@ -2,8 +2,13 @@ const DrugOrder = require('../models/drugOrderModel');
 
 const getAllDrugOrders = async (req, res) =>{
     try {
-        const drugOrders = await DrugOrder.getAllDrugOrders();
-        console.log(drugOrders);
+        const companyId = req.params.companyId; // Assuming companyId is passed as a parameter
+        const drugOrders = await DrugOrder.getAllDrugOrders(companyId);
+        
+        if (!drugOrders) {
+            return res.status(404).json({ error: 'No drug orders found for the company' });
+        }
+        
         res.json(drugOrders);
     } catch (err) {
         console.error(err);
@@ -50,8 +55,28 @@ const returnMedicine = async (req, res) =>{
 
 }
 
+const confirmDrugOrder = async (req, res) =>{
+    try {
+        const { appointmentId, drugName } = req.params;
+
+        // Validate input
+        if (!appointmentId || !drugName) {
+            return res.status(400).json({ error: 'Missing required parameters' });
+        }
+
+        await DrugOrder.confirmDrugOrder(appointmentId, drugName);
+
+        // Respond with success message
+        res.status(200).json({ message: 'Drug order confirmed successfully' });
+    } catch (err) {
+        console.error('Error confirming drug order:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 module.exports = {
     getAllDrugOrders,
     deleteDrugOrder,
-    returnMedicine
+    returnMedicine,
+    confirmDrugOrder
 }

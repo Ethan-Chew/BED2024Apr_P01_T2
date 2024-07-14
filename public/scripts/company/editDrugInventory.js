@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", async() => {
         window.location.href = '../index.html';
     });
 
+    // Handle Back Button Press
+    document.getElementById('back-btn').addEventListener('click', () => {
+        window.location.href = './drugInventory.html';
+    });    
+
     const drugName = document.getElementById('drug-name');
     const drugExpiryClose = document.getElementById('expiry-date-close');
     const drugExpiryFar = document.getElementById('expiry-date-far');
