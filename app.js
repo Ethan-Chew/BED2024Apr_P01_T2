@@ -31,6 +31,7 @@ const validatePaymentMethod = require("./middleware/validatePaymentMethod");
 const validatePaymentConfirmationEmail = require("./middleware/validatePaymentConfirmationEmail");
 const validateAppointment = require("./middleware/validateAppointment");
 const validatePaymentRequest = require("./middleware/validatePaymentRequest");
+const validateWalletHistory = require("./middleware/validateWalletHistory");
 
 // JWT Verification Middleware
 const authoriseJWT = require("./middleware/authoriseJWT");
@@ -71,7 +72,7 @@ app.put("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletCont
 
 // Routes for Patient's Digital Wallet History
 app.get("/api/patient/:patientId/digitalWalletHistory", authoriseJWT, digitalWalletHistoryController.getDigitalWalletHistory);
-app.post("/api/patient/:patientId/digitalWalletHistory", authoriseJWT, digitalWalletHistoryController.addDigitalWalletHistory);
+app.post("/api/patient/:patientId/digitalWalletHistory", authoriseJWT, validateWalletHistory, digitalWalletHistoryController.addDigitalWalletHistory);
 app.delete("/api/patient/:patientId/digitalWalletHistory", authoriseJWT, digitalWalletHistoryController.deleteDigitalWalletHistory);
 
 // Route for Managing Patient Payments

@@ -41,7 +41,7 @@ const getDigitalWalletHistory = async (req, res) => {
 const addDigitalWalletHistory = async (req, res) => {
     try {
         const { patientId } = req.params;
-        const { amount } = req.body;
+        const { title, amount } = req.body;
 
         // Verify User's Identity
         if (req.user.id !== patientId) {
@@ -51,16 +51,8 @@ const addDigitalWalletHistory = async (req, res) => {
             });
         }
 
-        // Verify the body's amount exists and is a number
-        if (!amount || isNaN(amount)) {
-            return res.status(400).json({
-                status: "Validation Error",
-                message: "Amount must be a number and must not be null"
-            });
-        }
-
         // Add the History
-        const newHistory = await DigitalWalletHistory.createHistory(patientId, amount);
+        const newHistory = await DigitalWalletHistory.createHistory(patientId, title, amount);
 
         if (newHistory) {
             res.status(201).json({

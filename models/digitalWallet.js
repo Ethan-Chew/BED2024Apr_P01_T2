@@ -32,11 +32,13 @@ class DigitalWallet {
         };
 
         for (let i = 0; i < result.recordset.length; i++) {
-            wallet.transactionHistory.push({
-                title: result.recordset[i].TransactionTitle,
-                amount: result.recordset[i].TransactionAmount,
-                date: result.recordset[i].TransactionDate
-            });
+            if (!(result.recordset[i].TransactionTitle === null)) {
+                wallet.transactionHistory.push({
+                    title: result.recordset[i].TransactionTitle,
+                    amount: result.recordset[i].TransactionAmount,
+                    date: result.recordset[i].TransactionDate
+                });
+            }
         }
 
         return wallet;
@@ -47,13 +49,13 @@ class DigitalWallet {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            INSERT INTO DigitalWallet (PatientId, Balance)
-            VALUES (@PatientId, @Balance)
+            INSERT INTO DigitalWallet (PatientId, WalletBalance)
+            VALUES (@PatientId, @WalletBalance)
         `;
 
         const request = connection.request();
         request.input('PatientId', patientId);
-        request.input('Balance', initialBalance);
+        request.input('WalletBalance', initialBalance);
 
         await request.query(query);
         connection.close();
@@ -67,18 +69,18 @@ class DigitalWallet {
 
         const query = `
             UPDATE DigitalWallet
-            SET Balance = @Balance
+            SET WalletBalance = @WalletBalance
             WHERE PatientId = @PatientId
         `;
 
         const request = connection.request();
         request.input('PatientId', patientId);
-        request.input('Balance', updatedBalance);
+        request.input('WalletBalance', updatedBalance);
 
-        await request.query(query);
+        const updateRequest = await request.query(query);
         connection.close();
 
-        return getDigitalWalletByPatient(patientId);
+        return updateRequest.rowsAffected[0] === 1;
     }
 
     // Created By: Ethan Chew

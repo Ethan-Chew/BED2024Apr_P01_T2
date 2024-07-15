@@ -27,22 +27,50 @@
                 <a class="text-xl">Welcome Back. Select a service you require</a>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
-                <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="book-appt">
-                    <a class="text-2xl">Book an Appointment</a>
+            <div class="space-y-5">
+                <div>
+                    <div class="flex items-center w-full mb-3">
+                        <div class="w-[20px] border-t border-gray-300"></div>
+                        <span class="flex-shrink mx-4 text-gray-500">Manage Appointments</span>
+                        <div class="flex-grow border-t border-gray-300"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-10">
+                        <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="book-appt">
+                            <a class="text-2xl">Book an Appointment</a>
+                        </div>
+                        <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="view-history">
+                            <a class="text-2xl">View Appointment History</a>  
+                        </div>
+                    </div>
                 </div>
-                <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="view-history">
-                    <a class="text-2xl">View Appointment History</a>  
+
+                <div>
+                    <div class="flex items-center w-full mb-3">
+                        <div class="w-[20px] border-t border-gray-300"></div>
+                        <span class="flex-shrink mx-4 text-gray-500">Payments</span>
+                        <div class="flex-grow border-t border-gray-300"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-10">
+                        <div class="flex flex-col align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="make-payment">
+                            <a class="text-2xl">Make Payment</a>
+                            <i id="num-unpaid-txt"><span class="font-bold" id="num-unpaid-num">0</span> Pending Payments</i>
+                        </div>
+                        <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="dwallet">
+                            <a class="text-2xl">Digital Wallet</a>  
+                        </div>
+                    </div>
                 </div>
-                <div class="flex flex-col align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="make-payment">
-                    <a class="text-2xl">Make Payment</a>
-                    <i id="num-unpaid-txt"><span class="font-bold" id="num-unpaid-num">0</span> Pending Payments</i>
-                </div>
-                <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="dwallet">
-                    <a class="text-2xl">Digital Wallet</a>  
-                </div>
-                <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="chatbot">
-                    <a class="text-2xl">Helper Chatbot</a>  
+                <div>
+                    <div class="flex items-center w-full mb-3">
+                        <div class="w-[20px] border-t border-gray-300"></div>
+                        <span class="flex-shrink mx-4 text-gray-500">Assistance</span>
+                        <div class="flex-grow border-t border-gray-300"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-10">
+                        <div class="flex align-top bg-gray-100 p-5 rounded-xl cursor-pointer" id="chatbot">
+                            <a class="text-2xl">Helper Chatbot</a>  
+                        </div>
+                    </div>
                 </div>
             </div>
 

@@ -45,7 +45,7 @@ const createDigitalWallet = async (req, res) => {
         const { balance } = req.body;
 
         // Verify that the balance is a positive number and exists
-        if (!balance || balance < 0) {
+        if (isNaN(balance) || balance < 0) {
             return res.status(400).json({
                 status: "Validation Error",
                 message: "Digital Wallet balance must not be null or negative"

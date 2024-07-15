@@ -13,10 +13,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = '../patient/makePayment.html';
     });
     document.getElementById('view-history').addEventListener('click', () => {
-        window.location.href = '../patient/prescriptionHistory.html';
+        window.location.href = '../patient/appointmentHistory.html';
     });
     document.getElementById('chatbot').addEventListener('click', () => {
         window.location.href = '../patient/chatbot.html';
+    });
+    document.getElementById('dwallet').addEventListener('click', () => {
+        window.location.href = '../patient/digitalWallet.html';
     });
 
     // Fetch Patient Information

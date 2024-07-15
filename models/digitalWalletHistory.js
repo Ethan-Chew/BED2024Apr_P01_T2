@@ -30,18 +30,19 @@ class DigitalWalletHistory {
     }
 
     // Created By: Ethan Chew
-    static async createHistory(patientId, amount) {
+    static async createHistory(patientId, title, amount) {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            INSERT INTO DigitalWalletHistory (PatientId, TransactionAmount, TransactionDate)
-            VALUES (@PatientId, @TransactionAmount, @TransactionDate);
+            INSERT INTO DigitalWalletHistory (PatientId, TransactionTitle, TransactionAmount, TransactionDate)
+            VALUES (@PatientId, @TransactionTitle, @TransactionAmount, @TransactionDate);
             SELECT SCOPE_IDENTITY() AS id;
         `;
 
         const unixMs = Date.now();
         const request = connection.request();
         request.input('PatientId', patientId);
+        request.input('TransactionTitle', title);
         request.input('TransactionAmount', amount);
         request.input('TransactionDate', unixMs);
 

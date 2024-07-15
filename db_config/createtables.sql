@@ -44,7 +44,7 @@ CREATE TABLE DigitalWallet (
 )
 
 CREATE TABLE DigitalWalletHistory (
-	PatientId VARCHAR(7) NOT NULL UNIQUE,
+	PatientId VARCHAR(7) NOT NULL,
 	WalletTransactionId INT IDENTITY(1,1),
 	TransactionTitle VARCHAR(255) NOT NULL,
 	TransactionAmount MONEY NOT NULL,
