@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     const digitalWalletJson = await digitalWalletRequest.json();
     const digitalWallet = digitalWalletJson.wallet;
-    console.log(digitalWallet)
 
     // Update Data on Screen
     document.getElementById("wallet-balance").innerText = digitalWallet.balance.toLocaleString();

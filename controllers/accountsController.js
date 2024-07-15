@@ -307,12 +307,22 @@ const updatePatientById = async (req, res) => {
 
         // Update Account (Patient's Parent Class)
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-        const updateAccountRes = await Account.updateAccount(patientId, {
-            name: name,
-            email: email,
-            password: hashedPassword
-        })
+        let hashedPassword = null;
+        
+        if (password) {
+          hashedPassword = await bcrypt.hash(password, salt);
+        }
+        
+        const updateData = {
+          name: name,
+          email: email,
+        };
+        
+        if (hashedPassword) {
+          updateData.password = hashedPassword;
+        }
+        
+        const updateAccountRes = await Account.updateAccount(patientId, updateData);
 
         if (updatePatientRes && updateAccountRes) {
             res.status(200).json({

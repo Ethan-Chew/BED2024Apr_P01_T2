@@ -11,24 +11,16 @@ const sendPaymentConfirmation = async (req, res) => {
         const appointmentDate = req.body.appointmentDate;
         const appointmentTime = req.body.appointmentTime;
 
-        // TODO: REMOVE BEFORE SUBMISSION
-        if (process.env.ENVIRONMENT !== "dev") {
-            const sendRequest = await Mail.sendPaymentConfirmation(recepient, paymentAmount, cardMerchant, cardLFDigits, appointmentDate, appointmentTime);
-            
-            if (sendRequest) {
-                res.status(201).json({
-                    status: "Success",
-                    message: "Payment Confirmation Email Sent"
-                });
-            }
-        } else {
+        const sendRequest = await Mail.sendPaymentConfirmation(recepient, paymentAmount, cardMerchant, cardLFDigits, appointmentDate, appointmentTime);
+        
+        if (sendRequest) {
             res.status(201).json({
                 status: "Success",
-                message: "Payment Confirmation Email Sent",
-                info: "Email Sending Disabled in Development"
+                message: "Payment Confirmation Email Sent"
             });
+        } else {
+            throw new Error("Failed to Send Email")
         }
-
     } catch (err) {
         console.error(err);
         res.status(500).json({

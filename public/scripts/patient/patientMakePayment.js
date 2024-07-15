@@ -9,6 +9,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const accountId = sessionStorage.getItem('accountId');
     if (!accountId) window.location.href = '../login.html';
 
+    // Fetch Patient's Account Details
+    const fetchPatientResponse = await fetch(`/api/patient/${accountId}`);
+    if (fetchPatientResponse.status === 401 || fetchPatientResponse.status === 403) window.location.href = '../login.html';
+    else if (fetchPatientResponse.status !== 200) {
+        alert("Error Retrieving Patient Information. Please try again.");
+        return;
+    }
+    const patientJson = await fetchPatientResponse.json();
+    const patient = patientJson.patient;
+    document.getElementById("email").value = patient.email;
+
     // Fetch Patient's Appointments
     const fetchPatientAppointmentsResponse = await fetch(`/api/appointments/patient/${accountId}`);
     if (fetchPatientAppointmentsResponse.status === 401 || fetchPatientAppointmentsResponse.status === 403) window.location.href = '../login.html';
@@ -59,6 +70,36 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>
         `;
     }
+
+    // Get the User's Digital Wallet
+    const digitalWalletRequest = await fetch(`/api/patient/${accountId}/digitalWallet`);
+    let digitalWallet;
+    if (digitalWalletRequest.status === 200) {
+        const digitalWalletJson = await digitalWalletRequest.json();
+        digitalWallet = digitalWalletJson.wallet;
+
+        paymentMethodList.innerHTML += `
+            <div class="flex items-center">
+                <input type="radio" id="digitalWallet" name="paymentMethod" value="digitalWallet" class="mr-2">
+                <label for="digitalWallet" class="text-gray-700">Digital Wallet ($${Number(digitalWallet.balance).toLocaleString()})</label>
+            </div>
+        `;
+    }
+
+    // If the user selects Digital Wallet, remove the CVV input. Else, add it back.
+    document.querySelectorAll("input[name='paymentMethod']").forEach((input) => {
+        input.addEventListener('change', () => {
+            const value = input.value;
+            // If the user selects Digital Wallet, remove the CVV input. Else, add it back.
+            if (value === "digitalWallet") {
+                document.getElementById("cvv-container").classList.add("hidden");
+                document.getElementById("cvv").required = false;
+            } else {
+                document.getElementById("cvv-container").classList.remove("hidden");
+                document.getElementById("cvv").required = true;
+            }
+        });
+    });
 
     // Display Unpaid Appointments on the Screen
     const paymentListContainer = document.getElementById('paymentlist-container');
@@ -119,7 +160,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Set Event Listeners for Payment Buttons
         document.getElementById(`payment-${i}`).addEventListener('click', async () => {
-            console.log(appointment)
             // Check if the User has a Pending Payment Request
             if (appointment.paymentRequest) {
                 const confirmPayment = confirm("You have a pending Payment Help Request. Are you sure you want to make this payment? The request will be cancelled.");
@@ -202,13 +242,50 @@ document.addEventListener("DOMContentLoaded", async () => {
         event.preventDefault();
 
         // Get Selected Payment Method
-        const last4DigitCard = document.querySelector('input[name="paymentMethod"]:checked').value;
-        const cardMerchant = paymentMethods.find(method => String(method.cardNumber).slice(-4) === last4DigitCard).merchant;
+        const cardVal = document.querySelector('input[name="paymentMethod"]:checked').value;
+        let cardMerchant = "Digital Wallet";
 
-        if (!last4DigitCard) {
-            console.log(document.querySelector('input[name="paymentMethod"]:checked'))
+        if (!cardVal) {
             alert("Please select a payment method.");
             return;
+        }
+
+        if (cardVal === "digitalWallet") {
+            // Check if the User's Digital Wallet has Sufficient Balance
+            if (digitalWallet.balance < Number(document.getElementById("payment-amount").innerText)) {
+                alert("Insufficient Balance in Digital Wallet. Choose another payment method!");
+                return;
+            }
+
+            // Deduct Payment from Digital Wallet
+            const deductFromWallet = await fetch(`/api/patient/${accountId}/digitalWallet`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    updateAmount: -Number(document.getElementById("payment-amount").innerText)
+                })
+            });
+
+            if (deductFromWallet.status !== 200) {
+                alert("Failed to deduct funds from wallet. Please try again later.");
+                return;
+            }
+
+            // Send Transaction History
+            const updateWalletHistoryRequest = await fetch(`/api/patient/${accountId}/digitalWalletHistory`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title: `Payment for Appointment on ${document.getElementById('appointment-date').value.split("T")[0]}`, amount: -Number(document.getElementById("payment-amount").innerText) }),
+            });
+
+            if (updateWalletHistoryRequest.status !== 201) {
+                alert("Failed to deduct funds from wallet. Please try again later.");
+                return;
+            }
+        } else {
+            cardMerchant = paymentMethods.find(method => String(method.cardNumber).slice(-4) === cardVal).merchant;
         }
 
         // Send Payment Paid Request
@@ -236,9 +313,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             body: JSON.stringify({
                 recepient: document.getElementById("email").value,
                 cardMerchant: cardMerchant,
+                cardLFDigits: cardVal,
                 paymentAmount: Number(document.getElementById("payment-amount").innerText),
-                appointmentDate: new Date(unpaidAppointments[0].consultationCost).toISOString().split("T")[0],
-                appointmentTime: unpaidAppointments[0].slotDate,
+                appointmentDate: document.getElementById('appointment-date').value.split("T")[0],
+                appointmentTime: document.getElementById('appointment-time').value,
             })
         });
 
@@ -251,7 +329,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById('make-payment-popup').classList.add('hidden');
 
         // Remove from Screen
-        document.getElementById("method-" + i).remove();
+        document.getElementById(`payment-${i}-container`).remove();
         paymentMethods.splice(i, 1);
     });
 });

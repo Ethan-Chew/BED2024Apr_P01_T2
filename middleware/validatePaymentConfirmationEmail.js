@@ -5,7 +5,7 @@ const validatePaymentConfirmationEmail = (req, res, next) => {
         recepient: Joi.string().email({ tlds: { allow: false } }).required(),
         paymentAmount: Joi.number().required(),
         cardMerchant: Joi.string().required(),
-        cardLFDigits: Joi.string().length(4).required(),
+        cardLFDigits: Joi.string(),
         appointmentDate: Joi.date().format('YYYY-MM-DD').required(),
         appointmentTime: Joi.string().required(),
     });
