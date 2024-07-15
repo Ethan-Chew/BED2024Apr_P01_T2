@@ -12,10 +12,9 @@ class DigitalWallet {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT * FROM DigitalWallet wallet
+            SELECT wallet.WalletBalance, his.* FROM DigitalWallet wallet
+            LEFT JOIN DigitalWalletHistory his ON wallet.PatientId = his.PatientId
             WHERE wallet.PatientId = @PatientId
-            INNER JOIN DigitalWalletTopUpHistory his 
-            ON wallet.PatientId = his.PatientId
         `;
 
         const request = connection.request();
@@ -24,14 +23,17 @@ class DigitalWallet {
         const result = await request.query(query);
         connection.close();
 
+        if (result.recordset.length === 0) return null;
+
         const wallet = {
             patientId: result.recordset[0].PatientId,
-            balance: result.recordset[0].Balance,
-            topupHistory: []
+            balance: result.recordset[0].WalletBalance,
+            transactionHistory: []
         };
 
         for (let i = 0; i < result.recordset.length; i++) {
-            wallet.topupHistory.push({
+            wallet.transactionHistory.push({
+                title: result.recordset[i].TransactionTitle,
                 amount: result.recordset[i].TransactionAmount,
                 date: result.recordset[i].TransactionDate
             });
@@ -94,7 +96,7 @@ class DigitalWallet {
         const result = await request.query(query);
         connection.close();
 
-        return result.recordset.length === 1;
+        return result.rowsAffected[0] > 0;
     }
 }
 

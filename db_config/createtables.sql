@@ -43,9 +43,10 @@ CREATE TABLE DigitalWallet (
 	CONSTRAINT PK_DigitalWallet PRIMARY KEY (PatientId),
 )
 
-CREATE TABLE DigitalWalletTopUpHistory (
+CREATE TABLE DigitalWalletHistory (
 	PatientId VARCHAR(7) NOT NULL UNIQUE,
 	WalletTransactionId INT IDENTITY(1,1),
+	TransactionTitle VARCHAR(255) NOT NULL,
 	TransactionAmount MONEY NOT NULL,
 	TransactionDate BIGINT NOT NULL,
 

@@ -11,6 +11,8 @@ const authorisedRoles = {
     "/api/patient/:patientId/paymentMethods/:methodId": ["patient"],
     "/api/chatbot/sendMessage": ["patient"],
     "/api/chatbot/history/:patientId": ["patient"],
+    "/api/patient/:patientId/digitalWallet": ["patient"],
+    "/api/patient/:patientId/digitalWalletHistory": ["patient"],
 };
 
 module.exports = authorisedRoles;
