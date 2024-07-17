@@ -60,7 +60,14 @@ document.addEventListener("DOMContentLoaded", async() => {
                     <td class="px-4 py-2 border border-gray-400">${record.availableDrug}/${record.totalDrug}</td>
                     <td class="px-4 py-2 border border-gray-400">${expiryDate}</td>
                     <td class="px-4 py-2 border border-gray-400">${status}</td>
-                    <td class="px-4 py-2 border border-gray-400 text-center"><button class="bg-btnprimary text-white px-6 py-2 rounded-2xl clear-stock" data-drug-record-id="${record.drugRecordId}">Clear Stock</button></td>
+                    <td class="px-4 py-2 border border-gray-400 text-center">
+                    <button class="bg-btnprimary text-white px-6 py-2 rounded-2xl clear-stock" 
+                    data-drug-record-id="${record.drugRecordId}"
+                    data-drug-total-quantity="${record.totalDrug}"
+                    data-drug-available-quantity="${record.availableDrug}">
+                    Clear Stock
+                    </button>
+                    </td>
                 </tr>
             `;
             tableList.appendChild(tableItem);
@@ -69,80 +76,35 @@ document.addEventListener("DOMContentLoaded", async() => {
         document.querySelectorAll('.clear-stock').forEach(button => {
             button.addEventListener('click', async() => {
                 const drugRecordId = button.getAttribute('data-drug-record-id');
-                const drugTotalQuantity = record.totalDrug;
-                const drugAvailableQuantity = record.availableDrug;
-                let deleteResponse, postResponse;
+                const drugTotalQuantity = button.getAttribute('data-drug-total-quantity');
+                const drugAvailableQuantity = button.getAttribute('data-drug-available-quantity');
 
                 if (drugTotalQuantity === drugAvailableQuantity) {
-                    deleteResponse = await fetch(`/api/inventoryRecord/${drugRecordId}`, {
+                    const deleteResponse = await fetch(`/api/inventoryRecord/${drugRecordId}`, {
                         method: 'DELETE'
                     });
+                    if (deleteResponse.ok) {
+                        const response = await deleteResponse.json();
+                        alert(response.message);
+                        window.location.reload();
+                    } else {
+                        console.error('Failed to delete drug record');
+                    }
                 } else {
-                    postResponse = await fetch(`/api/inventoryRecord/${drugRecordId}`, {
-                        method: 'PUT'
+                    const postResponse = await fetch(`/api/inventoryRecord/${drugRecordId}`, {
+                        method: 'PUT',
                     });
-                }
-
-                if (deleteResponse && deleteResponse.ok || postResponse) {
-                    window.location.reload();
-                } else {
-                    console.error('Failed to update drug record');
+                    if (postResponse.ok) {
+                        const response = await postResponse.json();
+                        alert(response.message);
+                        window.location.reload();
+                    } else {
+                        console.error('Failed to update drug record');
+                    }
                 }
             });
         });
     };
-
-    // drugRecordList.forEach((record) => {
-    //     const tableItem = document.createElement('tbody');
-    //     const entryDate = formatDate(record.dateOfEntry);
-    //     const expiryDate = formatDate(record.expiryDate);
-    //     const todayDate = new Date();
-        
-    //     const diffInMonths = Math.floor((expiryDate - todayDate) / (1000 * 60 * 60 * 24 * 30));
-    //     let status;
-    //     if (diffInMonths < 3) {
-    //         status = "Warning";
-    //     } else if (expiryDate < todayDate) {
-    //         status = "Bad"
-    //     } else {
-    //         status = "Good"
-    //     }
-        
-    //     tableItem.innerHTML = `
-    //         <tr class="h-12">
-    //             <td class="px-4 py-2 border border-gray-400">${record.drugRecordId}</td>
-    //             <td class="px-4 py-2 border border-gray-400">${entryDate}</td>
-    //             <td class="px-4 py-2 border border-gray-400">${record.drugName}</td>
-    //             <td class="px-4 py-2 border border-gray-400">${record.availableDrug}/${record.totalDrug}</td>
-    //             <td class="px-4 py-2 border border-gray-400">${expiryDate}</td>
-    //             <td class="px-4 py-2 border border-gray-400">${status}</td>
-    //             <td class="px-4 py-2 border border-gray-400 text-center"><button class="bg-btnprimary text-white px-6 py-2 rounded-2xl clear-stock" data-drug-record-id="${record.drugRecordId}">Clear Stock</button></td>
-    //         </tr>
-    //         `;
-    //     tableList.appendChild(tableItem);
-    // });
-
-    // document.querySelectorAll('.clear-stock').forEach(button => {
-    //     button.addEventListener('click', async() => {
-    //         const drugRecordId = button.getAttribute('data-drug-record-id');
-
-    //         if (drugTotalQuantity === drugAvailableQuantity) {
-    //             const deleteResponse = await fetch(`/api/inventoryRecord/${drugRecordId}`, {
-    //                 method: 'DELETE'
-    //             })
-    //         } else {
-    //             const postResponse = await fetch(`/api/inventoryRecord/${drugRecordId}`, {
-    //                 method: 'PUT'
-    //             })
-    //         };
-
-    //         if (deleteResponse.ok || postResponse) {
-    //             window.location.reload();
-    //         } else {
-    //             console.error('Failed to update drug record');
-    //         }
-    //     });
-    // });
 
     function formatDate(dateString) {
         const options = { day: 'numeric', month: 'long', year: 'numeric' };

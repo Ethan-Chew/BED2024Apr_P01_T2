@@ -21,7 +21,7 @@ const mailController = require("./controllers/mailController");
 const chatbotController = require("./controllers/chatbotController");
 const paymentRequestController = require("./controllers/paymentRequestController")
 const companyDrugInventoryController = require("./controllers/companyDrugInventoryController");
-const companyInventoryRecordController = require("./controllers/inventoryRecordController.js");
+const companyInventoryRecordController = require("./controllers/inventoryRecordController");
 const digitalWalletController = require("./controllers/digitalWalletController");
 const digitalWalletHistoryController = require("./controllers/digitalWalletHistoryController");
 
@@ -39,6 +39,10 @@ const validateCancelDrugOrderRequest = require("./middleware/validateCancelDrugO
 
 const validateReturnMedicine = require("./middleware/validateReturnMedicine");
 const validateConfirmDrugOrder = require("./middleware/validateConfirmDrugOrder");
+
+const validateCreateDrugInventoryRecord = require("./middleware/validateCreateDrugInventoryRecord");
+
+const validateUpdateDrugQuantityByRecordId = require("./middleware/validateUpdateDrugQuantityByRecordId");
 
 // JWT Verification Middleware
 const authoriseJWT = require("./middleware/authoriseJWT");
@@ -133,11 +137,11 @@ app.put("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", validateReturnMe
 app.get("/api/companyDrugInventory/", companyDrugInventoryController.getDrugName);
 app.get("/api/companyDrugInventory/:companyId/:drugName", companyDrugInventoryController.getInventoryByDrugName);
 app.delete("/api/companyDrugInventory/:companyId/:drugName", companyDrugInventoryController.emptyMedicineFromInventory);
-app.post("/api/companyDrugInventory/addDrug", companyDrugInventoryController.createDrugInventoryRecord);
+app.post("/api/companyDrugInventory/addDrug", validateCreateDrugInventoryRecord, companyDrugInventoryController.createDrugInventoryRecord);
 app.delete("/api/companyDrugInventory/:companyId/:drugName/:drugQuantity", companyDrugInventoryController.removeDrugFromInventoryRecord);
 // Route for Drug Inventory Record (Company)
 app.get("/api/inventoryRecord/:companyId", companyInventoryRecordController.getInventoryRecordByCompanyId);
-app.put("/api/inventoryRecord/:drugRecordId", companyInventoryRecordController.updateDrugQuantityByRecordId);
+app.put("/api/inventoryRecord/:drugRecordId", validateUpdateDrugQuantityByRecordId, companyInventoryRecordController.updateDrugQuantityByRecordId);
 app.delete("/api/inventoryRecord/:drugRecordId", companyInventoryRecordController.deleteDrugRecordByRecordId);
 
 //

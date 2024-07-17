@@ -13,10 +13,13 @@ const getInventoryRecordByCompanyId = async (req, res) => {
 
 const deleteDrugRecordByRecordId = async (req, res) => {
     try {
-        const { recordId } = req.params;
+        const { drugRecordId } = req.params;
+        if (!drugRecordId || typeof drugRecordId!== 'string') {
+            return res.status(400).json({ message: 'Invalid record ID' });
+        }
 
-        const result = await InventoryRecord.deleteDrugRecordByRecordId(recordId);
-        res.json(result);
+        const result = await InventoryRecord.deleteDrugRecordByRecordId(drugRecordId);
+        res.json({ message: 'Record deleted successfully', result });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -25,10 +28,13 @@ const deleteDrugRecordByRecordId = async (req, res) => {
 
 const updateDrugQuantityByRecordId = async (req, res) => {
     try {
-        const { recordId } = req.params;
+        const { drugRecordId } = req.params;
+        if (!drugRecordId || typeof drugRecordId!== 'string') {
+            return res.status(400).json({ message: 'Invalid record ID' });
+        }
 
-        const result = await InventoryRecord.updateDrugQuantityByRecordId(recordId);
-        res.json(result);
+        const result = await InventoryRecord.updateDrugQuantityByRecordId(drugRecordId);
+        res.json({ message: 'Quantity updated successfully', result });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

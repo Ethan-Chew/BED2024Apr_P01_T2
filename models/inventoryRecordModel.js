@@ -51,42 +51,53 @@ class InventoryRecord {
     }
 
     static async deleteDrugRecordByRecordId(drugRecordId) {
-        const connection = await sql.connect(dbConfig);
-        
-        const query = `
-            DELETE FROM 
-                DrugInventoryRecord 
-            WHERE 
-                DrugRecordId = @drugRecordId
-        `;
-        const request = connection.request();
-        request.input('drugRecordId', sql.VarChar, drugRecordId);
-        
-        await request.query(query);
-        connection.close();
-        
-        return 'Record Deleted';
+        try {
+            const connection = await sql.connect(dbConfig);
+            
+            const query = `
+                DELETE FROM 
+                    DrugInventoryRecord 
+                WHERE 
+                    DrugRecordId = @drugRecordId
+            `;
+            const request = connection.request();
+            request.input('drugRecordId', sql.VarChar, drugRecordId);
+            
+            await request.query(query);
+            connection.close();
+            
+            return 'Record Deleted';
+        } catch (error) {
+            console.error(`Error deleting drug record: ${error}`);
+            throw error;
+        }
     }
 
     static async updateDrugQuantityByRecordId(drugRecordId) {
-        const connection = await sql.connect(dbConfig);
-        
-        const query = `
-            UPDATE 
-                DrugInventoryRecord 
-            SET 
-                DrugTotalQuantity = DrugTotalQuantity - DrugAvailableQuantity,
-                DrugAvailableQuantity = 0
-            WHERE 
-                DrugRecordId = @drugRecordId
-        `;
-        const request = connection.request();
-        request.input('drugRecordId', sql.VarChar, drugRecordId);
-        
-        await request.query(query);
-        connection.close();
-        
-        return 'Quantity Updated';
+        try {
+            const connection = await sql.connect(dbConfig);
+            
+            const query = `
+                UPDATE 
+                    DrugInventoryRecord 
+                SET 
+                    DrugTotalQuantity = DrugTotalQuantity - DrugAvailableQuantity,
+                    DrugAvailableQuantity = 0
+                WHERE 
+                    DrugRecordId = @drugRecordId
+            `;
+            
+            const request = connection.request();
+            request.input('drugRecordId', sql.VarChar, drugRecordId);
+            
+            await request.query(query);
+            connection.close();
+            
+            return 'Quantity Updated';
+        } catch (error) {
+            console.error(`Error updating drug quantity: ${error}`);
+            throw error;
+        }
     }
 }
 
