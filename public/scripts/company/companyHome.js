@@ -1,10 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Check that User is a Company
-    // if (sessionStorage.getItem('accountType') !== 'company') {
-    //     window.location.href = '../login.html';
-    //     return;
-    // }
-
     // Handle Logout Button Press
     document.getElementById('logout').addEventListener('click', () => {
         sessionStorage.removeItem('accountId');
@@ -13,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Get Company Information
     const companyId = sessionStorage.getItem('accountId');
-    console.log(companyId);
+
     const fetchCompany = await fetch(`/api/company/${companyId}`, {
         method: 'GET'
     });
@@ -43,5 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
     document.getElementById('view-record').addEventListener('click', () => {
         window.location.href = '../company/inventoryRecord.html';
+    })
+    document.getElementById('view-account').addEventListener('click', () => {
+        window.location.href = '../company/companyAccountScreen.html';
     })
 })
