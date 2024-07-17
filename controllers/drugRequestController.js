@@ -25,7 +25,7 @@ const getDrugOrderByIdAndDrugName = async (req, res) => {
 
 const addRequestContribution = async (req, res) => {
     try {
-        const { appointmentId, drugName, quantity, totalCost, contributeDate, companyId, drugRecordId } = req.body;
+        let { appointmentId, drugName, quantity, totalCost, contributeDate, companyId, drugRecordId } = req.body;
 
         // Validate input data
         if (!appointmentId || !drugName || quantity == null || !totalCost || !contributeDate) {
@@ -79,9 +79,7 @@ const contributeDrugRequest = async (req, res) => {
 const cancelDrugOrder = async (req, res) => {
     try {
         const { id, drugName } = req.params;
-        //console.log('Received parameters:', { id, drugName }); // Log parameters
         const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(id, drugName);
-        //console.log('Drug Order: ', drugOrder)
         if (!drugOrder) {
             return res.status(404).json({ error: 'Drug order not found' });
         }

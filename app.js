@@ -33,6 +33,10 @@ const validateAppointment = require("./middleware/validateAppointment");
 const validatePaymentRequest = require("./middleware/validatePaymentRequest");
 const validateWalletHistory = require("./middleware/validateWalletHistory");
 
+const validateAddRequestContribution = require("./middleware/validateAddRequestContribution");
+const validateContributeDrugRequest = require("./middleware/validateContributeDrugRequest");
+const validateCancelDrugOrderRequest = require("./middleware/validateCancelDrugOrder");
+
 // JWT Verification Middleware
 const authoriseJWT = require("./middleware/authoriseJWT");
 
@@ -114,10 +118,10 @@ app.get("/api/company/:companyId", companyController.getCompanyById);
 // Drug Requests (Company)
 app.get("/api/drugRequests/", drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:id/:drugName", drugRequestController.getDrugOrderByIdAndDrugName);
-app.put("/api/drugRequest/:id/:drugName", drugRequestController.cancelDrugOrder);
-app.put("/api/drugRequest/contribute/:id/:drugName", drugRequestController.contributeDrugRequest);
+app.put("/api/drugRequest/:id/:drugName", validateCancelDrugOrderRequest, drugRequestController.cancelDrugOrder);
+app.put("/api/drugRequest/contribute/:id/:drugName", validateContributeDrugRequest, drugRequestController.contributeDrugRequest);
+app.post("/api/drugRequest/drugContribution", validateAddRequestContribution, drugRequestController.addRequestContribution);
 // Drug Orders (Company)
-app.post("/api/drugRequest/drugContribution", drugRequestController.addRequestContribution);
 app.get("/api/drugContributionOrders/:companyId", drugOrderController.getAllDrugOrders);
 app.put("/api/drugContributionOrders/:appointmentId/:drugName", drugOrderController.confirmDrugOrder);
 app.delete("/api/drugContributionOrders/:appointmentId/:drugName", drugOrderController.deleteDrugOrder);
