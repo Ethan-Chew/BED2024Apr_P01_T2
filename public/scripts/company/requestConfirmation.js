@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     
                 if (postResponse.ok && putResponse.ok) {
                     // Redirect to the company home page
-                    window.location.href = 'companyHome.html';
+                    window.location.href = 'drugRequest.html';
                 } else {
                     // Retrieve and log error details
                     const postError = postResponse.ok ? null : await postResponse.json();
