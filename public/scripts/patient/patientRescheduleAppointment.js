@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const date = document.getElementById('date').value;
         const timeslot = document.getElementById('timeslot').value;
 
-        if (timeslot.value === "noselect") {
+        if (timeslot === "noselect") {
             alert("Please select a timeslot.");
             return;
         }
