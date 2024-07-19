@@ -14,6 +14,15 @@ const getInventoryByDrugName = async (req, res) => {
     try {
         const { companyId, drugName } = req.params;
         const drugInfo = await CompanyDrugInventory.getInventoryByDrugName(drugName, companyId);
+        
+        if (req.user.id !== companyId) {
+            res.status(403).json({
+                status: "Forbidden",
+                message: "You are not allowed to view this drug inventory."
+            });
+            return;
+        }
+
         res.json(drugInfo);
     } catch (error) {
         console.error('Error fetching medicine information:', error);

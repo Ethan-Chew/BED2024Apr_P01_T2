@@ -1,3 +1,4 @@
+// Model Created by: Jefferson
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
@@ -167,7 +168,7 @@ class CompanyDrugInventory {
             const getLastRecordQuery = `
                 SELECT TOP 1 DrugRecordId
                 FROM DrugInventoryRecord
-                ORDER BY DrugRecordEntryDate DESC;
+                ORDER BY DrugRecordId DESC;
             `;
             const recordRequest = new sql.Request(transaction);
             const recordResult = await recordRequest.query(getLastRecordQuery);

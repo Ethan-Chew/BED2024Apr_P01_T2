@@ -1,3 +1,4 @@
+// Model Created by: Jefferson
 const InventoryRecord = require('../models/inventoryRecordModel');
 
 const getInventoryRecordByCompanyId = async (req, res) => {
@@ -5,6 +6,15 @@ const getInventoryRecordByCompanyId = async (req, res) => {
         const { companyId } = req.params;
 
         const inventoryRecord = await InventoryRecord.getInventoryRecordByCompanyId(companyId);
+
+        if (req.user.id !== companyId) {
+            res.status(403).json({
+                status: "Forbidden",
+                message: "You are not allowed to view the inventory record."
+            });
+            return;
+        }
+
         res.json(inventoryRecord);
     } catch (error) {
         res.status(500).json({ message: error.message });

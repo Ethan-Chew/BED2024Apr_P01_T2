@@ -131,8 +131,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                         // Optionally handle the response if needed
                         const data = await response.json();
                         console.log('Drug order confirmed:', data);
-
-                        // Redirect to companyHome.html after confirmation
+                        
                         window.location.reload();
                     } else {
                         console.error('Failed to confirm drug order:', response.statusText);
@@ -154,17 +153,17 @@ document.addEventListener("DOMContentLoaded", async() => {
                 const drugQuantity = button.getAttribute('data-drug-quantity');
         
                 try {
-                    // First fetch for DELETE request
+                    // Delete contribution record
                     const response = await fetch(`/api/drugContributionOrders/${appointmentId}/${drugName}`, {
                         method: 'DELETE'
                     });
         
                     if (response.ok) {
-                        // Second fetch for POST request
+                        // Change drug request status
                         const response2 = await fetch(`/api/drugRequest/${appointmentId}/${drugName}`, {
                             method: 'PUT'
                         });
-
+                        // Add drug quantity back to drug inventory
                         const response3 = await fetch(`/api/drugInventoryRecord/${drugRecordId}/${drugQuantity}`, {
                             method: 'PUT'
                         });
