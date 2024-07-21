@@ -24,6 +24,7 @@ const companyDrugInventoryController = require("./controllers/companyDrugInvento
 const companyInventoryRecordController = require("./controllers/inventoryRecordController");
 const digitalWalletController = require("./controllers/digitalWalletController");
 const digitalWalletHistoryController = require("./controllers/digitalWalletHistoryController");
+const notificationsController = require("./controllers/notificationsController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -43,6 +44,8 @@ const validateConfirmDrugOrder = require("./middleware/validateConfirmDrugOrder"
 const validateCreateDrugInventoryRecord = require("./middleware/validateCreateDrugInventoryRecord");
 
 const validateUpdateDrugQuantityByRecordId = require("./middleware/validateUpdateDrugQuantityByRecordId");
+
+const validateNotification = require("./middleware/validateNotification")
 
 // JWT Verification Middleware
 const authoriseJWT = require("./middleware/authoriseJWT");
@@ -158,12 +161,20 @@ app.post("/api/availableSlot", availableSlotController.getAvailableSlotByDateAnd
 app.put("/api/availableSlot/doctor/:slotId", availableSlotController.updateAvailableSlotById);
 
 // Route for Payment Request
+app.get("/api/paymentRequests", paymentRequestController.getPaymentRequestsByApprovedStatus);
+app.get("/api/paymentRequest/patient/:patientId", paymentRequestController.getPaymentRequestByAppointmentId);
 app.get("/api/paymentRequest/:appointmentId", paymentRequestController.getPaymentRequestByAppointmentId);
+app.put("/api/paymentRequest/approve/:appointmentId", paymentRequestController.approvePaymentRequestByAppointmentId);
+app.put("/api/paymentRequest/reject/:appointmentId", paymentRequestController.rejectPaymentRequestByAppointmentId);
 app.post("/api/paymentRequest", validatePaymentRequest, paymentRequestController.createPaymentRequest);
 app.delete("/api/paymentRequest/:id", paymentRequestController.cancelPaymentRequest);
 
 // Route for Notifications
-// app.get("/api/notification/:id", donothing);
+app.get("/api/notification/:accountid", authoriseJWT, notificationsController.receiveNotifications);
+app.put("/api/notification/:Notificationid", authoriseJWT, notificationsController.readNotification);
+app.put("/api/notifications/:accountid", authoriseJWT, notificationsController.readAllNotificationsByAccountId);
+app.post("/api/notification", validateNotification, notificationsController.sendNotification);
+
 
 // Initialise Server
 app.listen(3000, async () => {

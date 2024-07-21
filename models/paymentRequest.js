@@ -26,7 +26,7 @@ class PaymentRequest {
         return incrementString(result.recordset[0].PaymentRequestId);
     }
 
-    // Emmanuel //
+    // Emmanuel 
     static async createPaymentRequest(appointmentId, message, createdDate) {
         const connection = await sql.connect(dbConfig);
         const newRequestId = await PaymentRequest.getNextRequestId(connection);
@@ -114,6 +114,28 @@ class PaymentRequest {
     }
 
     // Emmanuel
+    static async getPaymentRequestsByApprovedStatus() {
+        const query = ` 
+            SELECT *
+            FROM PaymentRequest
+            WHERE PaymentRequestStatus = @Status
+        `;
+
+
+        const connection = await sql.connect(dbConfig);
+
+        const request = connection.request();
+        request.input("Status", "Approved");
+
+        const result = await request.query(query);
+        connection.close();
+
+        if (result.recordset.length == 0) return null;
+
+        return result.recordset;
+    }
+
+    // Emmanuel
     static async getPaymentRequestByAppointmentId(id) {
         const query = ` 
             SELECT *
@@ -132,6 +154,47 @@ class PaymentRequest {
         if (result.recordset.length == 0) return null;
 
         return result.recordset;
+    }
+
+    // Emmanuel
+    static async getPaymentRequestsByPatientId(id) {
+        const query = ` 
+            SELECT pr.*
+            FROM PaymentRequest pr
+            INNER JOIN Appointments appt ON pr.AppointmentId = appt.AppointmentId
+            INNER JOIN Patient p ON appt.PatientId = p.PatientId
+            WHERE p.PatientId = @Id
+        `;
+
+        const connection = await sql.connect(dbConfig);
+
+        const request = connection.request();
+        request.input("Id", id);
+
+        const result = await request.query(query);
+        connection.close();
+
+        if (result.recordset.length == 0) return null;
+
+        return result.recordset;
+    }
+
+    // Emmanuel
+    static async updatePaymentRequestStatusByAppointmentId(apptId, status) {
+        const query = `
+            UPDATE PaymentRequest SET PaymentStatus = '@Status'
+            WHERE AppointmentId = '@AppointmentId'
+        `;
+
+        const request = connection.request();
+        request.input('Status', status)
+        request.input('AppointmentId', apptId);
+
+
+        await request.query(query);
+        connection.close();
+
+        return result.rowsAffected[0] === 1;
     }
 }
 

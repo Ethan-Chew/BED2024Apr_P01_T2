@@ -2,7 +2,7 @@ const availableSlot = require("../models/availableSlot");
 const appointment = require("../models/appointment");
 const slotTime = require("../models/slotTime");
 
-// Emmanuel
+// Emmanuel //
 const createAvailableSlot = async (req, res) => {
     try {
         const { doctorId, slotDate, slotTimeId } = req.body;

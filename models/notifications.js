@@ -1,10 +1,11 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
-class Notification {
-    constructor(notifId, accountId, message, readStatus){
+class Notifications {
+    constructor(notifId, senderId, receiverId, message, readStatus) {
         this.notificationId = notifId;
-        this.accountId = accountId;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
         this.message = message;
         this.readStatus = readStatus;
     }
@@ -39,62 +40,61 @@ class Notification {
     }
 
     // Emmanuel
-    static async createNotification(senderId, recieverId, message) {
+    static async createNotification(senderId, receiverId, message) {
         const connection = await sql.connect(dbConfig);
-        const newNotificationId = await Notification.getNextNotificationId(connection);
+        const newNotificationId = await Notifications.getNextNotificationId(connection);
         const readStatus = 'Sent';
 
         const query = `
-            INSERT INTO Notification (NotificationId, SenderId, ReceiverId, MessageValue) VALUES
-            ('@NotificationId', '@SenderId', '@RecieverId', '@Message', '@ReadStatus');
+            INSERT INTO Notification (NotificationId, SenderId, ReceiverId, MessageValue, ReadStatus) VALUES
+            (@NotificationId, @SenderId, @ReceiverId, @Message, @ReadStatus);
         `;
 
 
         const request = connection.request();
         request.input('NotificationId', newNotificationId);
         request.input('SenderId', senderId);
-        request.input('RecieverId', recieverId);
+        request.input('ReceiverId', receiverId);
         request.input('Message', message);
-        request.input('ReadStatus',readStatus)
+        request.input('ReadStatus', readStatus)
 
+        // console.log(newNotificationId, senderId, receiverId, message, readStatus);
         await request.query(query);
         connection.close();
 
-        return new PaymentRequest(newNotificationId, senderId, recieverId, message, readStatus);
+        return new Notifications(newNotificationId, senderId, receiverId, message, readStatus);
     }
 
     // Emmanuel
-    static async getNotificationsByReceiverId(ReceiverId) {
+    static async getNotificationsByReceiverId(receiverId) {
         const connection = await sql.connect(dbConfig);
+        const status = 'Read';
 
         const query = `
-            SELECT * 
-            FROM Notification
-            WHERE RecieverId = '@ReceiverId'
+            SELECT n.* ,  a.AccountName AS 'SenderName'
+            FROM Notification n
+            INNER JOIN account a ON n.senderId = a.AccountId
+            WHERE ReceiverId = '@ReceiverId' AND ReadStatus != @Status
         `;
 
         const request = connection.request();
-        request.input('ReceiverId', ReceiverId);
+        request.input('ReceiverId', receiverId);
+        request.input('ReadStatus', status);
 
         await request.query(query);
         connection.close();
 
-        return result.recordset.map(
-            notification => new Notification(
-                notification.notificationId,
-                notification.accountId,
-                notification.message,
-                notification.readStatus)
-        );
+        return result.recordset.map();
     }
 
     // Emmanuel
-    static async updateNotification(notificationId, status) {
+    static async readNotification(notificationId) {
         const connection = await sql.connect(dbConfig);
+        const status = 'Read';
 
         const query = `
-            UPDATE Notification SET ReadStatus = '@Status'
-            WHERE NotificationId =  '@notificationId'
+            UPDATE Notification SET ReadStatus = @Status
+            WHERE NotificationId =  @notificationId
         `;
 
         const request = connection.request();
@@ -108,10 +108,23 @@ class Notification {
     }
 
     // Emmanuel
-    static async updateManyNotifications(status) {
+    static async updateManyNotificationsByReceiverId(receiverId, status) {
         const connection = await sql.connect(dbConfig);
 
+        const query = `
+            UPDATE Notification SET ReadStatus = @Status
+            WHERE RecieverId =  @ReceiverId
+        `;
+
+        const request = connection.request();
+        request.input('ReceiverId', receiverId);
+        request.input('Status', status)
+
+        await request.query(query);
+        connection.close();
+
+        return result.rowsAffected[0] === 1;
     }
 }
 
-module.exports = Notification;
+module.exports = Notifications;

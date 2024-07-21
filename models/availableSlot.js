@@ -109,6 +109,34 @@ class AvailableSlot {
     }
 
     // Emmanuel
+    static async getAnotherAvailableSlot(docterId, timeId) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `
+            SELECT TOP 1 aslot.*
+            FROM AvailableSlot aslot
+            LEFT JOIN SlotTime st ON aslot.SlotTimeId = st.SlotTimeId
+            WHERE st.SlotTimeId = @SlotTimeId AND aslot.DocterId != @DocterId;
+        `;
+
+        const request = connection.request();
+        request.input('SlotTimeId', timeId);
+        request.input('DocterId', docterId);
+
+        const result = await request.query(query);
+        connection.close();
+        if (result.recordset.length == 0) return null;
+
+        return result.recordset.map(
+            availableSlot => new AvailableSlot(
+                availableSlot.slotId,
+                availableSlot.doctorId,
+                availableSlot.slotDate,
+                availableSlot.slotTimeId)
+        );
+    }
+
+    // Emmanuel
     static async getAvailableSlotsByDoctorId(doctorId) {
         const connection = await sql.connect(dbConfig);
 

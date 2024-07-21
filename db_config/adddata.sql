@@ -162,7 +162,7 @@ INSERT INTO DrugTopupRequest (TopupId, DrugName, TopupQuantity, TopupRequestDate
 ('DRT0001', 'Paracetamol', 100, '2024-05-01', 'Completed'),
 ('DRT0002', 'Ibuprofen', 200, '2024-05-05', 'Pending');
 
-INSERT INTO Notification (NotificationId, SenderId, ReceiverId, MessageValue) VALUES
-('NOT0001', 'ACC0008', 'ACC0006', 'appointment cancelled, womp womp');
+INSERT INTO Notification (NotificationId, SenderId, ReceiverId, MessageValue, ReadStatus) VALUES
+('NOT0001', 'ACC0008', 'ACC0006', 'appointment cancelled, womp womp', 'Sent');
 
 USE master;
