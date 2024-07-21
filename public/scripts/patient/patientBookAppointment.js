@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Listen for onChange of the Appointment Date, then load the available times for the date
     document.getElementById("date").addEventListener("change", async function() {
-        console.log("Date Changed");
         // Set the Timeslot Attribute to a Loading Attribute
         const timeslotItem = document.getElementById("timeslot");
         timeslotItem.innerHTML = "<option value='noselect'>Loading...</option>";
@@ -51,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const date = document.getElementById("date").value;
         const timeslot = document.getElementById("timeslot").value;
 
-        if (timeslot.value === "noselect") {
+        if (timeslot === "noselect") {
             alert("Please select a timeslot.");
             return;
         }

@@ -103,33 +103,31 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Display Unpaid Appointments on the Screen
     const paymentListContainer = document.getElementById('paymentlist-container');
+    if (unpaidAppointmentsDetail.length === 0) document.getElementById('no-outstanding').classList.remove('hidden');
     for (let i = 0; i < unpaidAppointmentsDetail.length; i++) {
         const appointment = unpaidAppointmentsDetail[i];
         let totalAmount = appointment.consultationCost;
 
         paymentListContainer.innerHTML += `
-            <div class="bg-gray-100 shadow-lg p-3 rounded-2xl text-lg" id="payment-${i}-container">
-                <h3 class="text-3xl font-bold mb-2">Invoice Details (${appointment.slotDate.split("T")[0]})</h3>
-                <div class="w-1/2 flex flex-row">
-                    <div id="payment-med-${i}" class="flex flex-col gap-2">
-                        
-                    </div>
-
-                    <div class="ml-auto flex flex-col gap-2" id="payment-med-cost-${i}">
-                        
-                    </div>
+            <div class="bg-white shadow-md rounded-lg mb-4 p-4" id="payment-${i}-container">
+                <div class="border-b">
+                    <h2 class="text-2xl font-semibold mb-2">Invoice Details (${appointment.slotDate.split("T")[0]})</h2>
                 </div>
-                <div class="flex flex-row gap-10 items-center mt-3">
-                    <div>
-                        <p><span class="font-bold">Total Amount: </span>$<span id="payment-${i}-totalcost"></span></p>
-                        <p class="text-gray-500" id="help-text-${i}">Can't afford it now? Ask for help from a member of the public.</p>
-                    </div>
-                    <button class="ml-auto px-6 py-2 self-start rounded-xl bg-primary text-white hover:bg-btnprimary" id="payment-${i}">
-                        Pay
-                    </button>
-                    <button class="px-6 py-2 self-start rounded-xl bg-gray-400 text-white hover:bg-gray-500" id="help-${i}">
-                        Request Help
-                    </button>
+                <div class="flex flex-row mt-4">
+                    <div class="flex flex-col flex-grow space-y-2" id="payment-med-${i}"></div>
+                    <div class="flex flex-col space-y-2 items-end" id="payment-med-cost-${i}"></div>
+                </div>
+                <div class="flex flex-row align-center my-4">
+                    <a class="font-bold text-right">
+                        Total Amount: </span>$<span id="payment-${i}-totalcost"></span>
+                    </a>
+                    <a class="ml-auto text-sm text-gray-500" id="help-text-${i}">
+                        Can't afford it now? Ask for help from a member of the public.
+                    </a>
+                </div>
+                <div class="flex justify-end">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded mr-2" id="payment-${i}">Pay</button>
+                    <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded" id="help-${i}">Request Help</button>
                 </div>
             </div>
         `;

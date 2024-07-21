@@ -11,11 +11,10 @@ document.addEventListener("DOMContentLoaded", async() => {
     });
 
     // Get Drug Orders
-    const fetchDrugOrders = await fetch('/api/drugRequests', {
+    const fetchDrugOrders = await fetch('/api/drugRequests/', {
         method: 'GET'
     });
     const drugOrders = await fetchDrugOrders.json();
-    console.log("Drug Orders: ", drugOrders);
 
     const requestList = document.getElementById('requests-list');
 

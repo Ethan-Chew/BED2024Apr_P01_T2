@@ -158,7 +158,7 @@ CREATE TABLE Payments (
 	PaymentId VARCHAR(7),
 	AppointmentId VARCHAR(7) NOT NULL,
 	PaymentStatus VARCHAR (10) NOT NULL CHECK (PaymentStatus IN ('Paid','Unpaid')),
-	PaymentType VARCHAR(10) NULL CHECK (PaymentType IN ('DWallet', 'Card')),
+	PaymentType VARCHAR(10) NULL CHECK (PaymentType IN ('DWallet', 'Card', 'PayRequest')),
 
 	CONSTRAINT PK_Payments PRIMARY KEY (PaymentId),
 	CONSTRAINT FK_Payments_Appointments FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),

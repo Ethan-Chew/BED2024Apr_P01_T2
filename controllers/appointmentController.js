@@ -122,7 +122,7 @@ const createAppointmentById = async (req, res) => {
         }
 
         res.status(201).json({
-            message: `Appointment with ID ${appointmentId} has been created.`,
+            message: `Appointment with ID ${createAppointment.id} has been created.`,
             appointment: createAppointment
         });
     } catch (err) {

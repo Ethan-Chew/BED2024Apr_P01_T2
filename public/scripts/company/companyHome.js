@@ -8,24 +8,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Get Company Information
     const companyId = sessionStorage.getItem('accountId');
 
+    // Get Companay Name
     const fetchCompany = await fetch(`/api/company/${companyId}`, {
         method: 'GET'
     });
     const companyJson = await fetchCompany.json();
-    console.log("companyJson: ", companyJson);
 
     // Get Drug Orders
-    const fetchDrugOrders = await fetch('/api/drugRequests', {
+    const fetchDrugOrders = await fetch('/api/drugRequests/', {
         method: 'GET'
     });
     const drugOrders = await fetchDrugOrders.json();
-    console.log("Drug Orders: ", drugOrders);
-
 
     // Display Company Information
     document.getElementById('company-name').innerText = companyJson.name;
     document.getElementById('pending-request').innerText = drugOrders.length;
 
+    // Add event listener
     document.getElementById('view-request').addEventListener('click', () => {
         window.location.href = '../company/drugRequest.html';
     })

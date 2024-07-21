@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const drugNameList = await fetchDrugNameList.json();
 
+    // Function to generate HTML
     const renderDrugList = (drugs) => {
         drugList.innerHTML = '';
         drugList.innerHTML = '<legend class="text-center mb-2">Select Medicine</legend>';
@@ -56,11 +57,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 drugList.appendChild(drugItem);
             });
         }
-
+        // Add eventListner to the radio buttons
         document.addEventListener('change', event => {
             if (event.target.name === 'medicine') {
                 const selectedDrug = event.target.value;
-                console.log(selectedDrug);
                 showDrugInfo(selectedDrug, companyId);
                 emptyBtn.disabled = false;
                 editBtn.disabled = false;
@@ -83,36 +83,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderDrugList(filteredDrugs);
     });
 
-    // drugList.innerHTML = '';
-    // drugList.innerHTML = '<legend class="text-center mb-2">Select Medicine</legend>';
-
-    // if (!Array.isArray(drugNameList) || drugNameList.length === 0) {
-    //     drugList.innerHtml = 'No Medicine Found';
-    // } else {
-    //     drugNameList.forEach(drug => {
-    //         const drugId = drug.replace(/ /g, '-');
-    //         const drugItem = document.createElement('div');
-    //         drugItem.className = 'w-full text-center';
-
-    //         drugItem.innerHTML = `
-    //             <input class="peer/${drugId} appearance-none" type="radio" id="${drugId}" name="medicine" value="${drug}">
-    //             <label class="peer-checked/${drugId}:bg-black peer-checked/${drugId}:text-white" for="${drugId}">${drug}</label>
-    //         `;
-
-    //         drugList.appendChild(drugItem);
-    //     })
-    // }
-
-    // document.addEventListener('change', event => {
-    //     if (event.target.name === 'medicine') {
-    //         const selectedDrug = event.target.value;
-    //         console.log(selectedDrug);
-    //         showDrugInfo(selectedDrug, companyId);
-    //         emptyBtn.removeEventListener('click', handleEmptyInventory);
-    //         emptyBtn.addEventListener('click', handleEmptyInventory);
-    //     }
-    // })
-
     // Show Drug Details
     async function showDrugInfo(drug, companyId) {
         const fetchDrugInformation = await fetch(`/api/companyDrugInventory/${companyId}/${drug}`, {
@@ -131,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         editBtn.setAttribute('data-DrugName', drugInformation[0].drugName);
         editBtn.setAttribute('data-CompanyId', companyId);
     }
-
+    // Add event listener to edit button
     editBtn.addEventListener('click', () => {
         const drug = editBtn.getAttribute('data-DrugName');
         const companyId = editBtn.getAttribute('data-CompanyId');
@@ -151,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error emptying inventory:', error);
         }
     }
-
+    // Function to format date
     function formatDate(dateString) {
         const options = { day: 'numeric', month: 'long', year: 'numeric' };
         const date = new Date(dateString);

@@ -13,6 +13,22 @@ const authorisedRoles = {
     "/api/chatbot/history/:patientId": ["patient"],
     "/api/patient/:patientId/digitalWallet": ["patient"],
     "/api/patient/:patientId/digitalWalletHistory": ["patient"],
+
+    "/api/drugRequests/": ["company"],
+    "/api/drugRequest/:id/:drugName": ["company"],
+    "/api/drugRequest/contribute/:id/:drugName": ["company"],
+    "/api/drugRequest/drugContribution": ["company"],
+    "/api/drugContributionOrders/:companyId": ["company"],
+    "/api/drugContributionOrders/:appointmentId/:drugName": ["company"],
+    "/api/drugContributionOrders/:appointmentId/:drugName": ["company"],
+    "/api/drugInventoryRecord/:drugRecordId/:drugQuantity": ["company"],
+    "/api/companyDrugInventory/": ["company"],
+    "/api/companyDrugInventory/:companyId/:drugName": ["company"],
+    "/api/companyDrugInventory/addDrug": ["company"],
+    "/api/companyDrugInventory/:companyId/:drugName/:drugQuantity": ["company"],
+    "/api/inventoryRecord/:companyId": ["company"],
+    "/api/inventoryRecord/:drugRecordId": ["company"],
+    "/api/inventoryRecord/:drugRecordId": ["company"],
 };
 
 module.exports = authorisedRoles;

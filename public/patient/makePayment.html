@@ -6,7 +6,7 @@
         <title>Outstanding Payments - CareLinc</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="flex flex-col">
+    <body class="bg-gray-100 min-h-screen flex flex-col">
 
         <!-- Navigation Bar -->
         <header class="z-[1000] bg-primary flex flex-row px-5 py-3 text-white items-center">
@@ -20,10 +20,16 @@
             </nav>
         </header>
 
-        <div class="flex flex-col flex-grow p-8">
-            <h1 class="text-4.5xl font-bold">Outstanding Payments</h1>
-            <div class="mt-5 flex flex-col gap-3" id="paymentlist-container">
-                
+        <!-- Main Content -->
+        <div class="flex-1 flex items-center justify-center overflow-auto">
+            <div class="flex-grow bg-white shadow-lg rounded-lg max-w-6xl p-6 m-4">
+                <h1 class="text-3xl font-bold">Outstanding Payments</h1>   
+                <div class="mt-5 flex flex-col gap-3" id="paymentlist-container">
+                    <div class="bg-gray-100 shadow-lg p-6 rounded-2xl text-lg w-full text-center hidden" id="no-outstanding">
+                        <h3 class="text-3xl font-bold mb-2">You have no outstanding payments!</h3>
+                        <p class="text-gray-600">All your payments are up to date. Thank you for staying on top of your payments.</p>
+                    </div>
+                </div> 
             </div>
         </div>
 
