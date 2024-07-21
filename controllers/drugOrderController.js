@@ -1,4 +1,4 @@
-// Model Created by: Jefferson
+// Controller Created by: Jefferson
 const DrugOrder = require('../models/drugOrderModel');
 
 const getAllDrugOrders = async (req, res) =>{

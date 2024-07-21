@@ -1,4 +1,4 @@
-// Model Created by: Jefferson
+// Controller Created by: Jefferson
 const InventoryRecord = require('../models/inventoryRecordModel');
 
 const getInventoryRecordByCompanyId = async (req, res) => {
@@ -15,7 +15,7 @@ const getInventoryRecordByCompanyId = async (req, res) => {
             return;
         }
 
-        res.json(inventoryRecord);
+        res.status(200).json(inventoryRecord);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -29,7 +29,7 @@ const deleteDrugRecordByRecordId = async (req, res) => {
         }
 
         const result = await InventoryRecord.deleteDrugRecordByRecordId(drugRecordId);
-        res.json({ message: 'Record deleted successfully', result });
+        res.status(200).json({ message: 'Record deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -44,7 +44,7 @@ const updateDrugQuantityByRecordId = async (req, res) => {
         }
 
         const result = await InventoryRecord.updateDrugQuantityByRecordId(drugRecordId);
-        res.json({ message: 'Quantity updated successfully', result });
+        res.status(200).json({ message: 'Quantity updated successfully', result });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
