@@ -197,7 +197,7 @@ const getAppointmentDetailsByDoctorId = async (req, res) => {
     }
 }
 
-// Emmanuel
+// Emmanuel //
 const updateAppointmentDoctorSlot = async (req, res) => {
     try {
         // check if date and time slot for another already exists and is available
@@ -212,7 +212,7 @@ const updateAppointmentDoctorSlot = async (req, res) => {
         const getAppointment = await appointment.getAppointmentDetail(appointmentId);
         const availableSlotId = await getAppointment.slotDate;
         const getAvailableSlot = await availableSlot.getAvailableSlotByDateAndTime;
-        const updategetAvailableSlot =  await availableSlot.updateAvailableSlot(availableSlotId, {
+        const updategetAvailableSlot = await availableSlot.updateAvailableSlot(availableSlotId, {
             doctor: doctorId,
             date: date,
             timeId: time,

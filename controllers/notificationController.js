@@ -1,6 +1,6 @@
 const notification = require("../models/notification");
 
-// Emmanuel
+// Emmanuel //
 const sendNotification = async (req, res) => {
     const { senderId, receiverId, message } = req.body;
 
@@ -36,13 +36,13 @@ const sendNotification = async (req, res) => {
     }
 }
 
-const receiveNotifications = async (req,res) => {
+const receiveNotifications = async (req, res) => {
     const { accountId } = req.params;
 
-    if (!accountId || typeof accountId!== 'string') {
+    if (!accountId || typeof accountId !== 'string') {
         return res.status(400).json({ message: 'Invalid account ID' });
     }
-    
+
     if (req.user.id !== senderId) {
         res.status(403).json({
             status: "Forbidden",
@@ -53,8 +53,8 @@ const receiveNotifications = async (req,res) => {
 
     try {
         const getNotifications = await notification.getNotificationsByReceiverId(accountId)
-        for (i=0; i < getNotifications.length; i++) {
-            
+        for (i = 0; i < getNotifications.length; i++) {
+
         }
 
         if (!getNotifications) {
@@ -78,10 +78,10 @@ const receiveNotifications = async (req,res) => {
     }
 }
 
-const readNotification = async (req, res) =>  {
+const readNotification = async (req, res) => {
     const { notificationId } = req.params;
     const status = 'Read';
-    if (!notificationId || typeof notificationId!== 'string') {
+    if (!notificationId || typeof notificationId !== 'string') {
         return res.status(400).json({ message: 'Invalid notification ID' });
     }
 

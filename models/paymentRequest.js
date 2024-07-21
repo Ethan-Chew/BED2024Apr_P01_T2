@@ -26,7 +26,7 @@ class PaymentRequest {
         return incrementString(result.recordset[0].PaymentRequestId);
     }
 
-    // Emmanuel
+    // Emmanuel //
     static async createPaymentRequest(appointmentId, message, createdDate) {
         const connection = await sql.connect(dbConfig);
         const newRequestId = await PaymentRequest.getNextRequestId(connection);
