@@ -220,4 +220,16 @@ CREATE TABLE DrugTopupRequest (
 	CONSTRAINT FK_DrugTopupRequest_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName)
 )
 
+CREATE TABLE Notification (
+	NotificationId VARCHAR(7) NOT NULL,
+	SenderId VARCHAR(7) NOT NULL,
+	ReceiverId VARCHAR(7) NOT NULL,
+	MessageValue VARCHAR (255) NOT NULL,
+	ReadStatus VARCHAR (10) NOT NULL CHECK (ReadStatus IN ('Recieved', 'Read', 'Sent'))
+
+	CONSTRAINT PK_Notification PRIMARY KEY (NotificationId),
+	CONSTRAINT FK_Notification_SenderId FOREIGN KEY (SenderId) REFERENCES Account(AccountId),
+	CONSTRAINT FK_Notification_ReceiverId FOREIGN KEY (ReceiverId) REFERENCES Account(AccountId)
+)
+
 USE master;

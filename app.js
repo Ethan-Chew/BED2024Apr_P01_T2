@@ -162,6 +162,9 @@ app.get("/api/paymentRequest/:appointmentId", paymentRequestController.getPaymen
 app.post("/api/paymentRequest", validatePaymentRequest, paymentRequestController.createPaymentRequest);
 app.delete("/api/paymentRequest/:id", paymentRequestController.cancelPaymentRequest);
 
+// Route for Notifications
+app.get("/api/notification/:id", donothing);
+
 // Initialise Server
 app.listen(3000, async () => {
     console.log("CareLinc listening on port 3000.")
