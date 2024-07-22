@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     const urlParams = new URLSearchParams(window.location.search);
     const appointmentId = urlParams.get('appointmentId');
     const drugName = urlParams.get('drugName');
+    const companyId = sessionStorage.getItem('accountId');
 
     if (!appointmentId || !drugName) {
         console.error('Missing appointmentId or drugName in query parameters');
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     // Fetch Drug Order
     try {
-        const response = await fetch(`/api/drugRequest/${appointmentId}/${drugName}`, {
+        const response = await fetch(`/api/drugRequest/${appointmentId}/${drugName}/${companyId}`, {
             method: 'GET'
         });
         const drugOrder = await response.json();
@@ -52,6 +53,15 @@ document.addEventListener("DOMContentLoaded", async() => {
         let inventoryQuantity = parseInt(inputInventory.value) || 0;
         let excessQuantity = parseInt(inputExcess.value) || 0;
 
+        // Get the drugAvailableQuantity from the drug order info
+        const drugAvailableQuantity = parseInt(document.getElementById("inventory-quantity").innerHTML);
+
+        // Ensure inventoryQuantity doesn't exceed drugAvailableQuantity
+        if (inventoryQuantity > drugAvailableQuantity) {
+            inventoryQuantity = drugAvailableQuantity;
+            inputInventory.value = inventoryQuantity;
+        }
+
         // Calculate the maximum allowable contribution based on the requested quantity
         const maxContribution = parseInt(document.getElementById("request-quantity").innerHTML);
 
@@ -72,7 +82,6 @@ document.addEventListener("DOMContentLoaded", async() => {
         contributeQuantityElement.textContent = totalContribution;
     }
 
-    const companyId = sessionStorage.getItem('accountId');
     // Handle Confirm Button Press
     document.getElementById('confirm-btn').addEventListener('click', async () => {
         const totalContribution = parseInt(contributeQuantityElement.textContent);

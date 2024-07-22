@@ -15,11 +15,11 @@ const authorisedRoles = {
     "/api/patient/:patientId/digitalWalletHistory": ["patient"],
 
     "/api/drugRequests/": ["company"],
+    "/api/drugRequest/:appointmentId/:drugName/:companyId": ["company"],
     "/api/drugRequest/:appointmentId/:drugName": ["company"],
     "/api/drugRequest/contribute/:appointmentId/:drugName": ["company"],
     "/api/drugRequest/drugContribution": ["company"],
     "/api/drugContributionOrders/:companyId": ["company"],
-    "/api/drugContributionOrders/:appointmentId/:drugName": ["company"],
     "/api/drugContributionOrders/:appointmentId/:drugName": ["company"],
     "/api/drugInventoryRecord/:drugRecordId/:drugQuantity": ["company"],
     "/api/companyDrugInventory/": ["company"],
@@ -27,7 +27,6 @@ const authorisedRoles = {
     "/api/companyDrugInventory/addDrug": ["company"],
     "/api/companyDrugInventory/:companyId/:drugName/:drugQuantity": ["company"],
     "/api/inventoryRecord/:companyId": ["company"],
-    "/api/inventoryRecord/:drugRecordId": ["company"],
     "/api/inventoryRecord/:drugRecordId": ["company"],
 
     "/api/paymentRequests" : ["patient"],

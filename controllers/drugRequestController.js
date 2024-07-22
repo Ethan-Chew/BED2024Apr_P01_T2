@@ -13,8 +13,8 @@ const getAllDrugRequestOrder = async (req, res) => {
 
 const getDrugOrderByIdAndDrugName = async (req, res) => {
     try {
-        const { appointmentId, drugName } = req.params;
-        const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(appointmentId, drugName);
+        const { appointmentId, drugName, companyId } = req.params;
+        const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(appointmentId, drugName, companyId);
         if (!drugOrder) {
             return res.status(404).json({ error: 'Drug order not found' });
         }

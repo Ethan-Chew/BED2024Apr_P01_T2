@@ -53,7 +53,7 @@ class DrugRequest {
         );
     }
 
-    static async getDrugOrderByIdAndDrugName(appointmentId, drugName) {
+    static async getDrugOrderByIdAndDrugName(appointmentId, drugName, companyId) {
         const connection = await sql.connect(dbConfig);
 
         const query = `
@@ -78,9 +78,30 @@ class DrugRequest {
         request.input('appointmentId', sql.VarChar, appointmentId);
         request.input('drugName', sql.VarChar, drugName);
         const result = await request.query(query);
+
+        const query2 = `
+            SELECT
+                DrugAvailableQuantity
+            FROM
+                DrugInventoryRecord
+            WHERE
+                DrugName = @drugName
+                AND CompanyId = @companyId
+        `;
+
+        const request2 = connection.request();
+        request2.input('drugName', sql.VarChar, drugName);
+        request2.input('companyId', sql.VarChar, companyId);
+        const result2 = await request2.query(query2);
+
         connection.close();
 
         if (result.recordset.length === 0) return null; // Handle case when no result is found
+
+        let drugAvailableQuantity = 0;
+        if (result2.recordset.length !== 0) {
+            drugAvailableQuantity = result2.recordset[0].DrugAvailableQuantity;
+        }
 
         // Access the properties correctly from result.recordset[0]
         const row = result.recordset[0];
@@ -90,7 +111,7 @@ class DrugRequest {
             row.Quantity,
             row.DrugPrice,
             null, // Assuming no request date in the query
-            row.DrugAvailableQuantity
+            drugAvailableQuantity
         );
     }
 
