@@ -21,7 +21,7 @@ const mailController = require("./controllers/mailController");
 const chatbotController = require("./controllers/chatbotController");
 const paymentRequestController = require("./controllers/paymentRequestController")
 const companyDrugInventoryController = require("./controllers/companyDrugInventoryController");
-const companyInventoryRecordController = require("./controllers/inventoryRecordController");
+const inventoryRecordController = require("./controllers/inventoryRecordController");
 const digitalWalletController = require("./controllers/digitalWalletController");
 const digitalWalletHistoryController = require("./controllers/digitalWalletHistoryController");
 const drugTopup = require("./controllers/drugTopupController");
@@ -143,9 +143,9 @@ app.delete("/api/companyDrugInventory/:companyId/:drugName", authoriseJWT, valid
 app.post("/api/companyDrugInventory/addDrug", authoriseJWT, validateCreateDrugInventoryRecord, companyDrugInventoryController.createDrugInventoryRecord);
 app.delete("/api/companyDrugInventory/:companyId/:drugName/:drugQuantity", authoriseJWT, companyDrugInventoryController.removeDrugFromInventoryRecord);
 // Route for Drug Inventory Record (Company)
-app.get("/api/inventoryRecord/:companyId", authoriseJWT, validateCompanyId, companyInventoryRecordController.getInventoryRecordByCompanyId);
-app.put("/api/inventoryRecord/:drugRecordId", authoriseJWT, validateDrugRecordId, companyInventoryRecordController.updateDrugQuantityByRecordId);
-app.delete("/api/inventoryRecord/:drugRecordId", authoriseJWT, validateDrugRecordId, companyInventoryRecordController.deleteDrugRecordByRecordId);
+app.get("/api/inventoryRecord/:companyId", authoriseJWT, validateCompanyId, inventoryRecordController.getInventoryRecordByCompanyId);
+app.put("/api/inventoryRecord/:drugRecordId", authoriseJWT, validateDrugRecordId, inventoryRecordController.updateDrugQuantityByRecordId);
+app.delete("/api/inventoryRecord/:drugRecordId", authoriseJWT, validateDrugRecordId, inventoryRecordController.deleteDrugRecordByRecordId);
 
 // Route for Drug Orders (Admin)
 app.post("/api/drugTopup/:drugName", drugTopup.requestTopup);
