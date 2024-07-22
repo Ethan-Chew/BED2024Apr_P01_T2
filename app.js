@@ -157,24 +157,24 @@ app.put("/api/helpRequests/approve/:requestId", helpRequestsController.approveRe
 app.put("/api/helpRequests/reject/:requestId", helpRequestsController.rejectRequest);
 
 // Route for Available Slot
-app.get("/api/availableSlots/:date", availableSlotController.getAllAvailableSlotsTimesByDate);
-app.post("/api/availableSlot", availableSlotController.getAvailableSlotByDateAndTime);
-app.put("/api/availableSlot/doctor/:slotId", availableSlotController.updateAvailableSlotById);
+app.get("/api/availableSlots/:date", authoriseJWT, availableSlotController.getAllAvailableSlotsTimesByDate);
+app.post("/api/availableSlot/getByDateTime", authoriseJWT, availableSlotController.getAvailableSlotByDateAndTime);
+app.put("/api/availableSlot/doctor/:slotId", authoriseJWT, availableSlotController.updateAvailableSlotById);
+app.post("api/availableSlot", authoriseJWT, availableSlotController.createAvailableSlot);
 
 // Route for Payment Request
-app.get("/api/paymentRequests", paymentRequestController.getPaymentRequestsByApprovedStatus);
-app.get("/api/paymentRequest/patient/:patientId", paymentRequestController.getPaymentRequestByAppointmentId);
-app.get("/api/paymentRequest/:appointmentId", paymentRequestController.getPaymentRequestByAppointmentId);
-app.put("/api/paymentRequest/approve/:appointmentId", paymentRequestController.approvePaymentRequestByAppointmentId);
-app.put("/api/paymentRequest/reject/:appointmentId", paymentRequestController.rejectPaymentRequestByAppointmentId);
-app.post("/api/paymentRequest", validatePaymentRequest, paymentRequestController.createPaymentRequest);
-app.delete("/api/paymentRequest/:id", paymentRequestController.cancelPaymentRequest);
+app.get("/api/paymentRequests", authoriseJWT, paymentRequestController.getPaymentRequestsByApprovedStatus);
+app.get("/api/paymentRequest/:appointmentId", authoriseJWT, paymentRequestController.getPaymentRequestByAppointmentId);
+app.put("/api/paymentRequest/approve/:appointmentId", authoriseJWT, paymentRequestController.approvePaymentRequestByAppointmentId);
+app.put("/api/paymentRequest/reject/:appointmentId", authoriseJWT, paymentRequestController.rejectPaymentRequestByAppointmentId);
+app.post("/api/paymentRequest", authoriseJWT, validatePaymentRequest, paymentRequestController.createPaymentRequest);
+app.delete("/api/paymentRequest/:id", authoriseJWT, paymentRequestController.cancelPaymentRequest);
 
 // Route for Notifications
 app.get("/api/notification/:accountid", authoriseJWT, notificationsController.receiveNotifications);
 app.put("/api/notification/:Notificationid", authoriseJWT, notificationsController.readNotification);
 app.put("/api/notifications/:accountid", authoriseJWT, notificationsController.readAllNotificationsByAccountId);
-app.post("/api/notification", validateNotification, notificationsController.sendNotification);
+app.post("/api/notification",authoriseJWT, validateNotification, notificationsController.sendNotification);
 
 
 // Initialise Server
