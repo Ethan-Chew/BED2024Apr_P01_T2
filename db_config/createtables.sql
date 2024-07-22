@@ -7,7 +7,7 @@ CREATE TABLE Account (
     AccountEmail VARCHAR(255) NOT NULL,
     AccountCreationDate BIGINT NOT NULL,
 
-	CONSTRAINT PK_Account PRIMARY KEY (AccountId),
+	CONSTRAINT PK_Account PRIMARY KEY (AccountId)
 );
 
 CREATE TABLE DrugInventory (
@@ -15,7 +15,7 @@ CREATE TABLE DrugInventory (
 	DrugPrice MONEY NOT NULL,
 	DrugDescription VARCHAR(255) NOT NULL
 
-	CONSTRAINT PK_DrugInventory PRIMARY KEY (DrugName),
+	CONSTRAINT PK_DrugInventory PRIMARY KEY (DrugName)
 );
 
 --Accounts-- 
@@ -40,8 +40,8 @@ CREATE TABLE DigitalWallet (
 	PatientId VARCHAR(7) NOT NULL UNIQUE,
 	WalletBalance MONEY NOT NULL,
 
-	CONSTRAINT PK_DigitalWallet PRIMARY KEY (PatientId),
-)
+	CONSTRAINT PK_DigitalWallet PRIMARY KEY (PatientId)
+);
 
 CREATE TABLE DigitalWalletHistory (
 	PatientId VARCHAR(7) NOT NULL,
@@ -52,8 +52,8 @@ CREATE TABLE DigitalWalletHistory (
 
 	CONSTRAINT PK_DigitalWalletHistory PRIMARY KEY (PatientId, WalletTransactionId),
 	CONSTRAINT FK_DigitalWalletHistory_Patient FOREIGN KEY (PatientId) REFERENCES Patient(PatientId),
-	CONSTRAINT FK_DigitalWalletHistory_Wallet FOREIGN KEY (PatientId) REFERENCES DigitalWallet(PatientId),
-)
+	CONSTRAINT FK_DigitalWalletHistory_Wallet FOREIGN KEY (PatientId) REFERENCES DigitalWallet(PatientId)
+);
 
 CREATE TABLE PatientPaymentMethods (
 	PaymentMethodId VARCHAR(7) NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE Doctor (
 
 	CONSTRAINT PK_Doctor PRIMARY KEY (DoctorId),
 	CONSTRAINT FK_Doctor_Account FOREIGN KEY (DoctorId) REFERENCES Account(AccountId),
-	CONSTRAINT FK_Doctor_Staff FOREIGN KEY (DoctorCreatedBy) REFERENCES Staff(StaffId),
+	CONSTRAINT FK_Doctor_Staff FOREIGN KEY (DoctorCreatedBy) REFERENCES Staff(StaffId)
 );
 
 CREATE TABLE Company (
@@ -83,8 +83,7 @@ CREATE TABLE Company (
 
 	CONSTRAINT PK_Company PRIMARY KEY (CompanyId),
 	CONSTRAINT FK_Company_Account FOREIGN KEY (CompanyId) REFERENCES Account(AccountId),
-	CONSTRAINT FK_Company_Staff FOREIGN KEY (CompanyCreatedBy) REFERENCES Staff(StaffId),
-
+	CONSTRAINT FK_Company_Staff FOREIGN KEY (CompanyCreatedBy) REFERENCES Staff(StaffId)
 );
 
 CREATE TABLE Questionnaire (
@@ -108,14 +107,14 @@ CREATE TABLE ChatbotHistory (
 
 	CONSTRAINT PK_ChatbotHistory PRIMARY KEY (PatientId, MessageDate),
 	CONSTRAINT FK_ChatbotHistory_Patient FOREIGN KEY (PatientId) REFERENCES Patient(PatientId)
-)
+);
 
 CREATE TABLE SlotTime (
 	SlotTimeId VARCHAR(7) NOT NULL,
 	SlotTime VARCHAR(20) NOT NULL UNIQUE,
 
-	CONSTRAINT PK_SlotTime PRIMARY KEY (SlotTimeId),
-)
+	CONSTRAINT PK_SlotTime PRIMARY KEY (SlotTimeId)
+);
 
 CREATE TABLE AvailableSlot (
 	SlotId VARCHAR(7),
@@ -125,7 +124,7 @@ CREATE TABLE AvailableSlot (
 
 	CONSTRAINT PK_AvailableSlot PRIMARY KEY (SlotId),
 	CONSTRAINT FK_AvailableSlot_Doctor FOREIGN KEY (DoctorId) REFERENCES Doctor(DoctorId),
-	CONSTRAINT FK_AvailableSlot_SlotTime FOREIGN KEY (SlotTimeId) REFERENCES SlotTime(SlotTimeId),
+	CONSTRAINT FK_AvailableSlot_SlotTime FOREIGN KEY (SlotTimeId) REFERENCES SlotTime(SlotTimeId)
 );
 
 CREATE TABLE Appointments (
@@ -140,7 +139,7 @@ CREATE TABLE Appointments (
 	CONSTRAINT PK_Appointment PRIMARY KEY (AppointmentId),
 	CONSTRAINT FK_Appointment_Account FOREIGN KEY (PatientId) REFERENCES Account(AccountId),
 	CONSTRAINT FK_Appointment_Doctor FOREIGN KEY (DoctorId) REFERENCES Doctor(DoctorId),
-	CONSTRAINT FK_Appointment_Slot FOREIGN KEY (SlotId) REFERENCES AvailableSlot(SlotId),
+	CONSTRAINT FK_Appointment_Slot FOREIGN KEY (SlotId) REFERENCES AvailableSlot(SlotId)
 );
 
 CREATE TABLE PaymentRequest (
@@ -152,7 +151,7 @@ CREATE TABLE PaymentRequest (
 	
 	CONSTRAINT PK_PaymentRequest PRIMARY KEY (PaymentRequestId),
 	CONSTRAINT FK_PaymentRequest_Appointment FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId)
-)
+);
 
 CREATE TABLE Payments (
 	PaymentId VARCHAR(7),
@@ -161,8 +160,8 @@ CREATE TABLE Payments (
 	PaymentType VARCHAR(10) NULL CHECK (PaymentType IN ('DWallet', 'Card', 'PayRequest')),
 
 	CONSTRAINT PK_Payments PRIMARY KEY (PaymentId),
-	CONSTRAINT FK_Payments_Appointments FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
-)
+	CONSTRAINT FK_Payments_Appointments FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId)
+);
 
 CREATE TABLE DrugInventoryRecord (
 	DrugRecordId VARCHAR(7) NOT NULL,
@@ -175,8 +174,8 @@ CREATE TABLE DrugInventoryRecord (
 
 	CONSTRAINT PK_DrugInventoryRecord PRIMARY KEY (DrugRecordId),
 	CONSTRAINT FK_DrugInventoryRecord_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName),
-	CONSTRAINT FK_DrugInventoryRecord_Company FOREIGN KEY (CompanyId) REFERENCES Company(CompanyId),
-)
+	CONSTRAINT FK_DrugInventoryRecord_Company FOREIGN KEY (CompanyId) REFERENCES Company(CompanyId)
+);
 
 CREATE TABLE PrescribedMedication (
 	PrescribedMedId VARCHAR(7) NOT NULL,
@@ -218,6 +217,18 @@ CREATE TABLE DrugTopupRequest (
 
 	CONSTRAINT PK_DrugTopupRequest PRIMARY KEY (TopupId),
 	CONSTRAINT FK_DrugTopupRequest_DrugInventory FOREIGN KEY (DrugName) REFERENCES DrugInventory(DrugName)
-)
+);
+
+CREATE TABLE Notification (
+	NotificationId VARCHAR(7) NOT NULL,
+	SenderId VARCHAR(7) NOT NULL,
+	ReceiverId VARCHAR(7) NOT NULL,
+	MessageValue VARCHAR (255) NOT NULL,
+	ReadStatus VARCHAR (10) NOT NULL CHECK (ReadStatus IN ('Recieved', 'Read', 'Sent'))
+
+	CONSTRAINT PK_Notification PRIMARY KEY (NotificationId),
+	CONSTRAINT FK_Notification_SenderId FOREIGN KEY (SenderId) REFERENCES Account(AccountId),
+	CONSTRAINT FK_Notification_ReceiverId FOREIGN KEY (ReceiverId) REFERENCES Account(AccountId)
+);
 
 USE master;

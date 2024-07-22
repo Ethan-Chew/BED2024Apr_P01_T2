@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const validateContributeDrugRequest = (req, res, next) => {
     const schema = Joi.object({
-        id: Joi.string().required(),
+        appointmentId: Joi.string().required(),
         drugName: Joi.string().required(),
         contributedQuantity: Joi.number().required()
     });
@@ -16,6 +16,6 @@ const validateContributeDrugRequest = (req, res, next) => {
     }
 
     next();
-}
+};
 
 module.exports = validateContributeDrugRequest;

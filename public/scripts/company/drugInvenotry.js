@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 emptyBtn.removeEventListener('click', handleEmptyInventory);
                 emptyBtn.addEventListener('click', handleEmptyInventory);
             }
-        })
+        });
     };
 
     // Initial render of the drug list
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function showDrugInfo(drug, companyId) {
         const fetchDrugInformation = await fetch(`/api/companyDrugInventory/${companyId}/${drug}`, {
             method: 'GET'
-        })
+        });
         if (!fetchDrugInformation.ok) {
             throw new Error('Network response was not ok');
         }
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const drug = editBtn.getAttribute('data-DrugName');
         const companyId = editBtn.getAttribute('data-CompanyId');
         window.location.href = `editDrugInventory.html?companyId=${companyId}&drugName=${drug}`;
-    })
+    });
 
     async function emptyInventory(drug, companyId) {
         try {
@@ -132,4 +132,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         const selectedDrug = document.querySelector('input[name="medicine"]:checked').value;
         emptyInventory(selectedDrug, companyId);
     }
-})
+});

@@ -19,7 +19,7 @@ const getInventoryRecordByCompanyId = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
 
 const deleteDrugRecordByRecordId = async (req, res) => {
     try {
@@ -28,13 +28,13 @@ const deleteDrugRecordByRecordId = async (req, res) => {
             return res.status(400).json({ message: 'Invalid record ID' });
         }
 
-        const result = await InventoryRecord.deleteDrugRecordByRecordId(drugRecordId);
+        await InventoryRecord.deleteDrugRecordByRecordId(drugRecordId);
         res.status(200).json({ message: 'Record deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 
-}
+};
 
 const updateDrugQuantityByRecordId = async (req, res) => {
     try {
@@ -48,7 +48,7 @@ const updateDrugQuantityByRecordId = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
 
 module.exports = {
     getInventoryRecordByCompanyId,

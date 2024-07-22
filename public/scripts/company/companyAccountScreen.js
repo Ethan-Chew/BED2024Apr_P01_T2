@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById("btn-home").addEventListener('click', () => {
         window.location.href = './companyHome.html';
-    })
+    });
 
     // Get Company Information
     const companyId = sessionStorage.getItem('accountId');

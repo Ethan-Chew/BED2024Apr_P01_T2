@@ -15,8 +15,8 @@ const authorisedRoles = {
     "/api/patient/:patientId/digitalWalletHistory": ["patient"],
 
     "/api/drugRequests/": ["company"],
-    "/api/drugRequest/:id/:drugName": ["company"],
-    "/api/drugRequest/contribute/:id/:drugName": ["company"],
+    "/api/drugRequest/:appointmentId/:drugName": ["company"],
+    "/api/drugRequest/contribute/:appointmentId/:drugName": ["company"],
     "/api/drugRequest/drugContribution": ["company"],
     "/api/drugContributionOrders/:companyId": ["company"],
     "/api/drugContributionOrders/:appointmentId/:drugName": ["company"],
@@ -29,6 +29,31 @@ const authorisedRoles = {
     "/api/inventoryRecord/:companyId": ["company"],
     "/api/inventoryRecord/:drugRecordId": ["company"],
     "/api/inventoryRecord/:drugRecordId": ["company"],
+
+    "/api/paymentRequests" : ["patient"],
+    "/api/paymentRequest/:appointmentId" : ["admin"],
+    "/api/paymentRequest/approve/:appointmentId" : ["admin"],
+    "/api/paymentRequest/reject/:appointmentId" : ["admin"],
+    "/api/paymentRequest" : ["patient"],
+    "/api/paymentRequest/:id" : ["patient"],
+
+    "/api/notification/:accountid" : ["patient", "doctor", "admin"],
+    "/api/notification/:Notificationid" : ["patient", "doctor"],
+    "/api/notifications/:accountid" : ["patient", "doctor"],
+    "/api/notification" : ["doctor", "admin"],
+
+    "/api/appointments/cancel/:appointmentId" : ["doctor"],
+    "/api/appointments/doctor/:doctorId" : ["doctor"],
+
+    "/api/availableSlots/:date" : ["patient"],
+    "/api/availableSlot/getByDateTime" : ["patient"],
+    "/api/availableSlot/doctor/:slotId" :["doctor"],
+    "api/availableSlot" : ["doctor", "admin"],
+
+
+
+
+
 };
 
 module.exports = authorisedRoles;

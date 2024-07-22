@@ -9,12 +9,12 @@ const getAllDrugRequestOrder = async (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' }); // Return JSON
     }
-}
+};
 
 const getDrugOrderByIdAndDrugName = async (req, res) => {
     try {
-        const { id, drugName } = req.params;
-        const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(id, drugName);
+        const { appointmentId, drugName } = req.params;
+        const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(appointmentId, drugName);
         if (!drugOrder) {
             return res.status(404).json({ error: 'Drug order not found' });
         }
@@ -23,7 +23,7 @@ const getDrugOrderByIdAndDrugName = async (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' }); // Return JSON
     }
-}
+};
 
 const addRequestContribution = async (req, res) => {
     try {
@@ -56,42 +56,42 @@ const addRequestContribution = async (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' }); // Return JSON
     }
-}
+};
 
 const contributeDrugRequest = async (req, res) => {
     try {
-        const { id, drugName } = req.params;
+        const { appointmentId, drugName } = req.params;
         const contributedQuantity = req.body.contributedQuantity;
-        const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(id, drugName);
+        const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(appointmentId, drugName);
         if (!drugOrder) {
             return res.status(404).json({ error: 'Drug order not found' });
         }
         // Contribute to the drug request (Update the status to 'Completed' and update Drug Inventory Record Quantity)
-        const recordId = await DrugRequest.contributeDrugRequest(id, drugName, contributedQuantity);
+        const recordId = await DrugRequest.contributeDrugRequest(appointmentId, drugName, contributedQuantity);
         // Send success response
         res.status(200).json({ recordId, success: true, message: 'Drug request contribution completed successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' }); // Return JSON
     }
-}
+};
 
 const cancelDrugOrder = async (req, res) => {
     try {
-        const { id, drugName } = req.params;
-        const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(id, drugName);
+        const { appointmentId, drugName } = req.params;
+        const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(appointmentId, drugName);
         if (!drugOrder) {
             return res.status(404).json({ error: 'Drug order not found' });
         }
         // Cancel the drug request (Update the status to 'Cancelled')
-        await DrugRequest.cancelDrugOrder(id, drugName);
+        await DrugRequest.cancelDrugOrder(appointmentId, drugName);
         // Send success response
         res.status(200).json({ success: true, message: 'Drug request cancelled successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' }); // Return JSON
     }
-}
+};
 
 
 
@@ -101,4 +101,4 @@ module.exports = {
     addRequestContribution,
     contributeDrugRequest,
     cancelDrugOrder
-}
+};

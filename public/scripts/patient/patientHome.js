@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('dwallet').addEventListener('click', () => {
         window.location.href = '../patient/digitalWallet.html';
     });
+    document.getElementById('notifications').addEventListener('click', () => {
+        window.location.href = '../patient/notifications.html';
+    });
 
     // Fetch Patient Information
     const accountId = sessionStorage.getItem('accountId');

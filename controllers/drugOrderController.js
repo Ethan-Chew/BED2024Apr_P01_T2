@@ -23,7 +23,7 @@ const getAllDrugOrders = async (req, res) =>{
         console.error(err);
         res.status(500).json({ error: 'Internal server error' }); // Return JSON
     }
-}
+};
 
 const deleteDrugOrder = async (req, res) =>{
     try {
@@ -42,7 +42,7 @@ const deleteDrugOrder = async (req, res) =>{
         console.error('Error deleting drug order:', err);
         res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
 
 const returnMedicine = async (req, res) =>{
     try {
@@ -62,7 +62,7 @@ const returnMedicine = async (req, res) =>{
         res.status(500).json({ error: 'Internal server error' });
     }
 
-}
+};
 
 const confirmDrugOrder = async (req, res) =>{
     try {
@@ -81,11 +81,11 @@ const confirmDrugOrder = async (req, res) =>{
         console.error('Error confirming drug order:', err);
         res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
 
 module.exports = {
     getAllDrugOrders,
     deleteDrugOrder,
     returnMedicine,
     confirmDrugOrder
-}
+};

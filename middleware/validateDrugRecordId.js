@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const validateUpdateDrugQuantityByRecordId = async (req, res, next) => {
+const validateDrugRecordId = async (req, res, next) => {
   const schema = Joi.object({
     drugRecordId: Joi.string().required(),
   });
@@ -14,4 +14,4 @@ const validateUpdateDrugQuantityByRecordId = async (req, res, next) => {
   next();
 };
 
-module.exports = validateUpdateDrugQuantityByRecordId;
+module.exports = validateDrugRecordId;

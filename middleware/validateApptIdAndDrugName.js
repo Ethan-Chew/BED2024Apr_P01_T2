@@ -1,8 +1,8 @@
 const Joi = require("joi");
 
-const validateCancelDrugOrder = (req, res, next) => {
+const validateApptIdAndDrugName = (req, res, next) => {
     const schema = Joi.object({
-        id: Joi.string().required(),
+        appointmentId: Joi.string().required(),
         drugName: Joi.string().required()
     });
 
@@ -15,6 +15,6 @@ const validateCancelDrugOrder = (req, res, next) => {
     }
 
     next();
-}
+};
 
-module.exports = validateCancelDrugOrder;
+module.exports = validateApptIdAndDrugName;
