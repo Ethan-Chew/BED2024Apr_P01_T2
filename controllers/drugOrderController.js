@@ -1,12 +1,21 @@
+// Controller Created by: Jefferson
 const DrugOrder = require('../models/drugOrderModel');
 
 const getAllDrugOrders = async (req, res) =>{
     try {
-        const companyId = req.params.companyId; // Assuming companyId is passed as a parameter
+        const companyId = req.params.companyId;
         const drugOrders = await DrugOrder.getAllDrugOrders(companyId);
         
         if (!drugOrders) {
             return res.status(404).json({ error: 'No drug orders found for the company' });
+        }
+        
+        if (req.user.id !== companyId) {
+            res.status(403).json({
+                status: "Forbidden",
+                message: "You are not allowed to view the Drug Order."
+            });
+            return;
         }
         
         res.json(drugOrders);

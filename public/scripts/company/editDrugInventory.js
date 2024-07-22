@@ -42,15 +42,15 @@ document.addEventListener("DOMContentLoaded", async() => {
         drugPrice.innerHTML = '$' + drugInformation[0].drugPrice;
         drugInfo.innerHTML = drugInformation[0].drugDescription;
     }
-
+    // Function to format date
     function formatDate(dateString) {
         const options = { day: 'numeric', month: 'long', year: 'numeric' };
         const date = new Date(dateString);
         return date.toLocaleDateString('en-GB', options);
     }
 
+    // Render Drug Information
     showDrugInfo(drug, companyId);
-
 
     // Add Drug into Drug Inventory
     addBtn.addEventListener('click', async() => {
@@ -75,12 +75,18 @@ document.addEventListener("DOMContentLoaded", async() => {
             return;
         }
 
+        if (isDateInThePast(expiryDate)) {
+            alert('The date cannot be in the past. Please enter a valid future date.');
+            return;
+        }
+
         const data = {
             drugName: drug,
             drugQuantity: quantity,
             drugExpiryDate: expiryDate,
             companyId: companyId
         }
+        // Fetch POST request
         const addDrug = await fetch('/api/companyDrugInventory/addDrug', {
             method: 'POST',
             headers: {
@@ -88,9 +94,11 @@ document.addEventListener("DOMContentLoaded", async() => {
             },
             body: JSON.stringify(data)
         })
+
         if (!addDrug.ok) {
             throw new Error('Network response was not ok');
         }
+
         const response = await addDrug.json();
         if (response.message) {
             alert(response.message);
@@ -98,6 +106,7 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     });
 
+    // Add event listener to remove drug from inventory
     removeQuantity.addEventListener('input', () => {
         const quantity = parseInt(removeQuantity.value.trim());
         const availableQuantity = parseInt(drugQuantity.textContent.split(' ')[0]);
@@ -124,6 +133,7 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
 
         try {
+            // Fetch DELETE request
             const removeDrug = await fetch(`/api/companyDrugInventory/${companyId}/${drug}/${quantity}`, {
                 method: 'DELETE'
             });
@@ -142,9 +152,21 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     });
 
+    // Function to validate date format (YYYY-MM-DD)
     function isValidDateFormat(dateString) {
         const regex = /^\d{4}-\d{2}-\d{2}$/; // Regex pattern for YYYY-MM-DD format
         return regex.test(dateString);
     }
 
+    // Function to check if a date is in the past
+    function isDateInThePast(dateString) {
+        const inputDate = new Date(dateString);
+        const today = new Date();
+
+        // Set time to the beginning of the day to avoid time component issues
+        today.setHours(0, 0, 0, 0);
+
+        // Compare dates
+        return inputDate <= today;
+    }
 })

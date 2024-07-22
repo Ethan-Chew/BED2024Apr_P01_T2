@@ -18,22 +18,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     const confirmedDrugContributionOrders = await fetchConfirmedDrugContributionOrders.json();
 
-    // let confirmedDrugContributionOrders = await fetchConfirmedDrugContributionOrders.json();
-
-    // const testData = [];
-
-    // for (let i = 0; i < 35; i++) {
-    //     testData.push({
-    //         appointmentId: `APPT-${i + 1}`,
-    //         contributeDate: `2022-07-${i + 1}`,
-    //         drugName: `Drug ${i + 1}`,
-    //         drugQuantity: `10${i + 1}`,
-    //         contributionStatus: 'Completed'
-    //     });
-    // }
-
-    //confirmedDrugContributionOrders = testData;
-
     const confirmedContributionList = document.getElementById('confirmed-contribution-list-body');
     const nextPageButton = document.getElementById('next-page-button');
     const pageNumberInput = document.getElementById('page-number-input');
@@ -126,6 +110,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Update total pages span
     totalPagesSpan.innerHTML = `of ${totalPages}`;
 
+    // Add event listener to export to csv button
     document.getElementById('export-to-csv').addEventListener('click', () => {
         const csvContent = [];
       

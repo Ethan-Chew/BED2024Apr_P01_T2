@@ -1,3 +1,4 @@
+// Controller Created by: Jefferson
 const InventoryRecord = require('../models/inventoryRecordModel');
 
 const getInventoryRecordByCompanyId = async (req, res) => {
@@ -5,7 +6,16 @@ const getInventoryRecordByCompanyId = async (req, res) => {
         const { companyId } = req.params;
 
         const inventoryRecord = await InventoryRecord.getInventoryRecordByCompanyId(companyId);
-        res.json(inventoryRecord);
+
+        if (req.user.id !== companyId) {
+            res.status(403).json({
+                status: "Forbidden",
+                message: "You are not allowed to view the inventory record."
+            });
+            return;
+        }
+
+        res.status(200).json(inventoryRecord);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -19,7 +29,7 @@ const deleteDrugRecordByRecordId = async (req, res) => {
         }
 
         const result = await InventoryRecord.deleteDrugRecordByRecordId(drugRecordId);
-        res.json({ message: 'Record deleted successfully', result });
+        res.status(200).json({ message: 'Record deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -34,7 +44,7 @@ const updateDrugQuantityByRecordId = async (req, res) => {
         }
 
         const result = await InventoryRecord.updateDrugQuantityByRecordId(drugRecordId);
-        res.json({ message: 'Quantity updated successfully', result });
+        res.status(200).json({ message: 'Quantity updated successfully', result });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -3,6 +3,7 @@ const prescribedMedication = require("../models/prescribedMedication");
 const payment = require("../models/payment");
 const availableSlot = require("../models/availableSlot");
 const slotTime = require("../models/slotTime");
+const notifications = require("../models/notifications");
 
 // Created by: Ethan Chew
 const getAllPatientAppointment = async (req, res) => {
@@ -197,7 +198,7 @@ const getAppointmentDetailsByDoctorId = async (req, res) => {
     }
 }
 
-// Emmanuel
+// Emmanuel //
 const updateAppointmentDoctorSlot = async (req, res) => {
     try {
         // check if date and time slot for another already exists and is available
@@ -210,15 +211,28 @@ const updateAppointmentDoctorSlot = async (req, res) => {
         }
 
         const getAppointment = await appointment.getAppointmentDetail(appointmentId);
-        const availableSlotId = await getAppointment.slotDate;
-        const getAvailableSlot = await availableSlot.getAvailableSlotByDateAndTime;
-        const updategetAvailableSlot =  await availableSlot.updateAvailableSlot(availableSlotId, {
-            doctor: doctorId,
-            date: date,
-            timeId: time,
-        });
-        const updateSlotDateTime = await availableSlot
+        const availableSlotId = await getAppointment.SlotTime;
+        const getAnotherAvailableSlot = await availableSlot.getAnotherAvailableSlot(getAppointment.doctorId, availableSlotId);
 
+        if (!getAnotherAvailableSlot) {
+            const message = "The doctor has cancelled your appointment and there are no other available timeslots";
+            const deleteAppointment = await appointment.deleteAppointmentById(appointmentId);
+            const sendNotification = await notifications.sendNotification(getAppointment.doctorId, getAppointment.patientId, message)
+
+            return res.status(200).json({ message: `Appointment with ID ${appointmentId} has been deleted. Notification has been sent to the patient` });
+        } else {
+            const nextAvailableSlot = availableSlot.getAnotherAvailableSlot(getAppointment.doctorId, availableSlotId)
+
+            const updateFields = {
+                'doctor': nextAvailableSlot.doctorId,
+                'slotId': nextAvailableSlot.slotId,
+            }
+            const updateAppointment = await appointment.updateAppointmentDoctorSlot(appointmentId, updateFields);
+            const message = "The original doctor has cancelled your appointment, a new doctor will be seeing you instead";
+            const sendNotification = await notifications.sendNotification(getAppointment.doctorId, getAppointment.patientId, message)
+
+            return res.status(200).json({ message: `Appointment with ID ${appointmentId} has been updated. Notification has been sent to the patient` });
+        }
 
     } catch (err) {
         console.error(err);
@@ -226,7 +240,7 @@ const updateAppointmentDoctorSlot = async (req, res) => {
     }
 }
 
-// Emmanuel
+// Emmanuel //
 const updateAppointmentNewDoctor = async (req, res) => {
     const { appointmentId } = req.params;
 
@@ -235,6 +249,7 @@ const updateAppointmentNewDoctor = async (req, res) => {
     }
 
     try {
+        const s = appointment.updateAppointmentDoctorSlot();
 
     } catch (err) {
         console.error(err);

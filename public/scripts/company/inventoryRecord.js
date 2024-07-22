@@ -13,14 +13,17 @@ document.addEventListener("DOMContentLoaded", async() => {
     const tableList = document.getElementById('table-list');
     const searchField = document.getElementById('search-field');
 
+    // Get Company Information
     const companyId = sessionStorage.getItem('accountId');
 
+    // Fetch GET request
     const fetchDrugRecord = await fetch(`/api/inventoryRecord/${companyId}`, {
         method: 'GET'
     })
 
     const drugRecordList = await fetchDrugRecord.json();
 
+    // Generate the table
     const renderTableList = (records) => {
         tableList.innerHTML = `
             <thead>

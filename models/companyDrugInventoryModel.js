@@ -1,3 +1,4 @@
+// Model Created by: Jefferson
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
@@ -39,10 +40,10 @@ class CompanyDrugInventory {
                 di.DrugName,
                 (SELECT MIN(dr1.DrugExpiryDate)
                 FROM DrugInventoryRecord dr1
-                WHERE dr1.DrugName = di.DrugName AND dr1.CompanyId = dr.CompanyId) AS 'DrugExpiryDateClose',
+                WHERE dr1.DrugName = di.DrugName AND dr1.CompanyId = dr.CompanyId AND dr1.DrugAvailableQuantity > 0) AS 'DrugExpiryDateClose',
                 (SELECT MAX(dr2.DrugExpiryDate)
                 FROM DrugInventoryRecord dr2
-                WHERE dr2.DrugName = di.DrugName AND dr2.CompanyId = dr.CompanyId) AS 'DrugExpiryDateFar',
+                WHERE dr2.DrugName = di.DrugName AND dr2.CompanyId = dr.CompanyId AND dr2.DrugAvailableQuantity > 0) AS 'DrugExpiryDateFar',
                 SUM(dr.DrugAvailableQuantity) AS 'DrugQuantity',
                 di.DrugPrice,
                 di.DrugDescription,
@@ -167,7 +168,7 @@ class CompanyDrugInventory {
             const getLastRecordQuery = `
                 SELECT TOP 1 DrugRecordId
                 FROM DrugInventoryRecord
-                ORDER BY DrugRecordEntryDate DESC;
+                ORDER BY DrugRecordId DESC;
             `;
             const recordRequest = new sql.Request(transaction);
             const recordResult = await recordRequest.query(getLastRecordQuery);

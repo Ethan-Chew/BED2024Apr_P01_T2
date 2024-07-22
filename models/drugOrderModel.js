@@ -1,3 +1,4 @@
+// Model Created by: Jefferson
 const sql = require("mssql");
 const dbConfig = require ("../dbConfig");
 
