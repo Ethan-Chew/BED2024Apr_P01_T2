@@ -16,8 +16,8 @@ const authLoginAccount = async (req, res) => {
     
         if (!email || !password) {
             return res.status(400).json({
-                status: 'Error'
-,               message: "Email and Password are required in the request body.",
+                status: 'Error',
+                message: "Email and Password are required in the request body.",
             });
         }
         
