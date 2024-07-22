@@ -130,5 +130,6 @@ const getAvailableSlotByDateAndTime = async (req, res) => {
 module.exports = {
     updateAvailableSlotById,
     getAllAvailableSlotsTimesByDate,
-    getAvailableSlotByDateAndTime
+    getAvailableSlotByDateAndTime,
+    createAvailableSlot
 }
