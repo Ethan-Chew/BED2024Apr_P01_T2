@@ -14,6 +14,6 @@ const validateCompanyId = (req, res, next) => {
     }
 
     next();
-}
+};
 
 module.exports = validateCompanyId;

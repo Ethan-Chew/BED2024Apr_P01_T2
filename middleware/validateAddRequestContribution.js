@@ -21,6 +21,6 @@ const validateAddRequestContribution = (req, res, next) => {
     }
 
     next();
-}
+};
 
 module.exports = validateAddRequestContribution;

@@ -197,4 +197,4 @@ document.addEventListener("DOMContentLoaded", async() => {
         renderContributionOrders(filteredOrders);
     });
 
-})
+});

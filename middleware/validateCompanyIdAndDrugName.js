@@ -15,6 +15,6 @@ const validateCompanyIdAndDrugName = (req, res, next) => {
     }
 
     next();
-}
+};
 
 module.exports = validateCompanyIdAndDrugName;

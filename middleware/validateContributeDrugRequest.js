@@ -16,6 +16,6 @@ const validateContributeDrugRequest = (req, res, next) => {
     }
 
     next();
-}
+};
 
 module.exports = validateContributeDrugRequest;

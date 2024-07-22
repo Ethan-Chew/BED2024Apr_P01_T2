@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     // Fetch GET request
     const fetchDrugRecord = await fetch(`/api/inventoryRecord/${companyId}`, {
         method: 'GET'
-    })
+    });
 
     const drugRecordList = await fetchDrugRecord.json();
 
@@ -135,4 +135,4 @@ document.addEventListener("DOMContentLoaded", async() => {
         });
         renderTableList(filteredRecords);
     });
-})
+});

@@ -21,7 +21,7 @@ class CompanyDrugInventory {
                 DrugName
             FROM
                 DrugInventory
-        `
+        `;
 
         const request = connection.request();
         const result = await request.query(query);
@@ -61,7 +61,7 @@ class CompanyDrugInventory {
                 di.DrugPrice,
                 di.DrugDescription,
                 dr.CompanyId
-        `
+        `;
 
         const query2 = `
             SELECT
@@ -72,7 +72,7 @@ class CompanyDrugInventory {
                 DrugInventory
             WHERE
                 DrugName = @drugName
-        `
+        `;
 
         const request = connection.request();
         request.input('drugName', sql.VarChar, drugName);
@@ -246,7 +246,7 @@ class CompanyDrugInventory {
                             DrugTotalQuantity = DrugTotalQuantity - @quantityToRemove
                         WHERE
                             DrugRecordId = @drugRecordId;
-                    `
+                    `;
 
                     const updateRequest = new sql.Request(transaction);
                     updateRequest.input('quantityToRemove', sql.Int, quantityToRemove);
@@ -261,7 +261,7 @@ class CompanyDrugInventory {
             await transaction.commit();
             connection.close();
 
-            return 'Update Complete'
+            return 'Update Complete';
         } catch (error) {
             await transaction.rollback();
             connection.close();

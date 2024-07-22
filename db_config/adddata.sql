@@ -152,7 +152,8 @@ INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAva
 ('DRI0014', 'Digoxin', '2024-11-30', 150, 300, '2024-01-16', 'ACC0010'), 
 ('DRI0015', 'Dipyridamole', '2024-11-30', 150, 300, '2024-01-17', 'ACC0011'), 
 ('DRI0016', 'Pheniramine', '2024-11-30', 150, 300, '2024-01-18', 'ACC0011'), 
-('DRI0017', 'Aciclovir', '2024-11-30', 150, 300, '2024-01-19', 'ACC0011'); 
+('DRI0017', 'Aciclovir', '2024-11-30', 150, 300, '2024-01-19', 'ACC0011'),
+('DRI0018', 'Aspirin', '2024-11-30', 200, 200, '2024-07-01', 'ACC0010');
 
 INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quantity, Reason, DrugRequest) VALUES
 ('PRM0001', 'APP0001', 'Aspirin', 10, 'Pain relief', 'Completed'),

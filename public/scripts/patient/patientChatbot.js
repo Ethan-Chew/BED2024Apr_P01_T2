@@ -126,14 +126,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Check if the user has a currently saved history
-        const retrieveChatResponse = await fetch(`/api/chatbot/history/${sessionStorage.getItem("accountId")}`)
+        const retrieveChatResponse = await fetch(`/api/chatbot/history/${sessionStorage.getItem("accountId")}`);
 
         let history = JSON.parse(sessionStorage.getItem("chatbotHistory"));
         let historyTimestamps = JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp"));
 
         if (retrieveChatResponse.status !== 404) {
             // User already has a saved history
-            const retrieveChatResponseJson = await retrieveChatResponse.json()
+            const retrieveChatResponseJson = await retrieveChatResponse.json();
             const currentChatHistory = retrieveChatResponseJson.history;
 
             if (sessionStorage.getItem("chatbotHistory")) {
@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             }
         } else if (loadChatResponse.status === 404) {
-            alert("No saved history found!")
+            alert("No saved history found!");
         }
     });
 
@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         if (deleteRequest.status !== 204) {
-            alert("Failed to delete chat history. Try again later.")
+            alert("Failed to delete chat history. Try again later.");
             return;
         }
 
