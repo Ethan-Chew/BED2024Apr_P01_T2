@@ -109,19 +109,19 @@ class AvailableSlot {
     }
 
     // Emmanuel
-    static async getAnotherAvailableSlot(docterId, timeId) {
+    static async getAnotherAvailableSlot(doctorId, timeId) {
         const connection = await sql.connect(dbConfig);
 
         const query = `
             SELECT TOP 1 aslot.*
             FROM AvailableSlot aslot
             LEFT JOIN SlotTime st ON aslot.SlotTimeId = st.SlotTimeId
-            WHERE st.SlotTimeId = @SlotTimeId AND aslot.DocterId != @DocterId;
+            WHERE st.SlotTimeId = @SlotTimeId AND aslot.DoctorId != @DoctorId;
         `;
 
         const request = connection.request();
         request.input('SlotTimeId', timeId);
-        request.input('DocterId', docterId);
+        request.input('DoctorId', doctorId);
 
         const result = await request.query(query);
         connection.close();

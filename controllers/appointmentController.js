@@ -212,12 +212,16 @@ const updateAppointmentDoctorSlot = async (req, res) => {
 
         const getAppointment = await appointment.getAppointmentDetail(appointmentId);
         const availableSlotId = await getAppointment.SlotTime;
+
+        if (getAppointment.consultationCost === "NULL" || getAppointment.doctorNote === "NULL") {
+            return res.status(405).json({ message: 'Appointment has already occured' });
+        }
         const getAnotherAvailableSlot = await availableSlot.getAnotherAvailableSlot(getAppointment.doctorId, availableSlotId);
 
         if (!getAnotherAvailableSlot) {
             const message = "The doctor has cancelled your appointment and there are no other available timeslots";
-            const deleteAppointment = await appointment.deleteAppointmentById(appointmentId);
-            const sendNotification = await notifications.sendNotification(getAppointment.doctorId, getAppointment.patientId, message)
+            const deleteAppointment = await appointment.deleteAppointment(appointmentId); // ethan's model func
+            const sendNotification = await notifications.createNotification(getAppointment.doctorId, getAppointment.patientId, message)
 
             return res.status(200).json({ message: `Appointment with ID ${appointmentId} has been deleted. Notification has been sent to the patient` });
         } else {
@@ -264,4 +268,5 @@ module.exports = {
     createAppointmentById,
     getAppointmentDetailsByDoctorId,
     updateAppointmentById,
+    updateAppointmentDoctorSlot
 }

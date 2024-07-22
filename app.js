@@ -119,6 +119,7 @@ app.get("/api/appointments/patient/:patientId", authoriseJWT, appointmentControl
 app.get("/api/appointments/doctor/:doctorId", appointmentController.getAppointmentDetailsByDoctorId);
 app.get("/api/appointments/:appointmentId", authoriseJWT, appointmentController.getAppointmentDetailById);
 app.put("/api/appointments/:appointmentId", authoriseJWT, validateAppointment, appointmentController.updateAppointmentById);
+app.put("/api/appointments/cancel/:appointmentId", appointmentController.updateAppointmentDoctorSlot);
 app.post("/api/appointments", authoriseJWT, validateAppointment, appointmentController.createAppointmentById);
 app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppointmentById);
 
