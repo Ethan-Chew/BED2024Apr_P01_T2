@@ -78,7 +78,6 @@ class DrugRequest {
         request.input('appointmentId', sql.VarChar, appointmentId);
         request.input('drugName', sql.VarChar, drugName);
         const result = await request.query(query);
-        //console.log('SQL query result:', result); // Debug log
         connection.close();
 
         if (result.recordset.length === 0) return null; // Handle case when no result is found

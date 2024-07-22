@@ -36,14 +36,12 @@ const validateWalletHistory = require("./middleware/validateWalletHistory");
 
 const validateAddRequestContribution = require("./middleware/validateAddRequestContribution");
 const validateContributeDrugRequest = require("./middleware/validateContributeDrugRequest");
-const validateCancelDrugOrderRequest = require("./middleware/validateCancelDrugOrder");
-
+const validateApptIdAndDrugName = require("./middleware/validateApptIdAndDrugName");
 const validateReturnMedicine = require("./middleware/validateReturnMedicine");
-const validateConfirmDrugOrder = require("./middleware/validateConfirmDrugOrder");
-
+const validateCompanyId = require("./middleware/validateCompanyId");
 const validateCreateDrugInventoryRecord = require("./middleware/validateCreateDrugInventoryRecord");
-
-const validateUpdateDrugQuantityByRecordId = require("./middleware/validateUpdateDrugQuantityByRecordId");
+const validateCompanyIdAndDrugName = require("./middleware/validateCompanyIdAndDrugName");
+const validateDrugRecordId = require("./middleware/validateDrugRecordId");
 
 const validateNotification = require("./middleware/validateNotification")
 
@@ -128,25 +126,25 @@ app.post("/api/auth/create/company", accountsController.authCreateCompany);
 app.get("/api/company/:companyId", companyController.getCompanyById);
 // Route for Drug Requests (Company)
 app.get("/api/drugRequests/", authoriseJWT, drugRequestController.getAllDrugRequestOrder);
-app.get("/api/drugRequest/:id/:drugName", authoriseJWT, drugRequestController.getDrugOrderByIdAndDrugName);
-app.put("/api/drugRequest/:id/:drugName", authoriseJWT, validateCancelDrugOrderRequest, drugRequestController.cancelDrugOrder);
-app.put("/api/drugRequest/contribute/:id/:drugName", authoriseJWT, validateContributeDrugRequest, drugRequestController.contributeDrugRequest);
+app.get("/api/drugRequest/:appointmentId/:drugName", authoriseJWT, validateApptIdAndDrugName, drugRequestController.getDrugOrderByIdAndDrugName);
+app.put("/api/drugRequest/:appointmentId/:drugName", authoriseJWT, validateApptIdAndDrugName, drugRequestController.cancelDrugOrder);
+app.put("/api/drugRequest/contribute/:appointmentId/:drugName", authoriseJWT, validateContributeDrugRequest, drugRequestController.contributeDrugRequest);
 app.post("/api/drugRequest/drugContribution", authoriseJWT, validateAddRequestContribution, drugRequestController.addRequestContribution);
 // Route for Drug Orders (Company)
-app.get("/api/drugContributionOrders/:companyId", authoriseJWT, drugOrderController.getAllDrugOrders);
-app.put("/api/drugContributionOrders/:appointmentId/:drugName", authoriseJWT, validateConfirmDrugOrder, drugOrderController.confirmDrugOrder);
-app.delete("/api/drugContributionOrders/:appointmentId/:drugName", authoriseJWT, drugOrderController.deleteDrugOrder);
+app.get("/api/drugContributionOrders/:companyId", authoriseJWT, validateCompanyId, drugOrderController.getAllDrugOrders);
+app.put("/api/drugContributionOrders/:appointmentId/:drugName", authoriseJWT, validateApptIdAndDrugName, drugOrderController.confirmDrugOrder);
+app.delete("/api/drugContributionOrders/:appointmentId/:drugName", authoriseJWT, validateApptIdAndDrugName, drugOrderController.deleteDrugOrder);
 app.put("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", authoriseJWT, validateReturnMedicine, drugOrderController.returnMedicine);
 // Route for Drug Inventory (Company)
 app.get("/api/companyDrugInventory/", authoriseJWT, companyDrugInventoryController.getDrugName);
-app.get("/api/companyDrugInventory/:companyId/:drugName", authoriseJWT, companyDrugInventoryController.getInventoryByDrugName);
-app.delete("/api/companyDrugInventory/:companyId/:drugName", authoriseJWT, companyDrugInventoryController.emptyMedicineFromInventory);
+app.get("/api/companyDrugInventory/:companyId/:drugName", authoriseJWT, validateCompanyIdAndDrugName, companyDrugInventoryController.getInventoryByDrugName);
+app.delete("/api/companyDrugInventory/:companyId/:drugName", authoriseJWT, validateCompanyIdAndDrugName, companyDrugInventoryController.emptyMedicineFromInventory);
 app.post("/api/companyDrugInventory/addDrug", authoriseJWT, validateCreateDrugInventoryRecord, companyDrugInventoryController.createDrugInventoryRecord);
 app.delete("/api/companyDrugInventory/:companyId/:drugName/:drugQuantity", authoriseJWT, companyDrugInventoryController.removeDrugFromInventoryRecord);
 // Route for Drug Inventory Record (Company)
-app.get("/api/inventoryRecord/:companyId", authoriseJWT, companyInventoryRecordController.getInventoryRecordByCompanyId);
-app.put("/api/inventoryRecord/:drugRecordId", authoriseJWT, validateUpdateDrugQuantityByRecordId, companyInventoryRecordController.updateDrugQuantityByRecordId);
-app.delete("/api/inventoryRecord/:drugRecordId", authoriseJWT, companyInventoryRecordController.deleteDrugRecordByRecordId);
+app.get("/api/inventoryRecord/:companyId", authoriseJWT, validateCompanyId, companyInventoryRecordController.getInventoryRecordByCompanyId);
+app.put("/api/inventoryRecord/:drugRecordId", authoriseJWT, validateDrugRecordId, companyInventoryRecordController.updateDrugQuantityByRecordId);
+app.delete("/api/inventoryRecord/:drugRecordId", authoriseJWT, validateDrugRecordId, companyInventoryRecordController.deleteDrugRecordByRecordId);
 
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);
