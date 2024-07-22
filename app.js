@@ -24,6 +24,7 @@ const companyDrugInventoryController = require("./controllers/companyDrugInvento
 const companyInventoryRecordController = require("./controllers/inventoryRecordController");
 const digitalWalletController = require("./controllers/digitalWalletController");
 const digitalWalletHistoryController = require("./controllers/digitalWalletHistoryController");
+const drugTopup = require("./controllers/drugTopupController");
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -133,6 +134,10 @@ app.get("/api/drugContributionOrders/:companyId", authoriseJWT, drugOrderControl
 app.put("/api/drugContributionOrders/:appointmentId/:drugName", authoriseJWT,validateConfirmDrugOrder, drugOrderController.confirmDrugOrder);
 app.delete("/api/drugContributionOrders/:appointmentId/:drugName", authoriseJWT,drugOrderController.deleteDrugOrder);
 app.put("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", authoriseJWT,validateReturnMedicine, drugOrderController.returnMedicine);
+
+// Route for Drug Orders (Admin)
+app.post("/api/drugTopup/:drugName", drugTopup.requestTopup);
+
 // Route for Drug Inventory (Company)
 app.get("/api/companyDrugInventory/", authoriseJWT,companyDrugInventoryController.getDrugName);
 app.get("/api/companyDrugInventory/:companyId/:drugName", authoriseJWT,companyDrugInventoryController.getInventoryByDrugName);

@@ -1,4 +1,3 @@
-const { request } = require("express");
 
 document.addEventListener('DOMContentLoaded', function() {
     async function fetchDrugData() {
@@ -76,7 +75,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function requestMore(drug) {
-        
+        const topupQuantity = prompt(`Enter topup quantity for ${drug.name}:`);
+        if (topupQuantity) {
+            requestDrugTopup(drug.name, parseInt(topupQuantity, 10))
+                .then(response => {
+                    alert(response.message);
+                })
+                .catch(error => {
+                    console.error(`Failed to request topup for ${drug.name}.`, error);
+                });
+        }
+    }
+
+    async function requestDrugTopup(drugName, topupQuantity) {
+        const data = { drugName, topupQuantity };
+    
+        try {
+            const response = await fetch(`/api/drugTopup/${drugName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+    
+            if (!response.ok) {
+                response.json().then(data => alert(data.error));
+                throw new Error(`Error: ${response.error}`);
+            }
+    
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            throw error;
+        }
     }
 
     function createDrugElement(drug) {
