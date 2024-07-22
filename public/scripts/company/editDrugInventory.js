@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     const removeQuantity = document.getElementById('remove-qtn');
     const removeBtn = document.getElementById('remove-btn');
 
-    const urlParams = new URLSearchParams(window.location.search)
+    const urlParams = new URLSearchParams(window.location.search);
     const companyId = urlParams.get('companyId');
     const drug = urlParams.get('drugName');
 
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     async function showDrugInfo(drug, companyId) {
         const fetchDrugInformation = await fetch(`/api/companyDrugInventory/${companyId}/${drug}`, {
             method: 'GET'
-        })
+        });
         if (!fetchDrugInformation.ok) {
             throw new Error('Network response was not ok');
         }
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async() => {
             drugQuantity: quantity,
             drugExpiryDate: expiryDate,
             companyId: companyId
-        }
+        };
         // Fetch POST request
         const addDrug = await fetch('/api/companyDrugInventory/addDrug', {
             method: 'POST',
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        })
+        });
 
         if (!addDrug.ok) {
             throw new Error('Network response was not ok');
@@ -169,4 +169,4 @@ document.addEventListener("DOMContentLoaded", async() => {
         // Compare dates
         return inputDate <= today;
     }
-})
+});

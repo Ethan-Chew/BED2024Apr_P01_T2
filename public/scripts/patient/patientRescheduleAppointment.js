@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         option.value = availableSlots[i];
         option.text = availableSlots[i];
         timeslotItem.appendChild(option);
-    }
+    };
     timeslotItem.value = appointment.slotTime;
 
     // Listen for onChange of the Appointment Date, then load the available times for the date

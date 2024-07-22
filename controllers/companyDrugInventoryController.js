@@ -9,7 +9,7 @@ const getDrugName = async (req, res) => {
         console.error('Error fetching medicine name:', error);
         res.status(404).json({ error: 'Drug not found' });
     }
-}
+};
 
 const getInventoryByDrugName = async (req, res) => {
     try {
@@ -29,7 +29,7 @@ const getInventoryByDrugName = async (req, res) => {
         console.error('Error fetching medicine information:', error);
         res.status(404).json({ error: 'Inventory not found' });
     }
-}
+};
 
 const emptyMedicineFromInventory = async (req, res) => {
     try {
@@ -40,7 +40,7 @@ const emptyMedicineFromInventory = async (req, res) => {
         console.error('Error emptying medicine from inventory:', error);
         res.status(404).json({ error: 'Drug not found' });
     }
-}
+};
 
 const createDrugInventoryRecord = async (req, res) => {
     try {
@@ -58,7 +58,7 @@ const createDrugInventoryRecord = async (req, res) => {
             res.status(500).json({ error: 'Internal server error' });
         }    
     }
-}
+};
 
 const removeDrugFromInventoryRecord = async (req, res) => {
     try {
@@ -72,7 +72,7 @@ const removeDrugFromInventoryRecord = async (req, res) => {
         console.error('Error removing drug from inventory record:', error);
         res.status(404).json({ error: 'Drug not found' });
     }
-}
+};
 
 module.exports = {
     getDrugName,

@@ -32,7 +32,7 @@ class DrugRequest {
                 AvailableSlot s ON a.SlotId = s.SlotId
             WHERE 
                 pm.DrugRequest = 'Pending'
-        `
+        `;
 
         const request = connection.request();
         const result = await request.query(query);
@@ -72,13 +72,12 @@ class DrugRequest {
             WHERE
                 pm.AppointmentId = @appointmentId
                 AND pm.DrugName = @drugName
-        `
+        `;
 
         const request = connection.request();
         request.input('appointmentId', sql.VarChar, appointmentId);
         request.input('drugName', sql.VarChar, drugName);
         const result = await request.query(query);
-        //console.log('SQL query result:', result); // Debug log
         connection.close();
 
         if (result.recordset.length === 0) return null; // Handle case when no result is found
@@ -185,7 +184,7 @@ class DrugRequest {
                 INSERT INTO DrugRequestContribution 
                 (AppointmentId, DrugName, Quantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES
                 (@appointmentId, @drugName, @quantity, @totalCost, @contributeDate, @confirmationDate, @contributionStatus, @companyId, @drugRecordId)
-            `
+            `;
 
             const request = new sql.Request(transaction);
             request.input('appointmentId', sql.VarChar, appointmentId);

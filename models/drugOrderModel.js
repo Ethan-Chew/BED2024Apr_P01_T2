@@ -32,7 +32,7 @@ class DrugOrder{
             WHERE
                 do.ContributionStatus IN ('Pending', 'Completed')
                 AND do.CompanyId = @companyId
-        `
+        `;
 
         const request = connection.request();
         request.input('companyId', sql.VarChar, companyId);
@@ -63,7 +63,7 @@ class DrugOrder{
             const query = `
                 DELETE FROM DrugRequestContribution
                 WHERE AppointmentId = @appointmentId AND DrugName = @drugName
-            `
+            `;
             const request = connection.request();
             request.input('appointmentId', sql.VarChar, appointmentId);
             request.input('drugName', sql.VarChar, drugName);
@@ -84,7 +84,7 @@ class DrugOrder{
                 UPDATE DrugInventoryRecord
                 SET DrugAvailableQuantity = DrugAvailableQuantity + @drugQuantity
                 WHERE DrugRecordId = @drugRecordId
-            `
+            `;
             const request = connection.request();
             request.input('drugQuantity', sql.Int, drugQuantity);
             request.input('drugRecordId', sql.VarChar, drugRecordId);
@@ -106,7 +106,7 @@ class DrugOrder{
                 SET ContributionStatus = 'Completed',
                     ConfirmationDate = CONVERT(date, GETDATE())
                 WHERE AppointmentId = @appointmentId AND DrugName = @drugName
-            `
+            `;
 
             const request = connection.request();
             request.input('appointmentId', sql.VarChar, appointmentId);

@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     if (notifications.length > 0) {
         for (const notification of notifications) {
-            console.log(notification)
+            console.log(notification);
 
             document.getElementById("paymentRequests").innerHTML += `
             <div style="border: 1px solid #e5e7eb;">

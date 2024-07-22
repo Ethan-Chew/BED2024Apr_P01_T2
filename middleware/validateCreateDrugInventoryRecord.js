@@ -17,6 +17,6 @@ const validateCreateDrugInventoryRecord = (req, res, next) => {
     }
 
     next();
-}
+};
 
 module.exports = validateCreateDrugInventoryRecord;

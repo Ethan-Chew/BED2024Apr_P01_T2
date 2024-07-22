@@ -107,4 +107,4 @@ document.addEventListener("DOMContentLoaded", async() => {
         renderDrugOrders(filteredOrders);
     });    
     
-})
+});

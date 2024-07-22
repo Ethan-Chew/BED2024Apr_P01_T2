@@ -27,17 +27,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Add event listener
     document.getElementById('view-request').addEventListener('click', () => {
         window.location.href = '../company/drugRequest.html';
-    })
+    });
     document.getElementById('view-order').addEventListener('click', () => {
         window.location.href = '../company/drugOrder.html';
-    })
+    });
     document.getElementById('view-inventory').addEventListener('click', () => {
         window.location.href = '../company/drugInventory.html';
-    })
+    });
     document.getElementById('view-record').addEventListener('click', () => {
         window.location.href = '../company/inventoryRecord.html';
-    })
+    });
     document.getElementById('view-account').addEventListener('click', () => {
         window.location.href = '../company/companyAccountScreen.html';
-    })
-})
+    });
+});

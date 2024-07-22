@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             email: document.getElementById('email').value,
             birthdate: document.getElementById('birthday').value,
             knownAllergies: document.getElementById('medallergies').value,
-        }
+        };
 
         let isUpdated = false;
 
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         if (authLogin.status !== 200) {
-            document.getElementById('password-verify-txt').innerText = "Error: Password does not match."
+            document.getElementById('password-verify-txt').innerText = "Error: Password does not match.";
             document.getElementById('new-pw').disabled = true;
             document.getElementById('new-pw-verify').disabled = true;
             return;
