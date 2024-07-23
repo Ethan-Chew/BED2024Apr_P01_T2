@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('Login successful');
             const body = await response.json();
             sessionStorage.setItem('accountId', body.accountId);
+            sessionStorage.setItem('email', body.email);
 
             switch (body.role) {
                 case 'patient':

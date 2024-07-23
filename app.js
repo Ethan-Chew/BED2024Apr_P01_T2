@@ -26,6 +26,8 @@ const digitalWalletController = require("./controllers/digitalWalletController")
 const digitalWalletHistoryController = require("./controllers/digitalWalletHistoryController");
 const drugTopup = require("./controllers/drugTopupController");
 const notificationsController = require("./controllers/notificationsController");
+const twoFAModel = require("./models/2FAModel");
+
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -179,6 +181,18 @@ app.get("/api/notification/:accountid", authoriseJWT, notificationsController.re
 app.put("/api/notification/:Notificationid", authoriseJWT, notificationsController.readNotification);
 app.put("/api/notifications/:accountid", authoriseJWT, notificationsController.readAllNotificationsByAccountId);
 app.post("/api/notification",authoriseJWT, validateNotification, notificationsController.sendNotification);
+
+// Route for 2FA
+app.get('/api/generateQRCode', async (req, res) => {
+    const userEmail = req.headers.email;
+    try {
+      const qrCodeUrl = await twoFAModel.generateQRCodeUrl(userEmail); 
+      res.send(qrCodeUrl); 
+    } catch (error) {
+      console.error('Failed to generate QR code', error);
+      res.status(500).send('Failed to generate QR code');
+    }
+  });
 
 
 // Initialise Server
