@@ -14,6 +14,7 @@ const authorisedRoles = {
     "/api/patient/:patientId/digitalWallet": ["patient"],
     "/api/patient/:patientId/digitalWalletHistory": ["patient"],
 
+    "/api/company/:companyId": ["company"],
     "/api/drugRequests/": ["company"],
     "/api/drugRequest/:appointmentId/:drugName/:companyId": ["company"],
     "/api/drugRequest/:appointmentId/:drugName": ["company"],

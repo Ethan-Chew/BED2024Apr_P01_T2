@@ -15,6 +15,14 @@ document.addEventListener("DOMContentLoaded", async() => {
     const drugName = urlParams.get('drugName');
     const companyId = sessionStorage.getItem('accountId');
 
+    // Get Companay Name
+    const fetchCompany = await fetch(`/api/company/${companyId}`, {
+        method: 'GET'
+    });
+    if (fetchCompany.status === 401 || fetchCompany.status === 403) {
+        window.location.href = '../login.html';
+    }
+
     if (!appointmentId || !drugName) {
         console.error('Missing appointmentId or drugName in query parameters');
         return;

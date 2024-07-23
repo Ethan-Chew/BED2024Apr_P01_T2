@@ -126,7 +126,7 @@ app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppoi
 
 /// Route for Company Account
 app.post("/api/auth/create/company", accountsController.authCreateCompany);
-app.get("/api/company/:companyId", companyController.getCompanyById);
+app.get("/api/company/:companyId", authoriseJWT, companyController.getCompanyById);
 // Route for Drug Requests (Company)
 app.get("/api/drugRequests/", authoriseJWT, drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:appointmentId/:drugName/:companyId", authoriseJWT, validateDrugOrderByIdAndDrugName, drugRequestController.getDrugOrderByIdAndDrugName);

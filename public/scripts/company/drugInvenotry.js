@@ -22,6 +22,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const companyId = sessionStorage.getItem('accountId');
 
+    // Get Companay Name
+    const fetchCompany = await fetch(`/api/company/${companyId}`, {
+        method: 'GET'
+    });
+    if (fetchCompany.status === 401 || fetchCompany.status === 403) {
+        window.location.href = '../login.html';
+    }
+
     // Initially disable buttons
     emptyBtn.disabled = true;
     editBtn.disabled = true;
@@ -99,8 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         drugPrice.innerHTML = '$' + drugInformation[0].drugPrice;
         drugInfo.innerHTML = drugInformation[0].drugDescription;
         editBtn.setAttribute('data-DrugName', drugInformation[0].drugName);
-        editBtn.setAttribute('data-CompanyId', companyId);
-
+        
         // Disable empty button if drugQuantity is 0
         if (drugInformation[0].drugQuantity === 0) {
             emptyBtn.disabled = true;
@@ -115,8 +122,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Add event listener to edit button
     editBtn.addEventListener('click', () => {
         const drug = editBtn.getAttribute('data-DrugName');
-        const companyId = editBtn.getAttribute('data-CompanyId');
-        window.location.href = `editDrugInventory.html?companyId=${companyId}&drugName=${drug}`;
+        window.location.href = `editDrugInventory.html?drugName=${drug}`;
     });
 
     async function emptyInventory(drug, companyId) {
