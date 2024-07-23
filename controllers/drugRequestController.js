@@ -27,15 +27,15 @@ const getDrugOrderByIdAndDrugName = async (req, res) => {
 
 const addRequestContribution = async (req, res) => {
     try {
-        let { appointmentId, drugName, quantity, totalCost, contributeDate, companyId, drugRecordId } = req.body;
+        let { appointmentId, drugName, inventoryContribution, contributionQuantity, totalCost, contributeDate, companyId, drugRecordId } = req.body;
 
         // Validate input data
-        if (!appointmentId || !drugName || quantity == null || !totalCost || !contributeDate) {
+        if (!appointmentId || !drugName || inventoryContribution === null || contributionQuantity === null || !totalCost || !contributeDate) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
         // Ensure quantity is a positive integer
-        if (quantity <= 0) {
+        if (contributionQuantity <= 0) {
             return res.status(400).json({ error: 'Quantity must be greater than zero' });
         }
 
@@ -43,7 +43,8 @@ const addRequestContribution = async (req, res) => {
         await DrugRequest.addRequestContribution(
             appointmentId,
             drugName,
-            quantity,
+            inventoryContribution,
+            contributionQuantity,
             totalCost,
             contributeDate,
             companyId,

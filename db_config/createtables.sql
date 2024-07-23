@@ -194,13 +194,14 @@ CREATE TABLE PrescribedMedication (
 CREATE TABLE DrugRequestContribution (
 	AppointmentId VARCHAR(7) NOT NULL,
 	DrugName VARCHAR(255) NOT NULL,
-	Quantity INT NOT NULL,
+	InventoryContribution INT NOT NULL,
+	ContributionQuantity INT NOT NULL,
 	TotalCost MONEY NOT NULL,
 	ContributeDate DATE NOT NULL,
 	ConfirmationDate DATE NULL,
 	ContributionStatus VARCHAR(10) NOT NULL CHECK (ContributionStatus IN ('Pending', 'Completed')),
 	CompanyId VARCHAR(7) NOT NULL,
-	DrugRecordId VARCHAR(7) NOT NULL,
+	DrugRecordId VARCHAR(7) NULL,
 
 	CONSTRAINT PK_DrugRequestContribution PRIMARY KEY (AppointmentId, DrugName),
     CONSTRAINT FK_DrugRequestContribution_PrescribedMedication FOREIGN KEY (AppointmentId, DrugName) REFERENCES PrescribedMedication(AppointmentId, DrugName),

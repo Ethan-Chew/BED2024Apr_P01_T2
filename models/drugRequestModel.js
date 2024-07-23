@@ -198,7 +198,7 @@ class DrugRequest {
         }
     }
 
-    static async addRequestContribution(appointmentId, drugName, quantity, totalCost, contributeDate, companyId, drugRecordId){
+    static async addRequestContribution(appointmentId, drugName, inventoryContribution, contributionQuantity, totalCost, contributeDate, companyId, drugRecordId){
         const connection = await sql.connect(dbConfig);
         const transaction = new sql.Transaction(connection);
         const confirmationDate = null;
@@ -207,20 +207,21 @@ class DrugRequest {
         try {
             await transaction.begin();
             // Validate input parameters (e.g., check for positive quantity)
-            if (quantity <= 0) {
+            if (contributionQuantity <= 0) {
                 throw new Error('Quantity must be greater than zero.');
             }
             
             const query = `
                 INSERT INTO DrugRequestContribution 
-                (AppointmentId, DrugName, Quantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES
-                (@appointmentId, @drugName, @quantity, @totalCost, @contributeDate, @confirmationDate, @contributionStatus, @companyId, @drugRecordId)
+                (AppointmentId, DrugName, InventoryContribution, ContributionQuantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES
+                (@appointmentId, @drugName, @inventoryContribution, @contributionQuantity, @totalCost, @contributeDate, @confirmationDate, @contributionStatus, @companyId, @drugRecordId)
             `;
 
             const request = new sql.Request(transaction);
             request.input('appointmentId', sql.VarChar, appointmentId);
             request.input('drugName', sql.VarChar, drugName);
-            request.input('quantity', sql.Int, quantity);
+            request.input('inventoryContribution', sql.Int, inventoryContribution);
+            request.input('contributionQuantity', sql.Int, contributionQuantity);
             request.input('totalCost', sql.Money, totalCost);
             request.input('contributeDate', sql.Date, contributeDate);
             request.input('confirmationDate', sql.Date, confirmationDate);

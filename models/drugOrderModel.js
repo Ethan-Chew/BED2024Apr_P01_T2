@@ -22,7 +22,7 @@ class DrugOrder{
                 SELECT
                     do.AppointmentId,
                     do.DrugName,
-                    do.Quantity,
+                    do.ContributionQuantity,
                     do.TotalCost,
                     do.ContributeDate,
                     do.ConfirmationDate,
@@ -47,7 +47,7 @@ class DrugOrder{
                 new DrugOrder(
                     row.AppointmentId,
                     row.DrugName,
-                    row.Quantity,
+                    row.ContributionQuantity,
                     row.TotalCost,
                     row.ContributeDate,
                     row.ConfirmationDate,
@@ -81,10 +81,25 @@ class DrugOrder{
         }
     }
 
-    static async returnMedicine(drugQuantity, drugRecordId){
+    static async returnMedicine(drugRecordId, appointmentId, drugName){
         const connection = await sql.connect(dbConfig);
 
         try{
+            const getQuery = `
+                SELECT
+                    InventoryContribution
+                FROM
+                    DrugRequestContribution
+                WHERE
+                    AppointmentId = @appointmentId
+                    AND DrugName = @drugName
+            `
+            const getRequest = connection.request();
+            getRequest.input('appointmentId', sql.VarChar, appointmentId);
+            getRequest.input('drugName', sql.VarChar, drugName);
+            const getResult = await getRequest.query(getQuery);
+            const drugQuantity = getResult.recordset[0].InventoryContribution;
+
             const query = `
                 UPDATE DrugInventoryRecord
                 SET DrugAvailableQuantity = DrugAvailableQuantity + @drugQuantity

@@ -46,14 +46,15 @@ const deleteDrugOrder = async (req, res) =>{
 
 const returnMedicine = async (req, res) =>{
     try {
-        const { drugQuantity, drugRecordId } = req.params;
+        const { drugRecordId } = req.params;
+        const { appointmentId, drugName } = req.body;
         
         // Validate input
-        if (!drugQuantity || !drugRecordId) {
+        if (!drugRecordId || !appointmentId || !drugName) {
             return res.status(400).json({ error: 'Missing required parameters' });
         }
         
-        await DrugOrder.returnMedicine(drugQuantity, drugRecordId);
+        await DrugOrder.returnMedicine(drugRecordId, appointmentId, drugName);
 
         // Respond with success message
         res.status(200).json({ message: 'Medicine returned successfully' });

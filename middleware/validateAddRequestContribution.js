@@ -1,15 +1,19 @@
 const Joi = require("joi").extend(require('@joi/date'));
 
 const validateAddRequestContribution = (req, res, next) => {
+    console.log('Request body:', req.body);
+
+
     const schema = Joi.object({
         appointmentId: Joi.string().required(),
         drugName: Joi.string().required(),
-        quantity: Joi.number().required(),
+        inventoryContribution: Joi.number().required(),
+        contributionQuantity: Joi.number().required(),
         totalCost: Joi.number().required(),
         contributeDate: Joi.date().format('YYYY-MM-DD').required(),
         contributionStatus: Joi.string().required(),
         companyId: Joi.string().required(),
-        drugRecordId: Joi.string().required()
+        drugRecordId: Joi.string().allow(null)
     });
 
     const validation = schema.validate(req.body, { abortEarly: false });

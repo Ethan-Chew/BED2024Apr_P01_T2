@@ -165,9 +165,9 @@ INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quan
 ('PRM0007', 'APP0004', 'Magnesium Carbonate', 10, 'Heartburn', 'Pending');
 
 -- Sample data for DrugRequestContribution table
-INSERT INTO DrugRequestContribution (AppointmentId, DrugName, Quantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES
-('APP0001', 'Aspirin', 10, 59.90, '2024-06-01', NULL, 'Pending', 'ACC0010', 'DRI0001'),
-('APP0001', 'Paracetamol', 10, 59.90, '2024-06-01', '2024-07-21', 'Completed', 'ACC0010', 'DRI0003');
+INSERT INTO DrugRequestContribution (AppointmentId, DrugName, InventoryContribution, ContributionQuantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES
+('APP0001', 'Aspirin', 10, 10, 59.90, '2024-06-01', NULL, 'Pending', 'ACC0010', 'DRI0001'),
+('APP0001', 'Paracetamol', 5, 10, 59.90, '2024-06-01', '2024-07-21', 'Completed', 'ACC0010', 'DRI0003');
 
 
 INSERT INTO DrugTopupRequest (TopupId, DrugName, TopupQuantity, TopupRequestDate, TopupStatus) VALUES

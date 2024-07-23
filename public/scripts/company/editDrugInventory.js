@@ -160,6 +160,19 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     });
 
+    // Restrict input to numbers only and ensure no negative values
+    addQuantity.addEventListener('input', restrictToNumbers);
+    removeQuantity.addEventListener('input', restrictToNumbers);
+
+    function restrictToNumbers(event) {
+        const value = event.target.value;
+        event.target.value = value.replace(/\D/g, '');
+        // Ensure value does not go below 0
+        if (parseInt(event.target.value) < 0 || event.target.value === '') {
+            event.target.value = 0;
+        }
+    }
+
     // Function to validate date format (YYYY-MM-DD)
     function isValidDateFormat(dateString) {
         const regex = /^\d{4}-\d{2}-\d{2}$/; // Regex pattern for YYYY-MM-DD format
