@@ -18,4 +18,3 @@ echo Running adddata.sql
 sqlcmd -S %SERVER_NAME% -E -i "adddata.sql"
 
 echo All scripts executed successfully.
-pause

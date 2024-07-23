@@ -12,4 +12,3 @@ echo Running createUser.sql
 sqlcmd -S %SERVER_NAME% -E -i "createUser.sql"
 
 echo All scripts executed successfully.
-pause

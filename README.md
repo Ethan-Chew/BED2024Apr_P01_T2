@@ -18,8 +18,12 @@ In addition, if patients are still unable to afford the subsidised costs of medi
 
 The **Admin Staff** needs to manually approve new patients by ensuring they meet the ‘low socioeconomic status’ criteria. They can then update the stock quantity, expiry date and costs of different medications and add or remove doctors and pharmacists to the system. Admin Staff can also review the Help requested by Patients for their medication payment. After approving it, the staff can either get help from the Medical Companies (for medicine) or from the public (monetary donations).
 
-## API Documentation
-All API Endpoints implemented in the Back-End Application is documented in [API Documentation](./docs/APIDocumentation.md). Related Schemas are documented in [Schema Documentation](./docs/Schema.md).
+## Project Setup
+1. Ensure that **node.js** has been installed on your device
+2. Run our installation bash script to install all required dependencies and setup the database
+    - Ensure you are on the Root Directory and run `.\setup.bat`
+3. Environment Variables are required to be defined in our project under the `.env` file. Create this file under the Root Directory. Without them, the project _will not work as expected._
+    - JWT_SECRET, MAILGUN_DOMAIN, MAILGUN_APIKEY, GEMINI_APIKEY
 
 ## Credits
 Credits can be accessed in the ```public/credits.html``` page.
