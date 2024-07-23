@@ -127,12 +127,12 @@ app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppoi
 
 /// Route for Company Account
 app.post("/api/auth/create/company", accountsController.authCreateCompany);
-app.get("/api/company/:companyId", companyController.getCompanyById);
+app.get("/api/company/:companyId", authoriseJWT, companyController.getCompanyById);
 // Route for Drug Requests (Company)
 app.get("/api/drugRequests/", authoriseJWT, drugRequestController.getAllDrugRequestOrder);
 app.get("/api/drugRequest/:appointmentId/:drugName/:companyId", authoriseJWT, validateDrugOrderByIdAndDrugName, drugRequestController.getDrugOrderByIdAndDrugName);
 app.put("/api/drugRequest/:appointmentId/:drugName", authoriseJWT, validateApptIdAndDrugName, drugRequestController.cancelDrugOrder);
-app.put("/api/drugRequest/contribute/:appointmentId/:drugName", authoriseJWT, validateContributeDrugRequest, drugRequestController.contributeDrugRequest);
+app.put("/api/drugRequest/contribute/:companyId/:appointmentId/:drugName", authoriseJWT, validateContributeDrugRequest, drugRequestController.contributeDrugRequest);
 app.post("/api/drugRequest/drugContribution", authoriseJWT, validateAddRequestContribution, drugRequestController.addRequestContribution);
 // Route for Drug Orders (Company)
 app.get("/api/drugContributionOrders/:companyId", authoriseJWT, validateCompanyId, drugOrderController.getAllDrugOrders);

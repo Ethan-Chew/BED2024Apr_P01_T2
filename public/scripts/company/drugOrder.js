@@ -13,6 +13,14 @@ document.addEventListener("DOMContentLoaded", async() => {
     // Get Company ID from sessionStorage
     const companyId = sessionStorage.getItem('accountId');
 
+    // Get Companay Name
+    const fetchCompany = await fetch(`/api/company/${companyId}`, {
+        method: 'GET'
+    });
+    if (fetchCompany.status === 401 || fetchCompany.status === 403) {
+        window.location.href = '../login.html';
+    }
+
     // Get Drug Contribution Orders
     const fetchDrugContributionOrders = await fetch(`/api/drugContributionOrders/${companyId}`, {
         method: 'GET'
@@ -97,12 +105,12 @@ document.addEventListener("DOMContentLoaded", async() => {
                     </div>
                     <!--Button-->
                     <div class="flex flex-col gap-4">
-                        <button class="${order.contributionStatus === 'Completed' ? 'bg-red-500' : 'bg-btnprimary'} text-white px-6 py-4 rounded-2xl font-bold text-center confirm-btn"
+                        <button class="${order.contributionStatus === 'Completed' ? 'bg-red-500' : 'bg-btnprimary'} text-white px-6 py-4 rounded-2xl font-bold text-center confirm-btn ${order.contributionStatus === 'Completed' ? 'cursor-not-allowed' : 'hover:cursor-pointer'}"
                         data-appointment-id="${order.appointmentId}"
                         data-drug-name="${order.drugName}"
                         ${order.contributionStatus === 'Completed' ? 'disabled' : ''}>
                         Confirm request</button>
-                        <button class="${order.contributionStatus === 'Completed' ? 'bg-red-500' : 'bg-btnprimary'} text-white px-6 py-4 rounded-2xl font-bold text-center cancel-btn"
+                        <button class="${order.contributionStatus === 'Completed' ? 'bg-red-500' : 'bg-btnprimary'} text-white px-6 py-4 rounded-2xl font-bold text-center cancel-btn ${order.contributionStatus === 'Completed' ? 'cursor-not-allowed' : 'hover:cursor-pointer'}"
                         data-appointment-id="${order.appointmentId}"
                         data-drug-record-id="${order.drugRecordId}"
                         data-drug-name="${order.drugName}"
@@ -169,8 +177,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                         });
         
                         if (response2.ok && response3.ok) {
-                            // Redirect only if both requests are successful
-                            window.location.href = 'companyHome.html';
+                            window.location.reload();
                         } else {
                             console.error('Failed to process drug request:', response2.statusText, response3.statusText);
                         }

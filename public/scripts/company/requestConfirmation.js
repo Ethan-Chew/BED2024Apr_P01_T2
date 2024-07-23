@@ -15,6 +15,14 @@ document.addEventListener("DOMContentLoaded", async() => {
     const drugName = urlParams.get('drugName');
     const companyId = sessionStorage.getItem('accountId');
 
+    // Get Companay Name
+    const fetchCompany = await fetch(`/api/company/${companyId}`, {
+        method: 'GET'
+    });
+    if (fetchCompany.status === 401 || fetchCompany.status === 403) {
+        window.location.href = '../login.html';
+    }
+
     if (!appointmentId || !drugName) {
         console.error('Missing appointmentId or drugName in query parameters');
         return;
@@ -86,18 +94,19 @@ document.addEventListener("DOMContentLoaded", async() => {
     document.getElementById('confirm-btn').addEventListener('click', async () => {
         const totalContribution = parseInt(contributeQuantityElement.textContent);
         const maxContribution = parseInt(requestQuantityElement.textContent);
+        const inventoryContribution = parseInt(inputInventory.value) || 0;
 
         if (totalContribution === maxContribution) {
             try {
                 const totalCost = parseFloat(document.getElementById('price').innerText.replace('$', ''));
 
                 // Execute both requests in sequence to get recordId first
-                const putResponse = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
+                const putResponse = await fetch(`/api/drugRequest/contribute/${companyId}/${appointmentId}/${drugName}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ contributedQuantity: totalContribution })
+                    body: JSON.stringify({ contributedQuantity: inventoryContribution })
                 });
 
                 if (!putResponse.ok) {

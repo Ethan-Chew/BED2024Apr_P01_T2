@@ -15,10 +15,11 @@ const authorisedRoles = {
     "/api/patient/:patientId/digitalWallet": ["patient"],
     "/api/patient/:patientId/digitalWalletHistory": ["patient"],
 
+    "/api/company/:companyId": ["company"],
     "/api/drugRequests/": ["company"],
     "/api/drugRequest/:appointmentId/:drugName/:companyId": ["company"],
     "/api/drugRequest/:appointmentId/:drugName": ["company"],
-    "/api/drugRequest/contribute/:appointmentId/:drugName": ["company"],
+    "/api/drugRequest/contribute/:companyId/:appointmentId/:drugName": ["company"],
     "/api/drugRequest/drugContribution": ["company"],
     "/api/drugContributionOrders/:companyId": ["company"],
     "/api/drugContributionOrders/:appointmentId/:drugName": ["company"],

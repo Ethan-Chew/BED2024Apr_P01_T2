@@ -60,14 +60,14 @@ const addRequestContribution = async (req, res) => {
 
 const contributeDrugRequest = async (req, res) => {
     try {
-        const { appointmentId, drugName } = req.params;
+        const { companyId, appointmentId, drugName } = req.params;
         const contributedQuantity = req.body.contributedQuantity;
         const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(appointmentId, drugName);
         if (!drugOrder) {
             return res.status(404).json({ error: 'Drug order not found' });
         }
         // Contribute to the drug request (Update the status to 'Completed' and update Drug Inventory Record Quantity)
-        const recordId = await DrugRequest.contributeDrugRequest(appointmentId, drugName, contributedQuantity);
+        const recordId = await DrugRequest.contributeDrugRequest(companyId, appointmentId, drugName, contributedQuantity);
         // Send success response
         res.status(200).json({ recordId, success: true, message: 'Drug request contribution completed successfully' });
     } catch (err) {

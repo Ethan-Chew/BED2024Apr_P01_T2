@@ -12,7 +12,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const fetchCompany = await fetch(`/api/company/${companyId}`, {
         method: 'GET'
     });
+    if (fetchCompany.status === 401 || fetchCompany.status === 403) {
+        window.location.href = '../login.html';
+    }
     const companyJson = await fetchCompany.json();
+
 
     // Get Drug Orders
     const fetchDrugOrders = await fetch('/api/drugRequests/', {

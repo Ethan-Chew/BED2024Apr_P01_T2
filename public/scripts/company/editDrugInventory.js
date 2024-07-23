@@ -23,8 +23,16 @@ document.addEventListener("DOMContentLoaded", async() => {
     const removeBtn = document.getElementById('remove-btn');
 
     const urlParams = new URLSearchParams(window.location.search);
-    const companyId = urlParams.get('companyId');
+    const companyId = sessionStorage.getItem('accountId');
     const drug = urlParams.get('drugName');
+
+    // Get Companay Name
+    const fetchCompany = await fetch(`/api/company/${companyId}`, {
+        method: 'GET'
+    });
+    if (fetchCompany.status === 401 || fetchCompany.status === 403) {
+        window.location.href = '../login.html';
+    }
 
     // Show Drug Details
     async function showDrugInfo(drug, companyId) {
