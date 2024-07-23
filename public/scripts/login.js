@@ -33,6 +33,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } else {
             const error = await response.json();
+            if (error) {
+                if (error.approvalStatus === "Pending") {
+                    document.getElementById('error-text').innerText = "Error: Your account is pending approval by an admin. Check back again.";
+                    return;
+                }
+            }
             document.getElementById('error-text').innerText = error.message;
         }
     });

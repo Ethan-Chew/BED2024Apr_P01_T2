@@ -49,7 +49,7 @@ const authLoginAccount = async (req, res) => {
                 return res.status(403).json({
                     status: "Forbidden",
                     message: "Unauthorised",
-                    approvalStatus: account.isApproved
+                    approvalStatus: account.PatientIsApproved
                 })
             }
         } else if (account.CompanyId) {
@@ -77,7 +77,7 @@ const authLoginAccount = async (req, res) => {
             message: "Login Successful",
             accountId: account.AccountId,
             role: role
-        })
+        });
     } catch(err) {
         console.error(err);
         res.status(500).json({
