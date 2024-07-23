@@ -97,12 +97,12 @@ document.addEventListener("DOMContentLoaded", async() => {
                     </div>
                     <!--Button-->
                     <div class="flex flex-col gap-4">
-                        <button class="${order.contributionStatus === 'Completed' ? 'bg-red-500' : 'bg-btnprimary'} text-white px-6 py-4 rounded-2xl font-bold text-center confirm-btn"
+                        <button class="${order.contributionStatus === 'Completed' ? 'bg-red-500' : 'bg-btnprimary'} text-white px-6 py-4 rounded-2xl font-bold text-center confirm-btn ${order.contributionStatus === 'Completed' ? 'cursor-not-allowed' : 'hover:cursor-pointer'}"
                         data-appointment-id="${order.appointmentId}"
                         data-drug-name="${order.drugName}"
                         ${order.contributionStatus === 'Completed' ? 'disabled' : ''}>
                         Confirm request</button>
-                        <button class="${order.contributionStatus === 'Completed' ? 'bg-red-500' : 'bg-btnprimary'} text-white px-6 py-4 rounded-2xl font-bold text-center cancel-btn"
+                        <button class="${order.contributionStatus === 'Completed' ? 'bg-red-500' : 'bg-btnprimary'} text-white px-6 py-4 rounded-2xl font-bold text-center cancel-btn ${order.contributionStatus === 'Completed' ? 'cursor-not-allowed' : 'hover:cursor-pointer'}"
                         data-appointment-id="${order.appointmentId}"
                         data-drug-record-id="${order.drugRecordId}"
                         data-drug-name="${order.drugName}"

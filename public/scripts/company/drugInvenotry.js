@@ -100,6 +100,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         drugInfo.innerHTML = drugInformation[0].drugDescription;
         editBtn.setAttribute('data-DrugName', drugInformation[0].drugName);
         editBtn.setAttribute('data-CompanyId', companyId);
+
+        // Disable empty button if drugQuantity is 0
+        if (drugInformation[0].drugQuantity === 0) {
+            emptyBtn.disabled = true;
+            emptyBtn.classList.add('cursor-not-allowed');
+            emptyBtn.classList.remove('cursor-pointer');
+        } else {
+            emptyBtn.disabled = false;
+            emptyBtn.classList.add('cursor-pointer');
+            emptyBtn.classList.remove('cursor-not-allowed');
+        }
     }
     // Add event listener to edit button
     editBtn.addEventListener('click', () => {
