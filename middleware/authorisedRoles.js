@@ -18,7 +18,7 @@ const authorisedRoles = {
     "/api/drugRequests/": ["company"],
     "/api/drugRequest/:appointmentId/:drugName/:companyId": ["company"],
     "/api/drugRequest/:appointmentId/:drugName": ["company"],
-    "/api/drugRequest/contribute/:appointmentId/:drugName": ["company"],
+    "/api/drugRequest/contribute/:companyId/:appointmentId/:drugName": ["company"],
     "/api/drugRequest/drugContribution": ["company"],
     "/api/drugContributionOrders/:companyId": ["company"],
     "/api/drugContributionOrders/:appointmentId/:drugName": ["company"],

@@ -177,8 +177,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                         });
         
                         if (response2.ok && response3.ok) {
-                            // Redirect only if both requests are successful
-                            window.location.href = 'companyHome.html';
+                            window.location.reload();
                         } else {
                             console.error('Failed to process drug request:', response2.statusText, response3.statusText);
                         }
