@@ -210,13 +210,22 @@ const updateAppointmentDoctorSlot = async (req, res) => {
             return res.status(400).json({ message: 'Appointment ID is required' });
         }
 
-        const getAppointment = await appointment.getAppointmentDetail(appointmentId);
-        const availableSlotId = await getAppointment.SlotTime;
+        const getAppointment = await appointment.getAppointmentDetail(appointmentId); // ethan's model func
+        const apptAvailableSlot = await availableSlot.getAvailableSlotByDateAndTime(getAppointment.slotDate, getAppointment.slotTime)
 
-        if (getAppointment.consultationCost === "NULL" || getAppointment.doctorNote === "NULL") {
+        console.log("consult cost: ", getAppointment.consultationCost);
+        console.log("doctors note: ", getAppointment.doctorNote);
+        console.log("availableSLotId: ", apptAvailableSlot.slotId);
+
+        if (getAppointment.consultationCost == null || getAppointment.doctorNote == null) {
             return res.status(405).json({ message: 'Appointment has already occured' });
         }
-        const getAnotherAvailableSlot = await availableSlot.getAnotherAvailableSlot(getAppointment.doctorId, availableSlotId);
+        console.log("doctorId ", getAppointment.doctorId);
+
+        const getAnotherAvailableSlot = await availableSlot.getAnotherAvailableSlot(getAppointment.doctorId, apptAvailableSlot.slotId);
+
+        console.log("available Slot ", getAnotherAvailableSlot);
+
 
         if (!getAnotherAvailableSlot) {
             const message = "The doctor has cancelled your appointment and there are no other available timeslots";
