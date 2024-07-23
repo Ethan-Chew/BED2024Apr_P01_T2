@@ -45,6 +45,43 @@ const getPaymentMethodsByPatientId = async (req, res) => {
     }
 }
 
+// Created By: Ethan Chew
+const getPaymentMethodById = async (req, res) => {
+    try {
+        const { methodId } = req.params;
+
+        const paymentMethod = await PaymentMethod.getPaymentMethodById(methodId);
+
+        if (!paymentMethod) {
+            res.status(404).json({
+                status: "Error",
+                message: "Payment Method not found."
+            });
+            return;
+        }
+
+        if (paymentMethod.patientId !== req.user.id) {
+            res.status(403).json({
+                status: "Forbidden",
+                message: "You are not allowed to view this Payment Method."
+            });
+            return;
+        }
+
+        res.status(200).json({
+            status: "Success",
+            paymentMethod: paymentMethod
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
+    }
+}
+
 // Created by: Ethan Chew
 const createPaymentMethod = async (req, res) => {
     try {
@@ -95,10 +132,10 @@ const createPaymentMethod = async (req, res) => {
 // Created by: Ethan Chew
 const updatePaymentMethod = async (req, res) => {
     try {
-        const patientId = req.params.patientId;
         const methodId = req.params.methodId;
 
-        if (req.user.id !== patientId) {
+        const paymentMethod = await PaymentMethod.getPaymentMethodById(methodId);
+        if (paymentMethod.patientId !== req.user.id) { 
             res.status(403).json({
                 status: "Forbidden",
                 message: "You are not allowed to update a Payment Method for this Patient."
@@ -136,18 +173,11 @@ const updatePaymentMethod = async (req, res) => {
 // Created by: Ethan Chew
 const deletePaymentMethod = async (req, res) => {
     try {
-        const patientId = req.params.patientId;
         const methodId = req.params.methodId;
 
-        if (!patientId || !methodId) {
-            res.status(400).json({
-                status: "Error",
-                message: "Patient ID and Payment Method Id are required."
-            });
-            return;
-        }
+        const paymentMethod = await PaymentMethod.getPaymentMethodById(methodId);
 
-        if (req.user.id !== patientId) {
+        if (req.user.id !== paymentMethod.patientId) {
             res.status(403).json({
                 status: "Forbidden",
                 message: "You are not allowed to delete a Payment Method for this Patient."
@@ -181,6 +211,7 @@ const deletePaymentMethod = async (req, res) => {
 
 module.exports = {
     getPaymentMethodsByPatientId,
+    getPaymentMethodById,
     createPaymentMethod,
     deletePaymentMethod,
     updatePaymentMethod,

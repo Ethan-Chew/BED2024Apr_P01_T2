@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         patientDetails.qns = qns;
         
         // Create Account
-        const createResponse = await fetch('/api/auth/create/patient', {
+        const createResponse = await fetch('/api/patient', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

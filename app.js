@@ -63,21 +63,22 @@ app.use(staticMiddleware);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
-/// Routes for Account Authentication and Authorisation
+/// Routes for Account Authentication
 app.post("/api/auth/login", accountsController.authLoginAccount);
-app.post("/api/auth/create/patient", validatePatient, accountsController.authCreatePatient);
 
 /// Route for Patient Account
 app.get("/api/patient/:patientId", authoriseJWT, accountsController.getPatientById);
 app.get("/api/patients/", authoriseJWT, accountsController.getAllPatient);
 app.put("/api/patient/:patientId", authoriseJWT, validatePatient, accountsController.updatePatientById);
+app.post("/api/patient", validatePatient, accountsController.authCreatePatient);
 app.delete("/api/patient/:patientId", authoriseJWT, accountsController.deletePatientById);
 
 // Routes for Patient's Payment Methods
-app.get("/api/patient/:patientId/paymentMethods", authoriseJWT, paymentMethodController.getPaymentMethodsByPatientId);
-app.post("/api/patient/:patientId/paymentMethods", authoriseJWT, validatePaymentMethod, paymentMethodController.createPaymentMethod);
-app.delete("/api/patient/:patientId/paymentMethods/:methodId", authoriseJWT, paymentMethodController.deletePaymentMethod);
-app.put("/api/patient/:patientId/paymentMethods/:methodId", authoriseJWT, validatePaymentMethod, paymentMethodController.updatePaymentMethod);
+app.get("/api/patient/paymentMethods/:patientId", authoriseJWT, paymentMethodController.getPaymentMethodsByPatientId);
+app.post("/api/patient/paymentMethod/:patientId", authoriseJWT, validatePaymentMethod, paymentMethodController.createPaymentMethod);
+app.get("/api/patient/paymentMethod/:methodId", authoriseJWT, paymentMethodController.getPaymentMethodById);
+app.delete("/api/patient/paymentMethod/:methodId", authoriseJWT, paymentMethodController.deletePaymentMethod);
+app.put("/api/patient/paymentMethod/:methodId", authoriseJWT, validatePaymentMethod, paymentMethodController.updatePaymentMethod);
 
 // Routes for Patient's Digital Wallet
 app.get("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.getDigitalWallet);

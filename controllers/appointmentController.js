@@ -10,8 +10,15 @@ const getAllPatientAppointment = async (req, res) => {
     const { patientId } = req.params;
 
     try {
+        if (req.user.id !== patientId) {
+            res.status(403).json({
+                status: "Forbidden",
+                message: "You are not allowed to view this Appointment."
+            });
+            return;
+        }
+        
         const appointments = await appointment.getAllPatientAppointment(patientId);
-
         if (!appointments) {
             res.status(404).json({
                 status: "Not Found",
@@ -76,17 +83,36 @@ const deleteAppointmentById = async (req, res) => {
     const { appointmentId } = req.params;
 
     try {
-        const deleteAppointment = await payment.removePayment(appointmentId);
-        const deletePrescribedMedication = await prescribedMedication.removePrescribedMedication(appointmentId);
+        const getAppointment = await appointment.getAppointmentDetail(appointmentId);
+
+        if (!getAppointment) {
+            res.status(404).json({
+                status: "Not Found",
+                message: `Appointment with ID ${appointmentId} not found.`
+            });
+        } else {
+            if (req.user.id !== getAppointment.patientId) {
+                res.status(403).json({
+                    status: "Forbidden",
+                    message: "You are not allowed to delete this Appointment."
+                });
+                return;
+            }
+        }
+
+        await payment.removePayment(appointmentId);
+        await prescribedMedication.removePrescribedMedication(appointmentId);
         const deleteConfirmation = await appointment.deleteAppointment(appointmentId);
 
         if (deleteConfirmation) {
             res.status(200).json({
+                status: "Success",
                 message: `Appointment with ID ${appointmentId} has been deleted.`
             });
             return;
         } else {
             res.status(500).json({
+                status: "Error",
                 message: `Failed to delete Appointment.`
             });
         }
