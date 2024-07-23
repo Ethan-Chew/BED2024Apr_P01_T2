@@ -68,6 +68,8 @@ class Appointment {
         const result = await request.query(query);
         connection.close();
 
+        if (result.recordset.length == 0) return null;
+
         let paymentRequest = null;
         if (result.recordset[0].PaymentRequestStatus) {
             paymentRequest = {
@@ -123,7 +125,7 @@ class Appointment {
         await request.query(query);
         connection.close();
 
-        return new Appointment(newAppointmentId, patientId, null, slotId, null, reason, null);
+        return this.getAppointmentDetail(newAppointmentId);
     }
 
     // Created by: Ethan Chew

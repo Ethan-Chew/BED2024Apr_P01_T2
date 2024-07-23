@@ -83,6 +83,8 @@ const saveChatbotHistory = async (req, res) => {
              });
             return;
         }
+
+        // Save each line in the chatbot history individually
         for (let i = 0; i < history.length; i++) {
             await Chatbot.saveChatbotHistory(patientId, history[i].parts[0].text, history[i].role, historyTimestamps[i]);
         }
@@ -109,7 +111,7 @@ const deleteChatbotHistory = async (req, res) => {
         if (req.user.id !== patientId) {
             res.status(403).json({ 
                 error: "Forbidden",
-                message: "You are not allowed to save chatbot history for this patient."
+                message: "You are not allowed to delete chatbot history for this patient."
             });
             return;
         }

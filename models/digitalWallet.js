@@ -60,7 +60,7 @@ class DigitalWallet {
         await request.query(query);
         connection.close();
 
-        return new DigitalWallet(patientId, initialBalance);
+        return this.getDigitalWalletByPatient(patientId);
     }
 
     // Created By: Ethan Chew

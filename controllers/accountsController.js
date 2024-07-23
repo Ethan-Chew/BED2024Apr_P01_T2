@@ -93,6 +93,13 @@ const authCreatePatient = async (req, res) => {
     try {
         const { name, email, password, knownAllergies, birthdate, qns } = req.body;
 
+        if (!password || !qns) {
+            return res.status(400).json({
+                status: 'Error',
+                message: "Password and Questionnaire are required in the request body."
+            });
+        }
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -119,13 +126,6 @@ const authCreatePatient = async (req, res) => {
 const getPatientById = async (req, res) => {
     try {
         const patientId = req.params.patientId;
-
-        if (!patientId) {
-            return res.status(400).send({
-                status: 'Error',
-                message: 'Patient ID is required'
-            });
-        }
 
         // Ensure that AccountId in JWT matches PatientId
         if (req.user.id !== patientId) {

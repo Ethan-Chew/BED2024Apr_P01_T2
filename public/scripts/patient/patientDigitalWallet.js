@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     } else if (digitalWalletRequest.status === 401 || digitalWalletRequest.status === 403) {
         window.location.href = "../login.html";
+    } else {
+        document.getElementById("no-wallet-container").classList.add("hidden");
+        document.getElementById("wallet-container").classList.remove("hidden");
     }
     
     const digitalWalletJson = await digitalWalletRequest.json();

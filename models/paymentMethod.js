@@ -40,6 +40,26 @@ class PaymentMethod {
     }
 
     // Created by: Ethan Chew
+    static async getPaymentMethodById(id) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `
+            SELECT * FROM PatientPaymentMethods
+            WHERE PaymentMethodId = @PaymentMethodId
+        `;
+        const request = connection.request();
+        request.input('PaymentMethodId', id);
+
+        const result = await request.query(query);
+        connection.close();
+
+        if (result.recordset.length === 0) return null;
+
+        const row = result.recordset[0];
+        return new PaymentMethod(row.PaymentMethodId, row.PatientId, row.Merchant, row.CardName, row.CardNumber, row.CardExpiryDate);
+    }
+
+    // Created by: Ethan Chew
     static async createPaymentMethod(patientId, merchant, cardName, cardNumber, cardExpiryDate) {
         const connection = await sql.connect(dbConfig);
         const newId = await PaymentMethod.getNextPaymentMethodId(connection);

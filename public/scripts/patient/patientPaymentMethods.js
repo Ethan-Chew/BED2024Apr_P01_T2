@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     accountId = sessionStorage.getItem('accountId');
 
     // Get User Payment Methods
-    const paymentMethodsRequest = await fetch(`/api/patient/${accountId}/paymentMethods`);
+    const paymentMethodsRequest = await fetch(`/api/patient/paymentMethod/${accountId}`);
     if (paymentMethodsRequest.status === 401 || paymentMethodsRequest.status === 403) window.location.href = '../login.html';
     const paymentMethodsJson = await paymentMethodsRequest.json();
     const paymentMethods = paymentMethodsJson.paymentMethods;
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const confirmDelete = confirm("Are you sure you want to delete this payment method?");
 
                 if (confirmDelete) {
-                    await fetch(`/api/patient/${accountId}/paymentMethods/${paymentMethods[i].id}`, {
+                    await fetch(`/api/patient/paymentMethod/${paymentMethods[i].id}`, {
                         method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Make PUT Request
-        const putRequest = await fetch(`/api/patient/${accountId}/paymentMethods/${userInput.id}`, {
+        const putRequest = await fetch(`/api/patient/paymentMethod/${userInput.id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Make POST Request
-        const createRequest = await fetch(`/api/patient/${accountId}/paymentMethods`, {
+        const createRequest = await fetch(`/api/patient/paymentMethod/${accountId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
