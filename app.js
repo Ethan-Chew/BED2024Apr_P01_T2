@@ -185,6 +185,7 @@ app.post("/api/notification",authoriseJWT, validateNotification, notificationsCo
 // Route for 2FA
 app.get('/api/generateQRCode', twoFAController.generateQRCode)
 app.get('/api/getAuth/:accountId', twoFAController.getAuth)
+app.post('/api/verify2FA/:accountId', twoFAController.verify2FA)
 
 // Initialise Server
 app.listen(3000, async () => {
