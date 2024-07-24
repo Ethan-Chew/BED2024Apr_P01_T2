@@ -26,6 +26,8 @@ const digitalWalletController = require("./controllers/digitalWalletController")
 const digitalWalletHistoryController = require("./controllers/digitalWalletHistoryController");
 const drugTopup = require("./controllers/drugTopupController");
 const notificationsController = require("./controllers/notificationsController");
+const twoFAController = require("./controllers/2FAController");
+
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -181,6 +183,10 @@ app.put("/api/notification/:NotificationId", authoriseJWT, notificationsControll
 app.put("/api/notifications/:accountId", authoriseJWT, notificationsController.readAllNotificationsByAccountId);
 app.post("/api/notification",authoriseJWT, validateNotification, notificationsController.sendNotification);
 
+// Route for 2FA
+app.get('/api/generateQRCode', twoFAController.generateQRCode)
+app.get('/api/getAuth/:accountId', twoFAController.getAuth)
+app.post('/api/verify2FA/:accountId', twoFAController.verify2FA)
 
 // Initialise Server
 app.listen(3000, async () => {
