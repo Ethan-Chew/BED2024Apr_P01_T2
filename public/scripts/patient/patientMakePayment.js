@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // Get Patient's Payment Methods
-    const fetchPaymentMethodsResponse = await fetch(`/api/patient/${accountId}/paymentMethods`, {
+    const fetchPaymentMethodsResponse = await fetch(`/api/patient/paymentMethods/${accountId}`, {
         method: 'GET'
     });
 

@@ -15,23 +15,23 @@ class InventoryRecord {
     static async getInventoryRecordByCompanyId(companyId) {
         const connection = await sql.connect(dbConfig);
 
-        const query = `
-            SELECT
-                DrugRecordId,
-                DrugRecordEntryDate,
-                DrugName,
-                DrugAvailableQuantity,
-                DrugTotalQuantity,
-                DrugExpiryDate
-            FROM
-                DrugInventoryRecord
-            WHERE
-                CompanyId = @companyId
-        `;
-        
-        const request = connection.request();
-        request.input('companyId', sql.VarChar, companyId);
         try {
+            const query = `
+                SELECT
+                    DrugRecordId,
+                    DrugRecordEntryDate,
+                    DrugName,
+                    DrugAvailableQuantity,
+                    DrugTotalQuantity,
+                    DrugExpiryDate
+                FROM
+                    DrugInventoryRecord
+                WHERE
+                    CompanyId = @companyId
+            `;
+            
+            const request = connection.request();
+            request.input('companyId', sql.VarChar, companyId);
             const result = await request.query(query);
             if (result.recordset.length === 0) return null;
         
@@ -52,8 +52,8 @@ class InventoryRecord {
     }
 
     static async deleteDrugRecordByRecordId(drugRecordId) {
+        const connection = await sql.connect(dbConfig);
         try {
-            const connection = await sql.connect(dbConfig);
             
             const query = `
                 DELETE FROM 
@@ -75,9 +75,9 @@ class InventoryRecord {
     }
 
     static async updateDrugQuantityByRecordId(drugRecordId) {
+        const connection = await sql.connect(dbConfig);
+        
         try {
-            const connection = await sql.connect(dbConfig);
-            
             const query = `
                 UPDATE 
                     DrugInventoryRecord 

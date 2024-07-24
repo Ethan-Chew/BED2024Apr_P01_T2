@@ -2,6 +2,7 @@ const Joi = require("joi");
 
 const validateContributeDrugRequest = (req, res, next) => {
     const schema = Joi.object({
+        companyId: Joi.string().required(),
         appointmentId: Joi.string().required(),
         drugName: Joi.string().required(),
         contributedQuantity: Joi.number().required()

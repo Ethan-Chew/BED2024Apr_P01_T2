@@ -7,6 +7,9 @@ const Doctor = require("../models/doctor");
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const Appointment = require("../models/appointment");
+const DigitalWallet = require("../models/digitalWallet");
+const DigitalWalletHistory = require("../models/digitalWalletHistory");
 require("dotenv").config();
 
 // Created by: Ethan Chew
@@ -49,7 +52,7 @@ const authLoginAccount = async (req, res) => {
                 return res.status(403).json({
                     status: "Forbidden",
                     message: "Unauthorised",
-                    approvalStatus: account.isApproved
+                    approvalStatus: account.PatientIsApproved
                 })
             }
         } else if (account.CompanyId) {
@@ -77,7 +80,7 @@ const authLoginAccount = async (req, res) => {
             message: "Login Successful",
             accountId: account.AccountId,
             role: role
-        })
+        });
     } catch(err) {
         console.error(err);
         res.status(500).json({
@@ -92,6 +95,13 @@ const authLoginAccount = async (req, res) => {
 const authCreatePatient = async (req, res) => {
     try {
         const { name, email, password, knownAllergies, birthdate, qns } = req.body;
+
+        if (!password || !qns) {
+            return res.status(400).json({
+                status: 'Error',
+                message: "Password and Questionnaire are required in the request body."
+            });
+        }
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -119,13 +129,6 @@ const authCreatePatient = async (req, res) => {
 const getPatientById = async (req, res) => {
     try {
         const patientId = req.params.patientId;
-
-        if (!patientId) {
-            return res.status(400).send({
-                status: 'Error',
-                message: 'Patient ID is required'
-            });
-        }
 
         // Ensure that AccountId in JWT matches PatientId
         if (req.user.id !== patientId) {
@@ -251,7 +254,20 @@ const deletePatientById = async (req, res) => {
             });
         }
         
-        await PaymentMethod.deleteAllPaymentMethod(patientId); // Delete all attached payment methods if exists
+        // Before deleting a Patient Account, ensure that every related data (Appointment, MaymentMethods, Questionnaire, DigitalWallet) is deleted
+        await PaymentMethod.deleteAllPaymentMethod(patientId);
+        
+        // Get all Appointment of the Patient, then delete all of them
+        const appointments = await Appointment.getAllPatientAppointment(patientId);
+        if (appointments) {
+            for (let i = 0; i < appointments.length; i++) {
+                await Appointment.deleteAppointment(appointments[i].id);
+            }
+        }
+        
+        await DigitalWallet.deleteDigitalWallet(patientId);
+        await DigitalWalletHistory.deleteAllHistory(patientId);
+
         const deleteQuestionnaireRequest = await Questionnaire.deleteQuestionnaire(patientId);
         const deletePatientRequest = await Patient.deletePatientById(patientId);
         const deleteAccountRequest = await Account.deleteAccountById(patientId);
@@ -300,10 +316,7 @@ const updatePatientById = async (req, res) => {
         const { name, email, knownAllergies, birthdate, password } = req.body;
     
         // Update Patient
-        const updatePatientRes = await Patient.updatePatient(patientId, {
-            knownAllergies: knownAllergies,
-            birthdate: birthdate,
-        });
+        const updatePatientRes = await Patient.updatePatient(patientId, knownAllergies, birthdate);
 
         // Update Account (Patient's Parent Class)
         const salt = await bcrypt.genSalt(10);
@@ -313,16 +326,7 @@ const updatePatientById = async (req, res) => {
           hashedPassword = await bcrypt.hash(password, salt);
         }
         
-        const updateData = {
-          name: name,
-          email: email,
-        };
-        
-        if (hashedPassword) {
-          updateData.password = hashedPassword;
-        }
-        
-        const updateAccountRes = await Account.updateAccount(patientId, updateData);
+        const updateAccountRes = await Account.updateAccount(patientId, name, email, hashedPassword);
 
         if (updatePatientRes && updateAccountRes) {
             res.status(200).json({

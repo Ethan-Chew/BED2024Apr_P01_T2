@@ -27,15 +27,15 @@ const getDrugOrderByIdAndDrugName = async (req, res) => {
 
 const addRequestContribution = async (req, res) => {
     try {
-        let { appointmentId, drugName, quantity, totalCost, contributeDate, companyId, drugRecordId } = req.body;
+        let { appointmentId, drugName, inventoryContribution, contributionQuantity, totalCost, contributeDate, companyId, drugRecordId } = req.body;
 
         // Validate input data
-        if (!appointmentId || !drugName || quantity == null || !totalCost || !contributeDate) {
+        if (!appointmentId || !drugName || inventoryContribution === null || contributionQuantity === null || !totalCost || !contributeDate) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
         // Ensure quantity is a positive integer
-        if (quantity <= 0) {
+        if (contributionQuantity <= 0) {
             return res.status(400).json({ error: 'Quantity must be greater than zero' });
         }
 
@@ -43,7 +43,8 @@ const addRequestContribution = async (req, res) => {
         await DrugRequest.addRequestContribution(
             appointmentId,
             drugName,
-            quantity,
+            inventoryContribution,
+            contributionQuantity,
             totalCost,
             contributeDate,
             companyId,
@@ -60,14 +61,14 @@ const addRequestContribution = async (req, res) => {
 
 const contributeDrugRequest = async (req, res) => {
     try {
-        const { appointmentId, drugName } = req.params;
+        const { companyId, appointmentId, drugName } = req.params;
         const contributedQuantity = req.body.contributedQuantity;
         const drugOrder = await DrugRequest.getDrugOrderByIdAndDrugName(appointmentId, drugName);
         if (!drugOrder) {
             return res.status(404).json({ error: 'Drug order not found' });
         }
         // Contribute to the drug request (Update the status to 'Completed' and update Drug Inventory Record Quantity)
-        const recordId = await DrugRequest.contributeDrugRequest(appointmentId, drugName, contributedQuantity);
+        const recordId = await DrugRequest.contributeDrugRequest(companyId, appointmentId, drugName, contributedQuantity);
         // Send success response
         res.status(200).json({ recordId, success: true, message: 'Drug request contribution completed successfully' });
     } catch (err) {

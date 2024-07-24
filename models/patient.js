@@ -48,6 +48,8 @@ class Patient extends Account {
         const result = await request.query(query);
         connection.close();
 
+        if (result.recordset.length === 0) return null;
+
         // Group Patients with their Associated Appointments
         const birthdate = new Date(result.recordset[0].PatientBirthdate).toISOString().split("T")[0];  // Remove time from date
 
@@ -115,29 +117,18 @@ class Patient extends Account {
     }
     
     // Created by: Ethan Chew
-    static async updatePatient(patientId, updatedFields) {
-        const allowedFields = {
-            'knownAllergies': 'KnownAllergies',
-            'birthDate': 'PatientBirthdate',
-        }
-        
-        if (updatedFields.length === 0) {
-            throw new Error("No Fields to Update");
-        }
-
+    static async updatePatient(patientId, knownAllergies, birthdate) {
         const connection = await sql.connect(dbConfig);
         const request = connection.request();
         
         // Populate Query with Updated Fields
-        let query = `UPDATE Patient SET `;
-        for (const field in updatedFields) {
-            if (Object.keys(allowedFields).includes(field) && updatedFields[field] !== null) {
-                query += `${allowedFields[field]} = @${field}, `;
-                request.input(field, updatedFields[field]);
-            }
-        }
-        query = query.slice(0, -2); // Remove last ', '
-        query += ` WHERE PatientId = @PatientId`;
+        let query = `
+            UPDATE Patient SET 
+            KnownAllergies = @KnownAllergies, PatientBirthdate = @PatientBirthdate
+            WHERE PatientId = @PatientId
+        `;
+        request.input('KnownAllergies', knownAllergies);
+        request.input('PatientBirthdate', birthdate);
         request.input('PatientId', patientId);
 
         // Send Request

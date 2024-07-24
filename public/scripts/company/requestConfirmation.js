@@ -15,6 +15,14 @@ document.addEventListener("DOMContentLoaded", async() => {
     const drugName = urlParams.get('drugName');
     const companyId = sessionStorage.getItem('accountId');
 
+    // Get Companay Name
+    const fetchCompany = await fetch(`/api/company/${companyId}`, {
+        method: 'GET'
+    });
+    if (fetchCompany.status === 401 || fetchCompany.status === 403) {
+        window.location.href = '../login.html';
+    }
+
     if (!appointmentId || !drugName) {
         console.error('Missing appointmentId or drugName in query parameters');
         return;
@@ -46,6 +54,18 @@ document.addEventListener("DOMContentLoaded", async() => {
     // Event listeners for input fields
     inputInventory.addEventListener('input', updateContributeQuantity);
     inputExcess.addEventListener('input', updateContributeQuantity);
+    // Restrict input to numbers only and ensure no negative values
+    inputInventory.addEventListener('input', restrictToNumbers);
+    inputExcess.addEventListener('input', restrictToNumbers);
+
+    function restrictToNumbers(event) {
+        const value = event.target.value;
+        event.target.value = value.replace(/\D/g, '');
+        // Ensure value does not go below 0
+        if (parseInt(event.target.value) < 0 || event.target.value === '') {
+            event.target.value = 0;
+        }
+    }
 
     // Function to update contribute quantity based on inputs
     function updateContributeQuantity() {
@@ -86,18 +106,19 @@ document.addEventListener("DOMContentLoaded", async() => {
     document.getElementById('confirm-btn').addEventListener('click', async () => {
         const totalContribution = parseInt(contributeQuantityElement.textContent);
         const maxContribution = parseInt(requestQuantityElement.textContent);
+        const inventoryContribution = parseInt(inputInventory.value) || 0;
 
         if (totalContribution === maxContribution) {
             try {
                 const totalCost = parseFloat(document.getElementById('price').innerText.replace('$', ''));
 
                 // Execute both requests in sequence to get recordId first
-                const putResponse = await fetch(`/api/drugRequest/contribute/${appointmentId}/${drugName}`, {
+                const putResponse = await fetch(`/api/drugRequest/contribute/${companyId}/${appointmentId}/${drugName}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ contributedQuantity: totalContribution })
+                    body: JSON.stringify({ contributedQuantity: inventoryContribution })
                 });
 
                 if (!putResponse.ok) {
@@ -115,7 +136,8 @@ document.addEventListener("DOMContentLoaded", async() => {
                     body: JSON.stringify({
                         appointmentId,
                         drugName,
-                        quantity: totalContribution,
+                        inventoryContribution: inventoryContribution,
+                        contributionQuantity: totalContribution,
                         totalCost: parseFloat(totalCost),
                         contributeDate: getTodayDate(),
                         contributionStatus: 'Pending',
@@ -123,7 +145,6 @@ document.addEventListener("DOMContentLoaded", async() => {
                         drugRecordId: recordId.recordId
                     })
                 });
-
 
                 if (!postResponse.ok) {
                     const error = await postResponse.json();

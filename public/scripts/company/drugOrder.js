@@ -13,6 +13,14 @@ document.addEventListener("DOMContentLoaded", async() => {
     // Get Company ID from sessionStorage
     const companyId = sessionStorage.getItem('accountId');
 
+    // Get Companay Name
+    const fetchCompany = await fetch(`/api/company/${companyId}`, {
+        method: 'GET'
+    });
+    if (fetchCompany.status === 401 || fetchCompany.status === 403) {
+        window.location.href = '../login.html';
+    }
+
     // Get Drug Contribution Orders
     const fetchDrugContributionOrders = await fetch(`/api/drugContributionOrders/${companyId}`, {
         method: 'GET'
@@ -148,7 +156,8 @@ document.addEventListener("DOMContentLoaded", async() => {
         document.querySelectorAll('.cancel-btn').forEach(button => {
             button.addEventListener('click', async () => {
                 const appointmentId = button.getAttribute('data-appointment-id');
-                const drugRecordId = button.getAttribute('data-drug-record-id');
+                const drugRecordIdAttr = button.getAttribute('data-drug-record-id');
+                const drugRecordId = drugRecordIdAttr !== 'null' ? drugRecordIdAttr : null;
                 const drugName = button.getAttribute('data-drug-name');
                 const drugQuantity = button.getAttribute('data-drug-quantity');
         
@@ -163,16 +172,27 @@ document.addEventListener("DOMContentLoaded", async() => {
                         const response2 = await fetch(`/api/drugRequest/${appointmentId}/${drugName}`, {
                             method: 'PUT'
                         });
-                        // Add drug quantity back to drug inventory
-                        const response3 = await fetch(`/api/drugInventoryRecord/${drugRecordId}/${drugQuantity}`, {
-                            method: 'PUT'
-                        });
+                        let response3Ok = true;
+                        if (drugRecordId !== null) {// Add drug quantity back to drug inventory
+                            console.log("DrugRecordId is not null ", drugRecordId);
+                            const response3 = await fetch(`/api/drugInventoryRecord/${drugRecordId}/${drugQuantity}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ appointmentId: appointmentId, drugName: drugName })
+                            });
+                            response3Ok = response3.ok;
+
+                            if (!response3Ok) {
+                                console.error('Failed to update drug inventory:', response3.statusText);
+                            }
+                        }
         
-                        if (response2.ok && response3.ok) {
-                            // Redirect only if both requests are successful
-                            window.location.href = 'companyHome.html';
+                        if (response2.ok && response3Ok) {
+                            window.location.reload();
                         } else {
-                            console.error('Failed to process drug request:', response2.statusText, response3.statusText);
+                            console.error('Failed to process drug request:', response2.statusText, response3Ok ? '' : 'Drug inventory update failed');
                         }
                     } else {
                         console.error('Failed to delete drug order:', response.statusText);

@@ -23,8 +23,16 @@ document.addEventListener("DOMContentLoaded", async() => {
     const removeBtn = document.getElementById('remove-btn');
 
     const urlParams = new URLSearchParams(window.location.search);
-    const companyId = urlParams.get('companyId');
+    const companyId = sessionStorage.getItem('accountId');
     const drug = urlParams.get('drugName');
+
+    // Get Companay Name
+    const fetchCompany = await fetch(`/api/company/${companyId}`, {
+        method: 'GET'
+    });
+    if (fetchCompany.status === 401 || fetchCompany.status === 403) {
+        window.location.href = '../login.html';
+    }
 
     // Show Drug Details
     async function showDrugInfo(drug, companyId) {
@@ -151,6 +159,19 @@ document.addEventListener("DOMContentLoaded", async() => {
             alert(`Error: ${error.message}`);
         }
     });
+
+    // Restrict input to numbers only and ensure no negative values
+    addQuantity.addEventListener('input', restrictToNumbers);
+    removeQuantity.addEventListener('input', restrictToNumbers);
+
+    function restrictToNumbers(event) {
+        const value = event.target.value;
+        event.target.value = value.replace(/\D/g, '');
+        // Ensure value does not go below 0
+        if (parseInt(event.target.value) < 0 || event.target.value === '') {
+            event.target.value = 0;
+        }
+    }
 
     // Function to validate date format (YYYY-MM-DD)
     function isValidDateFormat(dateString) {

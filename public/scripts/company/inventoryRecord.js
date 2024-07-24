@@ -16,6 +16,14 @@ document.addEventListener("DOMContentLoaded", async() => {
     // Get Company Information
     const companyId = sessionStorage.getItem('accountId');
 
+    // Get Companay Name
+    const fetchCompany = await fetch(`/api/company/${companyId}`, {
+        method: 'GET'
+    });
+    if (fetchCompany.status === 401 || fetchCompany.status === 403) {
+        window.location.href = '../login.html';
+    }
+
     // Fetch GET request
     const fetchDrugRecord = await fetch(`/api/inventoryRecord/${companyId}`, {
         method: 'GET'

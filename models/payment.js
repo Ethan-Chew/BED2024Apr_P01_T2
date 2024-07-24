@@ -24,21 +24,6 @@ class Payment {
         await request.query(query);
         connection.close();
     }
-
-    // Created by: Ethan Chew
-    static async removePayment(appointmentId) {
-        const connection = await sql.connect(dbConfig);
-
-        const query = `
-            DELETE FROM Payments
-            WHERE AppointmentId = @AppointmentId
-        `;
-        const request = connection.request();
-        request.input('AppointmentId', appointmentId);
-
-        await request.query(query);
-        connection.close();
-    }
 }
 
 module.exports = Payment;

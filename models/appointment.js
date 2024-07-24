@@ -68,6 +68,8 @@ class Appointment {
         const result = await request.query(query);
         connection.close();
 
+        if (result.recordset.length == 0) return null;
+
         let paymentRequest = null;
         if (result.recordset[0].PaymentRequestStatus) {
             paymentRequest = {
@@ -123,24 +125,60 @@ class Appointment {
         await request.query(query);
         connection.close();
 
-        return new Appointment(newAppointmentId, patientId, null, slotId, null, reason, null);
+        return this.getAppointmentDetail(newAppointmentId);
     }
 
     // Created by: Ethan Chew
     static async deleteAppointment(appointmentId) {
         const connection = await sql.connect(dbConfig);
+        const transaction = new sql.Transaction(connection);
 
-        const query = `
-            DELETE FROM Appointments
-            WHERE AppointmentId = @AppointmentId
-        `;
-        const request = connection.request();
-        request.input('AppointmentId', appointmentId);
+        try {
+            await transaction.begin();
 
-        const result = await request.query(query);
-        connection.close();
+            // Delete Payments Associated to the Appointment
+            const deletePaymentsQuery = `DELETE FROM Payments WHERE AppointmentId = @AppointmentId`;
+            const deletePaymentsRequest = new sql.Request(transaction);
+            deletePaymentsRequest.input('AppointmentId', appointmentId);
+            await deletePaymentsRequest.query(deletePaymentsQuery);
 
-        return result.rowsAffected == 1;
+            // Delete Payment Requests Associated to the Appointment
+            const deletePaymentRequestsQuery = `DELETE FROM PaymentRequest WHERE AppointmentId = @AppointmentId`;
+            const deletePaymentRequestsRequest = new sql.Request(transaction);
+            deletePaymentRequestsRequest.input('AppointmentId', appointmentId);
+            await deletePaymentRequestsRequest.query(deletePaymentRequestsQuery);
+
+            // Delete DrugRequestContributions
+            const deleteDrugRequestContributionsQuery = `DELETE FROM DrugRequestContribution WHERE AppointmentId = @AppointmentId`;
+            const deleteDrugRequestContributionsRequest = new sql.Request(transaction);
+            deleteDrugRequestContributionsRequest.input('AppointmentId', appointmentId);
+            await deleteDrugRequestContributionsRequest.query(deleteDrugRequestContributionsQuery);
+
+            // Delete Prescribed Medication
+            const deletePrescribedMedicationQuery = `DELETE FROM PrescribedMedication WHERE AppointmentId = @AppointmentId`;
+            const deletePrescribedMedicationRequest = new sql.Request(transaction);
+            deletePrescribedMedicationRequest.input('AppointmentId', appointmentId);
+            await deletePrescribedMedicationRequest.query(deletePrescribedMedicationQuery);
+
+            // Delete the Appointment itself
+            const deleteAppointmentQuery = `DELETE FROM Appointments WHERE AppointmentId = @AppointmentId`;
+            const deleteAppointmentRequest = new sql.Request(transaction);
+            deleteAppointmentRequest.input('AppointmentId', appointmentId);
+            const deleteAppointmentResult = await deleteAppointmentRequest.query(deleteAppointmentQuery);
+            if (deleteAppointmentResult.rowsAffected[0] !== 1) {
+                throw new Error("Failed to delete Appointment");
+            }
+
+            // Send and Close the Transaction
+            await transaction.commit();
+            connection.close();
+
+            return true;
+        } catch (err) {
+            await transaction.rollback();
+            connection.close();
+            throw err;
+        }
     }
 
     // Created by: Ethan Chew

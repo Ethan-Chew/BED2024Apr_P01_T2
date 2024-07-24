@@ -17,49 +17,54 @@ class DrugOrder{
     static async getAllDrugOrders(companyId){
         const connection = await sql.connect(dbConfig);
 
-        const query = `
-            SELECT
-                do.AppointmentId,
-                do.DrugName,
-                do.Quantity,
-                do.TotalCost,
-                do.ContributeDate,
-                do.ConfirmationDate,
-                do.ContributionStatus,
-                do.DrugRecordId
-            FROM
-                DrugRequestContribution do
-            WHERE
-                do.ContributionStatus IN ('Pending', 'Completed')
-                AND do.CompanyId = @companyId
-        `;
-
-        const request = connection.request();
-        request.input('companyId', sql.VarChar, companyId);
-        const result = await request.query(query);
-        connection.close();
-
-        if (result.recordset.length == 0) return null;
-
-        console.log(result.recordset);
-        return result.recordset.map(row =>
-            new DrugOrder(
-                row.AppointmentId,
-                row.DrugName,
-                row.Quantity,
-                row.TotalCost,
-                row.ContributeDate,
-                row.ConfirmationDate,
-                row.ContributionStatus,
-                row.DrugRecordId
-            )
-        );
+        try {    
+            const query = `
+                SELECT
+                    do.AppointmentId,
+                    do.DrugName,
+                    do.ContributionQuantity,
+                    do.TotalCost,
+                    do.ContributeDate,
+                    do.ConfirmationDate,
+                    do.ContributionStatus,
+                    do.DrugRecordId
+                FROM
+                    DrugRequestContribution do
+                WHERE
+                    do.ContributionStatus IN ('Pending', 'Completed')
+                    AND do.CompanyId = @companyId
+            `;
+    
+            const request = connection.request();
+            request.input('companyId', sql.VarChar, companyId);
+            const result = await request.query(query);
+            connection.close();
+    
+            if (result.recordset.length == 0) return null;
+    
+            console.log(result.recordset);
+            return result.recordset.map(row =>
+                new DrugOrder(
+                    row.AppointmentId,
+                    row.DrugName,
+                    row.ContributionQuantity,
+                    row.TotalCost,
+                    row.ContributeDate,
+                    row.ConfirmationDate,
+                    row.ContributionStatus,
+                    row.DrugRecordId
+                )
+            );
+        } catch (error) {
+            console.error('An error occurred while getting all drug orders:', error);
+            return null;
+        }
     }
 
     static async deleteDrugOrder(appointmentId, drugName){
-        try{
-            const connection = await sql.connect(dbConfig);
+        const connection = await sql.connect(dbConfig);
 
+        try{
             const query = `
                 DELETE FROM DrugRequestContribution
                 WHERE AppointmentId = @appointmentId AND DrugName = @drugName
@@ -76,9 +81,24 @@ class DrugOrder{
         }
     }
 
-    static async returnMedicine(drugQuantity, drugRecordId){
+    static async returnMedicine(drugRecordId, appointmentId, drugName){
+        const connection = await sql.connect(dbConfig);
+
         try{
-            const connection = await sql.connect(dbConfig);
+            const getQuery = `
+                SELECT
+                    InventoryContribution
+                FROM
+                    DrugRequestContribution
+                WHERE
+                    AppointmentId = @appointmentId
+                    AND DrugName = @drugName
+            `
+            const getRequest = connection.request();
+            getRequest.input('appointmentId', sql.VarChar, appointmentId);
+            getRequest.input('drugName', sql.VarChar, drugName);
+            const getResult = await getRequest.query(getQuery);
+            const drugQuantity = getResult.recordset[0].InventoryContribution;
 
             const query = `
                 UPDATE DrugInventoryRecord
@@ -98,9 +118,9 @@ class DrugOrder{
     }
 
     static async confirmDrugOrder(appointmentId, drugName) {
-        try {
-            const connection = await sql.connect(dbConfig);
+        const connection = await sql.connect(dbConfig);
 
+        try {
             const query = `
                 UPDATE DrugRequestContribution
                 SET ContributionStatus = 'Completed',
