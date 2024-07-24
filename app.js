@@ -175,9 +175,9 @@ app.post("/api/paymentRequest", authoriseJWT, validatePaymentRequest, paymentReq
 app.delete("/api/paymentRequest/:id", authoriseJWT, paymentRequestController.cancelPaymentRequest);
 
 // Route for Notifications
-app.get("/api/notification/:accountid", authoriseJWT, notificationsController.receiveNotifications);
-app.put("/api/notification/:Notificationid", authoriseJWT, notificationsController.readNotification);
-app.put("/api/notifications/:accountid", authoriseJWT, notificationsController.readAllNotificationsByAccountId);
+app.get("/api/notifications/:accountId", authoriseJWT, notificationsController.receiveNotifications);
+app.put("/api/notification/:NotificationId", authoriseJWT, notificationsController.readNotification);
+app.put("/api/notifications/:accountId", authoriseJWT, notificationsController.readAllNotificationsByAccountId);
 app.post("/api/notification",authoriseJWT, validateNotification, notificationsController.sendNotification);
 
 

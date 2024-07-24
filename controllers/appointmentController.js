@@ -213,11 +213,9 @@ const updateAppointmentDoctorSlot = async (req, res) => {
         const getAppointment = await appointment.getAppointmentDetail(appointmentId); // ethan's model func
         const apptAvailableSlot = await availableSlot.getAvailableSlotByDateAndTime(getAppointment.slotDate, getAppointment.slotTime)
 
-        console.log("consult cost: ", getAppointment.consultationCost);
-        console.log("doctors note: ", getAppointment.doctorNote);
-        console.log("availableSLotId: ", apptAvailableSlot.slotId);
-
-        if (getAppointment.consultationCost == null || getAppointment.doctorNote == null) {
+        
+        
+        if (getAppointment.consultationCost !== null) {
             return res.status(405).json({ message: 'Appointment has already occured' });
         }
         console.log("doctorId ", getAppointment.doctorId);

@@ -40,44 +40,47 @@ const sendNotification = async (req, res) => {
 
 // Emmanuel
 const receiveNotifications = async (req, res) => {
-    const { accountId } = req.params;
+    const accountId  = req.params.accountId;
 
     if (!accountId || typeof accountId !== 'string') {
+        console.log("jdsiofkjdlkfjd;lasfs")
         return res.status(400).json({ message: 'Invalid account ID' });
     }
 
-    /*
-    if (req.user.id !== senderId) {
+
+    if (req.user.id !== accountId) {
         res.status(403).json({
             status: "Forbidden",
             message: "You are not allowed to receive these notifications using this account."
         });
         return;
     }
-        */
+
 
     try {
         const status = 'Received';
-        const getNotifications = await notification.getUnreadNotificationsByReceiverId(accountId);
-        const updateNotifications = await notification.updateManyNotificationsByReceiverId(accountId, status);
+        const getNotifications = await notification.getNotificationsByReceiverId(accountId);
 
         if (!getNotifications) {
-            res.status(500).json({
-                message: `Failed to get any notifications`
+            res.status(404).json({
+                message: `Failed to get any notifications, notifications do not exist for this user`
             });
             return;
         }
+
+        const updateNotifications = await notification.updateManyNotificationsByReceiverId(accountId, status);
+        console.log(updateNotifications);
+        if (!updateNotifications) {
+            res.status(404).json({
+                message: `Failed to update the notifications as received`
+            });
+            return;
+        }
+
         res.status(201).json({
             message: `Notifications succesfully returned`,
             notifications: getNotifications
         });
-
-        if (!updateNotifications) {
-            res.status(500).json({
-                message: `Failed to update the notifications as "Sent"`
-            });
-            return;
-        }
 
     } catch (err) {
         console.error(err);
@@ -132,7 +135,7 @@ const readNotification = async (req, res) => {
 
 // Emmanuel
 const readAllNotificationsByAccountId = async (req, res) => {
-    const { accountId } = req.params;
+    const { accountId } = req.user.id;
 
     if (!notificationId || typeof notificationId !== 'string') {
         return res.status(400).json({ message: 'Invalid account ID' });

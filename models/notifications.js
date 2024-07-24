@@ -11,15 +11,6 @@ class Notifications {
     }
 
     // Emmanuel
-    static async getNotificatonByIds(id) {
-        const connection = await sql.connect(dbConfig);
-
-
-    }
-
-    // Emmanuel
-
-    // Emmanuel
     // Helper function get New NotificationId
     static async getNextNotificationId(dbConnection) {
         const query = `
@@ -74,17 +65,17 @@ class Notifications {
             SELECT n.* ,  a.AccountName AS 'SenderName'
             FROM Notification n
             INNER JOIN account a ON n.senderId = a.AccountId
-            WHERE ReceiverId = '@ReceiverId' AND ReadStatus != @Status
+            WHERE ReceiverId = @ReceiverId AND ReadStatus != @Status
         `;
 
         const request = connection.request();
         request.input('ReceiverId', receiverId);
-        request.input('ReadStatus', status);
+        request.input('Status', status);
 
-        await request.query(query);
+        const result = await request.query(query);
         connection.close();
 
-        return result.recordset.map();
+        return result.recordset;
     }
 
     // Emmanuel
@@ -101,7 +92,7 @@ class Notifications {
         request.input('NotificationId', notificationId);
         request.input('ReadStatus', status);
 
-        await request.query(query);
+        const result = await request.query(query);
         connection.close();
 
         return result.rowsAffected[0] === 1;
@@ -110,20 +101,29 @@ class Notifications {
     // Emmanuel
     static async updateManyNotificationsByReceiverId(receiverId, status) {
         const connection = await sql.connect(dbConfig);
+        console.log("status: ", status);
+        console.log("receiver: ", receiverId);
+
+        
 
         const query = `
             UPDATE Notification SET ReadStatus = @Status
-            WHERE RecieverId =  @ReceiverId
+            WHERE ReceiverId = @ReceiverId
         `;
 
         const request = connection.request();
         request.input('ReceiverId', receiverId);
         request.input('Status', status)
 
-        await request.query(query);
+        const result = await request.query(query);
         connection.close();
 
-        return result.rowsAffected[0] === 1;
+        console.log("result.rowsAffected[0] === 1: ", result.rowsAffected[0] === 1 );
+        console.log("result.rowsAffected === 1: ", result.rowsAffected === 1 );
+        console.log("result.rowsAffected[0] >= 1: ", result.rowsAffected[0] >= 1 );
+        console.log("result.rowsAffected >= 1: ", result.rowsAffected >= 1 );
+
+        return result.rowsAffected[0] >= 1;
     }
 }
 

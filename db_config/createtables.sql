@@ -224,7 +224,7 @@ CREATE TABLE Notification (
 	SenderId VARCHAR(7) NOT NULL,
 	ReceiverId VARCHAR(7) NOT NULL,
 	MessageValue VARCHAR (255) NOT NULL,
-	ReadStatus VARCHAR (10) NOT NULL CHECK (ReadStatus IN ('Recieved', 'Read', 'Sent'))
+	ReadStatus VARCHAR (10) NOT NULL CHECK (ReadStatus IN ('Received', 'Read', 'Sent'))
 
 	CONSTRAINT PK_Notification PRIMARY KEY (NotificationId),
 	CONSTRAINT FK_Notification_SenderId FOREIGN KEY (SenderId) REFERENCES Account(AccountId),

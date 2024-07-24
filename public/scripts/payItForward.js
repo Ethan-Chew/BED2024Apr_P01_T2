@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         for (const paymentRequest of paymentRequests) {
             console.log(paymentRequest)
             document.getElementById("paymentRequests").innerHTML += `
-                <div class="flex flex-col align-top bg-gray-100 p-5 rounded-xl gap-10" id="appt-${paymentRequest.AppointmentId}">
+                <div class="flex-grow bg-white shadow-lg rounded-lg max-w-6xl p-6 m-4" id="appt-${paymentRequest.AppointmentId}">
                     <div class="flex flex-col">
                         <a class="text-2xl"><span class="font-bold">${new Date(paymentRequest.SlotDate).toISOString().split("T")[0]}</span> | ${paymentRequest.SlotTime}</a>
                         <a class="text-2xl"><span class="font-bold">
