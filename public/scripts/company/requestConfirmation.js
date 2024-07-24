@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", async() => {
+    // Handle Logout Button Press
+    document.getElementById('logout').addEventListener('click', () => {
+        sessionStorage.removeItem('accountId');
+        window.location.href = '../index.html';
+    });
+
     // Handle Cancel Button Press
     document.getElementById('cancel-btn').addEventListener('click', () => {
         window.location.href = 'drugRequest.html';
