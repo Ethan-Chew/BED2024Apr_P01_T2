@@ -7,6 +7,9 @@ const Doctor = require("../models/doctor");
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const Appointment = require("../models/appointment");
+const DigitalWallet = require("../models/digitalWallet");
+const DigitalWalletHistory = require("../models/digitalWalletHistory");
 require("dotenv").config();
 
 // Created by: Ethan Chew
@@ -251,7 +254,20 @@ const deletePatientById = async (req, res) => {
             });
         }
         
-        await PaymentMethod.deleteAllPaymentMethod(patientId); // Delete all attached payment methods if exists
+        // Before deleting a Patient Account, ensure that every related data (Appointment, MaymentMethods, Questionnaire, DigitalWallet) is deleted
+        await PaymentMethod.deleteAllPaymentMethod(patientId);
+        
+        // Get all Appointment of the Patient, then delete all of them
+        const appointments = await Appointment.getAllPatientAppointment(patientId);
+        if (appointments) {
+            for (let i = 0; i < appointments.length; i++) {
+                await Appointment.deleteAppointment(appointments[i].id);
+            }
+        }
+        
+        await DigitalWallet.deleteDigitalWallet(patientId);
+        await DigitalWalletHistory.deleteAllHistory(patientId);
+
         const deleteQuestionnaireRequest = await Questionnaire.deleteQuestionnaire(patientId);
         const deletePatientRequest = await Patient.deletePatientById(patientId);
         const deleteAccountRequest = await Account.deleteAccountById(patientId);
@@ -300,10 +316,7 @@ const updatePatientById = async (req, res) => {
         const { name, email, knownAllergies, birthdate, password } = req.body;
     
         // Update Patient
-        const updatePatientRes = await Patient.updatePatient(patientId, {
-            knownAllergies: knownAllergies,
-            birthdate: birthdate,
-        });
+        const updatePatientRes = await Patient.updatePatient(patientId, knownAllergies, birthdate);
 
         // Update Account (Patient's Parent Class)
         const salt = await bcrypt.genSalt(10);
@@ -313,16 +326,7 @@ const updatePatientById = async (req, res) => {
           hashedPassword = await bcrypt.hash(password, salt);
         }
         
-        const updateData = {
-          name: name,
-          email: email,
-        };
-        
-        if (hashedPassword) {
-          updateData.password = hashedPassword;
-        }
-        
-        const updateAccountRes = await Account.updateAccount(patientId, updateData);
+        const updateAccountRes = await Account.updateAccount(patientId, name, email, hashedPassword);
 
         if (updatePatientRes && updateAccountRes) {
             res.status(200).json({

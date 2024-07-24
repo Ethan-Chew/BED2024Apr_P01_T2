@@ -80,30 +80,20 @@ class Account {
     }
 
     // Created by: Ethan Chew
-    static async updateAccount(accountId, updatedFields) {
-        const allowedFields = {
-            'name': 'AccountName',
-            'email': 'AccountEmail',
-            'password': 'AccountPassword',
-        };
-
-        if (updatedFields.length === 0) {
-            throw new Error("No Fields to Update");
-        }
-
+    static async updateAccount(accountId, name, email, password) {
         const connection = await sql.connect(dbConfig);
         const request = connection.request();
 
         // Populate Query with Updated Fields
-        let query = `UPDATE Account SET `;
-        for (const field in updatedFields) {
-            if (Object.keys(allowedFields).includes(field) && updatedFields[field] !== null) {
-                query += `${allowedFields[field]} = @${field}, `;
-                request.input(field, updatedFields[field]);
-            }
-        }
-        query = query.slice(0, -2); // Remove last ', '
-        query += ` WHERE AccountId = '${accountId}'`;
+        let query = `
+            UPDATE Account SET 
+            AccountName = @AccountName, AccountEmail = @AccountEmail, AccountPassword = COALESCE(@AccountPassword, AccountPassword)
+            WHERE AccountId = '${accountId}'
+        `;
+        request.input('AccountName', name);
+        request.input('AccountEmail', email);
+        request.input('AccountPassword', sql.NVarChar, password);
+        request.input('AccountId', accountId);
 
         // Send Request
         const result = await request.query(query);
