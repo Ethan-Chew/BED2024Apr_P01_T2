@@ -125,7 +125,7 @@ app.get("/api/appointments/:appointmentId", authoriseJWT, appointmentController.
 app.put("/api/appointments/:appointmentId", authoriseJWT, validateAppointment, appointmentController.updateAppointmentById);
 app.put("/api/appointments/cancel/:appointmentId", appointmentController.updateAppointmentDoctorSlot);
 app.post("/api/appointments", authoriseJWT, validateAppointment, appointmentController.createAppointmentById);
-app.delete("/api/appointments/:appointmentId", appointmentController.deleteAppointmentById);
+app.delete("/api/appointments/:appointmentId", authoriseJWT, appointmentController.deleteAppointmentById);
 
 /// Route for Company Account
 app.post("/api/auth/create/company", accountsController.authCreateCompany);
@@ -167,7 +167,7 @@ app.put("/api/helpRequests/reject/:requestId", helpRequestsController.rejectRequ
 app.get("/api/availableSlots/:date", authoriseJWT, availableSlotController.getAllAvailableSlotsTimesByDate);
 app.post("/api/availableSlot/getByDateTime", authoriseJWT, availableSlotController.getAvailableSlotByDateAndTime);
 app.put("/api/availableSlot/doctor/:slotId", authoriseJWT, availableSlotController.updateAvailableSlotById);
-app.post("api/availableSlot", authoriseJWT, availableSlotController.createAvailableSlot);
+app.post("/api/availableSlot", authoriseJWT, availableSlotController.createAvailableSlot);
 
 // Route for Payment Request
 app.get("/api/paymentRequests", paymentRequestController.getPaymentRequestsByApprovedStatus);

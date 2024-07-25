@@ -88,6 +88,7 @@ const deleteAppointmentById = async (req, res) => {
                 message: `Appointment with ID ${appointmentId} not found.`
             });
         } else {
+            console.log(req.user)
             if (req.user.id !== getAppointment.patientId) {
                 res.status(403).json({
                     status: "Forbidden",

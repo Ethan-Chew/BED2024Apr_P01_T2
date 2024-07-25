@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         // Get Timeslot Detail
-        const timeslotDetail = await fetch(`/api/availableSlot`, {
+        const timeslotDetail = await fetch(`/api/availableSlot/getByDateTime`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
+    let paymentMethods;
+    
     // Check if User is Logged in
     let accountId;
     if (sessionStorage.getItem('accountType') !== 'patient' && sessionStorage.getItem("accountId") === null) {
@@ -7,16 +9,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     accountId = sessionStorage.getItem('accountId');
 
-    // Get User Payment Methods
-    const paymentMethodsRequest = await fetch(`/api/patient/paymentMethod/${accountId}`);
-    if (paymentMethodsRequest.status === 401 || paymentMethodsRequest.status === 403) window.location.href = '../login.html';
-    const paymentMethodsJson = await paymentMethodsRequest.json();
-    const paymentMethods = paymentMethodsJson.paymentMethods;
-
-    if (paymentMethods.length > 0) {
-        document.getElementById("no-added-container").classList.add("hidden");
-    }
-    
     // Display Payment Methods
     function displayPaymentMethods(paymentMethods) {
         document.getElementById("added-method-container").innerHTML = ""; // Clear the Container
@@ -72,7 +64,21 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         }
     }
-    displayPaymentMethods(paymentMethods);
+
+    // Get User Payment Methods
+    try {
+        const paymentMethodsRequest = await fetch(`/api/patient/paymentMethods/${accountId}`);
+        if (paymentMethodsRequest.status === 401 || paymentMethodsRequest.status === 403) window.location.href = '../login.html';
+        const paymentMethodsJson = await paymentMethodsRequest.json();
+        paymentMethods = paymentMethodsJson.paymentMethods;
+        displayPaymentMethods(paymentMethods);
+
+        if (paymentMethods.length > 0) {
+            document.getElementById("no-added-container").classList.add("hidden");
+        }
+    } catch (err) {
+        console.error(err);
+    }
 
     // Handle Edit Form Functions
     /// Close Form Button

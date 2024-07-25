@@ -36,6 +36,8 @@ class PaymentMethod {
         const result = await request.query(query);
         connection.close();
 
+        if (result.recordset.length === 0) return null;
+
         return result.recordset.map((row) => new PaymentMethod(row.PaymentMethodId, row.PatientId, row.Merchant, row.CardName, row.CardNumber, row.CardExpiryDate));
     }
 
