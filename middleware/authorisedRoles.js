@@ -23,7 +23,7 @@ const authorisedRoles = {
     "/api/drugRequest/drugContribution": ["company"],
     "/api/drugContributionOrders/:companyId": ["company"],
     "/api/drugContributionOrders/:appointmentId/:drugName": ["company"],
-    "/api/drugInventoryRecord/:drugRecordId/:drugQuantity": ["company"],
+    "/api/drugInventoryRecord/:drugRecordId": ["company"],
     "/api/companyDrugInventory/": ["company"],
     "/api/companyDrugInventory/:companyId/:drugName": ["company"],
     "/api/companyDrugInventory/addDrug": ["company"],

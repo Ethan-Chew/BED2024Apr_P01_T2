@@ -114,7 +114,6 @@ document.addEventListener("DOMContentLoaded", async() => {
                         data-appointment-id="${order.appointmentId}"
                         data-drug-record-id="${order.drugRecordId}"
                         data-drug-name="${order.drugName}"
-                        data-drug-quantity="${order.drugQuantity}"
                         ${order.contributionStatus === 'Completed' ? 'disabled' : ''}>
                         Cancel
                         </button>
@@ -159,47 +158,92 @@ document.addEventListener("DOMContentLoaded", async() => {
                 const drugRecordIdAttr = button.getAttribute('data-drug-record-id');
                 const drugRecordId = drugRecordIdAttr !== 'null' ? drugRecordIdAttr : null;
                 const drugName = button.getAttribute('data-drug-name');
-                const drugQuantity = button.getAttribute('data-drug-quantity');
         
                 try {
-                    // Delete contribution record
-                    const response = await fetch(`/api/drugContributionOrders/${appointmentId}/${drugName}`, {
-                        method: 'DELETE'
+                    // Change drug request status
+                    const response2 = await fetch(`/api/drugRequest/${appointmentId}/${drugName}`, {
+                        method: 'PUT'
                     });
-        
-                    if (response.ok) {
-                        // Change drug request status
-                        const response2 = await fetch(`/api/drugRequest/${appointmentId}/${drugName}`, {
-                            method: 'PUT'
+                    console.log("DrugRecordId:", drugRecordId);
+                    console.log("AppointmentId:", appointmentId);
+                    console.log("DrugName:", drugName);
+                
+                    let response3Ok = true;
+                    if (drugRecordId !== null) { // Add drug quantity back to drug inventory
+                        console.log("DrugRecordId is not null ", drugRecordId);
+                        const response3 = await fetch(`/api/drugInventoryRecord/${drugRecordId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ appointmentId: appointmentId, drugName: drugName })
                         });
-                        let response3Ok = true;
-                        if (drugRecordId !== null) {// Add drug quantity back to drug inventory
-                            console.log("DrugRecordId is not null ", drugRecordId);
-                            const response3 = await fetch(`/api/drugInventoryRecord/${drugRecordId}/${drugQuantity}`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ appointmentId: appointmentId, drugName: drugName })
-                            });
-                            response3Ok = response3.ok;
-
-                            if (!response3Ok) {
-                                console.error('Failed to update drug inventory:', response3.statusText);
-                            }
+                        response3Ok = response3.ok;
+                
+                        if (!response3Ok) {
+                            console.error('Failed to update drug inventory:', response3.statusText);
                         }
-        
-                        if (response2.ok && response3Ok) {
+                    }
+                
+                    if (response2.ok && response3Ok) {
+                        // Delete contribution record
+                        const response = await fetch(`/api/drugContributionOrders/${appointmentId}/${drugName}`, {
+                            method: 'DELETE'
+                        });
+                
+                        if (response.ok) {
                             window.location.reload();
                         } else {
-                            console.error('Failed to process drug request:', response2.statusText, response3Ok ? '' : 'Drug inventory update failed');
+                            console.error('Failed to delete drug order:', response.statusText);
                         }
                     } else {
-                        console.error('Failed to delete drug order:', response.statusText);
+                        console.error('Failed to process drug request:', response2.statusText, response3Ok ? '' : 'Drug inventory update failed');
                     }
                 } catch (error) {
                     console.error('Error occurred while handling order:', error);
                 }
+                // try {
+                //     // Delete contribution record
+                //     const response = await fetch(`/api/drugContributionOrders/${appointmentId}/${drugName}`, {
+                //         method: 'DELETE'
+                //     });
+        
+                //     if (response.ok) {
+                //         // Change drug request status
+                //         const response2 = await fetch(`/api/drugRequest/${appointmentId}/${drugName}`, {
+                //             method: 'PUT'
+                //         });
+                //         console.log("DrugRecordId:", drugRecordId);
+                //         console.log("AppointmentId:", appointmentId);
+                //         console.log("DrugName:", drugName);
+                //         let response3Ok = true;
+                //         if (drugRecordId !== null) {// Add drug quantity back to drug inventory
+                //             console.log("DrugRecordId is not null ", drugRecordId);
+                //             const response3 = await fetch(`/api/drugInventoryRecord/${drugRecordId}`, {
+                //                 method: 'PUT',
+                //                 headers: {
+                //                     'Content-Type': 'application/json'
+                //                 },
+                //                 body: JSON.stringify({ appointmentId: appointmentId, drugName: drugName })
+                //             });
+                //             response3Ok = response3.ok;
+
+                //             if (!response3Ok) {
+                //                 console.error('Failed to update drug inventory:', response3.statusText);
+                //             }
+                //         }
+        
+                //         if (response2.ok && response3Ok) {
+                //             window.location.reload();
+                //         } else {
+                //             console.error('Failed to process drug request:', response2.statusText, response3Ok ? '' : 'Drug inventory update failed');
+                //         }
+                //     } else {
+                //         console.error('Failed to delete drug order:', response.statusText);
+                //     }
+                // } catch (error) {
+                //     console.error('Error occurred while handling order:', error);
+                // }
             });
         });
     };

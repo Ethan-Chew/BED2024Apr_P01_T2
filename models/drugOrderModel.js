@@ -94,11 +94,19 @@ class DrugOrder{
                     AppointmentId = @appointmentId
                     AND DrugName = @drugName
             `
+            console.log(drugRecordId, appointmentId, drugName);
             const getRequest = connection.request();
             getRequest.input('appointmentId', sql.VarChar, appointmentId);
             getRequest.input('drugName', sql.VarChar, drugName);
             const getResult = await getRequest.query(getQuery);
+
+            if (getResult.recordset.length === 0) {
+                throw new Error('No matching drug request contribution found');
+            }
+            console.log("Get Result: ", getResult);
+
             const drugQuantity = getResult.recordset[0].InventoryContribution;
+            console.log("DrugQuantity: ", drugQuantity);
 
             const query = `
                 UPDATE DrugInventoryRecord

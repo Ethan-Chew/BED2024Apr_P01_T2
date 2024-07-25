@@ -140,7 +140,7 @@ app.post("/api/drugRequest/drugContribution", authoriseJWT, validateAddRequestCo
 app.get("/api/drugContributionOrders/:companyId", authoriseJWT, validateCompanyId, drugOrderController.getAllDrugOrders);
 app.put("/api/drugContributionOrders/:appointmentId/:drugName", authoriseJWT, validateApptIdAndDrugName, drugOrderController.confirmDrugOrder);
 app.delete("/api/drugContributionOrders/:appointmentId/:drugName", authoriseJWT, validateApptIdAndDrugName, drugOrderController.deleteDrugOrder);
-app.put("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", authoriseJWT, validateReturnMedicine, drugOrderController.returnMedicine);
+app.put("/api/drugInventoryRecord/:drugRecordId", authoriseJWT, validateReturnMedicine, drugOrderController.returnMedicine);
 // Route for Drug Inventory (Company)
 app.get("/api/companyDrugInventory/", authoriseJWT, companyDrugInventoryController.getDrugName);
 app.get("/api/companyDrugInventory/:companyId/:drugName", authoriseJWT, validateCompanyIdAndDrugName, companyDrugInventoryController.getInventoryByDrugName);
