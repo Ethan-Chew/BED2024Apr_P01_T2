@@ -84,7 +84,7 @@ app.put("/api/patient/paymentMethod/:methodId", authoriseJWT, validatePaymentMet
 app.get("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.getDigitalWallet);
 app.post("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.createDigitalWallet);
 app.delete("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.deleteDigitalWallet);
-app.put("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.updateDigitalWallet);
+app.put("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.updateDigitalWalletAmount);
 
 // Routes for Patient's Digital Wallet History
 app.get("/api/patient/:patientId/digitalWalletHistory", authoriseJWT, digitalWalletHistoryController.getDigitalWalletHistory);

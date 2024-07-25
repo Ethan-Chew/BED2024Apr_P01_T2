@@ -88,7 +88,7 @@ const createDigitalWallet = async (req, res) => {
 }
 
 // Created By: Ethan Chew
-const updateDigitalWallet = async (req, res) => {
+const updateDigitalWalletAmount = async (req, res) => {
     try {
         const { patientId } = req.params;
         const { updateAmount } = req.body;
@@ -111,8 +111,7 @@ const updateDigitalWallet = async (req, res) => {
         }
 
         // Update the Balance
-        const updatedBalance = existingWallet.balance + updateAmount;
-        const updatedWallet = await DigitalWallet.updateDigitalWallet(patientId, updatedBalance);
+        const updatedWallet = await DigitalWallet.updateDigitalWallet(patientId, updateAmount);
 
         res.status(200).json({
             status: "Success",
@@ -177,6 +176,6 @@ const deleteDigitalWallet = async (req, res) => {
 module.exports = {
     getDigitalWallet,
     createDigitalWallet,
-    updateDigitalWallet,
+    updateDigitalWalletAmount,
     deleteDigitalWallet,
 }

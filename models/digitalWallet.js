@@ -69,13 +69,13 @@ class DigitalWallet {
 
         const query = `
             UPDATE DigitalWallet
-            SET WalletBalance = @WalletBalance
+            SET WalletBalance = WalletBalance + @UpdateBalance
             WHERE PatientId = @PatientId
         `;
 
         const request = connection.request();
         request.input('PatientId', patientId);
-        request.input('WalletBalance', updatedBalance);
+        request.input('UpdateBalance', updatedBalance);
 
         const updateRequest = await request.query(query);
         connection.close();
