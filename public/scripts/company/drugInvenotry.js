@@ -55,9 +55,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             drugs.forEach(drug => {
                 const drugId = drug.replace(/ /g, '-');
                 const drugItem = document.createElement('div');
-                drugItem.className = 'w-full text-center';
+                drugItem.className = 'w-full text-center flex flex-col items-center';
 
                 drugItem.innerHTML = `
+                    <p class="w-full bg-black h-px m-1"> </p>
                     <input class="peer/${drugId} appearance-none" type="radio" id="${drugId}" name="medicine" value="${drug}">
                     <label class="peer-checked/${drugId}:bg-black peer-checked/${drugId}:text-white" for="${drugId}">${drug}</label>
                 `;

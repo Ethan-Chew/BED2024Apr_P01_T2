@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                 <th class="px-4 py-2 border border-gray-400">Entry ID</th>
                 <th class="px-4 py-2 border border-gray-400">Date of Entry</th>
                 <th class="px-4 py-2 border border-gray-400">Medicine</th>
-                <th class="px-4 py-2 border border-gray-400">Quantity</th>
+                <th class="px-4 py-2 border border-gray-400">Avaialbe/Total Quantity</th>
                 <th class="px-4 py-2 border border-gray-400">Medicine Expiry Date</th>
                 <th class="px-4 py-2 border border-gray-400">Status</th>
                 <th class="px-4 py-2 border border-gray-400"> </th>
@@ -55,22 +55,26 @@ document.addEventListener("DOMContentLoaded", async() => {
 
             const diffInMonths = Math.floor((new Date(expiryDate) - todayDate) / (1000 * 60 * 60 * 24 * 30));
             let status;
+            let textColor;
             if (diffInMonths < 3) {
                 status = "Warning";
+                textColor = "text-yellow-300";
             } else if (new Date(expiryDate) < todayDate) {
                 status = "Bad";
+                textColor = "text-red-400";
             } else {
                 status = "Good";
+                textColor = "text-green-400";
             }
 
             tableItem.innerHTML = `
-                <tr class="h-12">
+                <tr class="h-12 text-center">
                     <td class="px-4 py-2 border border-gray-400">${record.drugRecordId}</td>
                     <td class="px-4 py-2 border border-gray-400">${entryDate}</td>
                     <td class="px-4 py-2 border border-gray-400">${record.drugName}</td>
                     <td class="px-4 py-2 border border-gray-400">${record.availableDrug}/${record.totalDrug}</td>
                     <td class="px-4 py-2 border border-gray-400">${expiryDate}</td>
-                    <td class="px-4 py-2 border border-gray-400">${status}</td>
+                    <td class="px-4 py-2 border border-gray-400 font-bold ${textColor}">${status}</td>
                     <td class="px-4 py-2 border border-gray-400 text-center">
                     <button class="bg-btnprimary text-white px-6 py-2 rounded-2xl clear-stock" 
                     data-drug-record-id="${record.drugRecordId}"

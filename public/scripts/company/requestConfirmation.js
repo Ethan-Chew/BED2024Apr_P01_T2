@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", async() => {
     const drugName = urlParams.get('drugName');
     const companyId = sessionStorage.getItem('accountId');
 
+    document.getElementById('drug-name').innerHTML = `Drug Name: <span class="underline">${drugName}</span>`;
+
     // Get Companay Name
     const fetchCompany = await fetch(`/api/company/${companyId}`, {
         method: 'GET'
