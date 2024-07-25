@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", async() => {
     const renderDrugOrders = (orders) => {
         requestList.innerHTML = '';
         orders.forEach((order) => {
-            console.log("Order: ", order);
             const requestItem = document.createElement('div');
             requestItem.className = 'w-full bg-gray-200 px-6 py-4 text-2xl rounded-3xl flex flex-row gap-5 align-center items-center justify-between';
             

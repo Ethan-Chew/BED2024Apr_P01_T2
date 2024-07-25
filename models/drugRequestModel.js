@@ -37,7 +37,6 @@ class DrugRequest {
     
             const request = connection.request();
             const result = await request.query(query);
-            //console.log('SQL query result:', result); // Debug log
             connection.close();
     
             if (result.recordset.length == 0) return null;

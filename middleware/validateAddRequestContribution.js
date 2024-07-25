@@ -1,9 +1,6 @@
 const Joi = require("joi").extend(require('@joi/date'));
 
 const validateAddRequestContribution = (req, res, next) => {
-    console.log('Request body:', req.body);
-
-
     const schema = Joi.object({
         appointmentId: Joi.string().required(),
         drugName: Joi.string().required(),

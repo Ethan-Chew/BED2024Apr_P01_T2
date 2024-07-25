@@ -48,9 +48,6 @@ const returnMedicine = async (req, res) =>{
     try {
         const { drugRecordId } = req.params;
         const { appointmentId, drugName } = req.body;
-
-        console.log("Request Params:", req.params);
-        console.log("Request Body:", req.body);
         
         // Validate input
         if (!drugRecordId || !appointmentId || !drugName) {
