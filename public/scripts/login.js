@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     document.getElementById("popup").addEventListener("submit", async function (e) {
                         e.preventDefault();
 
+                        document.getElementById('error').style.display = 'none';
+                        document.getElementById('success').style.display = 'none';
+                        document.getElementById('errorVerify').style.display = 'none';
+                        document.getElementById('successVerify').style.display = 'none';
+
                         response = await fetch(`/api/verify2FA/${sessionStorage.getItem('accountId')}`, {
                             method: 'POST',
                             headers: {
@@ -58,7 +63,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             },
                         });
                         if (response.status === 200) {
+                            document.getElementById('successVerify').style.display = 'flex';
                             window.location.href = '/admin/home.html';
+                        } else {
+                            document.getElementById('errorVerify').style.display = 'flex';
                         }
                     });
 

@@ -46,6 +46,19 @@
                       </button>
                     </div>
                   </div>
+                  <div id="errorVerify" style="display:none" class="space-y-2 bg-red-100 border border-red-200 p-4 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.857L1.821 18a1.361 1.361 0 0 0 1.179 2h18a1.361 1.361 0 0 0 1.179-2L13.71 3.857a1.361 1.361 0 0 0-2.418 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> 
+                    <div class="font-bold">Error</div>
+                    <div>The two-factor authentication code you provided is not valid. Please try again.</div>
+                </div>
+                    <div id="successVerify" style="display:none" class="space-y-2 bg-green-100 border border-green-200 p-4 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11"></path></svg> 
+                    <div class="font-bold">Two-Factor Authentication Successfully Enabled!</div>
+                <div>
+                    Your account is now protected by 2FA. You will need to use your authenticator app in
+                    addition to your password to sign in.
+                </div>
+                </div>
                 </div>
               </div>
             </div>
