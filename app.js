@@ -86,7 +86,7 @@ app.put("/api/patient/paymentMethod/:methodId", authoriseJWT, validatePaymentMet
 app.get("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.getDigitalWallet);
 app.post("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.createDigitalWallet);
 app.delete("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.deleteDigitalWallet);
-app.put("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.updateDigitalWallet);
+app.put("/api/patient/:patientId/digitalWallet", authoriseJWT, digitalWalletController.updateDigitalWalletAmount);
 
 // Routes for Patient's Digital Wallet History
 app.get("/api/patient/:patientId/digitalWalletHistory", authoriseJWT, digitalWalletHistoryController.getDigitalWalletHistory);
@@ -140,7 +140,7 @@ app.post("/api/drugRequest/drugContribution", authoriseJWT, validateAddRequestCo
 app.get("/api/drugContributionOrders/:companyId", authoriseJWT, validateCompanyId, drugOrderController.getAllDrugOrders);
 app.put("/api/drugContributionOrders/:appointmentId/:drugName", authoriseJWT, validateApptIdAndDrugName, drugOrderController.confirmDrugOrder);
 app.delete("/api/drugContributionOrders/:appointmentId/:drugName", authoriseJWT, validateApptIdAndDrugName, drugOrderController.deleteDrugOrder);
-app.put("/api/drugInventoryRecord/:drugRecordId/:drugQuantity", authoriseJWT, validateReturnMedicine, drugOrderController.returnMedicine);
+app.put("/api/drugInventoryRecord/:drugRecordId", authoriseJWT, validateReturnMedicine, drugOrderController.returnMedicine);
 // Route for Drug Inventory (Company)
 app.get("/api/companyDrugInventory/", authoriseJWT, companyDrugInventoryController.getDrugName);
 app.get("/api/companyDrugInventory/:companyId/:drugName", authoriseJWT, validateCompanyIdAndDrugName, companyDrugInventoryController.getInventoryByDrugName);

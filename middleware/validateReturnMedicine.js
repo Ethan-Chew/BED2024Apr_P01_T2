@@ -1,17 +1,24 @@
 const Joi = require("joi");
 
 const validateReturnMedicine = (req, res, next) => {
-    const schema = Joi.object({
-        drugRecordId: Joi.string().required(),
+    const paramsSchema = Joi.object({
+        drugRecordId: Joi.string().required()
+    });
+
+    const bodySchema = Joi.object({
         appointmentId: Joi.string().required(),
         drugName: Joi.string().required()
     });
 
-    const validation = schema.validate(req.params, req.body, { abortEarly: false });
+    const paramsValidation = paramsSchema.validate(req.params, { abortEarly: false });
+    const bodyValidation = bodySchema.validate(req.body, { abortEarly: false });
 
-    if (validation.error) {
-        const error = new Joi.ValidationError(validation.error.details);
-        res.status(400).json({ message: "Validation error", error: error.message });
+    if (paramsValidation.error || bodyValidation.error) {
+        const errors = [
+            (paramsValidation.error ? paramsValidation.error.details : []),
+            (bodyValidation.error ? bodyValidation.error.details : [])
+        ];
+        res.status(400).json({ message: "Validation error", error: errors.map(e => e.message).join(", ") });
         return;
     }
 
