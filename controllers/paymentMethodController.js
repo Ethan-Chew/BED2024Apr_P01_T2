@@ -145,15 +145,7 @@ const updatePaymentMethod = async (req, res) => {
 
         const { merchant, cardName, cardNumber, cardExpiryDate } = req.body;
 
-        if (!patientId || !merchant || !cardName || !cardNumber || !methodId || !cardExpiryDate) {
-            res.status(400).json({
-                status: "Error",
-                message: "Method Id, Patient ID, Merchant, Card Name, Card Number, and Card Expiry Date are required."
-            });
-            return;
-        }
-        
-        const editRequest = await PaymentMethod.updatePaymentMethod(methodId, patientId, merchant, cardName, cardNumber, cardExpiryDate);
+        const editRequest = await PaymentMethod.updatePaymentMethod(methodId, merchant, cardName, cardNumber, cardExpiryDate);
 
         res.status(200).json({
             status: "Success",

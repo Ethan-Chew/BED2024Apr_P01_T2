@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     /// Submit Form Button
     document.getElementById("editPaymentForm").addEventListener("submit", async (e) => {
         e.preventDefault();
-
+        console.log(document.getElementById("editPaymentMethodId").value)
         // Validate User Input
         const userInput = {
             id: document.getElementById("editPaymentMethodId").value,
@@ -154,8 +154,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         if (createRequest.status === 201) {
+            const createRequestJson = await createRequest.json();
             alert("Payment Method Created Successfully");
-            paymentMethods.push(userInput);
+            paymentMethods.push(createRequestJson.paymentMethod);
+            
             displayPaymentMethods(paymentMethods);
 
             // Clear Form

@@ -121,7 +121,7 @@ class PaymentMethod {
     }
 
     // Created by: Ethan Chew
-    static async updatePaymentMethod(id, patientId, merchant, cardName, cardNumber, cardExpiryDate) {
+    static async updatePaymentMethod(id, merchant, cardName, cardNumber, cardExpiryDate) {
         const connection = await sql.connect(dbConfig);
 
         const query = `
@@ -131,7 +131,6 @@ class PaymentMethod {
         `;
         const request = connection.request();
         request.input('PaymentMethodId', id);
-        request.input('PatientId', patientId);
         request.input('Merchant', merchant);
         request.input('CardName', cardName);
         request.input('CardNumber', cardNumber);
@@ -140,7 +139,7 @@ class PaymentMethod {
         await request.query(query);
         connection.close();
 
-        return new PaymentMethod(id, patientId, merchant, cardName, cardNumber, cardExpiryDate);
+        return await this.getPaymentMethodById(id);
     }
 }
 
