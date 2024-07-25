@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
             `;
             const tempId = paymentRequest.PaymentRequestId;
             const element = document.getElementById(tempId);
-            element.addEventListener("click", pay(tempId));
+            element.addEventListener("click", () => pay(tempId));
         }
     } else {
         document.getElementById("paymentRequests").innerHTML += ``
