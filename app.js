@@ -26,6 +26,8 @@ const digitalWalletController = require("./controllers/digitalWalletController")
 const digitalWalletHistoryController = require("./controllers/digitalWalletHistoryController");
 const drugTopup = require("./controllers/drugTopupController");
 const notificationsController = require("./controllers/notificationsController");
+const twoFAController = require("./controllers/2FAController");
+
 
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
@@ -168,8 +170,9 @@ app.put("/api/availableSlot/doctor/:slotId", authoriseJWT, availableSlotControll
 app.post("api/availableSlot", authoriseJWT, availableSlotController.createAvailableSlot);
 
 // Route for Payment Request
-app.get("/api/paymentRequests", authoriseJWT, paymentRequestController.getPaymentRequestsByApprovedStatus);
+app.get("/api/paymentRequests", paymentRequestController.getPaymentRequestsByApprovedStatus);
 app.get("/api/paymentRequest/:appointmentId", authoriseJWT, paymentRequestController.getPaymentRequestByAppointmentId);
+app.put("/api/paymentRequest/pay", paymentRequestController.payRequestByRequestId);
 app.put("/api/paymentRequest/approve/:appointmentId", authoriseJWT, paymentRequestController.approvePaymentRequestByAppointmentId);
 app.put("/api/paymentRequest/reject/:appointmentId", authoriseJWT, paymentRequestController.rejectPaymentRequestByAppointmentId);
 app.post("/api/paymentRequest", authoriseJWT, validatePaymentRequest, paymentRequestController.createPaymentRequest);
@@ -179,8 +182,12 @@ app.delete("/api/paymentRequest/:id", authoriseJWT, paymentRequestController.can
 app.get("/api/notifications/:accountId", authoriseJWT, notificationsController.receiveNotifications);
 app.put("/api/notification/:NotificationId", authoriseJWT, notificationsController.readNotification);
 app.put("/api/notifications/:accountId", authoriseJWT, notificationsController.readAllNotificationsByAccountId);
-app.post("/api/notification",authoriseJWT, validateNotification, notificationsController.sendNotification);
+app.post("/api/notification", authoriseJWT, validateNotification, notificationsController.sendNotification);
 
+// Route for 2FA
+app.get('/api/generateQRCode', twoFAController.generateQRCode)
+app.get('/api/getAuth/:accountId', twoFAController.getAuth)
+app.post('/api/verify2FA/:accountId', twoFAController.verify2FA)
 
 // Initialise Server
 app.listen(3000, async () => {

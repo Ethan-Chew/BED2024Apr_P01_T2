@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', async function () {
     // Verify User Logged In
-    
+
     const accountId = sessionStorage.getItem("accountId");
     if (!accountId) window.location.href = "../login.html";
 
 
     // Fetch Patient's Profile
-    const fetchPatientDetails = await fetch (`/api/patient/${accountId}`, {
+    const fetchPatientDetails = await fetch(`/api/patient/${accountId}`, {
         method: 'GET'
     })
 
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // fill in patient's name
     const patientDetailsJson = await fetchPatientDetails.json();
     console.log(patientDetailsJson);
-    document.getElementById("accountName").innerText = patientDetailsJson.patient.senderName;
+    document.getElementById("accountName").innerText = patientDetailsJson.patient.name;
 
 
     // populate notifications

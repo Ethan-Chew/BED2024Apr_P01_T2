@@ -4,7 +4,6 @@ const notification = require("../models/notifications");
 const sendNotification = async (req, res) => {
     const { senderId, receiverId, message } = req.body;
 
-    /*
     if (req.user.id !== senderId) {
         res.status(403).json({
             status: "Forbidden",
@@ -12,7 +11,7 @@ const sendNotification = async (req, res) => {
         });
         return;
     }
-    */
+
 
     try {
         const createNotification = await notification.createNotification(senderId, receiverId, message);
@@ -40,7 +39,7 @@ const sendNotification = async (req, res) => {
 
 // Emmanuel
 const receiveNotifications = async (req, res) => {
-    const accountId  = req.params.accountId;
+    const accountId = req.params.accountId;
 
     if (!accountId || typeof accountId !== 'string') {
         console.log("jdsiofkjdlkfjd;lasfs")
@@ -66,15 +65,16 @@ const receiveNotifications = async (req, res) => {
                 message: `Failed to get any notifications, notifications do not exist for this user`
             });
             return;
-        }
+        } else {
+            const updateNotifications = await notification.updateManyNotificationsByReceiverId(accountId, status);
+            console.log(updateNotifications);
 
-        const updateNotifications = await notification.updateManyNotificationsByReceiverId(accountId, status);
-        console.log(updateNotifications);
-        if (!updateNotifications) {
-            res.status(404).json({
-                message: `Failed to update the notifications as received`
-            });
-            return;
+            if (!updateNotifications) {
+                res.status(404).json({
+                    message: `Failed to update the notifications as received`
+                });
+                return;
+            }
         }
 
         res.status(201).json({

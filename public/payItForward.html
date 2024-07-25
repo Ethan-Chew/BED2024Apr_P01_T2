@@ -30,25 +30,14 @@
                 </p>
                 </div>
             </div>
-            <div class="flex-grow flex items-center justify-center">
-                <div class="w-1/2 flex flex-col items-center justify-center gap-3">
-                    <h2 class="text-4xl font-bold">Payment requests</h2>
-                    <div class="flex flex-row gap-5 w-full" id="paymentRequests">
-                        <div class="flex-grow bg-white shadow-lg rounded-lg max-w-6xl p-6 m-4" id="appt-${paymentRequest.AppointmentId}">
-                            <div class="flex flex-col">
-                                <a class="text-2xl"><span class="font-bold">${new Date(paymentRequest.SlotDate).toISOString().split("T")[0]}</span> | ${paymentRequest.SlotTime}</a>
-                                <a class="text-2xl"><span class="font-bold">
-                                <a class="text-xl">${paymentRequest.Reason}</a>
-                            </div>
-        
-                            <div class="flex space-x-4">
-                                <button class="flex-1 py-2 bg-red-300 rounded-lg hover:bg-red-400" id="appt-cancel-${paymentRequest.AppointmentId}">Cancel</button>
-                                <button class="flex-1 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400" id="appt-reschedule-${paymentRequest.AppointmentId}">Reschedule</button>
-                                <button class="flex-1 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400" id="appt-view-${paymentRequest.AppointmentId}">View</button>
-                            </div>
-                        </div>
-                    </div>
+            <div class ="flex items-center justify-center">
+                <h2 class="text-4xl font-bold">Payment requests</h2>
+            </div>
+            
+            <div class=" flex items-center justify-center">
+                <div class="w-1/2 flex flex-row items-center justify-center gap-3" id="paymentRequests">
 
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,4 +45,24 @@
 
     <script src="scripts/tailwind.config.js"></script>
     <script src="scripts/payItForward.js"></script>
+    <script>
+        // pay payment request
+        async function pay(id) {
+            const elementid = "pr-" + id + "-amount";
+            const amount = document.getElementById(elementid).value;
+
+            const payPaymentRequest = await fetch(`/api/paymentRequest/pay`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, amount }),
+            });
+
+            const response = await payPaymentRequest;
+            if (response.status === 200) {
+                console.log('payment successful');
+            }
+        }
+    </script>
 </html>

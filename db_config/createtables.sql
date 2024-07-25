@@ -26,6 +26,15 @@ CREATE TABLE Staff (
 	CONSTRAINT FK_Staff FOREIGN KEY (StaffId) REFERENCES Account(AccountId)
 );
 
+CREATE TABLE AccountSecret (
+	AccountId VARCHAR(7) NOT NULL,
+	SecretKey VARCHAR(255) NULL,
+
+	CONSTRAINT PK_AccountSecret PRIMARY KEY (AccountId),
+	CONSTRAINT FK_AccountSecret_Account FOREIGN KEY (AccountId) REFERENCES Account(AccountId)
+
+);
+
 CREATE TABLE Patient (
 	PatientId VARCHAR(7) NOT NULL,
 	KnownAllergies VARCHAR(255) NOT NULL,
@@ -148,6 +157,7 @@ CREATE TABLE PaymentRequest (
 	PaymentRequestMessage VARCHAR(255) NOT NULL,
 	PaymentRequestCreatedDate DATE NOT NULL,
 	PaymentRequestStatus VARCHAR(10) NOT NULL CHECK (PaymentRequestStatus IN ('Pending', 'Approved', 'Rejected')),
+	PaymentPaidAmount MONEY NULL,
 	
 	CONSTRAINT PK_PaymentRequest PRIMARY KEY (PaymentRequestId),
 	CONSTRAINT FK_PaymentRequest_Appointment FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId)

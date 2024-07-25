@@ -106,8 +106,10 @@ INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, Consultati
 ('APP0006', 'ACC0005', 'ACC0008', 'SLO0006', NULL, 'Follow-up Appointment', NULL),
 ('APP0007', 'ACC0005', 'ACC0009', 'SLO0011', NULL, 'Follow-up Appointment', NULL);
 
-INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus) VALUES
-('REQ0001', 'APP0001', 'Not enough money to pay for this appointment', '2024-05-20', 'Pending');
+INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus, PaymentPaidAmount) VALUES
+('REQ0001', 'APP0001', 'Not enough money to pay for this appointment', '2024-05-20', 'Pending', 0),
+('REQ0002', 'APP0004', 'Not enough money to pay for this appointment', '2024-05-20', 'Approved', 0),
+('REQ0003', 'APP0002', 'Not enough money to pay for this appointment', '2024-05-20', 'Approved', 0);
 
 INSERT INTO Payments (PaymentId, AppointmentId, PaymentStatus, PaymentType) VALUES
 ('PAY0001', 'APP0001', 'Unpaid', NULL),

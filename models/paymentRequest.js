@@ -2,13 +2,13 @@ const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
 class PaymentRequest {
-    constructor(id, appointmentId, message, createdDate, status) {
+    constructor(id, appointmentId, message, createdDate, status, amount) {
         this.id = id;
         this.appointmentId = appointmentId;
         this.message = message;
         this.createdDate = createdDate;
         this.status = status;
-
+        this.paidAmount = amount;
     }
 
     // Emmanuel
@@ -116,9 +116,10 @@ class PaymentRequest {
     // Emmanuel
     static async getPaymentRequestsByApprovedStatus() {
         const query = ` 
-            SELECT *
-            FROM PaymentRequest
-            WHERE PaymentRequestStatus = @Status
+            SELECT pr.*, a.ConsultationCost
+            FROM PaymentRequest pr
+            INNER JOIN Appointments a ON  pr.AppointmentId = a.AppointmentId
+            WHERE pr.PaymentRequestStatus = 'Approved' AND a.ConsultationCost > pr.PaymentPaidAmount;
         `;
 
 
@@ -132,6 +133,7 @@ class PaymentRequest {
 
         if (result.recordset.length == 0) return null;
 
+        // console.log(result.recordset);
         return result.recordset;
     }
 
@@ -182,8 +184,8 @@ class PaymentRequest {
     // Emmanuel
     static async updatePaymentRequestStatusByAppointmentId(apptId, status) {
         const query = `
-            UPDATE PaymentRequest SET PaymentStatus = '@Status'
-            WHERE AppointmentId = '@AppointmentId'
+            UPDATE PaymentRequest SET PaymentRequestStatus = @Status, PaymentPaidAmount = 0
+            WHERE AppointmentId = @AppointmentId;
         `;
 
         const request = connection.request();
@@ -191,7 +193,26 @@ class PaymentRequest {
         request.input('AppointmentId', apptId);
 
 
-        await request.query(query);
+        const result = await request.query(query);
+        connection.close();
+
+        return result.rowsAffected[0] === 1;
+    }
+
+    // Emmanuel
+    static async payPaymentRequestByRequestId(paymentRequestId, amount) {
+        const query = `
+            UPDATE PaymentRequest SET PaymentPaidAmount = @Amount + PaymentPaidAmount
+            WHERE PaymentRequestId = @PaymentRequestId
+        `;
+
+        const connection = await sql.connect(dbConfig);
+
+        const request = connection.request();
+        request.input('Amount', amount)
+        request.input('PaymentRequestId', paymentRequestId);
+
+        const result = await request.query(query);
         connection.close();
 
         return result.rowsAffected[0] === 1;
