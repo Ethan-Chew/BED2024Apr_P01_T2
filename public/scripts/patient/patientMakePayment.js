@@ -183,6 +183,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById('appointment-date').value = appointment.slotDate;
             document.getElementById('appointment-time').value = appointment.slotTime;
             document.getElementById('appointment-id').value = appointment.appointmentId;
+            document.getElementById('appointment-i').value = i;
 
             // Display Payment Confirmation Popup
             document.getElementById('make-payment-popup').classList.remove('hidden');
@@ -327,7 +328,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById('make-payment-popup').classList.add('hidden');
 
         // Remove from Screen
-        document.getElementById(`payment-${i}-container`).remove();
-        paymentMethods.splice(i, 1);
+        const methodId = document.getElementById("appointment-i").value;
+        document.getElementById(`payment-${methodId}-container`).remove();
+        paymentMethods.splice(methodId, 1);
+
+        if (paymentMethods.length === 0) {
+            document.getElementById('no-outstanding').classList.remove('hidden');
+        }
     });
 });

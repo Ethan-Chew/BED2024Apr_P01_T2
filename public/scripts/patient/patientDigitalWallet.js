@@ -93,6 +93,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById("addfunds-form").addEventListener("submit", async function (e) {
             e.preventDefault();
 
+            // Simple Length Validation for Credit Card
+            const cardNumber = String(document.getElementById("cardNumber").value);
+            if (cardNumber.length !== 16) {
+                alert("Please enter a valid 16-digit card number");
+                return;
+            }
+
             const amount = parseFloat(document.getElementById("addfunds-amount").value);
             if (isNaN(amount) || amount <= 0) {
                 alert("Please enter a valid amount to add to your wallet");
