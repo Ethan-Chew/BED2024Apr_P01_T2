@@ -132,7 +132,7 @@ const approvePaymentRequestByAppointmentId = async (req, res) => {
             return res.status(200).json({
                 status: "Success",
                 message: "Payment request approved successfuly",
-                paymentRequest: getRequest
+                paymentRequest: approveRequest
             })
         } else {
             return res.status(404).json({
@@ -163,7 +163,7 @@ const rejectPaymentRequestByAppointmentId = async (req, res) => {
             return res.status(200).json({
                 status: "Success",
                 message: "Payment request rejected successfuly",
-                paymentRequest: getRequest
+                paymentRequest: rejectRequest
             })
         } else {
             return res.status(404).json({

@@ -85,12 +85,12 @@ class Notifications {
 
         const query = `
             UPDATE Notification SET ReadStatus = @Status
-            WHERE NotificationId =  @notificationId
+            WHERE NotificationId =  @NotificationId
         `;
 
         const request = connection.request();
         request.input('NotificationId', notificationId);
-        request.input('ReadStatus', status);
+        request.input('Status', status);
 
         const result = await request.query(query);
         connection.close();
@@ -104,7 +104,7 @@ class Notifications {
         console.log("status: ", status);
         console.log("receiver: ", receiverId);
 
-        
+
 
         const query = `
             UPDATE Notification SET ReadStatus = @Status
@@ -118,10 +118,10 @@ class Notifications {
         const result = await request.query(query);
         connection.close();
 
-        console.log("result.rowsAffected[0] === 1: ", result.rowsAffected[0] === 1 );
-        console.log("result.rowsAffected === 1: ", result.rowsAffected === 1 );
-        console.log("result.rowsAffected[0] >= 1: ", result.rowsAffected[0] >= 1 );
-        console.log("result.rowsAffected >= 1: ", result.rowsAffected >= 1 );
+        console.log("result.rowsAffected[0] === 1: ", result.rowsAffected[0] === 1);
+        console.log("result.rowsAffected === 1: ", result.rowsAffected === 1);
+        console.log("result.rowsAffected[0] >= 1: ", result.rowsAffected[0] >= 1);
+        console.log("result.rowsAffected >= 1: ", result.rowsAffected >= 1);
 
         return result.rowsAffected[0] >= 1;
     }

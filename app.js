@@ -180,7 +180,7 @@ app.delete("/api/paymentRequest/:id", authoriseJWT, paymentRequestController.can
 
 // Route for Notifications
 app.get("/api/notifications/:accountId", authoriseJWT, notificationsController.receiveNotifications);
-app.put("/api/notification/:NotificationId", authoriseJWT, notificationsController.readNotification);
+app.put("/api/notification/:notificationId", authoriseJWT, notificationsController.readNotification);
 app.put("/api/notifications/:accountId", authoriseJWT, notificationsController.readAllNotificationsByAccountId);
 app.post("/api/notification", authoriseJWT, validateNotification, notificationsController.sendNotification);
 
