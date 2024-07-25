@@ -35,7 +35,6 @@ const verify2FA = async (req, res) => {
     
     try {
       const response = await twoFAModel.AccountSecret.verify2FA(accountId, token);
-      console.log(response);
       if (response === false) {
         res.status(404).send(false);
       } else {
