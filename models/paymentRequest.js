@@ -119,7 +119,8 @@ class PaymentRequest {
             SELECT pr.*, a.ConsultationCost
             FROM PaymentRequest pr
             INNER JOIN Appointments a ON  pr.AppointmentId = a.AppointmentId
-            WHERE pr.PaymentRequestStatus = 'Approved' AND a.ConsultationCost > pr.PaymentPaidAmount;
+            INNER JOIN PrescribedMedication pm ON pr.AppointmentId = pm.AppointmentId
+            WHERE pr.PaymentRequestStatus = 'Approved' AND a.ConsultationCost > pr.PaymentPaidAmount AND pm.DrugRequest = 'Cancelled';
         `;
 
 
@@ -217,6 +218,24 @@ class PaymentRequest {
         connection.close();
 
         return result.rowsAffected[0] === 1;
+    }
+
+    static async getPaymentRequestsBeforeToday() {
+        const query = ` 
+        SELECT *
+        FROM PaymentRequest
+        WHERE PaymentRequestCreatedDate <= DATEADD(day, -3,  GETDATE());
+    `;
+
+        const connection = await sql.connect(dbConfig);
+        const request = connection.request();
+
+        const result = await request.query(query);
+        connection.close();
+
+        if (result.recordset.length == 0) return null;
+
+        return result.recordset;
     }
 }
 

@@ -1,5 +1,5 @@
 const PaymentRequest = require('../models/paymentRequest');
-
+const PrescribedMedication = require('../models/prescribedMedication')
 // Emmanuel
 const createPaymentRequest = async (req, res) => {
     try {
@@ -121,12 +121,14 @@ const approvePaymentRequestByAppointmentId = async (req, res) => {
     try {
         const { appointmentId } = req.params;
         const status = 'Approved';
+        const pmStatus = 'Pending';
 
         if (appointmentId === undefined) {
             return res.status(400).json({ message: 'Appointment Id is required' });
         }
 
         const approveRequest = await PaymentRequest.updatePaymentRequestStatusByAppointmentId(appointmentId, status);
+        const updatedPrescribedMed = await PrescribedMedication.updatePrescribedMedicationDrugRequestByAppointmentId(appointmentId, pmStatus);
 
         if (approveRequest) {
             return res.status(200).json({
@@ -152,12 +154,14 @@ const rejectPaymentRequestByAppointmentId = async (req, res) => {
     try {
         const { appointmentId } = req.params;
         const status = 'Rejected';
+        const pmStatus = 'Cancelled';
 
         if (appointmentId === undefined) {
             return res.status(400).json({ message: 'Appointment Id is required' });
         }
 
         const rejectRequest = await PaymentRequest.updatePaymentRequestStatusByAppointmentId(appointmentId, status);
+        const updatedPrescribedMed = await PrescribedMedication.updatePrescribedMedicationDrugRequestByAppointmentId(appointmentId, pmStatus)
 
         if (rejectRequest) {
             return res.status(200).json({
@@ -191,6 +195,30 @@ const payRequestByRequestId = async (req, res) => {
         const payPaymentRequest = PaymentRequest.payPaymentRequestByRequestId(paymentRequestId, amount);
 
         if (payPaymentRequest) {
+
+            return res.status(200).json({
+                status: "Success",
+                message: "Payment request paid successfuly",
+            })
+        } else {
+            return res.status(404).json({
+                status: "Failed",
+                message: "failed to pay as payment request does not exist"
+            })
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+// Emmanuel
+const checkPaymentRequest = async (req, res) => {
+    try {
+        const paymentRequests = PaymentRequest.getPaymentRequestsByDate(date);
+
+        if (paymentRequests) {
 
             return res.status(200).json({
                 status: "Success",
