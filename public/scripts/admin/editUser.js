@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function fetchAccountData() {
         const urlParams = new URLSearchParams(window.location.search);
         const accountId = urlParams.get('id');
-        const response = await fetch(`/api/patient/${accountId}`);
+        const response = await fetch(`/api/patient/admin/${accountId}`);
         return await response.json();
     }
 

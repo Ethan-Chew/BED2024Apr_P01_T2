@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="flex space-x-2">
                 <a class="p-3 bg-white rounded-lg shadow hover:bg-gray-300" href="editDoctor.html?id=${doctor.doctorId}">Edit Details</a>
-                <button class="p-3 bg-white rounded-lg shadow hover:bg-gray-300">Remove Doctor</button>
             </div>
         `;
         

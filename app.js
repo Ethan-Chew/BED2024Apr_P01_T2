@@ -70,10 +70,14 @@ app.post("/api/auth/login", accountsController.authLoginAccount);
 
 /// Route for Patient Account
 app.get("/api/patient/:patientId", authoriseJWT, accountsController.getPatientById);
+app.get("/api/patient/admin/:patientId", authoriseJWT, accountsController.getPatientByIdAdmin);
 app.get("/api/patients/", authoriseJWT, accountsController.getAllPatient);
 app.put("/api/patient/:patientId", authoriseJWT, validatePatient, accountsController.updatePatientById);
 app.post("/api/patient", validatePatient, accountsController.authCreatePatient);
 app.delete("/api/patient/:patientId", authoriseJWT, accountsController.deletePatientById);
+app.delete("/api/patient/admin/:patientId", authoriseJWT, accountsController.deletePatientByIdAdmin);
+app.put("/api/patient/approve/:patientId", authoriseJWT, accountsController.approvePatient);
+app.put("/api/patient/reject/:patientId", authoriseJWT, accountsController.denyPatient);
 
 // Routes for Patient's Payment Methods
 app.get("/api/patient/paymentMethods/:patientId", authoriseJWT, paymentMethodController.getPaymentMethodsByPatientId);
@@ -113,7 +117,6 @@ app.put("/api/staff/patient/:patientId", accountsController.adminUpdatePatientBy
 app.get("/api/doctors/", accountsController.getAllDoctor);
 app.get("/api/doctors/:doctorId", accountsController.getDoctorById);
 app.put("/api/doctors/:doctorId", accountsController.updateDoctorById);
-app.delete("/api/doctors/:doctorId", accountsController.deleteDoctorById);
 
 /// Route for Questionnaire
 app.get("/api/questionnaire/:accountId", accountsController.getQuestionnaireWithAccountId);

@@ -121,20 +121,6 @@ class Doctor extends Account {
         return { doctorId, name, email, dateOfJoining };
     }
 
-    //HERVIN
-    static async deleteDoctorById(doctorId) {
-        const connection = await sql.connect(dbConfig);
-    
-        const query = `DELETE FROM Doctor WHERE DoctorId = @DoctorId`;
-        const request = connection.request();
-        request.input('DoctorId', doctorId);
-    
-        const deleteDoctorRes = await request.query(query);
-    
-        connection.close();
-        return deleteDoctorRes.rowsAffected[0] === 1;
-    }
-
 }
 
 module.exports = Doctor;

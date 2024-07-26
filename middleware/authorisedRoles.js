@@ -14,6 +14,9 @@ const authorisedRoles = {
     "/api/chatbot/history/:patientId": ["patient"],
     "/api/patient/:patientId/digitalWallet": ["patient"],
     "/api/patient/:patientId/digitalWalletHistory": ["patient"],
+    "/api/patient/admin/:patientId": ["admin"],
+    "/api/patient/reject/:patientId": ["admin"],
+    "/api/patient/approve/:patientId": ["admin"],
 
     "/api/company/:companyId": ["company"],
     "/api/drugRequests/": ["company"],

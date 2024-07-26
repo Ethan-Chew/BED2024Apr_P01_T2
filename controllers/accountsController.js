@@ -125,6 +125,57 @@ const authCreatePatient = async (req, res) => {
     }
 }
 
+const approvePatient = async (req, res) => {
+    try {
+        const { patientId } = req.params;
+
+        if (!patientId) {
+            return res.status(400).send({ message: 'Patient ID is required' });
+        }
+
+        const approvePatientRes = await Patient.approvePatient(patientId);
+
+        if (approvePatientRes) {
+            res.status(200).json({
+                message: "Patient Approved Successfully",
+            });
+        } else {
+            res.status(500).json({
+                message: "Failed to Approve Patient"
+            });
+        }
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+const denyPatient = async (req, res) => {
+    try {
+        const { patientId } = req.params;
+
+        if (!patientId) {
+            return res.status(400).send({ message: 'Patient ID is required' });
+        }
+
+        const denyPatientRes = await Patient.denyPatient(patientId);
+
+        if (denyPatientRes) {
+            res.status(200).json({
+                message: "Patient Denied Successfully",
+            });
+        } else {
+            res.status(500).json({
+                message: "Failed to Deny Patient"
+            });
+        }
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+
+}
+
 // Created by: Ethan Chew
 const getPatientById = async (req, res) => {
     try {
@@ -162,6 +213,36 @@ const getPatientById = async (req, res) => {
         });
     }
 }
+
+const getPatientByIdAdmin = async (req, res) => {
+    try {
+        const patientId = req.params.patientId;
+
+        const patient = await Patient.getPatientById(patientId);
+
+        if (!patient) {
+            res.status(404).json({
+                status: 'Not Found',
+                message: `Patient with ID ${patientId} not found.`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            status: "Success",
+            message: "Patient with ID Found",
+            patient: patient
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
+    }
+}
+
 //HERVIN
 const getAllPatient = async (req, res) => {
     try {
@@ -254,6 +335,56 @@ const deletePatientById = async (req, res) => {
             });
         }
         
+        // Before deleting a Patient Account, ensure that every related data (Appointment, MaymentMethods, Questionnaire, DigitalWallet) is deleted
+        await PaymentMethod.deleteAllPaymentMethod(patientId);
+        
+        // Get all Appointment of the Patient, then delete all of them
+        const appointments = await Appointment.getAllPatientAppointment(patientId);
+        if (appointments) {
+            for (let i = 0; i < appointments.length; i++) {
+                await Appointment.deleteAppointment(appointments[i].id);
+            }
+        }
+        
+        await DigitalWallet.deleteDigitalWallet(patientId);
+        await DigitalWalletHistory.deleteAllHistory(patientId);
+
+        const deleteQuestionnaireRequest = await Questionnaire.deleteQuestionnaire(patientId);
+        const deletePatientRequest = await Patient.deletePatientById(patientId);
+        const deleteAccountRequest = await Account.deleteAccountById(patientId);
+
+        if (deleteQuestionnaireRequest && deletePatientRequest && deleteAccountRequest) {
+            res.status(200).json({
+                status: "Success",
+                message: "Patient Account Deleted Successfully"
+            });
+        } else {
+            res.status(500).json({
+                status: "Error",
+                message: "Failed to Delete Patient Account"
+            });
+        }
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error",
+            error: err
+        });
+    }
+}
+
+const deletePatientByIdAdmin = async (req, res) => {
+    try {
+        const { patientId } = req.params;
+
+        if (!patientId) {
+            return res.status(400).send({ 
+                status: 'Error',
+                message: 'Patient ID is required'
+            });
+        }
+
         // Before deleting a Patient Account, ensure that every related data (Appointment, MaymentMethods, Questionnaire, DigitalWallet) is deleted
         await PaymentMethod.deleteAllPaymentMethod(patientId);
         
@@ -456,31 +587,6 @@ const authCreateCompany = async (req, res) => {
     }
 }
 
-const deleteDoctorById = async (req, res) => {
-    try {
-        const { doctorId } = req.params;
-
-        if (!doctorId) {
-            return res.status(400).send({ message: 'Doctor ID is required' });
-        }
-        
-        const deleteDoctorRequest = await Doctor.deleteDoctorById(doctorId);
-        const deleteAccountRequest = await Account.deleteAccountById(doctorId);
-
-        if ( deleteDoctorRequest && deleteAccountRequest) {
-            res.status(200).json({
-                message: "Doctor Account Deleted Successfully"
-            });
-        } else {
-            res.status(500).json({
-                message: "Failed to Delete Doctor Account"
-            });
-        }
-    } catch(err) {
-        console.error(err);
-        res.status(500).send("Internal Server Error");
-    }
-}
 
 //HERVIN 
 const updateDoctorById = async (req, res) => {
@@ -527,5 +633,8 @@ module.exports = {
     getAllDoctor,
     getDoctorById,
     updateDoctorById,
-    deleteDoctorById,
+    getPatientByIdAdmin,
+    deletePatientByIdAdmin,
+    approvePatient,
+    denyPatient,
 }
