@@ -101,7 +101,7 @@ const tagsWithCategory = {
   "Mail": [
     "mail"
   ],
-  "2FA" [
+  "2FA": [
     "verify2FA", "generateQRCode", "getAuth"
   ]
 };
