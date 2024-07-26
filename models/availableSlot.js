@@ -15,19 +15,19 @@ class AvailableSlot {
         const query = `
             SELECT * 
             FROM AvailableSlot
-            WHERE SlotId=(SELECT max(slotId) FROM AvailableSlot);
+            WHERE SlotId=(SELECT max(SlotId) FROM AvailableSlot);
         `;
         const request = dbConnection.request();
         const result = await request.query(query);
 
         const incrementString = str => str.replace(/\d+/, num => (Number(num) + 1).toString().padStart(4, "0"));
-        return incrementString(result.recordset[0].slotId);
+        return incrementString(result.recordset[0].SlotId);
     }
 
     // Emmanuel
     static async createAvailableSlot(doctorId, slotDate, slotTimeId) {
         const connection = await sql.connect(dbConfig);
-        const newSlotId = await AvailableSlot.getNextSlotId(dbConnection);
+        const newSlotId = await AvailableSlot.getNextSlotId(connection);
 
         const query = `
             INSERT INTO AvailableSlot (SlotId, DoctorId, SlotDate, SlotTimeId)
@@ -40,10 +40,10 @@ class AvailableSlot {
         request.input('SlotDate', slotDate);
         request.input('SlotTimeId', slotTimeId);
 
-        await request.query(query);
+        const result = await request.query(query);
         connection.close();
 
-        return new AvailableSlot(newSlotId, doctorId, slotDate, slotTimeId);
+        return result.recordset;
     }
 
     // Emmanuel

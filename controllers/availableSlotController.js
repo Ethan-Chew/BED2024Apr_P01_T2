@@ -10,7 +10,7 @@ const createAvailableSlot = async (req, res) => {
         if (!doctorId || !slotDate || !slotTimeId) {
             return res.status(400).json({
                 status: "Error",
-                message: 'Doctor Id, slotDate and slotTimeId are'
+                message: 'Doctor Id, slotDate and slotTimeId are missing'
             });
         }
 

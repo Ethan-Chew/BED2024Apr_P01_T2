@@ -187,6 +187,7 @@ class PaymentRequest {
             UPDATE PaymentRequest SET PaymentRequestStatus = @Status, PaymentPaidAmount = 0
             WHERE AppointmentId = @AppointmentId;
         `;
+        const connection = await sql.connect(dbConfig);
 
         const request = connection.request();
         request.input('Status', status)
