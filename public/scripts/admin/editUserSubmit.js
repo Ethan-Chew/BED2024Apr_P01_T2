@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById("edit-user-form").addEventListener("submit", async function (e) {
         e.preventDefault();
 
+        const urlParams = new URLSearchParams(window.location.search);
+
         // Collect User Details
         const userValues = {
             name: document.getElementById('name').value,
@@ -14,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         // update patient Account
-        const createResponse = await fetch(`/api/staff/patient/${localStorage.getItem('patientId')}`, {
+        const createResponse = await fetch(`/api/staff/patient/${urlParams.get('id')}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

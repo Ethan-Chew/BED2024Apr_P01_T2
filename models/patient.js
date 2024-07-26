@@ -138,6 +138,44 @@ class Patient extends Account {
         return result.rowsAffected[0] === 1;
     }
 
+    static async approvePatient(patientId) {
+        const connection = await sql.connect(dbConfig);
+        const request = connection.request();
+        
+        // Populate Query with Updated Fields
+        let query = `
+            UPDATE Patient SET 
+            PatientIsApproved = 'Approved'
+            WHERE PatientId = @PatientId
+        `;
+        request.input('PatientId', patientId);
+
+        // Send Request
+        const result = await request.query(query);
+        connection.close();
+
+        return result.rowsAffected[0] === 1;
+    }
+
+    static async denyPatient(patientId) {
+        const connection = await sql.connect(dbConfig);
+        const request = connection.request();
+        
+        // Populate Query with Updated Fields
+        let query = `
+            UPDATE Patient SET 
+            PatientIsApproved = 'Declined'
+            WHERE PatientId = @PatientId
+        `;
+        request.input('PatientId', patientId);
+
+        // Send Request
+        const result = await request.query(query);
+        connection.close();
+
+        return result.rowsAffected[0] === 1;
+    }
+
     //HERVIN
     static async adminUpdatePatient(patientId, updatedFields) {
         const allowedFields = {

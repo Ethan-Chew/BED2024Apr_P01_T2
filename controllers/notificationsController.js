@@ -95,19 +95,9 @@ const receiveNotifications = async (req, res) => {
 // Emmanuel
 const readNotification = async (req, res) => {
     const { notificationId } = req.params;
-    const status = 'Read';
-    if (!notificationId || typeof notificationId !== 'string') {
-        return res.status(400).json({ message: 'Invalid notification ID' });
+    if (!notificationId) {
+        return res.status(400).json({ message: 'missing notification ID' });
     }
-
-    if (req.user.id !== senderId) {
-        res.status(403).json({
-            status: "Forbidden",
-            message: "You are not allowed to read this notification using this account."
-        });
-        return;
-    }
-    a
 
     try {
         const updateNotification = await notification.readNotification(notificationId);
@@ -135,24 +125,26 @@ const readNotification = async (req, res) => {
 
 // Emmanuel
 const readAllNotificationsByAccountId = async (req, res) => {
-    const { accountId } = req.user.id;
+    const { accountId } = req.params;
+    console.log(accountId);
 
-    if (!notificationId || typeof notificationId !== 'string') {
+    if (!accountId || typeof accountId !== 'string') {
         return res.status(400).json({ message: 'Invalid account ID' });
     }
 
-    /*
-    if (req.user.id !== senderId) {
+
+    if (req.user.id !== accountId) {
         res.status(403).json({
             status: "Forbidden",
             message: "You are not allowed to read this notification using this account."
         });
         return;
     }
-    */
+
 
     try {
-        const updateNotifications = await notification.readAllNotificationsByAccountId(accountId);
+        const status = "Read"
+        const updateNotifications = await notification.updateManyNotificationsByReceiverId(accountId, status);
 
         if (!updateNotifications) {
             res.status(500).json({

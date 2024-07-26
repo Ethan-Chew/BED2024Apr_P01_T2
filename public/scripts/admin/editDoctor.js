@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div>
                 <label class="font-bold" for="doctorId">Doctor ID</label>
-                <input id="doctorId" type="text" value="${doctor.doctorId}">
+                <input readonly id="doctorId" type="text" value="${doctor.doctorId}">
             </div>
         </div>
         <div class="flex space-x-2">

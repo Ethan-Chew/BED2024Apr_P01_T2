@@ -37,8 +37,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (appointments.length > 0) {
         document.getElementById('upcoming-appointments-container').classList.remove('hidden'); // Display Container
         document.getElementById('num-upcoming-txt').innerText = appointments.length;
-        var selectedAppointmentId = "";
-        var selectedSlotId = "";
         for (const appointment of appointments) {
             console.log(appointment)
             document.getElementById("upcoming-appointments").innerHTML += `
@@ -79,15 +77,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             */
 
             let rescheduleApptId = `appt-reschedule-${appointment.AppointmentId}`;
-            console.log(rescheduleApptId)
+            // console.log(rescheduleApptId);
             document.getElementById(rescheduleApptId).addEventListener('click', () => {
-                document.getElementById("reschedule-form").classList.remove('hidden');
-                document.getElementById("reschedule-formed").classList.remove('hidden');
-                selectedAppointmentId = appointment.AppointmentId;
-                selectedSlotId = appointment.SlotId;
+                let selectedAppointmentId = appointment.AppointmentId;
+                let selectedSlotId = appointment.SlotId;
                 console.log(selectedAppointmentId);
                 //window pop up
             });
+            document.getElementById("reschedule-form").classList.remove('hidden');
+            document.getElementById("reschedule-formed").classList.remove('hidden');
 
             let viewApptId = `appt-view-${appointment.AppointmentId}`;
             document.getElementById(viewApptId).addEventListener('click', () => {

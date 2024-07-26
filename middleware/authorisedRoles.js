@@ -14,6 +14,9 @@ const authorisedRoles = {
     "/api/chatbot/history/:patientId": ["patient"],
     "/api/patient/:patientId/digitalWallet": ["patient"],
     "/api/patient/:patientId/digitalWalletHistory": ["patient"],
+    "/api/patient/admin/:patientId": ["admin"],
+    "/api/patient/reject/:patientId": ["admin"],
+    "/api/patient/approve/:patientId": ["admin"],
 
     "/api/company/:companyId": ["company"],
     "/api/drugRequests/": ["company"],
@@ -31,25 +34,25 @@ const authorisedRoles = {
     "/api/inventoryRecord/:companyId": ["company"],
     "/api/inventoryRecord/:drugRecordId": ["company"],
 
-    "/api/paymentRequests" : ["patient"],
-    "/api/paymentRequest/:appointmentId" : ["admin"],
-    "/api/paymentRequest/approve/:appointmentId" : ["admin"],
-    "/api/paymentRequest/reject/:appointmentId" : ["admin"],
-    "/api/paymentRequest" : ["patient"],
-    "/api/paymentRequest/:id" : ["patient"],
+    "/api/paymentRequests": ["patient"],
+    "/api/paymentRequest/:appointmentId": ["admin"],
+    "/api/paymentRequest/approve/:appointmentId": ["admin"],
+    "/api/paymentRequest/reject/:appointmentId": ["admin"],
+    "/api/paymentRequest": ["patient"],
+    "/api/paymentRequest/:id": ["patient"],
 
-    "/api/notification/:accountid" : ["patient", "doctor", "admin"],
-    "/api/notification/:Notificationid" : ["patient", "doctor"],
-    "/api/notifications/:accountid" : ["patient", "doctor"],
-    "/api/notification" : ["doctor", "admin"],
+    "/api/notification/:accountid": ["patient", "doctor", "admin"],
+    "/api/notification/:Notificationid": ["patient", "doctor"],
+    "/api/notifications/:accountid": ["patient", "doctor"],
+    "/api/notification": ["doctor", "admin"],
 
-    "/api/appointments/cancel/:appointmentId" : ["doctor"],
-    "/api/appointments/doctor/:doctorId" : ["doctor"],
+    "/api/appointments/cancel/:appointmentId": ["doctor"],
+    "/api/appointments/doctor/:doctorId": ["doctor"],
 
-    "/api/availableSlots/:date" : ["patient"],
-    "/api/availableSlot/getByDateTime" : ["patient"],
-    "/api/availableSlot/doctor/:slotId" :["doctor"],
-    "api/availableSlot" : ["doctor", "admin"],
+    "/api/availableSlots/:date": ["patient"],
+    "/api/availableSlot/getByDateTime": ["patient"],
+    "/api/availableSlot/doctor/:slotId": ["doctor"],
+    "/api/availableSlot": ["doctor", "admin"],
 
 
 

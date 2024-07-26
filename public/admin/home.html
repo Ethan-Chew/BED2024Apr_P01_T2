@@ -19,16 +19,36 @@
             </nav>
         </header>        
 
-        <div class="max-w-4xl mx-auto p-6">
-            <h1 class="text-3xl font-bold mb-6">CareLinc</h1>
-            <p class="mb-8">Select a service you require</p>
-            <div class="grid grid-cols-2 gap-6">
-                <a href="viewDrugInventory.html" class="block p-6 bg-gray-200 rounded-lg shadow hover:bg-gray-300 text-center">View Drug Inventory</a>
-                <a href="manageHelpRequest.html" class="block p-6 bg-gray-200 rounded-lg shadow hover:bg-gray-300 text-center">Manage Help Requests</a>
-                <a href="viewDoctor.html" class="block p-6 bg-gray-200 rounded-lg shadow hover:bg-gray-300 text-center">View Doctors Accounts</a>
-                <a href="viewPatient.html" class="block p-6 bg-gray-200 rounded-lg shadow hover:bg-gray-300 text-center">View Patient Accounts</a>
-                <a href="approveUsers.html" class="block p-6 bg-gray-200 rounded-lg shadow hover:bg-gray-300 text-center">Approve New Users</a>
-                <a href="companySignup.html" class="block p-6 bg-gray-200 rounded-lg shadow hover:bg-gray-300 text-center">Create Company Account</a>
+        <div class="p-8 flex flex-col gap-10">
+            <div>
+                <h1 class="text-4.5xl font-bold" id="admin-name">CareLinc Admin</h1>
+                <a class="text-xl">Welcome Back. Select a service you require</a>
+            </div>
+            <div class="grid grid-cols-3 gap-5">
+                <!-- View Drug Inventory -->
+                <div class="flex flex-col align-top bg-gray-200 p-5 rounded-xl cursor-pointer h-24" id="view-inventory">
+                    <a href="viewDrugInventory.html" class="text-2xl">View Drug Inventory</a>
+                </div>
+                <!-- Manage Help Requests -->
+                <div class="flex align-top bg-gray-200 p-5 rounded-xl cursor-pointer h-24" id="manage-help-requests">
+                    <a href="manageHelpRequest.html" class="text-2xl">Manage Help Requests</a>
+                </div>
+                <!-- View Doctors Accounts -->
+                <div class="flex align-top bg-gray-200 p-5 rounded-xl cursor-pointer h-24" id="view-doctors">
+                    <a href="viewDoctor.html" class="text-2xl">View Doctors Accounts</a>
+                </div>
+                <!-- View Patient Accounts -->
+                <div class="flex align-top bg-gray-200 p-5 rounded-xl cursor-pointer h-24" id="view-patients">
+                    <a href="viewPatient.html" class="text-2xl">View Patient Accounts</a>
+                </div>
+                <!-- Approve New Users -->
+                <div class="flex align-top bg-gray-200 p-5 rounded-xl cursor-pointer h-24" id="approve-users">
+                    <a href="approveUsers.html" class="text-2xl">Approve New Users</a>
+                </div>
+                <!-- Create Company Account -->
+                <div class="flex align-top bg-gray-200 p-5 rounded-xl cursor-pointer h-24" id="create-company-account">
+                    <a href="companySignup.html" class="text-2xl">Create Company Account</a>
+                </div>
             </div>
         </div>
     </body>

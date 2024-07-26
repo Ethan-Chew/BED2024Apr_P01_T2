@@ -35,7 +35,7 @@
             </div>
             
             <div class=" flex items-center justify-center">
-                <div class="w-1/2 flex flex-col items-center justify-center gap-3" id="paymentRequests">
+                <div class="w-1/2 flex flex-row items-center justify-center gap-3" id="paymentRequests">
 
                     </div>
                 </div>
@@ -45,24 +45,4 @@
 
     <script src="scripts/tailwind.config.js"></script>
     <script src="scripts/payItForward.js"></script>
-    <script>
-        // pay payment request
-        async function pay(id) {
-            const elementid = "pr-" + id + "-amount";
-            const amount = document.getElementById(elementid).value;
-
-            const payPaymentRequest = await fetch(`/api/paymentRequest/pay`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, amount }),
-            });
-
-            const response = await payPaymentRequest;
-            if (response.status === 200) {
-                console.log('payment successful');
-            }
-        }
-    </script>
 </html>

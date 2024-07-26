@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function deletePatient(patientId) {
         try {
-            const deleteResponse = await fetch(`/api/patient/${patientId}`, {
+            const deleteResponse = await fetch(`/api/patient/admin/${patientId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

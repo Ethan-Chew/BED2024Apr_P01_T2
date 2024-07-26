@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createAccountElement(account) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const accountId = urlParams.get('id');
         const accountDiv = document.createElement('div');
         accountDiv.className = 'p-6 bg-gray-200 rounded-lg shadow flex justify-between items-center';
         
@@ -39,12 +41,60 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             <div class="flex space-x-2">
-                <a class="p-3 bg-white rounded-lg shadow hover:bg-gray-300">Approve</a>
-                <a class="p-3 bg-white rounded-lg shadow hover:bg-gray-300">Deny</a>
+                <a class="approve-btn p-3 bg-white rounded-lg shadow hover:bg-gray-300">Approve</a>
+                <a class="deny-btn p-3 bg-white rounded-lg shadow hover:bg-gray-300">Deny</a>
             </div>
         `;
+
+        const approveBtn = accountDiv.querySelector('.approve-btn');
+        approveBtn.addEventListener('click', () => approve(accountId));
+
+        const denyBtn = accountDiv.querySelector('.deny-btn');
+        denyBtn.addEventListener('click', () => deny(accountId));
         
         return accountDiv;
+    }
+
+    async function approve(accountId) {
+        try {
+            const approve = await fetch(`/api/patient/approve/${accountId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (approve.status !== 200) {
+                alert(`Error: Unable to approve account. ${errorText}`);
+            } else {
+                alert("Account approved successfully.");
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error("Error approve account:", error);
+            alert("Error: Unable to approve account. Please try again later.");
+        }
+    }
+
+    async function deny(accountId) {
+        try {
+            const deny = await fetch(`/api/patient/reject/${accountId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (deny.status !== 200) {
+                alert(`Error: Unable to deny account. ${errorText}`);
+            } else {
+                alert("Account denied successfully.");
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error("Error deny account:", error);
+            alert("Error: Unable to deny account. Please try again later.");
+        }
     }
 
     async function displayAccounts() {
