@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Display Appointment Details on the Screen
-    appointmentDetails.filter((appointment) => appointment.paymentStatus !== null).forEach((appointment) => {
+    const unpaidAppointments = appointmentDetails.filter((appointment) => appointment.paymentStatus !== null);
+    unpaidAppointments.forEach((appointment) => {
         document.getElementById('history-container').innerHTML += `
             <div class="bg-gray-200 p-6 mb-3 rounded-lg">
                 <h3 class="text-2xl font-bold">${appointment.reason}</h3>
@@ -47,21 +48,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 <span>Consultation Fee</span>
                                 <span>$${appointment.consultationCost}</span>
                             </li>
-                            ${appointment.medication.map((drug) => `
-                                <li class="flex justify-between mb-2">
-                                    <span>${drug.drugName} (${drug.quantity} Tablets)</span>
-                                    <span>$${drug.drugPrice}</span>
-                                </li>
-                            `).join('')}
+                            <div id="appointment-${appointment.appointmentId}-drugs"></div>
                         </ul>
                         <div class="flex justify-between font-bold mb-2">
                             <span>Total Amount:</span>
-                            <span>$${appointment.medication.reduce((sum, item) => sum + item.drugPrice, 0) + appointment.consultationCost}</span>
+                            <span id="appointment-${appointment.appointmentId}-final"></span>
                         </div>
-                        <p class="text-sm text-gray-600 italic">fully paid by patient</p>
+                        <p class="text-gray-400 italic">${appointment.paymentStatus === "Unpaid" ? "Pending Payment" : "Fully Paid"}</p>
                     </div>
                 </div>
             </div>
         `;
-    });        
+
+        const totalAmount = appointment.medication.reduce((sum, item) => sum + item.drugPrice, 0) + appointment.consultationCost;
+        appointment.medication.forEach((drug) => {
+            document.getElementById(`appointment-${appointment.appointmentId}-drugs`).innerHTML += `
+                <li class="flex justify-between mb-2">
+                    <span>${drug.drugName} (${drug.quantity} Tablets)</span>
+                    ${drug.drugRequest === "Completed" ? "<span>$0 <i>Company Fufilled</i></span>" : `<span>$${drug.drugPrice}</span>`}
+                </li>
+            `;
+    
+            if (drug.drugRequest === "Completed") {
+                totalAmount -= drug.drugPrice;
+            }
+        });
+        document.getElementById(`appointment-${appointment.appointmentId}-final`).innerText = `$${totalAmount}`;
+    });
 });

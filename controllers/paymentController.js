@@ -4,12 +4,7 @@ const Appointment = require("../models/appointment");
 // Created by: Ethan Chew
 const patientMakePayment = async (req, res) => {
     try {
-        const appointmentId = req.body.appointmentId;
-
-        if (!appointmentId) {
-            return res.status(400).json({ message: "Appointment ID is required." });
-        }
-
+        const { appointmentId, paymentMethod } = req.body;
         // Authorise the Payment by ensuring that the Patient ID in Appointment matches the Patient ID in the JWT
         const patientId = req.user.id;
         const appointment = await Appointment.getAppointmentDetail(appointmentId);
@@ -22,7 +17,7 @@ const patientMakePayment = async (req, res) => {
         }
 
         // Update the Payment Status to Paid
-        await Payment.updatePaymentStatus(appointmentId);
+        await Payment.updatePaymentStatus(appointmentId, paymentMethod);
 
         res.status(200).json({ 
             status: "Success",

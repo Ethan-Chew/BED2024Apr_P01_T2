@@ -157,13 +157,13 @@ INSERT INTO DrugInventoryRecord (DrugRecordId, DrugName, DrugExpiryDate, DrugAva
 ('DRI0018', 'Aspirin', '2024-11-30', 200, 200, '2024-07-01', 'ACC0010');
 
 INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quantity, Reason, DrugRequest) VALUES
-('PRM0001', 'APP0001', 'Aspirin', 10, 'Pain relief', 'Completed'),
-('PRM0002', 'APP0001', 'Paracetamol', 10, 'Fever', 'Completed'),
+('PRM0001', 'APP0001', 'Aspirin', 10, 'Pain relief', NULL),
+('PRM0002', 'APP0001', 'Paracetamol', 10, 'Fever', NULL),
 ('PRM0003', 'APP0002', 'Ibuprofen', 10, 'Fever and Pain Relief', 'Pending'),
 ('PRM0004', 'APP0002', 'Pheniramine', 10, 'Allergy', 'Pending'),
-('PRM0005', 'APP0003', 'Digoxin', 10, 'Heart Failure', 'Pending'),
-('PRM0006', 'APP0003', 'Magnesium Carbonate', 10, 'Heartburn', 'Pending'),
-('PRM0007', 'APP0004', 'Magnesium Carbonate', 10, 'Heartburn', 'Pending');
+('PRM0005', 'APP0003', 'Digoxin', 10, 'Heart Failure', NULL),
+('PRM0006', 'APP0003', 'Magnesium Carbonate', 10, 'Heartburn', NULL),
+('PRM0007', 'APP0004', 'Magnesium Carbonate', 10, 'Heartburn', NULL);
 
 -- Sample data for DrugRequestContribution table
 INSERT INTO DrugRequestContribution (AppointmentId, DrugName, InventoryContribution, ContributionQuantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES

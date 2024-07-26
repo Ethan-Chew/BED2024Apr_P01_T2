@@ -118,9 +118,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <div class="flex flex-col space-y-2 items-end" id="payment-med-cost-${i}"></div>
                 </div>
                 <div class="flex flex-row align-center my-4">
-                    <a class="font-bold text-right">
-                        Total Amount: </span>$<span id="payment-${i}-totalcost"></span>
-                    </a>
+                    <div class="flex flex-col space-y-2 items-start">
+                        <a class="text-right">
+                            <b>Total Amount:</b> $<span id="payment-${i}-totalcost"></span>
+                        </a>
+                        <div id="payment-${i}-approved-paymentreq" class="hidden">
+                            <a class="text-right"><b>Subsidised Amount: </b> $<span id="payment-${i}-subsidised"></span></a>
+                            <a class="text-right"><b>Final Amount: </b> $<span id="payment-${i}-final"></span></a> 
+                        </div>
+                    </div>
                     <a class="ml-auto text-sm text-gray-500" id="help-text-${i}">
                         Can't afford it now? Ask for help from a member of the public.
                     </a>
@@ -135,6 +141,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Set the Text for ask help
         if (appointment.paymentRequest) {
             document.getElementById(`help-text-${i}`).innerText = `Help requested on ${appointment.paymentRequest.createdDate.split("T")[0]}. Status: ${appointment.paymentRequest.status}`;
+
+            if (appointment.paymentRequest.status === "Pending") {
+                document.getElementById(`help-${i}`).disabled = true;
+                document.getElementById(`help-${i}`).classList.add('cursor-not-allowed');
+            } else if (appointment.paymentRequest.status === "Approved") {
+                document.getElementById(`payment-${i}-approved-paymentreq`).classList.remove('hidden');
+
+                // Update Subsidised and Final Amounts
+                document.getElementById(`payment-${i}-subsidised`).innerText = appointment.paymentRequest.helpAmount;
+            }
+
             document.getElementById(`help-${i}`).disabled = true;
             document.getElementById(`help-${i}`).classList.add('cursor-not-allowed');
         }
@@ -143,7 +160,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         for (let j = 0; j < appointment.medication.length; j++) {
             document.getElementById(`payment-med-${i}`).innerHTML += `<a>${appointment.medication[j].drugName}</a>`;
             document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$${appointment.medication[j].drugPrice}</a>`;
-            totalAmount += appointment.medication[j].drugPrice;
+            if (appointment.medication[j].drugRequest === "Completed") {
+                document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$0 <i>Company Fufilled</i></a>`;
+            } else {
+                totalAmount += appointment.medication[j].drugPrice;
+            }
         }
 
         // Add Consultation Cost to Screen
@@ -151,6 +172,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$${appointment.consultationCost}</a>`;
 
         document.getElementById(`payment-${i}-totalcost`).innerText = totalAmount; // Set total cost amount
+
+        if (appointment.paymentRequest) {
+            if (appointment.paymentRequest.status === "Approved") {
+                totalAmount -= appointment.paymentRequest.helpAmount;
+                document.getElementById(`payment-${i}-final`).innerText = totalAmount;
+            }
+        }
     }
 
     for (let i = 0; i < unpaidAppointmentsDetail.length; i++) {
@@ -170,6 +198,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (deletePaymentRequestResponse.status === 201) {
                     alert("Payment Request Cancelled.");
+                    unpaidAppointmentsDetail[i].paymentRequest = null;
                     document.getElementById(`help-text-${i}`).innerText = `Can't afford it now? Ask for help from a member of the public.`;
                     document.getElementById(`help-${i}`).disabled = false;
                     document.getElementById(`help-${i}`).classList.remove('cursor-not-allowed');
@@ -180,6 +209,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
             // Send Text to Payment Confirmation Popup
             document.getElementById('payment-amount').innerText = document.getElementById(`payment-${i}-totalcost`).innerText;
+            if (appointment.paymentRequest) {
+                if (appointment.paymentRequest.status === "Approved") {
+                    document.getElementById('payment-amount').innerText = document.getElementById(`payment-${i}-final`).innerText;
+                }
+            }
             document.getElementById('appointment-date').value = appointment.slotDate;
             document.getElementById('appointment-time').value = appointment.slotTime;
             document.getElementById('appointment-id').value = appointment.appointmentId;
@@ -295,6 +329,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             },
             body: JSON.stringify({
                 appointmentId: document.getElementById('appointment-id').value,
+                paymentMethod: cardMerchant === "Digital Wallet" ? "DWallet" : "Card",
             })
         });
 

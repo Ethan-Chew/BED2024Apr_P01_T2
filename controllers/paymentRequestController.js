@@ -15,7 +15,6 @@ const createPaymentRequest = async (req, res) => {
             return res.status(500).json({
                 message: `Failed to create Payment Request.`
             });
-            return;
         } else {
             return res.status(201).json({
                 status: "Success",
@@ -41,7 +40,6 @@ const cancelPaymentRequest = async (req, res) => {
         }
 
         const deleteRequest = await PaymentRequest.cancelPaymentRequestById(id);
-        // console.log("Controller response: ", deleteRequest)
         if (deleteRequest) {
             return res.status(201).json({
                 status: "Success",

@@ -76,7 +76,8 @@ class Appointment {
                 id: result.recordset[0].PaymentRequestId,
                 requestMessage: result.recordset[0].PaymentRequestMessage,
                 createdDate: result.recordset[0].PaymentRequestCreatedDate,
-                status: result.recordset[0].PaymentRequestStatus
+                status: result.recordset[0].PaymentRequestStatus,
+                helpAmount: result.recordset[0].PaymentPaidAmount
             }
         }
 

@@ -36,7 +36,7 @@ const validatePaymentConfirmationEmail = require("./middleware/validatePaymentCo
 const validateAppointment = require("./middleware/validateAppointment");
 const validatePaymentRequest = require("./middleware/validatePaymentRequest");
 const validateWalletHistory = require("./middleware/validateWalletHistory");
-
+const validatePayment = require("./middleware/validatePayment");
 const validateAddRequestContribution = require("./middleware/validateAddRequestContribution");
 const validateContributeDrugRequest = require("./middleware/validateContributeDrugRequest");
 const validateDrugOrderByIdAndDrugName = require("./middleware/validateDrugOrderByIdAndDrugName");
@@ -98,7 +98,7 @@ app.post("/api/patient/:patientId/digitalWalletHistory", authoriseJWT, validateW
 app.delete("/api/patient/:patientId/digitalWalletHistory", authoriseJWT, digitalWalletHistoryController.deleteDigitalWalletHistory);
 
 // Route for Managing Patient Payments
-app.post("/api/patient/makePayment", authoriseJWT, paymentController.patientMakePayment);
+app.post("/api/patient/makePayment", authoriseJWT, validatePayment, paymentController.patientMakePayment);
 
 // Route for Sending a Payment Confirmation Email
 app.post("/api/mail/paymentConfirmation", authoriseJWT, validatePaymentConfirmationEmail, mailController.sendPaymentConfirmation);
