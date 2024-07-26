@@ -12,7 +12,7 @@ const doc = {
   tags: [
     {
       name: "Authentication",
-      description: "Endpoints related to authentication and authorisation operations",
+      description: "Endpoints related to authentication and authorisation operations (login, create account, etc)",
     },
     {
       name: "Admin",
@@ -29,6 +29,30 @@ const doc = {
     {
       name: "Doctor",
       description: "Endpoints related to doctor operations",
+    },
+    {
+      name: "Pay-it-Forward",
+      description: "Endpoints related to the Pay-it-Forward program, allowing patients, doctors and companies to manage requests for help",
+    },
+    {
+      name: "Inventory",
+      description: "Endpoints related to drug inventory management",
+    },
+    {
+      name: "Appointments",
+      description: "Endpoints related to appointment scheduling and availability",
+    },
+    {
+      name: "Notifications",
+      description: "Endpoints related to notifications",
+    },
+    {
+      name: "Chatbot",
+      description: "Endpoints related to chatbot operations, allowing patients to interact with the chatbot",
+    },
+    {
+      name: "Mail",
+      description: "Endpoints related to mail operations which sends patients a payment confirmation email",
     }
   ],
   paths: {}
@@ -40,20 +64,35 @@ const tagsWithCategory = {
     "generateQRCode", "getAuth", "verify2FA", "auth"
   ],
   "Company": [
-    "drugRequests", "drugRequest", "drugContributionOrders",
-    "drugInventoryRecord", "companyDrugInventory", "inventoryRecord", "company"
+    "company"
   ],
   "Patient": [
-    "patient", "patients", "paymentMethod", "paymentMethods", "mail",
-    "chatbot", "appointments", "notification", "notifications", "questionnaire"
+    "patient", "patients", "paymentMethod", "paymentMethods", "questionnaire"
   ],
   "Doctor": [
-    "doctors", "appointment", "appointments", "availableSlot", "availableSlots",
-    "paymentRequests", "paymentRequest"
+    "doctors",
   ],
   "Admin": [
-    "staff", "patients/unapproved", "drugTopup", "drugInventory", "helpRequests"
+    "staff", "patients/unapproved", "drugTopup"
   ],
+  "Pay-it-Forward": [
+    "drugRequests", "drugRequest", "drugContributionOrders", "helpRequests", "paymentRequests", "paymentRequest"
+  ],
+  "Inventory": [
+    "drugInventoryRecord", "companyDrugInventory", "inventoryRecord", "drugInventory"
+  ],
+  "Appointments": [
+    "appointment", "appointments", "availableSlot", "availableSlots"
+  ],
+  "Notifications": [
+    "notification", "notifications"
+  ],
+  "Chatbot": [
+    "chatbot"
+  ],
+  "Mail": [
+    "mail"
+  ]
 };
 
 const addTagsToPaths = (paths, tagsConfig) => {
@@ -61,12 +100,7 @@ const addTagsToPaths = (paths, tagsConfig) => {
     Object.entries(tagsConfig).forEach(([tag, keywords]) => {
       if (keywords.some((keyword) => path.startsWith(`/api/${keyword}`))) {
         Object.keys(paths[path]).forEach((method) => {
-          if (!paths[path][method].tags) {
-            paths[path][method].tags = [];
-          }
-          if (!paths[path][method].tags.includes(tag)) {
-            paths[path][method].tags.push(tag);
-          }
+          paths[path][method].tags = [tag];
         });
       }
     });

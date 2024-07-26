@@ -2,12 +2,16 @@
   "swagger": "2.0",
   "info": {
     "title": "CareLinc Backend API",
-    "description": "Outlines the different endpoints contained in the CareLinc Back-End API.",
+    "description": "Outlines the different endpoints contained in the CareLinc Back-End API. These API Endpoints handle the management of accounts, appointment bookings, inventory management and other operations that are crucial to the functioning of the CareLinc platform.",
     "version": "1.0.0"
   },
   "host": "localhost:3000",
   "basePath": "/",
   "tags": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints related to authentication and authorisation operations (login, create account, etc)"
+    },
     {
       "name": "Admin",
       "description": "Endpoints related to admin operations"
@@ -18,11 +22,35 @@
     },
     {
       "name": "Company",
-      "description": "Endpoints related to company operations (Jefferson)"
+      "description": "Endpoints related to company operations"
     },
     {
       "name": "Doctor",
       "description": "Endpoints related to doctor operations"
+    },
+    {
+      "name": "Pay-it-Forward",
+      "description": "Endpoints related to the Pay-it-Forward program, allowing patients, doctors and companies to manage requests for help"
+    },
+    {
+      "name": "Inventory",
+      "description": "Endpoints related to drug inventory management"
+    },
+    {
+      "name": "Appointments",
+      "description": "Endpoints related to appointment scheduling and availability"
+    },
+    {
+      "name": "Notifications",
+      "description": "Endpoints related to notifications"
+    },
+    {
+      "name": "Chatbot",
+      "description": "Endpoints related to chatbot operations, allowing patients to interact with the chatbot"
+    },
+    {
+      "name": "Mail",
+      "description": "Endpoints related to mail operations which sends patients a payment confirmation email"
     }
   ],
   "schemes": [
@@ -65,10 +93,221 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Authentication"
+        ]
       }
     },
-    "/api/auth/create/patient": {
+    "/api/patient/{patientId}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Patient"
+        ]
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "knownAllergies": {
+                  "example": "any"
+                },
+                "birthdate": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Patient"
+        ]
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Patient"
+        ]
+      }
+    },
+    "/api/patient/admin/{patientId}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Patient"
+        ]
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Patient"
+        ]
+      }
+    },
+    "/api/patients/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Patient"
+        ]
+      }
+    },
+    "/api/patient": {
       "post": {
         "description": "",
         "parameters": [
@@ -110,41 +349,13 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       }
     },
-    "/api/patient/{patientId}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "patientId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
+    "/api/patient/approve/{patientId}": {
       "put": {
         "description": "",
         "parameters": [
@@ -153,30 +364,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "knownAllergies": {
-                  "example": "any"
-                },
-                "birthdate": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -195,9 +382,14 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
-      },
-      "delete": {
+        },
+        "tags": [
+          "Patient"
+        ]
+      }
+    },
+    "/api/patient/reject/{patientId}": {
+      "put": {
         "description": "",
         "parameters": [
           {
@@ -223,32 +415,13 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       }
     },
-    "/api/patients/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/patient/{patientId}/paymentMethods": {
+    "/api/patient/paymentMethods/{patientId}": {
       "get": {
         "description": "",
         "parameters": [
@@ -278,8 +451,13 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
-      },
+        },
+        "tags": [
+          "Patient"
+        ]
+      }
+    },
+    "/api/patient/paymentMethod/{patientId}": {
       "post": {
         "description": "",
         "parameters": [
@@ -327,19 +505,47 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       }
     },
-    "/api/patient/{patientId}/paymentMethods/{methodId}": {
-      "delete": {
+    "/api/patient/paymentMethod/{methodId}": {
+      "get": {
         "description": "",
         "parameters": [
           {
-            "name": "patientId",
+            "name": "methodId",
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Patient"
+        ]
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
           {
             "name": "methodId",
             "in": "path",
@@ -351,9 +557,6 @@
           "204": {
             "description": "No Content"
           },
-          "400": {
-            "description": "Bad Request"
-          },
           "401": {
             "description": "Unauthorized"
           },
@@ -363,17 +566,14 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       },
       "put": {
         "description": "",
         "parameters": [
-          {
-            "name": "patientId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "methodId",
             "in": "path",
@@ -418,7 +618,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       }
     },
     "/api/patient/{patientId}/digitalWallet": {
@@ -448,7 +651,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       },
       "post": {
         "description": "",
@@ -488,7 +694,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       },
       "delete": {
         "description": "",
@@ -516,7 +725,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       },
       "put": {
         "description": "",
@@ -556,7 +768,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       }
     },
     "/api/patient/{patientId}/digitalWalletHistory": {
@@ -586,7 +801,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       },
       "post": {
         "description": "",
@@ -629,7 +847,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       },
       "delete": {
         "description": "",
@@ -657,7 +878,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       }
     },
     "/api/patient/makePayment": {
@@ -693,7 +917,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       }
     },
     "/api/mail/paymentConfirmation": {
@@ -744,7 +971,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Mail"
+        ]
       }
     },
     "/api/chatbot/sendMessage": {
@@ -780,7 +1010,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Chatbot"
+        ]
       }
     },
     "/api/chatbot/history/{patientId}": {
@@ -810,7 +1043,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Chatbot"
+        ]
       },
       "post": {
         "description": "",
@@ -850,7 +1086,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Chatbot"
+        ]
       },
       "delete": {
         "description": "",
@@ -875,7 +1114,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Chatbot"
+        ]
       }
     },
     "/api/patients/unapproved": {
@@ -897,7 +1139,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Admin"
+        ]
       }
     },
     "/api/staff/patient/{patientId}": {
@@ -945,7 +1190,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Admin"
+        ]
       }
     },
     "/api/doctors/": {
@@ -961,7 +1209,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Doctor"
+        ]
       }
     },
     "/api/doctors/{doctorId}": {
@@ -988,7 +1239,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Doctor"
+        ]
       },
       "put": {
         "description": "",
@@ -1028,29 +1282,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "doctorId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        },
+        "tags": [
+          "Doctor"
+        ]
       }
     },
     "/api/questionnaire/{accountId}": {
@@ -1077,7 +1312,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Patient"
+        ]
       }
     },
     "/api/appointments/patient/{patientId}": {
@@ -1107,7 +1345,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       }
     },
     "/api/appointments/doctor/{doctorId}": {
@@ -1131,7 +1372,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       }
     },
     "/api/appointments/{appointmentId}": {
@@ -1161,7 +1405,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       },
       "put": {
         "description": "",
@@ -1207,7 +1454,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       },
       "delete": {
         "description": "",
@@ -1223,10 +1473,22 @@
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       }
     },
     "/api/appointments/cancel/{appointmentId}": {
@@ -1253,7 +1515,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       }
     },
     "/api/appointments": {
@@ -1295,7 +1560,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       }
     },
     "/api/auth/create/company": {
@@ -1334,7 +1602,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Authentication"
+        ]
       }
     },
     "/api/company/{companyId}": {
@@ -1352,13 +1623,22 @@
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Company"
+        ]
       }
     },
     "/api/drugRequests/": {
@@ -1379,7 +1659,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Pay-it-Forward"
         ]
       }
     },
@@ -1427,7 +1707,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Pay-it-Forward"
         ]
       }
     },
@@ -1469,14 +1749,20 @@
           }
         },
         "tags": [
-          "Company"
+          "Pay-it-Forward"
         ]
       }
     },
-    "/api/drugRequest/contribute/{appointmentId}/{drugName}": {
+    "/api/drugRequest/contribute/{companyId}/{appointmentId}/{drugName}": {
       "put": {
         "description": "",
         "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "appointmentId",
             "in": "path",
@@ -1523,7 +1809,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Pay-it-Forward"
         ]
       }
     },
@@ -1543,7 +1829,10 @@
                 "drugName": {
                   "example": "any"
                 },
-                "quantity": {
+                "inventoryContribution": {
+                  "example": "any"
+                },
+                "contributionQuantity": {
                   "example": "any"
                 },
                 "totalCost": {
@@ -1580,7 +1869,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Pay-it-Forward"
         ]
       }
     },
@@ -1616,7 +1905,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Pay-it-Forward"
         ]
       }
     },
@@ -1655,7 +1944,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Pay-it-Forward"
         ]
       },
       "delete": {
@@ -1692,11 +1981,11 @@
           }
         },
         "tags": [
-          "Company"
+          "Pay-it-Forward"
         ]
       }
     },
-    "/api/drugInventoryRecord/{drugRecordId}/{drugQuantity}": {
+    "/api/drugInventoryRecord/{drugRecordId}": {
       "put": {
         "description": "",
         "parameters": [
@@ -1707,10 +1996,19 @@
             "type": "string"
           },
           {
-            "name": "drugQuantity",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "appointmentId": {
+                  "example": "any"
+                },
+                "drugName": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -1731,7 +2029,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Inventory"
         ]
       }
     },
@@ -1753,7 +2051,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Inventory"
         ]
       }
     },
@@ -1792,7 +2090,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Inventory"
         ]
       },
       "delete": {
@@ -1829,7 +2127,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Inventory"
         ]
       }
     },
@@ -1877,7 +2175,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Inventory"
         ]
       }
     },
@@ -1922,7 +2220,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Inventory"
         ]
       }
     },
@@ -1955,7 +2253,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Inventory"
         ]
       }
     },
@@ -1988,7 +2286,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Inventory"
         ]
       },
       "delete": {
@@ -2019,7 +2317,7 @@
           }
         },
         "tags": [
-          "Company"
+          "Inventory"
         ]
       }
     },
@@ -2059,7 +2357,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Admin"
+        ]
       }
     },
     "/api/drugInventory": {
@@ -2075,7 +2376,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Inventory"
+        ]
       }
     },
     "/api/helpRequests": {
@@ -2091,7 +2395,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
       }
     },
     "/api/helpRequests/approve/{requestId}": {
@@ -2115,7 +2422,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
       }
     },
     "/api/helpRequests/reject/{requestId}": {
@@ -2139,7 +2449,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
       }
     },
     "/api/availableSlots/{date}": {
@@ -2172,7 +2485,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       }
     },
     "/api/availableSlot/getByDateTime": {
@@ -2214,7 +2530,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       }
     },
     "/api/availableSlot/doctor/{slotId}": {
@@ -2262,10 +2581,13 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       }
     },
-    "api/availableSlot": {
+    "/api/availableSlot": {
       "post": {
         "description": "",
         "parameters": [
@@ -2304,7 +2626,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Appointments"
+        ]
       }
     },
     "/api/paymentRequests": {
@@ -2314,19 +2639,16 @@
           "200": {
             "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
           "404": {
             "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
       }
     },
     "/api/paymentRequest/{appointmentId}": {
@@ -2359,7 +2681,49 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
+      }
+    },
+    "/api/paymentRequest/pay": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "paymentRequestId": {
+                  "example": "any"
+                },
+                "amount": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
       }
     },
     "/api/paymentRequest/approve/{appointmentId}": {
@@ -2392,7 +2756,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
       }
     },
     "/api/paymentRequest/reject/{appointmentId}": {
@@ -2425,7 +2792,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
       }
     },
     "/api/paymentRequest": {
@@ -2467,7 +2837,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
       }
     },
     "/api/paymentRequest/{id}": {
@@ -2500,15 +2873,18 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
       }
     },
-    "/api/notification/{accountid}": {
+    "/api/notifications/{accountId}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "accountid",
+            "name": "accountId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -2527,18 +2903,22 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
-        }
-      }
-    },
-    "/api/notification/{Notificationid}": {
+        },
+        "tags": [
+          "Notifications"
+        ]
+      },
       "put": {
         "description": "",
         "parameters": [
           {
-            "name": "Notificationid",
+            "name": "accountId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -2560,15 +2940,18 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Notifications"
+        ]
       }
     },
-    "/api/notifications/{accountid}": {
+    "/api/notification/{notificationId}": {
       "put": {
         "description": "",
         "parameters": [
           {
-            "name": "accountid",
+            "name": "notificationId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -2590,7 +2973,10 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Notifications"
+        ]
       }
     },
     "/api/notification": {
@@ -2632,7 +3018,97 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/generateQRCode": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "accountid",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/getAuth/{accountId}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/verify2FA/{accountId}": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
       }
     }
   }
