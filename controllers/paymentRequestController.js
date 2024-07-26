@@ -1,5 +1,6 @@
 const PaymentRequest = require('../models/paymentRequest');
 const PrescribedMedication = require('../models/prescribedMedication')
+const Payment = require('../models/payment')
 // Emmanuel
 const createPaymentRequest = async (req, res) => {
     try {
@@ -153,6 +154,7 @@ const approvePaymentRequestByAppointmentId = async (req, res) => {
 
         const approveRequest = await PaymentRequest.updatePaymentRequestStatusByAppointmentId(appointmentId, status);
         const updatedPrescribedMed = await PrescribedMedication.updatePrescribedMedicationDrugRequestByAppointmentId(appointmentId, pmStatus);
+        // const updatePayment = await Payment.updatePaymentStatus
 
         if (approveRequest) {
             return res.status(200).json({

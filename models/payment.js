@@ -24,6 +24,29 @@ class Payment {
         await request.query(query);
         connection.close();
     }
+
+    // Emmanuel
+    static async updatePaymentStatusToPayRequest(appointmentId) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `
+            UPDATE Payments p
+            INNER JOIN PaymentRequest pr ON p.AppointmentId = pr.AppointmentId
+            SET p.PaymentStatus = 'PayRequest'
+            WHERE p.AppointmentId = @AppointmentId AND p.;
+        `
+
+        const query2 = 1;/*
+        UPDATE Payments 
+SET PaymentStatus = 'PayRequest'
+FROM Payments p INNER JOIN PaymentRequest pr ON p.AppointmentId = pr.AppointmentId
+*/
+        const request = connection.request();
+        request.input('AppointmentId', appointmentId);
+
+        await request.query(query);
+        connection.close();
+    }
 }
 
 module.exports = Payment;
