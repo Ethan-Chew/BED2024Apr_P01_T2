@@ -64,7 +64,7 @@ const tagsWithCategory = {
     "generateQRCode", "getAuth", "verify2FA", "auth"
   ],
   "Company": [
-    "company"
+    "company", "drugRequests", "drugRequest", "drugContributionOrders"
   ],
   "Patient": [
     "patient", "patients", "paymentMethod", "paymentMethods", "questionnaire"
@@ -76,10 +76,10 @@ const tagsWithCategory = {
     "staff", "patients/unapproved", "drugTopup"
   ],
   "Pay-it-Forward": [
-    "drugRequests", "drugRequest", "drugContributionOrders", "helpRequests", "paymentRequests", "paymentRequest"
+    "helpRequests", "paymentRequests", "paymentRequest"
   ],
   "Inventory": [
-    "drugInventoryRecord", "companyDrugInventory", "inventoryRecord", "drugInventory"
+    "drugInventory", "companyDrugInventory", "drugInventoryRecord", "inventoryRecord"
   ],
   "Appointments": [
     "appointment", "appointments", "availableSlot", "availableSlots"
