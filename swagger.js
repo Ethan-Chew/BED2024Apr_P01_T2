@@ -9,6 +9,14 @@ const doc = {
     description: "Outlines the different endpoints contained in the CareLinc Back-End API. These API Endpoints handle the management of accounts, appointment bookings, inventory management and other operations that are crucial to the functioning of the CareLinc platform.",
   },
   host: "localhost:3000",
+  securityDefinitions: {
+    BearerAuth: {
+      type: "apiKey",
+      name: "Authorization",
+      in: "header",
+      description: "Enter your bearer token in the format **Bearer &lt;token&gt;**",
+    },
+  },
   tags: [
     {
       name: "Authentication",

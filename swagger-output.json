@@ -56,6 +56,14 @@
   "schemes": [
     "http"
   ],
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter your bearer token in the format **Bearer &lt;token&gt;**"
+    }
+  },
   "paths": {
     "/api/auth/login": {
       "post": {
@@ -1568,7 +1576,7 @@
     },
     "/api/auth/create/company": {
       "post": {
-        "description": "",
+        "description": "This route allows the creation of a new company account.",
         "parameters": [
           {
             "name": "body",
@@ -1610,7 +1618,7 @@
     },
     "/api/company/{companyId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves the details of a company by its ID.",
         "parameters": [
           {
             "name": "companyId",
@@ -1643,7 +1651,7 @@
     },
     "/api/drugRequests/": {
       "get": {
-        "description": "",
+        "description": "This route fetches all drug request orders.",
         "responses": {
           "200": {
             "description": "OK"
@@ -1659,13 +1667,13 @@
           }
         },
         "tags": [
-          "Pay-it-Forward"
+          "Company"
         ]
       }
     },
     "/api/drugRequest/{appointmentId}/{drugName}/{companyId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves a specific drug request by appointment ID, drug name, and company ID.",
         "parameters": [
           {
             "name": "appointmentId",
@@ -1707,13 +1715,13 @@
           }
         },
         "tags": [
-          "Pay-it-Forward"
+          "Company"
         ]
       }
     },
     "/api/drugRequest/{appointmentId}/{drugName}": {
       "put": {
-        "description": "",
+        "description": "This route updates the status of a drug request from completed back to pending.",
         "parameters": [
           {
             "name": "appointmentId",
@@ -1749,13 +1757,13 @@
           }
         },
         "tags": [
-          "Pay-it-Forward"
+          "Company"
         ]
       }
     },
     "/api/drugRequest/contribute/{companyId}/{appointmentId}/{drugName}": {
       "put": {
-        "description": "",
+        "description": "This route updates a drug request to completed and deducts the necessary medicine from the inventory.",
         "parameters": [
           {
             "name": "companyId",
@@ -1809,13 +1817,13 @@
           }
         },
         "tags": [
-          "Pay-it-Forward"
+          "Company"
         ]
       }
     },
     "/api/drugRequest/drugContribution": {
       "post": {
-        "description": "",
+        "description": "This route adds the contributed drug request to a contribution list (drug orders).",
         "parameters": [
           {
             "name": "body",
@@ -1869,13 +1877,13 @@
           }
         },
         "tags": [
-          "Pay-it-Forward"
+          "Company"
         ]
       }
     },
     "/api/drugContributionOrders/{companyId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves all drug orders that the company is contributing to.",
         "parameters": [
           {
             "name": "companyId",
@@ -1905,13 +1913,13 @@
           }
         },
         "tags": [
-          "Pay-it-Forward"
+          "Company"
         ]
       }
     },
     "/api/drugContributionOrders/{appointmentId}/{drugName}": {
       "put": {
-        "description": "",
+        "description": "This route confirms that a drug order is completed.",
         "parameters": [
           {
             "name": "appointmentId",
@@ -1944,11 +1952,11 @@
           }
         },
         "tags": [
-          "Pay-it-Forward"
+          "Company"
         ]
       },
       "delete": {
-        "description": "",
+        "description": "This route deletes a drug order from the contribution list and puts it back to the pending request list.",
         "parameters": [
           {
             "name": "appointmentId",
@@ -1981,13 +1989,13 @@
           }
         },
         "tags": [
-          "Pay-it-Forward"
+          "Company"
         ]
       }
     },
     "/api/drugInventoryRecord/{drugRecordId}": {
       "put": {
-        "description": "",
+        "description": "This route returns the medicine contributed back to the inventory for a drug order that was canceled and put back into the pending request list.",
         "parameters": [
           {
             "name": "drugRecordId",
@@ -2035,7 +2043,7 @@
     },
     "/api/companyDrugInventory/": {
       "get": {
-        "description": "",
+        "description": "This route retrieves a list of available drugs in the system.",
         "responses": {
           "200": {
             "description": "OK"
@@ -2057,7 +2065,7 @@
     },
     "/api/companyDrugInventory/{companyId}/{drugName}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves the details of a drug in the company's inventory by the drug name.",
         "parameters": [
           {
             "name": "companyId",
@@ -2094,7 +2102,7 @@
         ]
       },
       "delete": {
-        "description": "",
+        "description": "This route removes all available drugs remaining inside the company inventory and updates the record.",
         "parameters": [
           {
             "name": "companyId",
@@ -2133,7 +2141,7 @@
     },
     "/api/companyDrugInventory/addDrug": {
       "post": {
-        "description": "",
+        "description": "This route adds more drug quantity into the company inventory for a selected drug.",
         "parameters": [
           {
             "name": "body",
@@ -2181,7 +2189,7 @@
     },
     "/api/companyDrugInventory/{companyId}/{drugName}/{drugQuantity}": {
       "delete": {
-        "description": "",
+        "description": "This route removes a specified drug quantity based on user input from the company inventory.",
         "parameters": [
           {
             "name": "companyId",
@@ -2226,7 +2234,7 @@
     },
     "/api/inventoryRecord/{companyId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves all available drug records (drugs added into the company's inventory logs) that belong to the company.",
         "parameters": [
           {
             "name": "companyId",
@@ -2259,7 +2267,7 @@
     },
     "/api/inventoryRecord/{drugRecordId}": {
       "put": {
-        "description": "",
+        "description": "This route removes all remaining drugs for the specified drug record.",
         "parameters": [
           {
             "name": "drugRecordId",
@@ -2290,7 +2298,7 @@
         ]
       },
       "delete": {
-        "description": "",
+        "description": "This route deletes the drug record from the database.",
         "parameters": [
           {
             "name": "drugRecordId",
