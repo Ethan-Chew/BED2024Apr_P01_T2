@@ -35,6 +35,7 @@ const authorisedRoles = {
     "/api/inventoryRecord/:drugRecordId": ["company"],
 
     "/api/paymentRequests": ["patient"],
+    "/api/paymentRequests/company": ['company'],
     "/api/paymentRequest/:appointmentId": ["admin"],
     "/api/paymentRequest/approve/:appointmentId": ["admin"],
     "/api/paymentRequest/reject/:appointmentId": ["admin"],

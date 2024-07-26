@@ -174,8 +174,10 @@ app.post("/api/availableSlot", authoriseJWT, availableSlotController.createAvail
 
 // Route for Payment Request
 app.get("/api/paymentRequests", paymentRequestController.getPaymentRequestsByApprovedStatus);
+app.get("/api/paymentRequests/company", authoriseJWT, paymentRequestController.getPaymentRequestStatusByPendingDrugRequest);
 app.get("/api/paymentRequest/:appointmentId", authoriseJWT, paymentRequestController.getPaymentRequestByAppointmentId);
 app.put("/api/paymentRequest/pay", paymentRequestController.payRequestByRequestId);
+app.put("/api/paymentRequest/check", paymentRequestController.checkPaymentRequest);
 app.put("/api/paymentRequest/approve/:appointmentId", authoriseJWT, paymentRequestController.approvePaymentRequestByAppointmentId);
 app.put("/api/paymentRequest/reject/:appointmentId", authoriseJWT, paymentRequestController.rejectPaymentRequestByAppointmentId);
 app.post("/api/paymentRequest", authoriseJWT, validatePaymentRequest, paymentRequestController.createPaymentRequest);

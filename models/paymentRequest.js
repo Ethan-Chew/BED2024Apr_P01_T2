@@ -139,6 +139,31 @@ class PaymentRequest {
     }
 
     // Emmanuel
+    static async getPaymentRequestStatusByPendingDrugRequest() {
+        const query = ` 
+            SELECT pr.*, pm.*
+            FROM PaymentRequest pr
+            INNER JOIN Appointments a ON  pr.AppointmentId = a.AppointmentId
+            INNER JOIN PrescribedMedication pm ON pr.AppointmentId = pm.AppointmentId
+            WHERE pr.PaymentRequestStatus = 'Approved'  AND pm.DrugRequest = 'Pending';
+        `;
+
+
+        const connection = await sql.connect(dbConfig);
+
+        const request = connection.request();
+        request.input("Status", "Approved");
+
+        const result = await request.query(query);
+        connection.close();
+
+        if (result.recordset.length == 0) return null;
+
+        // console.log(result.recordset);
+        return result.recordset;
+    }
+
+    // Emmanuel
     static async getPaymentRequestByAppointmentId(id) {
         const query = ` 
             SELECT *

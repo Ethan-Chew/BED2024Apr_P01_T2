@@ -41,7 +41,7 @@ const cancelPaymentRequest = async (req, res) => {
         }
 
         const deleteRequest = await PaymentRequest.cancelPaymentRequestById(id);
-        console.log("Controller response: ", deleteRequest)
+        // console.log("Controller response: ", deleteRequest)
         if (deleteRequest) {
             return res.status(201).json({
                 status: "Success",
@@ -96,6 +96,30 @@ const getPaymentRequestsByApprovedStatus = async (req, res) => {
     try {
 
         const getRequests = await PaymentRequest.getPaymentRequestsByApprovedStatus();
+
+        if (getRequests) {
+            return res.status(200).json({
+                status: "Success",
+                message: "Payment requests returned",
+                paymentRequests: getRequests
+            })
+        } else {
+            return res.status(404).json({
+                status: "Failed",
+                message: "Payment requests do not exist"
+            })
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+// Emmanuel
+const getPaymentRequestStatusByPendingDrugRequest = async (req, res) => {
+    try {
+        const getRequests = await paymentRequest.getPaymentRequestStatusByPendingDrugRequest();
 
         if (getRequests) {
             return res.status(200).json({
@@ -214,20 +238,42 @@ const payRequestByRequestId = async (req, res) => {
 }
 
 // Emmanuel
+const fulfillRequestByRequestId = async (req, res) => {
+    try {
+        const { paymentRequestId } = req.params;
+
+        if (paymentRequestId === undefined) {
+            return res.status(400).json({ message: 'paymentRequestId Id is required' });
+        }
+
+        const fulfillRequest = PaymentRequest; // WIP
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+// Emmanuel
 const checkPaymentRequest = async (req, res) => {
     try {
-        const paymentRequests = PaymentRequest.getPaymentRequestsByDate(date);
+        const paymentRequests = await PaymentRequest.getPaymentRequestsBeforeToday();
 
         if (paymentRequests) {
-
+            const status = 'Cancelled';
+            // console.log(paymentRequests);
+            for (i = 0; i < paymentRequests.length; i++) {
+                // console.log(paymentRequests[i].AppointmentId);
+                const updatePrescribeMed = await PrescribedMedication.updatePrescribedMedicationDrugRequestByAppointmentId(paymentRequests[i].AppointmentId, status);
+            }
             return res.status(200).json({
                 status: "Success",
-                message: "Payment request paid successfuly",
+                message: "Prescribed Med updated successfuly",
             })
         } else {
             return res.status(404).json({
                 status: "Failed",
-                message: "failed to pay as payment request does not exist"
+                message: "Failed to access Payment Requests"
             })
         }
 
@@ -241,8 +287,10 @@ module.exports = {
     createPaymentRequest,
     cancelPaymentRequest,
     getPaymentRequestByAppointmentId,
+    getPaymentRequestStatusByPendingDrugRequest,
     approvePaymentRequestByAppointmentId,
     rejectPaymentRequestByAppointmentId,
     getPaymentRequestsByApprovedStatus,
-    payRequestByRequestId
+    payRequestByRequestId,
+    checkPaymentRequest
 };
