@@ -41,10 +41,10 @@ document.addEventListener('DOMContentLoaded', async (e) => {
                         
                         <a class="text-1xl font-bold">Message from the requester</a>
                         ${paymentRequest.PaymentRequestMessage}
-                        <a class="text-1xl font-bold">Requested Payment Amount: ${paymentRequest.ConsultationCost}</a>
+                        <a class="text-1xl font-bold">Requested Payment Amount: ${paymentRequest.TotalCost}</a>
                         <a class="text-1xl font-bold"> Amount Paid: ${paymentRequest.PaymentPaidAmount}</a>
                         <a class="text-1xl font-bold">Pay this amount: 
-                        <input type="number" min="0.01" step="0.01" max="${paymentRequest.ConsultationCost} - ${paymentRequest.PaymentPaidAmount}" value="5" id="pr-${paymentRequest.PaymentRequestId}-amount"/><span class="font-bold"></a>
+                        <input type="number" min="0.01" step="0.01" max="${paymentRequest.TotalCost} - ${paymentRequest.PaymentPaidAmount}" value="5" id="pr-${paymentRequest.PaymentRequestId}-amount"/><span class="font-bold"></a>
                     </div>
 
                     <div class="flex space-x-3">
