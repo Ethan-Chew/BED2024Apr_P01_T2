@@ -81,7 +81,7 @@ const tagsWithCategory = {
     "doctors",
   ],
   "Admin": [
-    "staff", "patients/unapproved", "drugTopup"
+    "staff", "patients/unapproved", "drugTopup", "patient/admin/", "helpRequests", "drugTopup", "patient/reject/", "patient/approve/"
   ],
   "Pay-it-Forward": [
     "helpRequests", "paymentRequests", "paymentRequest"
@@ -100,6 +100,9 @@ const tagsWithCategory = {
   ],
   "Mail": [
     "mail"
+  ],
+  "2FA" [
+    "verify2FA", "generateQRCode", "getAuth"
   ]
 };
 
