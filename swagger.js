@@ -61,7 +61,12 @@ const addTagsToPaths = (paths, tagsConfig) => {
     Object.entries(tagsConfig).forEach(([tag, keywords]) => {
       if (keywords.some((keyword) => path.startsWith(`/api/${keyword}`))) {
         Object.keys(paths[path]).forEach((method) => {
-          paths[path][method].tags = [tag];
+          if (!paths[path][method].tags) {
+            paths[path][method].tags = [];
+          }
+          if (!paths[path][method].tags.includes(tag)) {
+            paths[path][method].tags.push(tag);
+          }
         });
       }
     });
