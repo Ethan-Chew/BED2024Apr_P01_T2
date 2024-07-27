@@ -7,7 +7,8 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger-output.json");
 
 // Controllers
-const accountsController = require("./controllers/accountsController");
+const patientsController = require("./controllers/patientsController");
+const doctorsController = require("./controllers/doctorController");
 const appointmentController = require("./controllers/appointmentController");
 const drugRequestController = require("./controllers/drugRequestController");
 const drugOrderController = require("./controllers/drugOrderController");
@@ -29,6 +30,7 @@ const notificationsController = require("./controllers/notificationsController")
 const twoFAController = require("./controllers/2FAController");
 
 
+
 // Middleware
 const validatePatient = require("./middleware/validatePatient");
 const validatePaymentMethod = require("./middleware/validatePaymentMethod");
@@ -36,7 +38,7 @@ const validatePaymentConfirmationEmail = require("./middleware/validatePaymentCo
 const validateAppointment = require("./middleware/validateAppointment");
 const validatePaymentRequest = require("./middleware/validatePaymentRequest");
 const validateWalletHistory = require("./middleware/validateWalletHistory");
-const validatePayment = require("./middleware/validatePayment");
+
 const validateAddRequestContribution = require("./middleware/validateAddRequestContribution");
 const validateContributeDrugRequest = require("./middleware/validateContributeDrugRequest");
 const validateDrugOrderByIdAndDrugName = require("./middleware/validateDrugOrderByIdAndDrugName");
@@ -66,18 +68,18 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 /// Routes for Account Authentication
-app.post("/api/auth/login", accountsController.authLoginAccount);
+app.post("/api/auth/login", patientsController.authLoginAccount);
 
 /// Route for Patient Account
-app.get("/api/patient/:patientId", authoriseJWT, accountsController.getPatientById);
-app.get("/api/patient/admin/:patientId", authoriseJWT, accountsController.getPatientByIdAdmin);
-app.get("/api/patients/", authoriseJWT, accountsController.getAllPatient);
-app.put("/api/patient/:patientId", authoriseJWT, validatePatient, accountsController.updatePatientById);
-app.post("/api/patient", validatePatient, accountsController.authCreatePatient);
-app.delete("/api/patient/:patientId", authoriseJWT, accountsController.deletePatientById);
-app.delete("/api/patient/admin/:patientId", authoriseJWT, accountsController.deletePatientByIdAdmin);
-app.put("/api/patient/approve/:patientId", authoriseJWT, accountsController.approvePatient);
-app.put("/api/patient/reject/:patientId", authoriseJWT, accountsController.denyPatient);
+app.get("/api/patient/:patientId", authoriseJWT, patientsController.getPatientById);
+app.get("/api/patient/admin/:patientId", authoriseJWT, patientsController.getPatientByIdAdmin);
+app.get("/api/patients/", authoriseJWT, patientsController.getAllPatient);
+app.put("/api/patient/:patientId", authoriseJWT, validatePatient, patientsController.updatePatientById);
+app.post("/api/patient", validatePatient, patientsController.authCreatePatient);
+app.delete("/api/patient/:patientId", authoriseJWT, patientsController.deletePatientById);
+app.delete("/api/patient/admin/:patientId", authoriseJWT, patientsController.deletePatientByIdAdmin);
+app.put("/api/patient/approve/:patientId", authoriseJWT, patientsController.approvePatient);
+app.put("/api/patient/reject/:patientId", authoriseJWT, patientsController.denyPatient);
 
 // Routes for Patient's Payment Methods
 app.get("/api/patient/paymentMethods/:patientId", authoriseJWT, paymentMethodController.getPaymentMethodsByPatientId);
@@ -98,7 +100,7 @@ app.post("/api/patient/:patientId/digitalWalletHistory", authoriseJWT, validateW
 app.delete("/api/patient/:patientId/digitalWalletHistory", authoriseJWT, digitalWalletHistoryController.deleteDigitalWalletHistory);
 
 // Route for Managing Patient Payments
-app.post("/api/patient/makePayment", authoriseJWT, validatePayment, paymentController.patientMakePayment);
+app.post("/api/patient/makePayment", authoriseJWT, paymentController.patientMakePayment);
 
 // Route for Sending a Payment Confirmation Email
 app.post("/api/mail/paymentConfirmation", authoriseJWT, validatePaymentConfirmationEmail, mailController.sendPaymentConfirmation);
@@ -110,16 +112,16 @@ app.post("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.save
 app.delete("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.deleteChatbotHistory);
 
 // Routes for Admin-Managing Patient Accounts
-app.get("/api/patients/unapproved", authoriseJWT, accountsController.getAllUnapproved);
-app.put("/api/staff/patient/:patientId", accountsController.adminUpdatePatientById);
+app.get("/api/patients/unapproved", authoriseJWT, patientsController.getAllUnapproved);
+app.put("/api/staff/patient/:patientId", patientsController.adminUpdatePatientById);
 
 /// Route for Doctor Account
-app.get("/api/doctors/", accountsController.getAllDoctor);
-app.get("/api/doctors/:doctorId", accountsController.getDoctorById);
-app.put("/api/doctors/:doctorId", accountsController.updateDoctorById);
+app.get("/api/doctors/", doctorsController.getAllDoctor);
+app.get("/api/doctors/:doctorId", doctorsController.getDoctorById);
+app.put("/api/doctors/:doctorId", doctorsController.updateDoctorById);
 
 /// Route for Questionnaire
-app.get("/api/questionnaire/:accountId", accountsController.getQuestionnaireWithAccountId);
+app.get("/api/questionnaire/:accountId", patientsController.getQuestionnaireWithAccountId);
 
 /// Route for Appointments
 app.get("/api/appointments/patient/:patientId", authoriseJWT, appointmentController.getAllPatientAppointment);
@@ -131,7 +133,7 @@ app.post("/api/appointments", authoriseJWT, validateAppointment, appointmentCont
 app.delete("/api/appointments/:appointmentId", authoriseJWT, appointmentController.deleteAppointmentById);
 
 /// Route for Company Account
-app.post("/api/auth/create/company", accountsController.authCreateCompany);
+app.post("/api/auth/create/company", companyController.authCreateCompany);
 app.get("/api/company/:companyId", authoriseJWT, companyController.getCompanyById);
 // Route for Drug Requests (Company)
 app.get("/api/drugRequests/", authoriseJWT, drugRequestController.getAllDrugRequestOrder);
@@ -161,7 +163,7 @@ app.post("/api/drugTopup/:drugName", drugTopup.requestTopup);
 //
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);
 
-//
+//Hervin
 app.get("/api/helpRequests", helpRequestsController.getPendingRequests);
 app.put("/api/helpRequests/approve/:requestId", helpRequestsController.approveRequest);
 app.put("/api/helpRequests/reject/:requestId", helpRequestsController.rejectRequest);

@@ -17,6 +17,24 @@ const getCompanyById = async (req,res) => {
     }
 }
 
+//HERVIn
+const authCreateCompany = async (req, res) => {
+    try {
+        const { name, email, password, companyAddress, createdBy } = req.body;
+
+        const company = await Company.createCompany(name, email, password, companyAddress, createdBy);
+
+        res.status(201).json({
+            message: "Company Created Successfully",
+            company: company
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
     getCompanyById,
+    authCreateCompany
 };
