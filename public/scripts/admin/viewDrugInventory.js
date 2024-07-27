@@ -32,13 +32,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
         // Drug info column
         const drugInfoColumn = document.createElement('div');
-        const drugInfoTitle = document.createElement('h3');
-        drugInfoTitle.className = "font-bold";
-        drugInfoTitle.textContent = "Expiry Date";
+        const drugInfoEarliest = document.createElement('h3');
+        const drugInfoLatest = document.createElement('h3');
+        drugInfoEarliest.className = "font-bold";
+        drugInfoEarliest.textContent = "Earliest Expiry Date";
+        drugInfoLatest.className = "font-bold";
+        drugInfoLatest.textContent = "Latest Expiry Date";
         drugInfoColumn.className = "pr-25";
-        drugInfoColumn.appendChild(drugInfoTitle);
-
-        drugInfoColumn.innerHTML += `<p>${drug.expiryDate}</p>`;
+        drugInfoColumn.appendChild(drugInfoEarliest);
+        drugInfoColumn.innerHTML += `<p>${drug.expiryDateClose}</p>`;
+        drugInfoColumn.appendChild(drugInfoLatest);
+        drugInfoColumn.innerHTML += `<p>${drug.expiryDateFar}</p>`;
         grid.appendChild(drugInfoColumn);
     
         // Quantity and price column
