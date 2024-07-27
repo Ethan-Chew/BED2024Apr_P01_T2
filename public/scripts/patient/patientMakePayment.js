@@ -330,7 +330,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             },
             body: JSON.stringify({
                 appointmentId: document.getElementById('appointment-id').value,
-                paymentMethod: cardMerchant === "Digital Wallet" ? "DWallet" : "Card",
+                paymentType: cardMerchant === "Digital Wallet" ? "DWallet" : "Card",
             })
         });
 

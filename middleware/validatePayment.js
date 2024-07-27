@@ -3,7 +3,7 @@ const Joi = require("joi").extend(require('@joi/date'));
 const validatePayment = (req, res, next) => {
     const schema = Joi.object({
         appointmentId: Joi.string(),
-        paymentMethod: Joi.string().valid('DWallet', 'Card', 'PayRequest').required(),
+        paymentType: Joi.string().valid('DWallet', 'Card', 'PayRequest').required(),
     });
 
     const validation = schema.validate(req.body, { abortEarly: false });

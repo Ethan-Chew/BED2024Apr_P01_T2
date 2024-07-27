@@ -11,16 +11,16 @@ class Payment {
     }
 
     // Created by: Ethan Chew
-    static async updatePaymentStatus(appointmentId, paymentMethod) {
+    static async updatePaymentStatus(appointmentId, paymentType) {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            UPDATE Payments SET PaymentStatus = 'Paid' AND PaymentMethod = @PaymentMethod
+            UPDATE Payments SET PaymentStatus = 'Paid', PaymentType = @PaymentType
             WHERE AppointmentId = @AppointmentId
         `
         const request = connection.request();
         request.input('AppointmentId', appointmentId);
-        request.input('PaymentMethod', paymentMethod);
+        request.input('PaymentType', paymentType);
 
         await request.query(query);
         connection.close();
