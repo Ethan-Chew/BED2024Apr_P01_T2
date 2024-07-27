@@ -59,8 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
             </div>
         `;
-
-        const totalAmount = appointment.medication.reduce((sum, item) => sum + item.drugPrice, 0) + appointment.consultationCost;
+        let totalAmount = Math.round((appointment.medication.reduce((sum, item) => sum + item.drugPrice, 0) + appointment.consultationCost) * 100) / 100;
         appointment.medication.forEach((drug) => {
             document.getElementById(`appointment-${appointment.appointmentId}-drugs`).innerHTML += `
                 <li class="flex justify-between mb-2">

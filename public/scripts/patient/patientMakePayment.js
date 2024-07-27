@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <a class="text-right">
                             <b>Total Amount:</b> $<span id="payment-${i}-totalcost"></span>
                         </a>
-                        <div id="payment-${i}-approved-paymentreq" class="hidden">
+                        <div id="payment-${i}-approved-paymentreq" class="hidden flex flex-col space-y-2 items-start">
                             <a class="text-right"><b>Subsidised Amount: </b> $<span id="payment-${i}-subsidised"></span></a>
                             <a class="text-right"><b>Final Amount: </b> $<span id="payment-${i}-final"></span></a> 
                         </div>
@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById(`payment-med-${i}`).innerHTML += `<a>${appointment.medication[j].drugName}</a>`;
             document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$${appointment.medication[j].drugPrice}</a>`;
             if (appointment.medication[j].drugRequest === "Completed") {
-                document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$0 <i>Company Fufilled</i></a>`;
+                document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$0 <i>(Company Fufilled)</i></a>`;
             } else {
                 totalAmount += appointment.medication[j].drugPrice;
             }
@@ -171,6 +171,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById(`payment-med-${i}`).innerHTML += `<a>Consultation Fee</a>`;
         document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$${appointment.consultationCost}</a>`;
 
+        totalAmount = Math.round(totalAmount * 100) / 100;
         document.getElementById(`payment-${i}-totalcost`).innerText = totalAmount; // Set total cost amount
 
         if (appointment.paymentRequest) {

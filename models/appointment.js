@@ -53,7 +53,7 @@ class Appointment {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT a.AppointmentId, a.ConsultationCost, a.PatientId, a.DoctorId, a.Reason, avs.SlotDate, st.SlotTime, pay.PaymentStatus, payReq.PaymentRequestId, payReq.PaymentRequestMessage, payReq.PaymentRequestCreatedDate, payReq.PaymentRequestStatus, pm.DrugName, pm.Quantity, pm.Reason AS 'DrugReason', pm.DrugRequest, di.DrugPrice * pm.Quantity AS 'DrugPrice' FROM Appointments a
+            SELECT a.AppointmentId, a.ConsultationCost, a.PatientId, a.DoctorId, a.Reason, avs.SlotDate, st.SlotTime, pay.PaymentStatus, payReq.PaymentRequestId, payReq.PaymentRequestMessage, payReq.PaymentRequestCreatedDate, payReq.PaymentRequestStatus, payReq.PaymentPaidAmount, pm.DrugName, pm.Quantity, pm.Reason AS 'DrugReason', pm.DrugRequest, di.DrugPrice * pm.Quantity AS 'DrugPrice' FROM Appointments a
             LEFT JOIN Payments pay ON pay.AppointmentId = a.AppointmentId
             LEFT JOIN PaymentRequest payReq ON payReq.AppointmentId = a.AppointmentId
             LEFT JOIN PrescribedMedication pm ON a.AppointmentId = pm.AppointmentId
