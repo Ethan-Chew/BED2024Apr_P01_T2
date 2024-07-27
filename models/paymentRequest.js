@@ -116,27 +116,35 @@ class PaymentRequest {
     // Emmanuel
     static async getPaymentRequestsByApprovedStatus() {
         const query = ` 
-            SELECT pr.PaymentRequestId,
-            pr.AppointmentId,
-            pr.PaymentRequestStatus,
-            pr.PaymentPaidAmount,
-            a.ConsultationCost,
-            SUM(di.DrugPrice * pm.Quantity) AS 'TotalDrugCost',
-            (a.ConsultationCost + SUM(di.DrugPrice * pm.Quantity)) AS 'TotalCost'
-            FROM PaymentRequest pr
-            INNER JOIN Appointments a ON pr.AppointmentId = a.AppointmentId
-            INNER JOIN PrescribedMedication pm ON pr.AppointmentId = pm.AppointmentId
-            INNER JOIN DrugInventory di ON pm.DrugName = di.DrugName
+            SELECT 
+                pr.PaymentRequestId,
+                pr.AppointmentId,
+                pr.PaymentRequestStatus,
+                pr.PaymentPaidAmount,
+                a.ConsultationCost,
+                TotalDrugCost,
+                (a.ConsultationCost + TotalDrugCost) AS TotalCost
+            FROM 
+                PaymentRequest pr
+            INNER JOIN 
+                Appointments a ON pr.AppointmentId = a.AppointmentId
+            INNER JOIN 
+                (
+                    SELECT 
+                        pm.AppointmentId,
+                        SUM(di.DrugPrice * pm.Quantity) AS TotalDrugCost
+                    FROM 
+                        PrescribedMedication pm
+                    INNER JOIN 
+                        DrugInventory di ON pm.DrugName = di.DrugName
+                    WHERE 
+                        pm.DrugRequest = 'Cancelled'
+                    GROUP BY 
+                        pm.AppointmentId
+                ) pm_agg ON pr.AppointmentId = pm_agg.AppointmentId
             WHERE 
-            pr.PaymentRequestStatus = 'Approved' 
-            AND a.ConsultationCost > pr.PaymentPaidAmount 
-            AND pm.DrugRequest = 'Cancelled'
-            GROUP BY 
-            pr.PaymentRequestId,
-            pr.AppointmentId,
-            pr.PaymentRequestStatus,
-            pr.PaymentPaidAmount,
-            a.ConsultationCost;
+                pr.PaymentRequestStatus = 'Approved' 
+                AND (a.ConsultationCost + pm_agg.TotalDrugCost) > pr.PaymentPaidAmount;
         `;
 
 
