@@ -136,10 +136,15 @@ INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, Consultati
 ('APP0018', 'ACC0005', 'ACC0009', 'SLO0036', NULL, 'Follow-up Appointment', NULL);
 
 INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus, PaymentPaidAmount) VALUES
-('REQ0001', 'APP0001', 'Not enough money to pay for this appointment', '2024-05-20', 'Pending', 0),
-('REQ0002', 'APP0002', 'Not enough money to pay for this appointment', '2024-05-24', 'Approved', 0),
-('REQ0003', 'APP0004', 'Not enough money to pay for this appointment', '2024-06-03', 'Rejected', 0),
-('REQ0004', 'APP0005', 'Not enough money to pay for this appointment', '2024-07-22', 'Pending', 0);
+('REQ0001', 'APP0001', 'Not enough money to pay for this appointment', '2024-05-20', 'Pending', 0), -- Patient sent PaymentRequest, not approved by Admin
+('REQ0002', 'APP0002', 'Not enough money to pay for this appointment', '2024-05-24', 'Approved', 0), -- Patient sent PaymentRequest, approved by Admin, PrescribedMed set to Pending
+('REQ0003', 'APP0004', 'Not enough money to pay for this appointment', '2024-06-03', 'Rejected', 0), -- Patient send PaymentRequest, rejected by Admin
+('REQ0004', 'APP0005', 'Not enough money to pay for this appointment', '2024-07-22', 'Approved', 0), -- Patient send PaymentRequest, approved from Admin, one PrescribedMed set to Completed
+('REQ0005', 'APP0006', 'Not enough money to pay for this appointment', '2024-07-22', 'Approved', 0), -- Patient sent PaymentRequest, approved by Admin
+('REQ0006', 'APP0007', 'Not enough money to pay for this appointment', '2024-07-22', 'Approved', 0), -- Patient sent PaymentRequest, approved by Admin, all PrescribedMed to Completed
+('REQ0007', 'APP0008', 'Not enough money to pay for this appointment', '2024-07-22', 'Approved', 0), -- Patient sent PaymentRequest, approved by Admin, PrescribedMed to Cancelled, PaymentPaidAmount = 0
+('REQ0008', 'APP0009', 'Not enough money to pay for this appointment', '2024-07-23', 'Approved', 10), -- Patient sent PaymentRequest, approved by Admin, PrescribedMed to Cancelled, PaymentPaidAmount = 10
+('REQ0009', 'APP0012', 'Not enough money to pay for this appointment', '2024-07-23', 'Approved', 17); -- Patient sent PaymentRequest, approved by Admin, all PrescribedMed Completed, PaymentPaidAmount = 17 (ConsultationCost)
 
 INSERT INTO Payments (PaymentId, AppointmentId, PaymentStatus, PaymentType) VALUES
 ('PAY0001', 'APP0001', 'Unpaid', NULL),
@@ -151,12 +156,13 @@ INSERT INTO Payments (PaymentId, AppointmentId, PaymentStatus, PaymentType) VALU
 ('PAY0007', 'APP0007', 'Unpaid', NULL),
 ('PAY0008', 'APP0008', 'Unpaid', NULL),
 ('PAY0009', 'APP0009', 'Unpaid', NULL),
-('PAY0010', 'APP0010', 'Unpaid', NULL),
-('PAY0011', 'APP0011', 'Unpaid', NULL),
-('PAY0012', 'APP0012', 'Unpaid', NULL),
+('PAY0010', 'APP0010', 'Paid', 'Card'),
+('PAY0011', 'APP0011', 'Paid', 'DWallet'),
+('PAY0012', 'APP0012', 'Paid', 'PayRequest'),
 ('PAY0013', 'APP0013', 'Unpaid', NULL),
 ('PAY0014', 'APP0014', 'Unpaid', NULL),
 ('PAY0015', 'APP0015', 'Unpaid', NULL);
+
 INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Aspirin', 0.10, 'Pain relief'),
 ('Paracetamol', 0.05, 'Fever relief'),
@@ -204,26 +210,26 @@ INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quan
 ('PRM0004', 'APP0002', 'Pheniramine', 10, 'Allergy', 'Pending'),
 ('PRM0005', 'APP0003', 'Digoxin', 10, 'Heart Failure', NULL),
 ('PRM0006', 'APP0003', 'Magnesium Carbonate', 10, 'Heartburn', NULL),
-('PRM0007', 'APP0004', 'Magnesium Carbonate', 10, 'Heartburn', NULL),
-('PRM0008', 'APP0004', 'Promethazine', 10, 'Insomnia', NULL),
-('PRM0009', 'APP0004', 'Digoxin', 10, 'Heart Failure', 'Pending'),
+('PRM0007', 'APP0004', 'Magnesium Carbonate', 10, 'Heartburn', 'Cancelled'),
+('PRM0008', 'APP0004', 'Promethazine', 10, 'Insomnia', 'Cancelled'),
+('PRM0009', 'APP0004', 'Digoxin', 10, 'Heart Failure', 'Cancelled'),
 ('PRM0010', 'APP0005', 'Prazosin', 10, 'Hypertension', 'Completed'),
 ('PRM0011', 'APP0005', 'Calcium Channel Blockers', 10, 'Lower blood pressure', 'Pending'),
 ('PRM0012', 'APP0005', 'Clindamycin', 10, 'Bacterial infection', 'Pending'),
 ('PRM0013', 'APP0006', 'Paracetamol', 10, 'Fever relief', NULL),
 ('PRM0014', 'APP0006', 'Penicillamine', 10, 'Rheumatoid arthritis', NULL),
-('PRM0015', 'APP0007', 'Aspirin', 10, 'Pain relief', NULL),
-('PRM0016', 'APP0007', 'Benzydamine', 10, 'Sore throat', NULL),
-('PRM0017', 'APP0008', 'Panadol', 10, 'Pain relief', NULL),
-('PRM0018', 'APP0008', 'Dipyridamole', 10, 'Prevent blood clots', NULL),
+('PRM0015', 'APP0007', 'Aspirin', 10, 'Pain relief', 'Completed'),
+('PRM0016', 'APP0007', 'Benzydamine', 10, 'Sore throat', 'Completed'),
+('PRM0017', 'APP0008', 'Panadol', 10, 'Pain relief', 'Cancelled'),
+('PRM0018', 'APP0008', 'Dipyridamole', 10, 'Prevent blood clots', 'Cancelled'),
 ('PRM0019', 'APP0009', 'Benzydamine', 10, 'Sore throat', NULL),
 ('PRM0020', 'APP0009', 'Aspirin', 10, 'Pain relief', NULL),
 ('PRM0021', 'APP0010', 'Aciclovir', 10, 'Viral infection', NULL),
 ('PRM0022', 'APP0010', 'Clindamycin', 10, 'Viral infection', NULL),
 ('PRM0023', 'APP0011', 'Tamoxifen', 10, 'Breast cancer treatment', NULL),
 ('PRM0024', 'APP0011', 'Dipyridamole', 10, 'Prevent blood clots', NULL),
-('PRM0025', 'APP0012', 'Paracetamol', 10, 'Fever relief', NULL),
-('PRM0026', 'APP0012', 'Prazosin', 10, 'Hypertension', NULL),
+('PRM0025', 'APP0012', 'Paracetamol', 10, 'Fever relief', 'Completed'),
+('PRM0026', 'APP0012', 'Prazosin', 10, 'Hypertension', 'Completed'),
 ('PRM0027', 'APP0013', 'Ibuprofen', 10, 'Pain relief', NULL),
 ('PRM0028', 'APP0013', 'Panadol', 10, 'Pain relief', NULL),
 ('PRM0029', 'APP0014', 'Promethazine', 10, 'Inflammation relief', NULL),
@@ -233,7 +239,11 @@ INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quan
 
 -- Sample data for DrugRequestContribution table
 INSERT INTO DrugRequestContribution (AppointmentId, DrugName, InventoryContribution, ContributionQuantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES
-('APP0005', 'Prazosin', 5, 5, 79.90, '2024-06-01', NULL, 'Pending', 'ACC0010', 'DRI0008');
+('APP0005', 'Prazosin', 5, 5, 6, '2024-06-01', NULL, 'Pending', 'ACC0010', 'DRI0008'),
+('APP0007', 'Aspirin', 10, 0, 1, '2024-07-23', NULL, 'Completed', 'ACC0010', 'DRI0001'),
+('APP0007', 'Benzydamine', 10, 0, 5, '2024-07-23', NULL, 'Completed', 'ACC0010', 'DRI0013'),
+('APP0012', 'Prazosin', 10, 0, 6, '2024-07-24', NULL, 'Completed', 'ACC0010', 'DRI0008'),
+('APP0012', 'Paracetamol', 10, 0, 0.5, '2024-07-24', NULL, 'Completed', 'ACC0010', 'DRI0003');
 
 INSERT INTO DrugTopupRequest (TopupId, DrugName, TopupQuantity, TopupRequestDate, TopupStatus) VALUES
 ('DRT0001', 'Paracetamol', 100, '2024-05-01', 'Completed'),
