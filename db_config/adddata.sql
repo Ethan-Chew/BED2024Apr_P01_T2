@@ -128,12 +128,9 @@ INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, Consultati
 ('APP0010', 'ACC0005', 'ACC0009', 'SLO0018', 12.00, 'Ear Infection', 'Prescribed antibiotics.'),
 ('APP0011', 'ACC0005', 'ACC0009', 'SLO0019', 22.00, 'Sinus Infection', 'Recommended nasal spray.'),
 ('APP0012', 'ACC0005', 'ACC0009', 'SLO0020', 17.00, 'Skin Rash', 'Prescribed topical cream.'),
-('APP0013', 'ACC0005', 'ACC0009', 'SLO0021', 10.00, 'High Blood Pressure', 'Adjusted medication dosage.'),
-('APP0014', 'ACC0005', 'ACC0009', 'SLO0022', 25.00, 'Asthma Checkup', 'Prescribed inhaler refill.'),
-('APP0015', 'ACC0005', 'ACC0009', 'SLO0023', 20.00, 'Diabetes Follow-up', 'Reviewed blood sugar levels.'),
-('APP0016', 'ACC0007', 'ACC0009', 'SLO0024', NULL, 'MRI Scan', NULL),
-('APP0017', 'ACC0005', 'ACC0008', 'SLO0029', NULL, 'Follow-up Appointment', NULL),
-('APP0018', 'ACC0005', 'ACC0009', 'SLO0036', NULL, 'Follow-up Appointment', NULL);
+('APP0013', 'ACC0007', 'ACC0009', 'SLO0024', NULL, 'MRI Scan', NULL),
+('APP0014', 'ACC0005', 'ACC0008', 'SLO0029', NULL, 'Follow-up Appointment', NULL),
+('APP0015', 'ACC0005', 'ACC0009', 'SLO0036', NULL, 'Follow-up Appointment', NULL);
 
 INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus, PaymentPaidAmount) VALUES
 ('REQ0001', 'APP0001', 'Not enough money to pay for this appointment', '2024-05-20', 'Pending', 0), -- Patient sent PaymentRequest, not approved by Admin
@@ -158,10 +155,7 @@ INSERT INTO Payments (PaymentId, AppointmentId, PaymentStatus, PaymentType) VALU
 ('PAY0009', 'APP0009', 'Unpaid', NULL),
 ('PAY0010', 'APP0010', 'Paid', 'Card'),
 ('PAY0011', 'APP0011', 'Paid', 'DWallet'),
-('PAY0012', 'APP0012', 'Paid', 'PayRequest'),
-('PAY0013', 'APP0013', 'Unpaid', NULL),
-('PAY0014', 'APP0014', 'Unpaid', NULL),
-('PAY0015', 'APP0015', 'Unpaid', NULL);
+('PAY0012', 'APP0012', 'Paid', 'PayRequest');
 
 INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Aspirin', 0.10, 'Pain relief'),
@@ -229,13 +223,7 @@ INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quan
 ('PRM0023', 'APP0011', 'Tamoxifen', 10, 'Breast cancer treatment', NULL),
 ('PRM0024', 'APP0011', 'Dipyridamole', 10, 'Prevent blood clots', NULL),
 ('PRM0025', 'APP0012', 'Paracetamol', 10, 'Fever relief', 'Completed'),
-('PRM0026', 'APP0012', 'Prazosin', 10, 'Hypertension', 'Completed'),
-('PRM0027', 'APP0013', 'Ibuprofen', 10, 'Pain relief', NULL),
-('PRM0028', 'APP0013', 'Panadol', 10, 'Pain relief', NULL),
-('PRM0029', 'APP0014', 'Promethazine', 10, 'Inflammation relief', NULL),
-('PRM0030', 'APP0014', 'Benzydamine', 10, 'Sore throat', NULL),
-('PRM0031', 'APP0015', 'Aciclovir', 10, 'Viral infection', NULL),
-('PRM0032', 'APP0015', 'Penicillamine', 10, 'Rheumatoid arthritis', NULL);
+('PRM0026', 'APP0012', 'Prazosin', 10, 'Hypertension', 'Completed');
 
 -- Sample data for DrugRequestContribution table
 INSERT INTO DrugRequestContribution (AppointmentId, DrugName, InventoryContribution, ContributionQuantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES

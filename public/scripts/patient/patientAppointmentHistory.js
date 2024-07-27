@@ -52,9 +52,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </ul>
                         <div class="flex justify-between font-bold mb-2">
                             <span>Total Amount:</span>
+                            <span id="appointment-${appointment.appointmentId}-total"></span>
+                        </div>
+                        <div class="flex justify-between font-bold mb-2 hidden">
+                            <span>Subsidised Amount:</span>
+                            <span id="appointment-${appointment.appointmentId}-subsidised"></span>
+                        </div>
+                        <div class="flex justify-between font-bold mb-2 hidden">
+                            <span>Final Amount:</span>
                             <span id="appointment-${appointment.appointmentId}-final"></span>
                         </div>
-                        <p class="text-gray-400 italic">${appointment.paymentStatus === "Unpaid" ? "Pending Payment" : "Fully Paid"}</p>
+                        <p class="text-gray-400 italic" id="appointment-${appointment.appointmentId}-paymentType"></p>
                     </div>
                 </div>
             </div>
@@ -72,6 +80,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 totalAmount -= drug.drugPrice;
             }
         });
-        document.getElementById(`appointment-${appointment.appointmentId}-final`).innerText = `$${totalAmount}`;
+        document.getElementById(`appointment-${appointment.appointmentId}-total`).innerText = `$${totalAmount}`;
+
+        if (appointment.paymentStatus === "Paid") {
+            document.getElementById(`appointment-${appointment.appointmentId}-paymentType`).innerText = "Fully Paid";
+        } else {
+            document.getElementById(`appointment-${appointment.appointmentId}-paymentType`).innerText = "Pending Payment";
+        }
+        if (appointment.paymentStatus === "Paid" && appointment.paymentType === "PayRequest") {
+            document.getElementById(`appointment-${appointment.appointmentId}-paymentType`).innerText = "Fully Paid by Payment Request";
+        }
+
+        if (appointment.paymentType === "PayRequest") {
+            document.getElementById(`appointment-${appointment.appointmentId}-subsidised`).innerText = `$${Math.round(appointment.paymentRequest.helpAmount * 100) / 100}`;
+            document.getElementById(`appointment-${appointment.appointmentId}-final`).innerText = `$${Math.round((totalAmount - appointment.paymentRequest.helpAmount) * 100) / 100}`;
+
+            document.getElementById(`appointment-${appointment.appointmentId}-subsidised`).parentElement.classList.remove("hidden");
+            document.getElementById(`appointment-${appointment.appointmentId}-final`).parentElement.classList.remove("hidden");
+        }
     });
 });
