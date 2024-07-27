@@ -255,7 +255,7 @@
           }
         },
         "tags": [
-          "Patient"
+          "Admin"
         ]
       },
       "delete": {
@@ -286,7 +286,7 @@
           }
         },
         "tags": [
-          "Patient"
+          "Admin"
         ]
       }
     },
@@ -392,7 +392,7 @@
           }
         },
         "tags": [
-          "Patient"
+          "Admin"
         ]
       }
     },
@@ -425,7 +425,7 @@
           }
         },
         "tags": [
-          "Patient"
+          "Admin"
         ]
       }
     },
@@ -2329,6 +2329,196 @@
         ]
       }
     },
+    "/api/companyDrugInventory/addDrug": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "drugName": {
+                  "example": "any"
+                },
+                "drugExpiryDate": {
+                  "example": "any"
+                },
+                "drugQuantity": {
+                  "example": "any"
+                },
+                "companyId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/api/companyDrugInventory/{companyId}/{drugName}/{drugQuantity}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "drugName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "drugQuantity",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/api/inventoryRecord/{companyId}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/api/inventoryRecord/{drugRecordId}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "drugRecordId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Inventory"
+        ]
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "drugRecordId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
     "/api/drugTopup/{drugName}": {
       "post": {
         "description": "",
@@ -2659,6 +2849,31 @@
         ]
       }
     },
+    "/api/paymentRequests/company": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
+      }
+    },
     "/api/paymentRequest/{appointmentId}": {
       "get": {
         "description": "",
@@ -2721,6 +2936,25 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Pay-it-Forward"
+        ]
+      }
+    },
+    "/api/paymentRequest/check": {
+      "put": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "404": {
             "description": "Not Found"
@@ -3056,7 +3290,7 @@
           }
         },
         "tags": [
-          "Authentication"
+          "2FA"
         ]
       }
     },
@@ -3083,7 +3317,7 @@
           }
         },
         "tags": [
-          "Authentication"
+          "2FA"
         ]
       }
     },
@@ -3115,7 +3349,7 @@
           }
         },
         "tags": [
-          "Authentication"
+          "2FA"
         ]
       }
     }
