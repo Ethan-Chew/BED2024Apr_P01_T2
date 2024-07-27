@@ -1,4 +1,4 @@
-﻿USE CareLinc;
+USE CareLinc;
 
 INSERT INTO Account(AccountId, AccountName, AccountPassword, AccountEmail, AccountCreationDate) VALUES
 ('ACC0001', 'User1', '$2a$10$rP1fkh4ouGntzi2R./73Cu/3v5lBi.PiM8LdY/3.oZNfPvpUw/oUy', 'user1@mail.com', 1718096320), 
@@ -75,46 +75,88 @@ INSERT INTO SlotTime(SlotTimeId, SlotTime) VALUES
 INSERT INTO AvailableSlot (SlotId, DoctorId, SlotDate, SlotTimeId) VALUES
 ('SLO0001', 'ACC0008', '2024-05-10', 'SLOT003'),
 ('SLO0002', 'ACC0009', '2024-05-24', 'SLOT004'),
-('SLO0003', 'ACC0008', '2024-06-03', 'SLOT007'),
+('SLO0003', 'ACC0008', '2024-06-03', 'SLOT002'),
 ('SLO0004', 'ACC0008', '2024-06-03', 'SLOT007'),
 ('SLO0005', 'ACC0009', '2024-07-01', 'SLOT020'),
-('SLO0006', 'ACC0008', '2024-08-20', 'SLOT010'),
-('SLO0007', 'ACC0008', '2024-08-20', 'SLOT002'),
-('SLO0008', 'ACC0008', '2024-08-20', 'SLOT007'),
-('SLO0009', 'ACC0008', '2024-08-20', 'SLOT003'),
-('SLO0010', 'ACC0008', '2024-08-20', 'SLOT009'),
-('SLO0011', 'ACC0009', '2024-10-15', 'SLOT017'),
-('SLO0012', 'ACC0009', '2024-10-15', 'SLOT020'),
-('SLO0013', 'ACC0009', '2024-10-15', 'SLOT012'),
-('SLO0014', 'ACC0009', '2024-10-15', 'SLOT010'),
-('SLO0015', 'ACC0009', '2024-10-15', 'SLOT006'),
-('SLO0016', 'ACC0009', '2024-10-15', 'SLOT008'),
-('SLO0017', 'ACC0009', '2024-10-15', 'SLOT013'),
-('SLO0018', 'ACC0008', '2024-09-11', 'SLOT001'),
-('SLO0019', 'ACC0009', '2024-09-11', 'SLOT002'),
-('SLO0020', 'ACC0008', '2024-09-11', 'SLOT003'),
-('SLO0021', 'ACC0008', '2024-09-11', 'SLOT004'),
-('SLO0022', 'ACC0009', '2024-09-11', 'SLOT005'),
-('SLO0023', 'ACC0008', '2024-09-11', 'SLOT006');
+('SLO0006', 'ACC0008', '2024-07-20', 'SLOT010'),
+('SLO0007', 'ACC0008', '2024-07-20', 'SLOT005'),
+('SLO0008', 'ACC0008', '2024-07-20', 'SLOT007'),
+('SLO0009', 'ACC0008', '2024-07-20', 'SLOT008'),
+('SLO0010', 'ACC0008', '2024-07-20', 'SLOT002'),
+('SLO0011', 'ACC0008', '2024-07-22', 'SLOT004'),
+('SLO0012', 'ACC0008', '2024-07-22', 'SLOT007'),
+('SLO0013', 'ACC0008', '2024-07-22', 'SLOT003'),
+('SLO0014', 'ACC0008', '2024-07-22', 'SLOT002'),
+('SLO0015', 'ACC0008', '2024-07-22', 'SLOT001'),
+('SLO0016', 'ACC0008', '2024-07-22', 'SLOT016'),
+('SLO0017', 'ACC0008', '2024-07-23', 'SLOT019'),
+('SLO0018', 'ACC0008', '2024-07-23', 'SLOT018'),
+('SLO0019', 'ACC0008', '2024-07-23', 'SLOT020'),
+('SLO0020', 'ACC0008', '2024-07-23', 'SLOT013'),
+('SLO0021', 'ACC0008', '2024-07-23', 'SLOT015'),
+('SLO0022', 'ACC0008', '2024-07-23', 'SLOT014'),
+('SLO0023', 'ACC0008', '2024-07-23', 'SLOT012'),
+('SLO0024', 'ACC0008', '2024-08-20', 'SLOT010'),
+('SLO0025', 'ACC0008', '2024-08-20', 'SLOT002'),
+('SLO0026', 'ACC0008', '2024-08-20', 'SLOT007'),
+('SLO0027', 'ACC0008', '2024-08-20', 'SLOT003'),
+('SLO0028', 'ACC0008', '2024-08-20', 'SLOT009'),
+('SLO0029', 'ACC0009', '2024-10-15', 'SLOT017'),
+('SLO0030', 'ACC0009', '2024-10-15', 'SLOT020'),
+('SLO0031', 'ACC0009', '2024-10-15', 'SLOT012'),
+('SLO0032', 'ACC0009', '2024-10-15', 'SLOT010'),
+('SLO0033', 'ACC0009', '2024-10-15', 'SLOT006'),
+('SLO0034', 'ACC0009', '2024-10-15', 'SLOT008'),
+('SLO0035', 'ACC0009', '2024-10-15', 'SLOT013'),
+('SLO0036', 'ACC0008', '2024-09-11', 'SLOT001'),
+('SLO0037', 'ACC0009', '2024-09-11', 'SLOT002'),
+('SLO0038', 'ACC0008', '2024-09-11', 'SLOT003'),
+('SLO0039', 'ACC0008', '2024-09-11', 'SLOT004'),
+('SLO0040', 'ACC0009', '2024-09-11', 'SLOT005'),
+('SLO0041', 'ACC0008', '2024-09-11', 'SLOT006');
 
 INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, ConsultationCost, Reason, DoctorNote) VALUES
 ('APP0001', 'ACC0005', 'ACC0008', 'SLO0001', 10.00, 'High Fever and Coughing', 'Prescribed Medication to Patient, to monitor.'),
 ('APP0002', 'ACC0005', 'ACC0009', 'SLO0002', 10.00, 'High Fever and Sneezing', 'Follow-up appointment to be made.'),
 ('APP0003', 'ACC0006', 'ACC0008', 'SLO0003', 15.00, 'Chest Pain', 'Medication prescribed, follow-up appointment required.'),
 ('APP0004', 'ACC0005', 'ACC0008', 'SLO0004', 15.00, 'Flu', 'Medication prescribed, patient is fine.'),
-('APP0005', 'ACC0007', 'ACC0009', 'SLO0005', NULL, 'MRI Scan', NULL),
-('APP0006', 'ACC0005', 'ACC0008', 'SLO0006', NULL, 'Follow-up Appointment', NULL),
-('APP0007', 'ACC0005', 'ACC0009', 'SLO0011', NULL, 'Follow-up Appointment', NULL);
+('APP0005', 'ACC0005', 'ACC0009', 'SLO0012', 20.00, 'Headache and Nausea', 'Recommended rest and hydration.'),
+('APP0006', 'ACC0005', 'ACC0009', 'SLO0014', 30.00, 'Stomach Ache', 'Prescribed antacids.'),
+('APP0007', 'ACC0005', 'ACC0009', 'SLO0015', 10.00, 'Seasonal Allergies', 'Prescribed antihistamines.'),
+('APP0008', 'ACC0005', 'ACC0009', 'SLO0016', 15.00, 'Sore Throat', 'Prescribed throat lozenges.'),
+('APP0009', 'ACC0005', 'ACC0009', 'SLO0017', 18.00, 'Sprained Ankle', 'Recommended ice and elevation.'),
+('APP0010', 'ACC0005', 'ACC0009', 'SLO0018', 12.00, 'Ear Infection', 'Prescribed antibiotics.'),
+('APP0011', 'ACC0005', 'ACC0009', 'SLO0019', 22.00, 'Sinus Infection', 'Recommended nasal spray.'),
+('APP0012', 'ACC0005', 'ACC0009', 'SLO0020', 17.00, 'Skin Rash', 'Prescribed topical cream.'),
+('APP0013', 'ACC0005', 'ACC0009', 'SLO0021', 10.00, 'High Blood Pressure', 'Adjusted medication dosage.'),
+('APP0014', 'ACC0005', 'ACC0009', 'SLO0022', 25.00, 'Asthma Checkup', 'Prescribed inhaler refill.'),
+('APP0015', 'ACC0005', 'ACC0009', 'SLO0023', 20.00, 'Diabetes Follow-up', 'Reviewed blood sugar levels.'),
+('APP0016', 'ACC0007', 'ACC0009', 'SLO0024', NULL, 'MRI Scan', NULL),
+('APP0017', 'ACC0005', 'ACC0008', 'SLO0029', NULL, 'Follow-up Appointment', NULL),
+('APP0018', 'ACC0005', 'ACC0009', 'SLO0036', NULL, 'Follow-up Appointment', NULL);
 
 INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus, PaymentPaidAmount) VALUES
 ('REQ0001', 'APP0001', 'Not enough money to pay for this appointment', '2024-05-20', 'Pending', 0),
-('REQ0002', 'APP0002', 'Not enough money to pay for this appointment', '2024-05-20', 'Approved', 0);
+('REQ0002', 'APP0002', 'Not enough money to pay for this appointment', '2024-05-24', 'Approved', 0),
+('REQ0003', 'APP0004', 'Not enough money to pay for this appointment', '2024-06-03', 'Rejected', 0),
+('REQ0004', 'APP0005', 'Not enough money to pay for this appointment', '2024-07-22', 'Pending', 0);
 
 INSERT INTO Payments (PaymentId, AppointmentId, PaymentStatus, PaymentType) VALUES
 ('PAY0001', 'APP0001', 'Unpaid', NULL),
-('PAY0002', 'APP0002', 'Paid', 'Card'),
+('PAY0002', 'APP0002', 'Unpaid', NULL),
 ('PAY0003', 'APP0003', 'Unpaid', NULL),
-('PAY0004', 'APP0004', 'Unpaid', NULL);
+('PAY0004', 'APP0004', 'Unpaid', NULL),
+('PAY0005', 'APP0005', 'Unpaid', NULL),
+('PAY0006', 'APP0006', 'Unpaid', NULL),
+('PAY0007', 'APP0007', 'Unpaid', NULL),
+('PAY0008', 'APP0008', 'Unpaid', NULL),
+('PAY0009', 'APP0009', 'Unpaid', NULL),
+('PAY0010', 'APP0010', 'Unpaid', NULL),
+('PAY0011', 'APP0011', 'Unpaid', NULL),
+('PAY0012', 'APP0012', 'Unpaid', NULL),
+('PAY0013', 'APP0013', 'Unpaid', NULL),
+('PAY0014', 'APP0014', 'Unpaid', NULL),
+('PAY0015', 'APP0015', 'Unpaid', NULL);
 
 INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Aspirin', 5.99, 'Pain relief'),
@@ -163,13 +205,36 @@ INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quan
 ('PRM0004', 'APP0002', 'Pheniramine', 10, 'Allergy', 'Pending'),
 ('PRM0005', 'APP0003', 'Digoxin', 10, 'Heart Failure', NULL),
 ('PRM0006', 'APP0003', 'Magnesium Carbonate', 10, 'Heartburn', NULL),
-('PRM0007', 'APP0004', 'Magnesium Carbonate', 10, 'Heartburn', NULL);
+('PRM0007', 'APP0004', 'Magnesium Carbonate', 10, 'Heartburn', NULL),
+('PRM0008', 'APP0004', 'Promethazine', 10, 'Insomnia', NULL),
+('PRM0009', 'APP0004', 'Digoxin', 10, 'Heart Failure', 'Pending'),
+('PRM0010', 'APP0005', 'Prazosin', 10, 'Hypertension', 'Completed'),
+('PRM0011', 'APP0005', 'Calcium Channel Blockers', 10, 'Lower blood pressure', 'Pending'),
+('PRM0012', 'APP0005', 'Clindamycin', 10, 'Bacterial infection', 'Pending'),
+('PRM0013', 'APP0006', 'Paracetamol', 10, 'Fever relief', NULL),
+('PRM0014', 'APP0006', 'Penicillamine', 10, 'Rheumatoid arthritis', NULL),
+('PRM0015', 'APP0007', 'Aspirin', 10, 'Pain relief', NULL),
+('PRM0016', 'APP0007', 'Benzydamine', 10, 'Sore throat', NULL),
+('PRM0017', 'APP0008', 'Panadol', 10, 'Pain relief', NULL),
+('PRM0018', 'APP0008', 'Dipyridamole', 10, 'Prevent blood clots', NULL),
+('PRM0019', 'APP0009', 'Benzydamine', 10, 'Sore throat', NULL),
+('PRM0020', 'APP0009', 'Aspirin', 10, 'Pain relief', NULL),
+('PRM0021', 'APP0010', 'Aciclovir', 10, 'Viral infection', NULL),
+('PRM0022', 'APP0010', 'Clindamycin', 10, 'Viral infection', NULL),
+('PRM0023', 'APP0011', 'Tamoxifen', 10, 'Breast cancer treatment', NULL),
+('PRM0024', 'APP0011', 'Dipyridamole', 10, 'Prevent blood clots', NULL),
+('PRM0025', 'APP0012', 'Paracetamol', 10, 'Fever relief', NULL),
+('PRM0026', 'APP0012', 'Prazosin', 10, 'Hypertension', NULL),
+('PRM0027', 'APP0013', 'Ibuprofen', 10, 'Pain relief', NULL),
+('PRM0028', 'APP0013', 'Panadol', 10, 'Pain relief', NULL),
+('PRM0029', 'APP0014', 'Promethazine', 10, 'Inflammation relief', NULL),
+('PRM0030', 'APP0014', 'Benzydamine', 10, 'Sore throat', NULL),
+('PRM0031', 'APP0015', 'Aciclovir', 10, 'Viral infection', NULL),
+('PRM0032', 'APP0015', 'Penicillamine', 10, 'Rheumatoid arthritis', NULL);
 
 -- Sample data for DrugRequestContribution table
 INSERT INTO DrugRequestContribution (AppointmentId, DrugName, InventoryContribution, ContributionQuantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES
-('APP0001', 'Aspirin', 10, 10, 59.90, '2024-06-01', NULL, 'Pending', 'ACC0010', 'DRI0001'),
-('APP0001', 'Paracetamol', 5, 10, 59.90, '2024-06-01', '2024-07-21', 'Completed', 'ACC0010', 'DRI0003');
-
+('APP0005', 'Prazosin', 5, 5, 79.90, '2024-06-01', NULL, 'Pending', 'ACC0010', 'DRI0008');
 
 INSERT INTO DrugTopupRequest (TopupId, DrugName, TopupQuantity, TopupRequestDate, TopupStatus) VALUES
 ('DRT0001', 'Paracetamol', 100, '2024-05-01', 'Completed'),

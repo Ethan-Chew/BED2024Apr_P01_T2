@@ -116,11 +116,27 @@ class PaymentRequest {
     // Emmanuel
     static async getPaymentRequestsByApprovedStatus() {
         const query = ` 
-            SELECT pr.*, a.ConsultationCost
+            SELECT pr.PaymentRequestId,
+            pr.AppointmentId,
+            pr.PaymentRequestStatus,
+            pr.PaymentPaidAmount,
+            a.ConsultationCost,
+            SUM(di.DrugPrice * pm.Quantity) AS 'TotalDrugCost',
+            (a.ConsultationCost + SUM(di.DrugPrice * pm.Quantity)) AS 'TotalCost'
             FROM PaymentRequest pr
-            INNER JOIN Appointments a ON  pr.AppointmentId = a.AppointmentId
+            INNER JOIN Appointments a ON pr.AppointmentId = a.AppointmentId
             INNER JOIN PrescribedMedication pm ON pr.AppointmentId = pm.AppointmentId
-            WHERE pr.PaymentRequestStatus = 'Approved' AND a.ConsultationCost > pr.PaymentPaidAmount AND pm.DrugRequest = 'Cancelled';
+            INNER JOIN DrugInventory di ON pm.DrugName = di.DrugName
+            WHERE 
+            pr.PaymentRequestStatus = 'Approved' 
+            AND a.ConsultationCost > pr.PaymentPaidAmount 
+            AND pm.DrugRequest = 'Cancelled'
+            GROUP BY 
+            pr.PaymentRequestId,
+            pr.AppointmentId,
+            pr.PaymentRequestStatus,
+            pr.PaymentPaidAmount,
+            a.ConsultationCost;
         `;
 
 
