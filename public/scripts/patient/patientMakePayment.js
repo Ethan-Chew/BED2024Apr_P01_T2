@@ -159,10 +159,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Add Medication and Cost to Screen
         for (let j = 0; j < appointment.medication.length; j++) {
             document.getElementById(`payment-med-${i}`).innerHTML += `<a>${appointment.medication[j].drugName}</a>`;
-            document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$${appointment.medication[j].drugPrice}</a>`;
             if (appointment.medication[j].drugRequest === "Completed") {
                 document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$0 <i>(Company Fufilled)</i></a>`;
             } else {
+                document.getElementById(`payment-med-cost-${i}`).innerHTML += `<a>$${appointment.medication[j].drugPrice}</a>`;
                 totalAmount += appointment.medication[j].drugPrice;
             }
         }

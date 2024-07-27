@@ -19,26 +19,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("disclaimerMessage").classList.add("hidden");
     });
 
-    // Load Messages from Session Storage
-    const messageHistory = JSON.parse(sessionStorage.getItem("chatbotHistory"));
-
-    if (messageHistory) {
-        for (let i = 0; i < messageHistory.length; i++) {
-            if (messageHistory[i].role === "user") {
-                document.getElementById("chat-container").innerHTML += `
-                    <div class="self-start bg-blue-100 p-3 rounded-lg shadow">
-                        <p class="text-gray-800"><strong>User:</strong> ${messageHistory[i].parts[0].text}</p>
-                    </div>
-                `;
-            } else {
-                document.getElementById("chat-container").innerHTML += `
-                    <div class="self-end bg-green-100 p-3 rounded-lg shadow">
-                        <p class="text-gray-800"><strong>CareBot:</strong> ${messageHistory[i].parts[0].text}</p>
-                    </div>
-                `;
-            }
-        }
-    }
+    // Variables to save the Chatbot Messages
+    let chatbotHistory = [];
+    let chatbotHistoryTimestamp = [];
 
     // Handle Message Send
     document.getElementById("send-button").addEventListener("click", async () => {
@@ -61,9 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
 
         // Set History Timestamp (User)
-        const chatbotHistoryTimestamp = sessionStorage.getItem("chatbotHistoryTimestamp") ? JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp")) : [];
         chatbotHistoryTimestamp.push(new Date().getTime());
-        sessionStorage.setItem("chatbotHistoryTimestamp", JSON.stringify(chatbotHistoryTimestamp));
 
         // Freeze the send button while the chatbot is responding
         document.getElementById("send-button").disabled = true;
@@ -78,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             },
             body: JSON.stringify({ 
                 message: userInput,
-                history: sessionStorage.getItem("chatbotHistory") ? JSON.parse(sessionStorage.getItem("chatbotHistory")) : [],
+                history: chatbotHistory,
             }),
         });
         
@@ -94,7 +75,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
 
             // Save the chatbot history to sessionStorage
-            const chatbotHistory = sessionStorage.getItem("chatbotHistory") ? JSON.parse(sessionStorage.getItem("chatbotHistory")) : [];
             chatbotHistory.push({
                 role: "user",
                 parts: [{ text: userInput }]
@@ -103,12 +83,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 role: "model",
                 parts: [{ text: response }]
             });
-            sessionStorage.setItem("chatbotHistory", JSON.stringify(chatbotHistory));
 
             // Set History Timestamp (Model)
-            const chatbotHistoryTimestamp = sessionStorage.getItem("chatbotHistoryTimestamp") ? JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp")) : [];
             chatbotHistoryTimestamp.push(new Date().getTime());
-            sessionStorage.setItem("chatbotHistoryTimestamp", JSON.stringify(chatbotHistoryTimestamp));
         } else {
             alert("An error occurred while sending the message to the chatbot. Please try again later.");
         }
@@ -128,17 +105,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Check if the user has a currently saved history
         const retrieveChatResponse = await fetch(`/api/chatbot/history/${sessionStorage.getItem("accountId")}`);
 
-        let history = JSON.parse(sessionStorage.getItem("chatbotHistory"));
-        let historyTimestamps = JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp"));
-
         if (retrieveChatResponse.status !== 404) {
             // User already has a saved history
             const retrieveChatResponseJson = await retrieveChatResponse.json();
             const currentChatHistory = retrieveChatResponseJson.history;
 
             if (sessionStorage.getItem("chatbotHistory")) {
-                history = JSON.parse(sessionStorage.getItem("chatbotHistory")).slice(currentChatHistory.length);
-                historyTimestamps = JSON.parse(sessionStorage.getItem("chatbotHistoryTimestamp")).slice(currentChatHistory.length);
+                chatbotHistory = chatbotHistory.slice(currentChatHistory.length);
+                chatbotHistoryTimestamp = chatbotHistoryTimestamp.slice(currentChatHistory.length);
             }
         }
 
@@ -148,8 +122,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                history: history,
-                historyTimestamps: historyTimestamps,
+                history: chatbotHistory,
+                historyTimestamps: chatbotHistoryTimestamp,
             }),
         });
 
@@ -173,27 +147,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (loadChatResponse.status === 200) {
             const loadChatResponseJson = await loadChatResponse.json();
-            const history = loadChatResponseJson.history;
-            const historyTimestamps = loadChatResponseJson.historyTimestamps;
-
-            // Reset Session Storage
-            sessionStorage.setItem("chatbotHistory", JSON.stringify(history));
-            sessionStorage.setItem("chatbotHistoryTimestamp", JSON.stringify(historyTimestamps));
+            chatbotHistory = loadChatResponseJson.history;
+            chatbotHistoryTimestamp = loadChatResponseJson.historyTimestamps;
 
             // Display the chat history on the screen
             const chatContainer = document.getElementById("chat-container");
             chatContainer.innerHTML = ""; // Reset the Chat Container
-            for (let i = 0; i < history.length; i++) {
-                if (history[i].role === "user") {
+            for (let i = 0; i < chatbotHistory.length; i++) {
+                if (chatbotHistory[i].role === "user") {
                     chatContainer.innerHTML += `
                         <div class="self-start bg-blue-100 p-3 rounded-lg shadow">
-                            <p class="text-gray-800"><strong>User:</strong> ${history[i].parts[0].text}</p>
+                            <p class="text-gray-800"><strong>User:</strong> ${chatbotHistory[i].parts[0].text}</p>
                         </div>
                     `;
                 } else {
                     chatContainer.innerHTML += `
                         <div class="self-end bg-green-100 p-3 rounded-lg shadow">
-                            <p class="text-gray-800"><strong>CareBot:</strong> ${history[i].parts[0].text}</p>
+                            <p class="text-gray-800"><strong>CareBot:</strong> ${chatbotHistory[i].parts[0].text}</p>
                         </div>
                     `;
                 }
@@ -220,8 +190,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Reset Session Storage
-        sessionStorage.setItem("chatbotHistory", []);
-        sessionStorage.setItem("chatbotHistoryTimestamp", []);
+        chatbotHistory = [];
+        chatbotHistoryTimestamp = [];
 
         // Delete Chat Container Info
         const chatContainer = document.getElementById("chat-container");
