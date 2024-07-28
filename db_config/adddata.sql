@@ -128,10 +128,10 @@ INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, Consultati
 ('APP0010', 'ACC0005', 'ACC0009', 'SLO0018', 12.00, 'Ear Infection', 'Prescribed antibiotics.'),
 ('APP0011', 'ACC0005', 'ACC0009', 'SLO0019', 22.00, 'Sinus Infection', 'Recommended nasal spray.'),
 ('APP0012', 'ACC0005', 'ACC0009', 'SLO0020', 17.00, 'Skin Rash', 'Prescribed topical cream.'),
-('APP0013', 'ACC0007', 'ACC0009', 'SLO0024', NULL, 'MRI Scan', NULL),
-('APP0014', 'ACC0005', 'ACC0008', 'SLO0029', NULL, 'Follow-up Appointment', NULL),
-('APP0015', 'ACC0005', 'ACC0009', 'SLO0036', NULL, 'Follow-up Appointment', NULL),
-('APP0016', 'ACC0005', 'ACC0009', 'SLO0020', 30.00, 'Farmer disease', 'Prescribed no backend practicals for 2 weeks.');
+('APP0013', 'ACC0005', 'ACC0009', 'SLO0040', 30.00, 'Farmer disease', 'Prescribed no backend practicals for 2 weeks.'),
+('APP0014', 'ACC0007', 'ACC0009', 'SLO0024', NULL, 'MRI Scan', NULL),
+('APP0015', 'ACC0005', 'ACC0008', 'SLO0029', NULL, 'Follow-up Appointment', NULL),
+('APP0016', 'ACC0005', 'ACC0009', 'SLO0036', NULL, 'Follow-up Appointment', NULL);
 
 INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus, PaymentPaidAmount) VALUES
 ('REQ0001', 'APP0001', 'Not enough money to pay for this appointment', '2024-05-20', 'Pending', 0), -- Patient sent PaymentRequest, not approved by Admin
@@ -224,7 +224,8 @@ INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quan
 ('PRM0023', 'APP0011', 'Tamoxifen', 10, 'Breast cancer treatment', NULL),
 ('PRM0024', 'APP0011', 'Dipyridamole', 10, 'Prevent blood clots', NULL),
 ('PRM0025', 'APP0012', 'Paracetamol', 10, 'Fever relief', 'Completed'),
-('PRM0026', 'APP0012', 'Prazosin', 10, 'Hypertension', 'Completed');
+('PRM0026', 'APP0012', 'Prazosin', 10, 'Hypertension', 'Completed'),
+('PRM0027', 'APP0013', 'Digoxin', 10, 'Farmer Disease Treatment', NULL);
 
 -- Sample data for DrugRequestContribution table
 INSERT INTO DrugRequestContribution (AppointmentId, DrugName, InventoryContribution, ContributionQuantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES
