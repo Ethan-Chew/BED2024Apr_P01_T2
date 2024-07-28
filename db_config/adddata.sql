@@ -156,7 +156,8 @@ INSERT INTO Payments (PaymentId, AppointmentId, PaymentStatus, PaymentType) VALU
 ('PAY0009', 'APP0009', 'Unpaid', NULL),
 ('PAY0010', 'APP0010', 'Paid', 'Card'),
 ('PAY0011', 'APP0011', 'Paid', 'DWallet'),
-('PAY0012', 'APP0012', 'Paid', 'PayRequest');
+('PAY0012', 'APP0012', 'Paid', 'PayRequest'),
+('PAY0013', 'APP0013', 'Unpaid', NULL);
 
 INSERT INTO DrugInventory(DrugName, DrugPrice, DrugDescription) VALUES
 ('Aspirin', 0.10, 'Pain relief'),
@@ -225,7 +226,7 @@ INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quan
 ('PRM0024', 'APP0011', 'Dipyridamole', 10, 'Prevent blood clots', NULL),
 ('PRM0025', 'APP0012', 'Paracetamol', 10, 'Fever relief', 'Completed'),
 ('PRM0026', 'APP0012', 'Prazosin', 10, 'Hypertension', 'Completed'),
-('PRM0027', 'APP0013', 'Digoxin', 10, 'Farmer Disease', 'Completed');
+('PRM0027', 'APP0013', 'Digoxin', 10, 'Farmer Disease', NULL);
 
 -- Sample data for DrugRequestContribution table
 INSERT INTO DrugRequestContribution (AppointmentId, DrugName, InventoryContribution, ContributionQuantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES
