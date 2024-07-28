@@ -15,6 +15,7 @@ class PaymentRequest {
   
       const query = `
           SELECT * FROM PaymentRequest
+          WHERE PaymentRequestStatus = 'Pending'
       `;
   
       const request = connection.request();
