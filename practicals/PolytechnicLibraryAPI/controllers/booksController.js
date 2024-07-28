@@ -15,7 +15,8 @@ const updateBookAvailability = async (req, res) => {
     const availability = req.params.availability;
 
     try {
-        await Book.updateBookAvailability(bookId,availability);
+        const updatedBook = await Book.updateBookAvailability(bookId,availability);
+        if (!updatedBook) return res.status(404).send("Book not found");
         res.status(200).json({ message: "Book availability updated successfully" });
 
     } catch (error) {

@@ -21,6 +21,22 @@ class Book {
         return result.recordset.map(record => new Book(record.id, record.title, record.author, record.availability));
     }
 
+    static async getBookById(bookId) {
+        const connection = await sql.connect(dbConfig);
+
+        const query = `SELECT * FROM Books WHERE id = @bookId`;
+        const request = connection.request();
+        request.input("bookId", bookId);
+
+        const result = await request.query(query);
+        connection.close();
+
+        if (result.recordset.length === 0) return null;
+
+        const record = result.recordset[0];
+        return new Book(record.id, record.title, record.author, record.availability);
+    }
+
     static async updateBookAvailability(bookId, availability) {
         const connection = await sql.connect(dbConfig);
 
@@ -29,10 +45,10 @@ class Book {
         request.input("bookId", bookId);
         request.input("availability", availability);
 
-        const result = await request.query(query);
+        await request.query(query);
         connection.close();
         
-        return result.rowsAffected > 0;
+        return this.getBookById(bookId);
     }
 }
 
