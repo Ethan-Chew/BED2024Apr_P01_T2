@@ -49,7 +49,7 @@ const cancelPaymentRequest = async (req, res) => {
         } else {
             return res.status(404).json({
                 status: "Error",
-                message: "Payment request does not exist or status is Rejected"
+                message: "Payment request does not exist or status is Rejected or Payment Reqeust has already been paid"
             })
         }
 

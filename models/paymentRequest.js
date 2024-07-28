@@ -55,7 +55,7 @@ class PaymentRequest {
     static async cancelPaymentRequestById(id) {
         let query = `
             DELETE FROM PaymentRequest 
-            WHERE PaymentRequestId = @Id AND PaymentRequestStatus != @Status
+            WHERE PaymentRequestId = @Id AND PaymentRequestStatus != @Status AND PaymentPaidAmount <= 0
         `;
 
         const connection = await sql.connect(dbConfig);
@@ -290,66 +290,66 @@ class PaymentRequest {
     //Hervin
     static async getPendingRequests() {
         const connection = await sql.connect(dbConfig);
-    
+
         const query = `
             SELECT * FROM PaymentRequest
             WHERE PaymentRequestStatus = 'Pending'
         `;
-    
+
         const request = connection.request();
         const result = await request.query(query);
         connection.close();
-    
-        if (result.recordset.length == 0) return null;
-    
-        return result.recordset.map(row =>
-          new PaymentRequest(
-            row.PaymentRequestId,
-            row.AppointmentId,
-            row.PaymentRequestMessage,
-            row.PaymentRequestCreated,
-            row.PaymentRequestStatus
-          )
-        );
-      }
 
-      //Hervin
-      static async approveRequest(requestId) {
+        if (result.recordset.length == 0) return null;
+
+        return result.recordset.map(row =>
+            new PaymentRequest(
+                row.PaymentRequestId,
+                row.AppointmentId,
+                row.PaymentRequestMessage,
+                row.PaymentRequestCreated,
+                row.PaymentRequestStatus
+            )
+        );
+    }
+
+    //Hervin
+    static async approveRequest(requestId) {
         const connection = await sql.connect(dbConfig);
-    
+
         const query = `
             UPDATE PaymentRequest SET
             PaymentRequestStatus = 'Approved'
             WHERE PaymentRequestId = @requestId
         `;
-    
+
         const request = connection.request();
-    
+
         request.input('requestId', requestId);
         await request.query(query);
-    
+
         connection.close();
-    
+
         return { requestId };
     }
 
     //Hervin
     static async rejectRequest(requestId) {
         const connection = await sql.connect(dbConfig);
-    
+
         const query = `
             UPDATE PaymentRequest SET
             PaymentRequestStatus = 'Rejected'
             WHERE PaymentRequestId = @requestId
         `;
-    
+
         const request = connection.request();
-    
+
         request.input('requestId', requestId);
         await request.query(query);
-    
+
         connection.close();
-    
+
         return { requestId };
     }
 }
