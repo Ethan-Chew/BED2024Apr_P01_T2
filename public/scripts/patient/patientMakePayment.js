@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (appointment.paymentRequest.status === "Pending") {
                 document.getElementById(`help-${i}`).disabled = true;
                 document.getElementById(`help-${i}`).classList.add('cursor-not-allowed');
-            } else if (appointment.paymentRequest.status === "Approved") {
+            } else if (appointment.paymentRequest.status === "Approved" || appointment.paymentRequest.status === "Closed") {
                 document.getElementById(`payment-${i}-approved-paymentreq`).classList.remove('hidden');
 
                 // Update Subsidised and Final Amounts
@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById(`payment-${i}-totalcost`).innerText = totalAmount; // Set total cost amount
 
         if (appointment.paymentRequest) {
-            if (appointment.paymentRequest.status === "Approved") {
+            if (appointment.paymentRequest.status === "Approved" || appointment.paymentRequest.status === "Closed") {
                 totalAmount -= appointment.paymentRequest.helpAmount;
                 document.getElementById(`payment-${i}-final`).innerText = totalAmount;
             }
@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Set Event Listeners for Payment Buttons
         document.getElementById(`payment-${i}`).addEventListener('click', async () => {
             // Check if the User has a Pending Payment Request
-            if (appointment.paymentRequest) {
+            if (appointment.paymentRequest && appointment.paymentRequest.status !== "Closed") {
                 const confirmPayment = confirm("You have a pending Payment Help Request. Are you sure you want to make this payment? The request will be cancelled.");
                 if (!confirmPayment) return;
 
@@ -198,11 +198,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
 
                 if (deletePaymentRequestResponse.status === 201) {
-                    alert("Payment Request Cancelled.");
-                    unpaidAppointmentsDetail[i].paymentRequest = null;
-                    document.getElementById(`help-text-${i}`).innerText = `Can't afford it now? Ask for help from a member of the public.`;
-                    document.getElementById(`help-${i}`).disabled = false;
-                    document.getElementById(`help-${i}`).classList.remove('cursor-not-allowed');
+                    const deletePaymentRequestJson = await deletePaymentRequestResponse.json();
+                    if (deletePaymentRequestJson.message === "Payment request status set to Closed") {
+                        unpaidAppointmentsDetail[i].paymentRequest.status = "Closed";
+                    } else {
+                        alert("Payment Request Cancelled.");
+                        unpaidAppointmentsDetail[i].paymentRequest = null;
+                        document.getElementById(`help-text-${i}`).innerText = `Can't afford it now? Ask for help from a member of the public.`;
+                        document.getElementById(`help-${i}`).disabled = false;
+                        document.getElementById(`help-${i}`).classList.remove('cursor-not-allowed');
+                    }
                 } else {
                     alert("Failed to cancel Payment Request.");
                     return;
@@ -211,7 +216,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Send Text to Payment Confirmation Popup
             document.getElementById('payment-amount').innerText = document.getElementById(`payment-${i}-totalcost`).innerText;
             if (appointment.paymentRequest) {
-                if (appointment.paymentRequest.status === "Approved") {
+                if (appointment.paymentRequest.status === "Approved" || appointment.paymentRequest.status === "Closed") {
                     document.getElementById('payment-amount').innerText = document.getElementById(`payment-${i}-final`).innerText;
                 }
             }

@@ -121,6 +121,7 @@ class PaymentRequest {
                 pr.AppointmentId,
                 pr.PaymentRequestStatus,
                 pr.PaymentPaidAmount,
+                pr.PaymentRequestMessage,
                 a.ConsultationCost,
                 TotalDrugCost,
                 (a.ConsultationCost + TotalDrugCost) AS TotalCost
