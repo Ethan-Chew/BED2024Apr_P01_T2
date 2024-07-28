@@ -20,7 +20,7 @@ class Account {
                 CASE
                     WHEN p.PatientId IS NOT NULL THEN 'patient'
                     WHEN d.DoctorId IS NOT NULL THEN 'doctor'
-                    WHEN s.StaffId IS NOT NULL THEN 'staff'
+                    WHEN s.StaffId IS NOT NULL THEN 'admin'
                     WHEN c.CompanyId IS NOT NULL THEN 'company'
                     ELSE 'Unknown'
                 END AS Role,

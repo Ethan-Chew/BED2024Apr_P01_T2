@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Handle Logout Button Press
+    document.getElementById('logout').addEventListener('click', () => {
+        sessionStorage.removeItem('accountId');
+        window.location.href = '../index.html';
+    });
+    
     async function fetchAccountData() {
         const urlParams = new URLSearchParams(window.location.search);
         const accountId = urlParams.get('id');

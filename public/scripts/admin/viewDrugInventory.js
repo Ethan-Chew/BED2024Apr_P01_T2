@@ -1,5 +1,11 @@
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Handle Logout Button Press
+    document.getElementById('logout').addEventListener('click', () => {
+        sessionStorage.removeItem('accountId');
+        window.location.href = '../index.html';
+    });
+    
     async function fetchDrugData() {
         const response = await fetch('/api/drugInventory');
         return await response.json();

@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Handle Logout Button Press
+    document.getElementById('logout').addEventListener('click', () => {
+        sessionStorage.removeItem('accountId');
+        window.location.href = '../index.html';
+    });
+    
     async function fetchRequestData() {
-        const response = await fetch('/api/paymentRequests/');
+        const response = await fetch('/api/admin/paymentRequests/');
         return await response.json();
     }
 
@@ -45,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function handleApproveRequest(requestId) {
 
-        const updateResponse = await fetch(`/api/paymentRequest/approve/${requestId}`, {
+        const updateResponse = await fetch(`/api/admin/paymentRequest/approve/${requestId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function handleRejectRequest(requestId) {
 
-        const updateResponse = await fetch(`/api/paymentRequest/reject/${requestId}`, {
+        const updateResponse = await fetch(`/api/admin/paymentRequest/reject/${requestId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

@@ -14,11 +14,14 @@ const authorisedRoles = {
     "/api/chatbot/history/:patientId": ["patient"],
     "/api/patient/:patientId/digitalWallet": ["patient"],
     "/api/patient/:patientId/digitalWalletHistory": ["patient"],
+    "/api/staff/patient/:patientId": ["admin"],
     "/api/patient/admin/:patientId": ["admin"],
     "/api/patient/reject/:patientId": ["admin"],
     "/api/patient/approve/:patientId": ["admin"],
 
     "/api/company/:companyId": ["company"],
+    "/api/drugTopup/:drugName": ["admin"],
+    "/api/drugInventory": ["admin"],
     "/api/drugRequests/": ["company"],
     "/api/drugRequest/:appointmentId/:drugName/:companyId": ["company"],
     "/api/drugRequest/:appointmentId/:drugName": ["company"],
@@ -34,11 +37,12 @@ const authorisedRoles = {
     "/api/inventoryRecord/:companyId": ["company"],
     "/api/inventoryRecord/:drugRecordId": ["company"],
 
+
+    "/api/admin/paymentRequests/": ["admin"],
     "/api/paymentRequests": ["patient"],
     "/api/paymentRequests/company": ['company'],
-    "/api/paymentRequest/:appointmentId": ["admin"],
-    "/api/paymentRequest/approve/:appointmentId": ["admin"],
-    "/api/paymentRequest/reject/:appointmentId": ["admin"],
+    "/api/admin/paymentRequest/approve/:appointmentId": ["admin"],
+    "/api/admin/paymentRequest/reject/:appointmentId": ["admin"],
     "/api/paymentRequest": ["patient"],
     "/api/paymentRequest/:id": ["patient"],
 
@@ -55,9 +59,11 @@ const authorisedRoles = {
     "/api/availableSlot/doctor/:slotId": ["doctor"],
     "/api/availableSlot": ["doctor", "admin"],
 
+    "/api/doctors/": ["admin"],
+    "/api/doctors/:doctorId": ["admin"],
+    "/api/doctors/:doctorId": ["admin"],
 
-
-
+    "/api/questionnaire/:accountId": ["admin"],
 
 };
 

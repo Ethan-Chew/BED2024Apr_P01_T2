@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Handle Logout Button Press
+    document.getElementById('logout').addEventListener('click', () => {
+        sessionStorage.removeItem('accountId');
+        window.location.href = '../index.html';
+    });
+    
     async function fetchDoctorData() {
         const response = await fetch('/api/doctors/');
         return await response.json();

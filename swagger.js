@@ -81,7 +81,7 @@ const tagsWithCategory = {
     "doctors",
   ],
   "Admin": [
-    "staff", "patients/unapproved", "drugTopup", "patient/admin/", "helpRequests", "drugTopup", "patient/reject/", "patient/approve/"
+    "staff", "patients/unapproved", "drugTopup", "patient/admin/", "drugTopup", "patient/reject/", "patient/approve/", "admin"
   ],
   "Pay-it-Forward": [
     "helpRequests", "paymentRequests", "paymentRequest"
