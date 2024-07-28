@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         const approveBtn = requestDiv.querySelector('.approve-btn');
-        approveBtn.addEventListener('click', () => handleApproveRequest(request.PaymentRequestId));
+        approveBtn.addEventListener('click', () => handleApproveRequest(request.id));
 
         const denyBtn = requestDiv.querySelector('.deny-btn');
-        denyBtn.addEventListener('click', () => handleRejectRequest(request.PaymentRequestId));
+        denyBtn.addEventListener('click', () => handleRejectRequest(request.id));
         
         return requestDiv;
     }
