@@ -70,16 +70,13 @@ class Appointment {
 
         if (result.recordset.length == 0) return null;
 
-        let paymentRequest = null;
-        if (result.recordset[0].PaymentRequestStatus) {
-            paymentRequest = {
-                id: result.recordset[0].PaymentRequestId,
-                requestMessage: result.recordset[0].PaymentRequestMessage,
-                createdDate: result.recordset[0].PaymentRequestCreatedDate,
-                status: result.recordset[0].PaymentRequestStatus,
-                helpAmount: result.recordset[0].PaymentPaidAmount
-            }
-        }
+        const paymentRequest = firstRow.PaymentRequestStatus ? {
+            id: firstRow.PaymentRequestId,
+            requestMessage: firstRow.PaymentRequestMessage,
+            createdDate: firstRow.PaymentRequestCreatedDate,
+            status: firstRow.PaymentRequestStatus,
+            helpAmount: firstRow.PaymentPaidAmount
+        } : null;
 
         const appointmentWithMedication = {
             appointmentId: result.recordset[0].AppointmentId,

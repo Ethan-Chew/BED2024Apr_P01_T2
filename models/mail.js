@@ -35,10 +35,6 @@ class Mail {
 
         return sendResponse.message;
     }
-
-    static async sendAppointmentConfirmation() {
-
-    }
 }
 
 module.exports = Mail;

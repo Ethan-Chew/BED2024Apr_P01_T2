@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     if (getPatientProfile.status === 401 || getPatientProfile.status === 403) window.location.href = '../login.html';
     const patientJson = await getPatientProfile.json();
-    const patient = patientJson.patient;
+    let patient = patientJson.patient;
 
     // Populate Screen with Patient Info
     document.getElementById('patient-name').innerText = patient.name; 
@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert("Account Updated Successfully.");
 
             // Update Screen Info
+            patient.email = updatedUser.email;
             document.getElementById('patient-name').innerText = updatedUser.name; 
             document.getElementById('name').value = updatedUser.name;
             document.getElementById('email').value = updatedUser.email;

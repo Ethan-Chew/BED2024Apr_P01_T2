@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             birthdate: document.getElementById('dob').value,
         };
 
-
         // Hide Create Account Container, show Questionnaire Container
         document.getElementById("create-account-container").classList.add("hidden");
         document.getElementById("questionnaire-container").classList.remove("hidden");

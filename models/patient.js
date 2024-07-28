@@ -53,7 +53,7 @@ class Patient extends Account {
         // Group Patients with their Associated Appointments
         const birthdate = new Date(result.recordset[0].PatientBirthdate).toISOString().split("T")[0];  // Remove time from date
 
-        return  new Patient(result.recordset[0].PatientId, result.recordset[0].AccountName, result.recordset[0].AccountEmail, null, new Date(result.recordset[0].AccountCreationDate * 1000).toISOString().split("T")[0], result.recordset[0].KnownAllergies, birthdate, result.recordset[0].PatientIsApproved);
+        return new Patient(result.recordset[0].PatientId, result.recordset[0].AccountName, result.recordset[0].AccountEmail, null, new Date(result.recordset[0].AccountCreationDate * 1000).toISOString().split("T")[0], result.recordset[0].KnownAllergies, birthdate, result.recordset[0].PatientIsApproved);
     }
     //HERVIn
     static async getAllPatient() {

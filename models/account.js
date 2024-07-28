@@ -15,12 +15,22 @@ class Account {
         const connection = await sql.connect(dbConfig);
 
         const query = `
-            SELECT * FROM Account a
+            SELECT 
+                a.*,
+                CASE
+                    WHEN p.PatientId IS NOT NULL THEN 'patient'
+                    WHEN d.DoctorId IS NOT NULL THEN 'doctor'
+                    WHEN s.StaffId IS NOT NULL THEN 'staff'
+                    WHEN c.CompanyId IS NOT NULL THEN 'company'
+                    ELSE 'Unknown'
+                END AS Role,
+                p.PatientIsApproved
+            FROM Account a
             LEFT JOIN Patient p ON a.AccountId = p.PatientId
             LEFT JOIN Staff s ON a.AccountId = s.StaffId
             LEFT JOIN Doctor d ON a.AccountId = d.DoctorId
             LEFT JOIN Company c ON a.AccountId = c.CompanyId
-            WHERE AccountEmail = @AccountEmail
+            WHERE a.AccountEmail = @AccountEmail
         `;
         const request = connection.request();
         request.input('AccountEmail', email);
@@ -49,8 +59,8 @@ class Account {
         const insertUnixTime = Math.floor(Date.now() / 1000);
 
         const query = `
-        INSERT INTO Account (AccountId, AccountName, AccountEmail, AccountPassword, AccountCreationDate) VALUES
-        (@AccountId, @AccountName, @AccountEmail, @AccountPassword, @AccountCreationDate);
+            INSERT INTO Account (AccountId, AccountName, AccountEmail, AccountPassword, AccountCreationDate) VALUES
+            (@AccountId, @AccountName, @AccountEmail, @AccountPassword, @AccountCreationDate);
         `;
 
         const request = connection.request();

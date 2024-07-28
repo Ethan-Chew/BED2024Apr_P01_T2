@@ -41,30 +41,18 @@ const authLoginAccount = async (req, res) => {
         }
 
         // Determine the Account's Role
-        let role = "";
-        if (account.PatientId) {
-            // Ensure that the Patient's Account has been Approved by an Admin
-            if (account.PatientIsApproved === "Approved") {
-                role = "patient";
-            } else {
-                return res.status(403).json({
-                    status: "Forbidden",
-                    message: "Unauthorised",
-                    approvalStatus: account.PatientIsApproved
-                })
-            }
-        } else if (account.CompanyId) {
-            role = "company";
-        } else if (account.DoctorId) {
-            role = "doctor";
-        } else if (account.StaffId) {
-            role = "admin";
+        if (account.Role === "Patient" && account.PatientIsApproved !== "Approved") {
+            return res.status(403).json({
+                status: "Forbidden",
+                message: "Unauthorised",
+                approvalStatus: account.PatientIsApproved
+            })
         }
 
         // Generate a JWT Token
         const tokenMaxAge = 10800
         const token = await jwt.sign(
-            { id: account.AccountId, email: account.AccountEmail, role: role },
+            { id: account.AccountId, email: account.AccountEmail, role: account.Role },
             process.env.JWT_SECRET,
             { expiresIn: tokenMaxAge }
         );
@@ -77,7 +65,7 @@ const authLoginAccount = async (req, res) => {
             status: "Success",
             message: "Login Successful",
             accountId: account.AccountId,
-            role: role
+            role: account.Role
         });
     } catch(err) {
         console.error(err);
