@@ -130,7 +130,8 @@ INSERT INTO Appointments (AppointmentId, PatientId, DoctorId, SlotId, Consultati
 ('APP0012', 'ACC0005', 'ACC0009', 'SLO0020', 17.00, 'Skin Rash', 'Prescribed topical cream.'),
 ('APP0013', 'ACC0007', 'ACC0009', 'SLO0024', NULL, 'MRI Scan', NULL),
 ('APP0014', 'ACC0005', 'ACC0008', 'SLO0029', NULL, 'Follow-up Appointment', NULL),
-('APP0015', 'ACC0005', 'ACC0009', 'SLO0036', NULL, 'Follow-up Appointment', NULL);
+('APP0015', 'ACC0005', 'ACC0009', 'SLO0036', NULL, 'Follow-up Appointment', NULL),
+('APP0016', 'ACC0005', 'ACC0009', 'SLO0020', 30.00, 'Farmer disease', 'Prescribed no backend practicals for 2 weeks.');
 
 INSERT INTO PaymentRequest (PaymentRequestId, AppointmentId, PaymentRequestMessage, PaymentRequestCreatedDate, PaymentRequestStatus, PaymentPaidAmount) VALUES
 ('REQ0001', 'APP0001', 'Not enough money to pay for this appointment', '2024-05-20', 'Pending', 0), -- Patient sent PaymentRequest, not approved by Admin
