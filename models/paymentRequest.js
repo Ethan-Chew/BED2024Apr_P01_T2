@@ -234,7 +234,7 @@ class PaymentRequest {
     // Emmanuel
     static async updatePaymentRequestStatusByAppointmentId(apptId, status) {
         const query = `
-            UPDATE PaymentRequest SET PaymentRequestStatus = @Status, PaymentPaidAmount = 0
+            UPDATE PaymentRequest SET PaymentRequestStatus = @Status
             WHERE AppointmentId = @AppointmentId;
         `;
         const connection = await sql.connect(dbConfig);
