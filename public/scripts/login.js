@@ -45,8 +45,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         });
                         if (response.status === 200) {
                             document.getElementById('success').style.display = 'flex';
-                            await new Promise(resolve => setTimeout(resolve, 2000));
+                            await new Promise(resolve => setTimeout(resolve, 1000));
                             popup.style.display = 'none';
+                            window.location.href = '/admin/home.html';
                         } else {
                             document.getElementById('error').style.display = 'flex';
                         }
