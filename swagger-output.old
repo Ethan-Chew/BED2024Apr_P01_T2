@@ -5,7 +5,7 @@
     "description": "Outlines the different endpoints contained in the CareLinc Back-End API. These API Endpoints handle the management of accounts, appointment bookings, inventory management and other operations that are crucial to the functioning of the CareLinc platform.",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "localhost:3000/api",
   "basePath": "/",
   "tags": [
     {
@@ -916,6 +916,9 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -1195,12 +1198,6 @@
           "400": {
             "description": "Bad Request"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -1216,12 +1213,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
@@ -1252,12 +1243,6 @@
           },
           "400": {
             "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
@@ -1305,12 +1290,6 @@
           "400": {
             "description": "Bad Request"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -1337,12 +1316,6 @@
           },
           "400": {
             "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
@@ -1703,7 +1676,7 @@
     },
     "/api/drugRequest/{appointmentId}/{drugName}/{companyId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves a specific drug request by appointment ID, drug name, and company ID.",
         "parameters": [
           {
             "name": "appointmentId",
@@ -2171,6 +2144,196 @@
     },
     "/api/companyDrugInventory/addDrug": {
       "post": {
+        "description": "This route adds more drug quantity into the company inventory for a selected drug.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "drugName": {
+                  "example": "any"
+                },
+                "drugExpiryDate": {
+                  "example": "any"
+                },
+                "drugQuantity": {
+                  "example": "any"
+                },
+                "companyId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/api/companyDrugInventory/{companyId}/{drugName}/{drugQuantity}": {
+      "delete": {
+        "description": "This route removes a specified drug quantity based on user input from the company inventory.",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "drugName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "drugQuantity",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/api/inventoryRecord/{companyId}": {
+      "get": {
+        "description": "This route retrieves all available drug records (drugs added into the company's inventory logs) that belong to the company.",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/api/inventoryRecord/{drugRecordId}": {
+      "put": {
+        "description": "This route removes all remaining drugs for the specified drug record.",
+        "parameters": [
+          {
+            "name": "drugRecordId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Inventory"
+        ]
+      },
+      "delete": {
+        "description": "This route deletes the drug record from the database.",
+        "parameters": [
+          {
+            "name": "drugRecordId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Inventory"
+        ]
+      }
+    },
+    "/api/companyDrugInventory/addDrug": {
+      "post": {
         "description": "",
         "parameters": [
           {
@@ -2392,12 +2555,6 @@
           "400": {
             "description": "Bad Request"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -2414,12 +2571,6 @@
           "200": {
             "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
           "404": {
             "description": "Not Found"
           },
@@ -2432,19 +2583,13 @@
         ]
       }
     },
-    "/api/admin/paymentRequests": {
+    "/api/helpRequests": {
       "get": {
         "description": "",
         "responses": {
           "200": {
             "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
           "404": {
             "description": "Not Found"
           },
@@ -2453,11 +2598,11 @@
           }
         },
         "tags": [
-          "Admin"
+          "Pay-it-Forward"
         ]
       }
     },
-    "/api/admin/paymentRequest/approve/{requestId}": {
+    "/api/helpRequests/approve/{requestId}": {
       "put": {
         "description": "",
         "parameters": [
@@ -2472,12 +2617,6 @@
           "200": {
             "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
           "404": {
             "description": "Not Found"
           },
@@ -2486,11 +2625,11 @@
           }
         },
         "tags": [
-          "Admin"
+          "Pay-it-Forward"
         ]
       }
     },
-    "/api/admin/paymentRequest/reject/{requestId}": {
+    "/api/helpRequests/reject/{requestId}": {
       "put": {
         "description": "",
         "parameters": [
@@ -2505,12 +2644,6 @@
           "200": {
             "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
           "404": {
             "description": "Not Found"
           },
@@ -2519,7 +2652,7 @@
           }
         },
         "tags": [
-          "Admin"
+          "Pay-it-Forward"
         ]
       }
     },
