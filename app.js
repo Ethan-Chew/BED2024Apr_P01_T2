@@ -15,7 +15,6 @@ const drugOrderController = require("./controllers/drugOrderController");
 const companyController = require("./controllers/companyController");
 const paymentMethodController = require("./controllers/paymentMethodController");
 const DrugInventoryController = require("./controllers/drugInventoryController");
-const helpRequestsController = require("./controllers/helpRequestsController");
 const availableSlotController = require("./controllers/availableSlotController")
 const paymentController = require("./controllers/paymentController");
 const mailController = require("./controllers/mailController");
@@ -164,9 +163,9 @@ app.post("/api/drugTopup/:drugName", drugTopup.requestTopup);
 app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);
 
 //Hervin
-app.get("/api/helpRequests", helpRequestsController.getPendingRequests);
-app.put("/api/helpRequests/approve/:requestId", helpRequestsController.approveRequest);
-app.put("/api/helpRequests/reject/:requestId", helpRequestsController.rejectRequest);
+app.get("/api/paymentRequests", paymentRequestController.getPendingRequests);
+app.put("/api/paymentRequest/approve/:requestId", paymentRequestController.approveRequest);
+app.put("/api/paymentRequest/reject/:requestId", paymentRequestController.rejectRequest);
 
 // Route for Available Slot
 app.get("/api/availableSlots/:date", authoriseJWT, availableSlotController.getAllAvailableSlotsTimesByDate);

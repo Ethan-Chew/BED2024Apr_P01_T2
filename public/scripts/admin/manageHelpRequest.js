@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     async function fetchRequestData() {
-        const response = await fetch('/api/helpRequests/');
+        const response = await fetch('/api/paymentRequests/');
         return await response.json();
     }
 
@@ -13,19 +13,19 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="flex-1 grid grid-cols-2 gap-x-10 gap-y-2 pr-20">
                 <div>
                     <div class="font-bold">Request ID</div>
-                    <div>${request.PaymentRequestId}</div>
+                    <div>${request.id}</div>
                 </div>
                 <div>
                     <div class="font-bold">Appointment ID</div>
-                    <div>${request.AppointmentId}</div>
+                    <div>${request.appointmentId}</div>
                 </div>
                 <div>
                     <div class="font-bold">Request Message</div>
-                    <div>${request.PaymentRequestMessage}</div>
+                    <div>${request.message}</div>
                 </div>
                 <div>
                     <div class="font-bold">Request Status</div>
-                    <div>${request.PaymentRequestStatus}</div>
+                    <div>${request.status}</div>
                 </div>
             </div>
             <div class="flex space-x-2">
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function handleApproveRequest(requestId) {
 
-        const updateResponse = await fetch(`/api/helpRequests/approve/${requestId}`, {
+        const updateResponse = await fetch(`/api/paymentRequest/approve/${requestId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function handleRejectRequest(requestId) {
 
-        const updateResponse = await fetch(`/api/helpRequests/reject/${requestId}`, {
+        const updateResponse = await fetch(`/api/paymentRequest/reject/${requestId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
         container.innerHTML = '';
     
         const filteredRequests = request.requests.filter(request => 
-            request.PaymentRequestId.toLowerCase().includes(searchTerm.toLowerCase())
+            request.id.toLowerCase().includes(searchTerm.toLowerCase())
         );
     
         filteredRequests.forEach(request => {

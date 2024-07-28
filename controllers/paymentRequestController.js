@@ -283,6 +283,69 @@ const checkPaymentRequest = async (req, res) => {
     }
 }
 
+// Hervin
+const getPendingRequests = async (req, res) => {
+    try {
+
+        const requests = await PaymentRequest.getPendingRequests();
+
+        if (!requests) {
+            res.status(404).json({
+                message: `Requests not found.`
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: "Requests Found",
+            requests: requests
+        });
+        
+    } catch(err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+// Hervin
+const approveRequest = async (req, res) => {
+    try {
+        const requestId = req.params.requestId;
+        const result = await PaymentRequest.approveRequest(requestId);
+
+        if (!result) {
+            res.status(404).json({ error: 'Error approving request' });
+            return;
+        } else {
+            res.status(200).json(true);
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+// Hervin
+const rejectRequest = async (req, res) => {
+    try {
+        const requestId = req.params.requestId;
+        const result = await PaymentRequest.rejectRequest(requestId);
+
+        if (!result) {
+            res.status(404).json({ error: 'Error rejecting request' });
+            return;
+        } else {
+            res.status(200).json(true);
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+
+}
+
 module.exports = {
     createPaymentRequest,
     cancelPaymentRequest,
@@ -292,5 +355,8 @@ module.exports = {
     rejectPaymentRequestByAppointmentId,
     getPaymentRequestsByApprovedStatus,
     payRequestByRequestId,
-    checkPaymentRequest
+    checkPaymentRequest,
+    approveRequest,
+    rejectRequest,
+    getPendingRequests
 };
