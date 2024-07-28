@@ -14,7 +14,7 @@ const getAllPatientAppointment = async (req, res) => {
             });
             return;
         }
-        
+
         const appointments = await Appointment.getAllPatientAppointment(patientId);
         if (!appointments) {
             res.status(404).json({
@@ -88,7 +88,7 @@ const deleteAppointmentById = async (req, res) => {
                 message: `Appointment with ID ${appointmentId} not found.`
             });
         } else {
-            console.log(req.user)
+            // console.log(req.user)
             if (req.user.id !== getAppointment.patientId) {
                 res.status(403).json({
                     status: "Forbidden",
@@ -235,16 +235,16 @@ const updateAppointmentDoctorSlot = async (req, res) => {
         const getAppointment = await Appointment.getAppointmentDetail(appointmentId); // ethan's model func
         const apptAvailableSlot = await AvailableSlot.getAvailableSlotByDateAndTime(getAppointment.slotDate, getAppointment.slotTime)
 
-        
-        
+
+
         if (getAppointment.consultationCost !== null) {
             return res.status(405).json({ message: 'Appointment has already occured' });
         }
-        console.log("doctorId ", getAppointment.doctorId);
+        // console.log("doctorId ", getAppointment.doctorId);
 
         const getAnotherAvailableSlot = await AvailableSlot.getAnotherAvailableSlot(getAppointment.doctorId, apptAvailableSlot.slotId);
 
-        console.log("available Slot ", getAnotherAvailableSlot);
+        // console.log("available Slot ", getAnotherAvailableSlot);
 
 
         if (!getAnotherAvailableSlot) {

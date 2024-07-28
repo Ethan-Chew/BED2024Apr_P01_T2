@@ -2658,7 +2658,7 @@
     },
     "/api/availableSlots/{date}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves all the availableSlots based on the date",
         "parameters": [
           {
             "name": "date",
@@ -2694,7 +2694,7 @@
     },
     "/api/availableSlot/getByDateTime": {
       "post": {
-        "description": "",
+        "description": "This route retrieves an availableSlot based on the date and time",
         "parameters": [
           {
             "name": "body",
@@ -2739,7 +2739,7 @@
     },
     "/api/availableSlot/doctor/{slotId}": {
       "put": {
-        "description": "",
+        "description": "This route allows the doctor to update an availableSlot's details by slotId",
         "parameters": [
           {
             "name": "slotId",
@@ -2790,7 +2790,7 @@
     },
     "/api/availableSlot": {
       "post": {
-        "description": "",
+        "description": "This route allows an admin/doctor to create an available slot",
         "parameters": [
           {
             "name": "body",
@@ -2835,7 +2835,7 @@
     },
     "/api/paymentRequests": {
       "get": {
-        "description": "",
+        "description": "This route retrieves all the payment requests that are approved by the admin and are not fulfilled by either anonmyous payment or company donations",
         "responses": {
           "200": {
             "description": "OK"
@@ -2854,7 +2854,7 @@
     },
     "/api/paymentRequests/company": {
       "get": {
-        "description": "",
+        "description": "This route retrieves payment requests that have the pending status",
         "responses": {
           "200": {
             "description": "OK"
@@ -2879,7 +2879,7 @@
     },
     "/api/paymentRequest/{appointmentId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves a payment request based on the appointment Id",
         "parameters": [
           {
             "name": "appointmentId",
@@ -2915,7 +2915,7 @@
     },
     "/api/paymentRequest/pay": {
       "put": {
-        "description": "",
+        "description": "This route allows an anonymous user to pay for a payment request, updating the paidamount attribute",
         "parameters": [
           {
             "name": "body",
@@ -2954,7 +2954,7 @@
     },
     "/api/paymentRequest/check": {
       "put": {
-        "description": "",
+        "description": "This route will refresh the status of the payment requests, setting the prescribed medication drug request status to cancelled if the payment request is older than 3 days since its creation",
         "responses": {
           "200": {
             "description": "OK"
@@ -2973,7 +2973,7 @@
     },
     "/api/paymentRequest/approve/{appointmentId}": {
       "put": {
-        "description": "",
+        "description": "This route sets the payment request status to approved by appointment Id",
         "parameters": [
           {
             "name": "appointmentId",
@@ -3009,7 +3009,7 @@
     },
     "/api/paymentRequest/reject/{appointmentId}": {
       "put": {
-        "description": "",
+        "description": "This route sets the payment request status to cancelled by appointment Id",
         "parameters": [
           {
             "name": "appointmentId",
@@ -3045,7 +3045,7 @@
     },
     "/api/paymentRequest": {
       "post": {
-        "description": "",
+        "description": "This route creates a payment request",
         "parameters": [
           {
             "name": "body",
@@ -3090,7 +3090,7 @@
     },
     "/api/paymentRequest/{id}": {
       "delete": {
-        "description": "",
+        "description": "This route deletes a payment request if the status is not cancelled",
         "parameters": [
           {
             "name": "id",
@@ -3126,7 +3126,7 @@
     },
     "/api/notifications/{accountId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves all the notifications send to the user by the user's account Id",
         "parameters": [
           {
             "name": "accountId",
@@ -3193,7 +3193,7 @@
     },
     "/api/notification/{notificationId}": {
       "put": {
-        "description": "",
+        "description": "This route updates the notification's read status to read",
         "parameters": [
           {
             "name": "notificationId",
@@ -3226,7 +3226,7 @@
     },
     "/api/notification": {
       "post": {
-        "description": "",
+        "description": "This route creates a notification",
         "parameters": [
           {
             "name": "body",

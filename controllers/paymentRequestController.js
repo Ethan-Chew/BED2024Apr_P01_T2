@@ -118,7 +118,7 @@ const getPaymentRequestsByApprovedStatus = async (req, res) => {
 // Emmanuel
 const getPaymentRequestStatusByPendingDrugRequest = async (req, res) => {
     try {
-        const getRequests = await paymentRequest.getPaymentRequestStatusByPendingDrugRequest();
+        const getRequests = await PaymentRequest.getPaymentRequestStatusByPendingDrugRequest();
 
         if (getRequests) {
             return res.status(200).json({
@@ -300,8 +300,8 @@ const getPendingRequests = async (req, res) => {
             message: "Requests Found",
             requests: requests
         });
-        
-    } catch(err) {
+
+    } catch (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
     }

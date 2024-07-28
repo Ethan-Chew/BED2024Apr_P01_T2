@@ -42,7 +42,7 @@ const receiveNotifications = async (req, res) => {
     const accountId = req.params.accountId;
 
     if (!accountId || typeof accountId !== 'string') {
-        console.log("jdsiofkjdlkfjd;lasfs")
+        // console.log("jdsiofkjdlkfjd;lasfs")
         return res.status(400).json({ message: 'Invalid account ID' });
     }
 
@@ -67,7 +67,7 @@ const receiveNotifications = async (req, res) => {
             return;
         } else {
             const updateNotifications = await notification.updateManyNotificationsByReceiverId(accountId, status);
-            console.log(updateNotifications);
+            // console.log(updateNotifications);
 
             if (!updateNotifications) {
                 res.status(404).json({
@@ -126,7 +126,7 @@ const readNotification = async (req, res) => {
 // Emmanuel
 const readAllNotificationsByAccountId = async (req, res) => {
     const { accountId } = req.params;
-    console.log(accountId);
+    // console.log(accountId);
 
     if (!accountId || typeof accountId !== 'string') {
         return res.status(400).json({ message: 'Invalid account ID' });
