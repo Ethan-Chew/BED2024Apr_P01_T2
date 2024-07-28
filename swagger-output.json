@@ -5,7 +5,7 @@
     "description": "Outlines the different endpoints contained in the CareLinc Back-End API. These API Endpoints handle the management of accounts, appointment bookings, inventory management and other operations that are crucial to the functioning of the CareLinc platform.",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "localhost:3000/api",
   "basePath": "/",
   "tags": [
     {
@@ -67,7 +67,7 @@
   "paths": {
     "/api/auth/login": {
       "post": {
-        "description": "",
+        "description": "This route allows the login of a user, by verifying their email and password. It will return a Role (Admin, Patient, Doctor, Company) and a JWT Token in Cookies to be used in future authentication. If they are a patient, their approval status will be shown too.",
         "parameters": [
           {
             "name": "body",
@@ -109,7 +109,7 @@
     },
     "/api/patient/{patientId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves information related to the patient including their Known Allergies, Approval Status, Account Creation Date, Birthdate, Email and Name. Patients can only retrieve information about themselves.",
         "parameters": [
           {
             "name": "patientId",
@@ -140,7 +140,7 @@
         ]
       },
       "put": {
-        "description": "",
+        "description": "This route allows Patients to update their own profile information. They can update their Name, Email, Known Allergies, Birthdate and Password. Patients can only update their own information.",
         "parameters": [
           {
             "name": "patientId",
@@ -195,7 +195,7 @@
         ]
       },
       "delete": {
-        "description": "",
+        "description": "This route allows deletes a Patient Account and all associated information (Appointments, Payment Methods, etc). This operation is irreversible, and only accessible to the Patient themselves.",
         "parameters": [
           {
             "name": "patientId",
@@ -431,7 +431,7 @@
     },
     "/api/patient/paymentMethods/{patientId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves all payment methods associated with a Patient ID. Payment Methods are returned in an array and only accessible to the Patient themselves.",
         "parameters": [
           {
             "name": "patientId",
@@ -467,7 +467,7 @@
     },
     "/api/patient/paymentMethod/{patientId}": {
       "post": {
-        "description": "",
+        "description": "This route allows the addition of a payment method that ties to a Patient ID. Patients can only add payment methods to their own account.",
         "parameters": [
           {
             "name": "patientId",
@@ -521,7 +521,7 @@
     },
     "/api/patient/paymentMethod/{methodId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves a specific payment method associated with a Payment Method ID. Authentication is used to ensure that the requested payment method belongs to the Patient who is requesting it.",
         "parameters": [
           {
             "name": "methodId",
@@ -552,7 +552,7 @@
         ]
       },
       "delete": {
-        "description": "",
+        "description": "This route deletes a payment method with the associated Payment Method ID. Only the Patient who owns the payment method can delete it.",
         "parameters": [
           {
             "name": "methodId",
@@ -580,7 +580,7 @@
         ]
       },
       "put": {
-        "description": "",
+        "description": "This route updates a payment method with the associated Payment Method ID. Only the Patient who owns the payment method can update it.",
         "parameters": [
           {
             "name": "methodId",
@@ -634,7 +634,7 @@
     },
     "/api/patient/{patientId}/digitalWallet": {
       "get": {
-        "description": "",
+        "description": "This route retrieves the digital wallet of a patient. When a Patient account is first created, there is no Digital Wallet associated with their account. Patients can only retrieve their own digital wallet.",
         "parameters": [
           {
             "name": "patientId",
@@ -665,7 +665,7 @@
         ]
       },
       "post": {
-        "description": "",
+        "description": "This route creates a empty (no value) digital wallet for a patient. Patients can only create a digital wallet for themselves.",
         "parameters": [
           {
             "name": "patientId",
@@ -708,7 +708,7 @@
         ]
       },
       "delete": {
-        "description": "",
+        "description": "This route deletes the associated digital wallet of a patient. When deleting a digital wallet, all funds and wallet history is lost. Patients can only delete their own digital wallet.",
         "parameters": [
           {
             "name": "patientId",
@@ -739,7 +739,7 @@
         ]
       },
       "put": {
-        "description": "",
+        "description": "This route updates the amount in the patient's digital wallet. The updateAmount attribute specifies the amount to be added or subtracted from the wallet. Patients can only update their own digital wallet.",
         "parameters": [
           {
             "name": "patientId",
@@ -784,7 +784,7 @@
     },
     "/api/patient/{patientId}/digitalWalletHistory": {
       "get": {
-        "description": "",
+        "description": "This route retrieves the transaction history of a patient's digital wallet. The transaction history is returned in an array and only accessible to the Patient themselves. If the patient does not have an associated digital wallet, there would be no transaction history.",
         "parameters": [
           {
             "name": "patientId",
@@ -815,7 +815,7 @@
         ]
       },
       "post": {
-        "description": "",
+        "description": "This route adds a new transaction to the patient's digital wallet history.",
         "parameters": [
           {
             "name": "patientId",
@@ -861,7 +861,7 @@
         ]
       },
       "delete": {
-        "description": "",
+        "description": "This route deletes all associated transaction history of a patient's digital wallet. Deleting the transaction history will remove all records of transactions made by the patient, but does not delete the patient's digital wallet.",
         "parameters": [
           {
             "name": "patientId",
@@ -894,7 +894,7 @@
     },
     "/api/patient/makePayment": {
       "post": {
-        "description": "",
+        "description": "This route marks the payment of an appointment as Paid. Patients can only mark their own appointments as Paid.",
         "parameters": [
           {
             "name": "body",
@@ -904,6 +904,9 @@
               "properties": {
                 "appointmentId": {
                   "example": "any"
+                },
+                "paymentType": {
+                  "example": "DWallet | Card | PayRequest"
                 }
               }
             }
@@ -933,7 +936,7 @@
     },
     "/api/mail/paymentConfirmation": {
       "post": {
-        "description": "",
+        "description": "This route sends a payment confirmation email to the patient. The email contains details of the payment made by the patient. To send a payment confirmation email for a Digital Wallet payment, the Merchant should be set to 'Digital Wallet'.",
         "parameters": [
           {
             "name": "body",
@@ -948,7 +951,7 @@
                   "example": "any"
                 },
                 "cardMerchant": {
-                  "example": "any"
+                  "example": "any | Digital Wallet"
                 },
                 "cardLFDigits": {
                   "example": "any"
@@ -987,7 +990,7 @@
     },
     "/api/chatbot/sendMessage": {
       "post": {
-        "description": "",
+        "description": "This route sends a message to the chatbot. The chatbot will respond with a message based on the input. This route also accepts the entry of a Chat History, which is retrieved using the /chatbot/history route. This route does not handle the saving of chat history.",
         "parameters": [
           {
             "name": "body",
@@ -1026,7 +1029,7 @@
     },
     "/api/chatbot/history/{patientId}": {
       "get": {
-        "description": "",
+        "description": "This route returns the chatbot history relating to a patient. The chatbot history is returned in a way that can be easily passed back into the Gemini Model. Only patients can retrieve their own chatbot history.",
         "parameters": [
           {
             "name": "patientId",
@@ -1057,7 +1060,7 @@
         ]
       },
       "post": {
-        "description": "",
+        "description": "This route adds a new chatbot history entry to the patient's chatbot history. Patients can only add chatbot history to their own account.",
         "parameters": [
           {
             "name": "patientId",
@@ -1100,7 +1103,7 @@
         ]
       },
       "delete": {
-        "description": "",
+        "description": "This route deletes all chatbot history associated with a patient using the Patient Id. Deleting the chatbot history will remove all records of chatbot interactions made by the patient.",
         "parameters": [
           {
             "name": "patientId",
@@ -1328,7 +1331,7 @@
     },
     "/api/appointments/patient/{patientId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves all appointments associated with a Patient ID. Appointments are returned in an array and only accessible to the Patient themselves. The returned appointments are not as detailed as the ones retrieved from the /appointments/{appointmentId} route.",
         "parameters": [
           {
             "name": "patientId",
@@ -1388,7 +1391,7 @@
     },
     "/api/appointments/{appointmentId}": {
       "get": {
-        "description": "",
+        "description": "This route retrieves a detailed description of an appointment by an Appointment ID. It combines the Payment, Payment Request, Prescribed Medication and Slot Times.",
         "parameters": [
           {
             "name": "appointmentId",
@@ -1419,7 +1422,7 @@
         ]
       },
       "put": {
-        "description": "",
+        "description": "This route allows the updating of an appointment by an Appointment ID. The body of the request should contain the updated details of the appointment.",
         "parameters": [
           {
             "name": "appointmentId",
@@ -1468,7 +1471,7 @@
         ]
       },
       "delete": {
-        "description": "",
+        "description": "This route deletes and frees up a slot for a specific appointment. Only the patient who owns the appointment can delete it.",
         "parameters": [
           {
             "name": "appointmentId",
@@ -1531,7 +1534,7 @@
     },
     "/api/appointments": {
       "post": {
-        "description": "",
+        "description": "This route creates a new appointment for a patient.",
         "parameters": [
           {
             "name": "body",
