@@ -1,5 +1,11 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Handle Logout Button Press
+    document.getElementById('logout').addEventListener('click', () => {
+        sessionStorage.removeItem('accountId');
+        window.location.href = '../index.html';
+    });
+    
     await new Promise(resolve => setTimeout(resolve, 100));
     document.getElementById("edit-user-form").addEventListener("submit", async function (e) {
         e.preventDefault();

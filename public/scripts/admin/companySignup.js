@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    // Handle Logout Button Press
+    document.getElementById('logout').addEventListener('click', () => {
+        sessionStorage.removeItem('accountId');
+        window.location.href = '../index.html';
+    });
+    
     document.getElementById("create-company-acc-form").addEventListener("submit", async function (e) {
         e.preventDefault();
 
