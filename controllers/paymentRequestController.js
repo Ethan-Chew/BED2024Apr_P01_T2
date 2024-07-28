@@ -40,17 +40,39 @@ const cancelPaymentRequest = async (req, res) => {
             return res.status(400).json({ message: 'Payment Request Id is required' })
         }
 
-        const deleteRequest = await PaymentRequest.cancelPaymentRequestById(id);
-        if (deleteRequest) {
-            return res.status(201).json({
-                status: "Success",
-                message: "Payment request deleted"
-            })
+        const getRequest = await PaymentRequest.getPaymentRequestById(id);
+
+        // console.log(getRequest);
+        if (getRequest[0].PaymentRequestStatus == "Approved") {
+            const status = "Closed";
+            const updateRequest = await PaymentRequest.updatePaymentRequestStatusByAppointmentId(getRequest[0].AppointmentId, status)
+            // console.log(updateRequest);
+
+            if (updateRequest) {
+                return res.status(201).json({
+                    status: "Success",
+                    message: "Payment request status set to Closed"
+                })
+            } else {
+                return res.status(404).json({
+                    status: "Error",
+                    message: "Payment request does not exist"
+                })
+            }
+
         } else {
-            return res.status(404).json({
-                status: "Error",
-                message: "Payment request does not exist or status is Rejected or Payment Reqeust has already been paid"
-            })
+            const deleteRequest = await PaymentRequest.cancelPaymentRequestById(id);
+            if (deleteRequest) {
+                return res.status(201).json({
+                    status: "Success",
+                    message: "Payment request deleted"
+                })
+            } else {
+                return res.status(404).json({
+                    status: "Error",
+                    message: "Payment request does not exist or status is Rejected or Payment Reqeust has already been paid"
+                })
+            }
         }
 
     } catch (err) {

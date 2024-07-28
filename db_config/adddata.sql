@@ -225,7 +225,7 @@ INSERT INTO PrescribedMedication (PrescribedMedId, AppointmentId, DrugName, Quan
 ('PRM0024', 'APP0011', 'Dipyridamole', 10, 'Prevent blood clots', NULL),
 ('PRM0025', 'APP0012', 'Paracetamol', 10, 'Fever relief', 'Completed'),
 ('PRM0026', 'APP0012', 'Prazosin', 10, 'Hypertension', 'Completed'),
-('PRM0027', 'APP0013', 'Digoxin', 10, 'Farmer Disease Treatment', NULL);
+('PRM0027', 'APP0013', 'Digoxin', 10, 'Farmer Disease', 'Completed');
 
 -- Sample data for DrugRequestContribution table
 INSERT INTO DrugRequestContribution (AppointmentId, DrugName, InventoryContribution, ContributionQuantity, TotalCost, ContributeDate, ConfirmationDate, ContributionStatus, CompanyId, DrugRecordId) VALUES

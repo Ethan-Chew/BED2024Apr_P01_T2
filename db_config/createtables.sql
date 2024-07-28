@@ -156,7 +156,7 @@ CREATE TABLE PaymentRequest (
 	AppointmentId VARCHAR(7) NOT NULL,
 	PaymentRequestMessage VARCHAR(255) NOT NULL,
 	PaymentRequestCreatedDate DATE NOT NULL,
-	PaymentRequestStatus VARCHAR(10) NOT NULL CHECK (PaymentRequestStatus IN ('Pending', 'Approved', 'Rejected')),
+	PaymentRequestStatus VARCHAR(10) NOT NULL CHECK (PaymentRequestStatus IN ('Pending', 'Approved', 'Rejected', 'Closed')),
 	PaymentPaidAmount MONEY NULL,
 	
 	CONSTRAINT PK_PaymentRequest PRIMARY KEY (PaymentRequestId),
