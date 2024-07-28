@@ -112,15 +112,15 @@ app.delete("/api/chatbot/history/:patientId", authoriseJWT, chatbotController.de
 
 // Routes for Admin-Managing Patient Accounts
 app.get("/api/patients/unapproved", authoriseJWT, patientsController.getAllUnapproved);
-app.put("/api/staff/patient/:patientId", patientsController.adminUpdatePatientById);
+app.put("/api/staff/patient/:patientId", authoriseJWT, patientsController.adminUpdatePatientById);
 
 /// Route for Doctor Account
-app.get("/api/doctors/", doctorsController.getAllDoctor);
-app.get("/api/doctors/:doctorId", doctorsController.getDoctorById);
-app.put("/api/doctors/:doctorId", doctorsController.updateDoctorById);
+app.get("/api/doctors/", authoriseJWT, doctorsController.getAllDoctor);
+app.get("/api/doctors/:doctorId", authoriseJWT, doctorsController.getDoctorById);
+app.put("/api/doctors/:doctorId", authoriseJWT, doctorsController.updateDoctorById);
 
 /// Route for Questionnaire
-app.get("/api/questionnaire/:accountId", patientsController.getQuestionnaireWithAccountId);
+app.get("/api/questionnaire/:accountId", authoriseJWT, patientsController.getQuestionnaireWithAccountId);
 
 /// Route for Appointments
 app.get("/api/appointments/patient/:patientId", authoriseJWT, appointmentController.getAllPatientAppointment);
@@ -157,15 +157,15 @@ app.put("/api/inventoryRecord/:drugRecordId", authoriseJWT, validateDrugRecordId
 app.delete("/api/inventoryRecord/:drugRecordId", authoriseJWT, validateDrugRecordId, inventoryRecordController.deleteDrugRecordByRecordId);
 
 // Route for Drug Orders (Admin)
-app.post("/api/drugTopup/:drugName", drugTopup.requestTopup);
+app.post("/api/drugTopup/:drugName", authoriseJWT, drugTopup.requestTopup);
 
 //
-app.get("/api/drugInventory", DrugInventoryController.getDrugInventory);
+app.get("/api/drugInventory", authoriseJWT, DrugInventoryController.getDrugInventory);
 
 //Hervin
-app.get("/api/paymentRequests", paymentRequestController.getPendingRequests);
-app.put("/api/paymentRequest/approve/:requestId", paymentRequestController.approveRequest);
-app.put("/api/paymentRequest/reject/:requestId", paymentRequestController.rejectRequest);
+app.get("/api/admin/paymentRequests", authoriseJWT, paymentRequestController.getPendingRequests);
+app.put("/api/admin/paymentRequest/approve/:requestId", authoriseJWT, paymentRequestController.approveRequest);
+app.put("/api/admin/paymentRequest/reject/:requestId", authoriseJWT, paymentRequestController.rejectRequest);
 
 // Route for Available Slot
 app.get("/api/availableSlots/:date", authoriseJWT, availableSlotController.getAllAvailableSlotsTimesByDate);
